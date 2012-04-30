@@ -7,8 +7,13 @@
   <groupId>vorm</groupId>
   <artifactId>vorm</artifactId>
   <version>0.1.0-SNAPSHOT</version>
-  <packaging>jar</packaging>
+  <packaging>pom</packaging>
 
+  <modules>
+    <module>macros</module>
+    <module>core</module>
+    <module>common</module>
+  </modules>
   <dependencies>
     <dependency>
       <groupId>org.scala-lang</groupId>

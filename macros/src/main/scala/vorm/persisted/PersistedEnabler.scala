@@ -31,7 +31,5 @@ object PersistedEnabler {
     val init = New(Ident(cdef.name), List((params.dropRight(1) map (param => Select(Ident(temp.name), param.name))) :+ id.tree))
     Expr(Block(cdef, temp, init))
   }
-String(".")
-  }
 
 }

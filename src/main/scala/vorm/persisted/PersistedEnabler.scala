@@ -1,126 +1,37 @@
 package vorm.persisted
 
-import someOtherPackage.domain.Artist
-import tools.nsc.interpreter.IMain
-import tools.nsc._
-import reflect.mirror.{Symbol, Type}
+import language.experimental.macros
+import scala.reflect.makro.Context
+import scala.reflect.api.Modifier._
 
 object PersistedEnabler {
-  private val persistedClassCache =
-    collection.mutable.Map[TypeTag[_], Class[_]]()
 
-  def persistedClass[T](tag: TypeTag[T]): Class[T with Persisted] = {
-    if (persistedClassCache.contains(tag))
-      persistedClass(tag).asInstanceOf[Class[T with Persisted]]
-    else {
-      val name = generateName()
+  def toPersisted[T](instance: T, id: Long): T with Persisted = macro impl[T]
 
-      val code = {
-        val sourceParams =
-          methodParams(constructors(tag.tpe).head.typeSignature)
+  def impl[T: c.TypeTag](c: Context)(instance: c.Expr[T], id: c.Expr[Long]) = {
+    import c.mirror._
 
-        val newParamsList = {
-          def paramDeclaration(s: Symbol): String =
-            s.name.decoded + ": " + s.typeSignature.toString
-          "val key: String" :: sourceParams.map(paramDeclaration) mkString ", "
-        }
-        val sourceParamsList =
-          sourceParams.map(_.name.decoded).mkString(", ")
+    val t = c.typeTag[T]
+    val u = t.tpe.typeSymbol
+    if (!(u.modifiers contains `case`))
+      c.abort(c.enclosingPosition, "toPersisted only accepts case classes, you provided %s".format(t.tpe))
 
-        """
-       class """ + name + """(""" + newParamsList + """)
-        extends """ + tag.sym.fullName + """(""" + sourceParamsList + """)
-        with """ + typeTag[Persisted].sym.fullName + """
-      """
-      }
+    // how did I know what trees to generate?
+    // read up the docs at http://scalamacros.org/documentation.html
+    val fields = u.typeSignature.members.filter(m => m.owner == u && !m.isMethod).toList.reverse // members are returned in reverse order
+    var vals = fields map (field => ValDef(Modifiers(Set(`override`, paramAccessor)), nme.dropLocalSuffix(field.name).toTermName, Ident(definitions.StringClass), EmptyTree))
+    vals :+= ValDef(Modifiers(Set(paramAccessor)), newTermName("id"), Ident(definitions.LongClass), EmptyTree)
+    val params = vals map (field => field.copy(mods = Modifiers(Set(parameter, paramAccessor))))
+    val body = Apply(Select(Super(This(newTypeName("")), newTypeName("")), nme.CONSTRUCTOR), params.dropRight(1) map (param => Ident(param.name)))
+    val ctor = DefDef(NoMods, nme.CONSTRUCTOR, Nil, List(params), TypeTree(), Block(List(body), Literal(Constant(()))))
+    val tmpl = Template(List(Ident(u), Ident(staticClass("Persisted"))), emptyValDef, vals :+ ctor)
+    val cdef = ClassDef(NoMods, newTypeName(c.fresh(u.name + "$Persisted")), Nil, tmpl)
 
-      println(code)
-
-
-      interpreter.compileString(code)
-      val c =
-        interpreter.classLoader.findClass(name)
-          .asInstanceOf[Class[T with Persisted]]
-
-      interpreter.reset()
-
-      persistedClassCache(tag) = c
-
-      c
-    }
+    val temp = ValDef(NoMods, newTermName(c.fresh("precomputed$")), TypeTree(), instance.tree)
+    val init = New(Ident(cdef.name), List((params.dropRight(1) map (param => Select(Ident(temp.name), param.name))) :+ id.tree))
+    Expr(Block(cdef, temp, init))
   }
-
-  def toPersisted[T](instance: T, key: String)
-      (implicit instanceTag: TypeTag[T]): T with Persisted = {
-
-
-
-    throw new NotImplementedError
-  }
-
-  private lazy val interpreter = {
-    val settings = new Settings()
-    settings.usejavacp.value = true
-    new IMain(settings, new NewLinePrintWriter(new ConsoleWriter, true))
-  }
-
-
-  private var generateNameCounter = 0l
-  private def generateName() = synchronized {
-    generateNameCounter += 1
-    "PersistedAnonymous" + generateNameCounter.toString
-  }
-  //
-  //
-  //  def buildClass[T, V](implicit t: Manifest[T], v: Manifest[V]) = {
-  //
-  //    // Create a unique ID
-  //    val name = generateName()
-  //
-  //    // what's the Scala code we need to generate this class?
-  //    val classDef = """
-  //      class %s extends %s with %s
-  //    """.format(name, t.toString, v.toString)
-  //
-  //    println(classDef)
-  //
-  //    // fire up a new Scala interpreter/compiler
-  //    val interpreter = new Interpreter()
-  //
-  //    // define this class
-  //    interpreter.compileString(classDef)
-  //
-  //    // get the bytecode for this new class
-  //    val bytes = interpreter.classLoader.classBytes(name)
-  //
-  //    // define the bytecode using this classloader; cast it to what we expect
-  //    defineClass(name, bytes, 0, bytes.length).asInstanceOf[Class[T with V]]
-  //  }
-
-  type MethodType = {def params: List[Symbol]; def resultType: Type}
-
-  def methodParams(t: Type): List[Symbol] =
-    t.asInstanceOf[MethodType].params
-
-  def methodResultType(t: Type): Type =
-    t.asInstanceOf[MethodType].resultType
-
-  def constructors(t: Type): Iterable[Symbol] =
-    t.members.filter(_.kind == "constructor")
-
-  def fullyQualifiedName(s: Symbol): String = {
-    def symbolsTree(s: Symbol): List[Symbol] =
-      if (s.enclosingTopLevelClass != s)
-        s :: symbolsTree(s.enclosingTopLevelClass)
-      else if (s.enclosingPackageClass != s)
-        s :: symbolsTree(s.enclosingPackageClass)
-      else
-        Nil
-
-    symbolsTree(s)
-      .reverseMap(_.name.decoded)
-      .drop(1)
-      .mkString(".")
+String(".")
   }
 
 }

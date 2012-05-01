@@ -45,4 +45,7 @@ class QueryStream[T <: Persisted](connection: Connection, query: Query = Query()
 
   override protected def tailDefined: Boolean =
     throw new NotImplementedError
+
+  override def length: Int =
+    throw new NotImplementedError
 }

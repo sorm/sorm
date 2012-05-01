@@ -36,8 +36,8 @@ object PersistedEnabler {
         class """ + name + """(""" + newParamsList + """)
           extends """ + tag.sym.fullName + """(""" + sourceParamsList + """)
           with """ + typeTag[Persisted].sym.fullName + """ {
-//            def copy(""" + copyMethodParamsList + """) =
-//              new """ + name + """(""" + copyInstantiationParamsList + """)
+            override def copy(""" + copyMethodParamsList + """) =
+              new """ + name + """(""" + copyInstantiationParamsList + """)
           }
         """
       }
@@ -73,8 +73,6 @@ object PersistedEnabler {
 
     }
 
-    println(args)
-
     c.getConstructors.head
       .newInstance(args.asInstanceOf[List[Object]]: _*)
       .asInstanceOf[T with Persisted]
@@ -102,7 +100,8 @@ object PersistedEnabler {
     val t = typeOfInstance(instance)
 
     propertyNames(t)
-      .map(n => n -> invoke(instance, t.member(newTermName(n)))()).toMap
+      .map(n => n -> invoke(instance, t.member(newTermName(n)))())
+      .toMap
   }
 
   type MethodType = {def params: List[Symbol]; def resultType: Type}

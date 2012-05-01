@@ -24,6 +24,10 @@ object Sandbox extends App {
   assert(persisted.key == "some-key")
   assert(persisted.name == "Nirvana")
 
+  val copy = persisted.copy(name = "Foo Fighters")
+
+  println(copy.isInstanceOf[Persisted])
+  println(copy.isInstanceOf[Artist])
 
 }
 

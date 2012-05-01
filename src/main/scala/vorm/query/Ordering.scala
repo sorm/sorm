@@ -1,4 +1,4 @@
-package vorm.api
+package vorm.query
 
 case class Ordering(
   property: String,

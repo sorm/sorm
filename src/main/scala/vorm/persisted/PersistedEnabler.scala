@@ -5,12 +5,30 @@ import tools.nsc._
 import reflect.mirror._
 
 object PersistedEnabler {
+
+  def toPersisted[T <: AnyRef](instance: T, key: String)
+                              (implicit instanceTag: TypeTag[T]): T with Persisted = {
+    val args = {
+      val valuesMap = propertyValuesMap(instance)
+      key ::
+        methodParams(constructors(instanceTag.tpe).head.typeSignature)
+          .map(_.name.decoded.trim)
+          .map(valuesMap(_))
+    }
+
+    persistedClass(instanceTag)
+      .getConstructors.head
+      .newInstance(args.asInstanceOf[List[Object]]: _*)
+      .asInstanceOf[T with Persisted]
+  }
+
+
   private val persistedClassCache =
     collection.mutable.Map[TypeTag[_], Class[_]]()
 
-  def persistedClass[T](tag: TypeTag[T]): Class[T with Persisted] = {
+  private def persistedClass[T](tag: TypeTag[T]): Class[T with Persisted] = {
     if (persistedClassCache.contains(tag))
-      persistedClass(tag).asInstanceOf[Class[T with Persisted]]
+      persistedClassCache(tag).asInstanceOf[Class[T with Persisted]]
     else {
       val name = generateName()
 
@@ -42,40 +60,15 @@ object PersistedEnabler {
         """
       }
 
-      println(code)
-
-
       interpreter.compileString(code)
       val c =
         interpreter.classLoader.findClass(name)
           .asInstanceOf[Class[T with Persisted]]
-
       interpreter.reset()
-
       persistedClassCache(tag) = c
 
       c
     }
-  }
-
-  def toPersisted[T <: AnyRef](instance: T, key: String)
-                              (implicit instanceTag: TypeTag[T]): T with Persisted = {
-
-    val c = persistedClass(instanceTag)
-
-
-    val args = {
-      val valuesMap = propertyValues(instance)
-      key ::
-        methodParams(constructors(instanceTag.tpe).head.typeSignature)
-          .map(_.name.decoded.trim)
-          .map(valuesMap(_))
-
-    }
-
-    c.getConstructors.head
-      .newInstance(args.asInstanceOf[List[Object]]: _*)
-      .asInstanceOf[T with Persisted]
   }
 
   private lazy val interpreter = {
@@ -93,10 +86,12 @@ object PersistedEnabler {
   }
 
 
-  def propertyNames(t: Type) =
+  // REFLECTION HELPERS
+
+  private def propertyNames(t: Type) =
     t.members.filter(m => !m.isMethod && m.isTerm).map(_.name.decoded.trim)
 
-  def propertyValues[T <: AnyRef](instance: T) = {
+  private def propertyValuesMap[T <: AnyRef](instance: T) = {
     val t = typeOfInstance(instance)
 
     propertyNames(t)
@@ -104,18 +99,18 @@ object PersistedEnabler {
       .toMap
   }
 
-  type MethodType = {def params: List[Symbol]; def resultType: Type}
+  private type MethodType = {def params: List[Symbol]; def resultType: Type}
 
-  def methodParams(t: Type): List[Symbol] =
+  private def methodParams(t: Type): List[Symbol] =
     t.asInstanceOf[MethodType].params
 
-  def methodResultType(t: Type): Type =
+  private def methodResultType(t: Type): Type =
     t.asInstanceOf[MethodType].resultType
 
-  def constructors(t: Type): Iterable[Symbol] =
+  private def constructors(t: Type): Iterable[Symbol] =
     t.members.filter(_.kind == "constructor")
 
-  def fullyQualifiedName(s: Symbol): String = {
+  private def fullyQualifiedName(s: Symbol): String = {
     def symbolsTree(s: Symbol): List[Symbol] =
       if (s.enclosingTopLevelClass != s)
         s :: symbolsTree(s.enclosingTopLevelClass)

@@ -18,4 +18,6 @@ trait API {
 
   def save[T](values: List[T]): List[T with Persisted]
 
+  def all[T]: QueryStream[T with Persisted]
+
 }

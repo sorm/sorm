@@ -12,7 +12,7 @@ trait API {
    * Replaces insertUpdateDelete approach because it didn't allow to execute inserts
    * prior to updates to be able to manipulate their ids.
    */
-  def transaction(f: () => ())
+  def transaction(f: () => Unit)
 
   def save[T](value: T): T with Persisted
 

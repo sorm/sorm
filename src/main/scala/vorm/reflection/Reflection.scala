@@ -75,7 +75,7 @@ object Reflection {
 
   class Property(val name: String, val owner: Type, val tpe: Type) {
     def value(instance: AnyRef) =
-      owner.javaClass.getMethod(name).invoke(instance)
+      mirror.invoke(instance, owner.mt.member(mirror.newTermName(name).asInstanceOf[mirror.Name]))()
 
     override def toString = owner.toString + "." + name + ": " + tpe.toString
   }
@@ -83,9 +83,12 @@ object Reflection {
   class Method(val name: String, val owner: Type, val argumentTypes: List[Type], val resultType: Type) {
 
     def invoke(instance: AnyRef, args: List[Any] = Nil) =
-      owner.javaClass
-        .getMethod(name, argumentTypes.map(_.javaClass): _*)
-        .invoke(instance, args.asInstanceOf[List[Object]]: _*)
+      mirror.invoke(
+        instance,
+        owner.mt.member(
+          mirror.newTermName(name).asInstanceOf[mirror.Name]
+        )
+      )(args: _*)
 
     override def toString = owner.toString + "." + name + "(" + argumentTypes.mkString(", ") + "): " + resultType.toString
   }

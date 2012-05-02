@@ -38,6 +38,10 @@ class TypeReflection(val mt: mirror.Type) extends Reflection {
     mirror.typeToClass(mt)
 
 
+  def is[T: TypeTag] =
+    mt <:< tag[T].tpe
+
+
   def property(name: String) =
     properties.find(_.name == name).get
 

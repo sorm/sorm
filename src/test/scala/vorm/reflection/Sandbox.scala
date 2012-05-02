@@ -10,6 +10,12 @@ object Sandbox extends App {
   val artist = Artist("234", "Nirvana", Set(Genre("Grunge"), Genre("Rock")), Set("kurt-cobain", "grunge", "nirvana"))
 
 
+
+  println {
+    reflection(Seq(342, 34)).is[AnyVal]
+  }
+
+
   reflection[Artist].properties.foreach(println)
   reflection[Artist].property("genres").tpe.generics.foreach(println)
 

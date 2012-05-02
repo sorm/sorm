@@ -11,12 +11,13 @@ object Sandbox extends App {
   val artist = Artist("234", "Nirvana", Set(Genre("Grunge"), Genre("Rock")), Set("kurt-cobain", "grunge", "nirvana"))
 
 
-//  tpe[Artist].properties.foreach(println)
-//  tpe[Artist].property("genres").tpe.generics.foreach(println)
+  tpe[Artist].properties.foreach(println)
+  tpe[Artist].property("genres").tpe.generics.foreach(println)
 
 
   println {
-    tpe[Artist].constructors
+    tpe[Artist].method("sings").invoke(artist, List("ass"))
+//    tpe[Artist].property("tags").value(artist)
   }
 
 }

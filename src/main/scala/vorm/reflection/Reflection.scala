@@ -16,13 +16,13 @@ object Reflection {
     }
 
   def tpe[T: TypeTag]: Type =
-    tpe(tag[T].tpe)
+    tpe(mirror.classToType(tag[T].erasure))
 
   def tpe[T: TypeTag](instance: T): Type =
-    tpe(tag[T].tpe)
+    tpe[T]
 
 
-  class Type(mt: mirror.Type) {
+  class Type(val mt: mirror.Type) {
 
     private def method(s: mirror.Symbol): Method = {
       type MethodType = {
@@ -54,6 +54,9 @@ object Reflection {
       mt.members.filter(m => m.kind == "constructor" && m.owner == mt.typeSymbol)
         .map(method)
 
+    lazy val javaClass =
+      mirror.typeToClass(mt)
+
 
     def property(name: String) =
       properties.find(_.name == name).get
@@ -72,12 +75,17 @@ object Reflection {
 
   class Property(val name: String, val owner: Type, val tpe: Type) {
     def value(instance: AnyRef) =
-      instance.getClass.getMethods.find(_.getName == name).get.invoke(instance)
+      owner.javaClass.getMethod(name).invoke(instance)
 
     override def toString = owner.toString + "." + name + ": " + tpe.toString
   }
 
   class Method(val name: String, val owner: Type, val argumentTypes: List[Type], val resultType: Type) {
+
+    def invoke(instance: AnyRef, args: List[Any] = Nil) =
+      owner.javaClass
+        .getMethod(name, argumentTypes.map(_.javaClass): _*)
+        .invoke(instance, args.asInstanceOf[List[Object]]: _*)
 
     override def toString = owner.toString + "." + name + "(" + argumentTypes.mkString(", ") + "): " + resultType.toString
   }

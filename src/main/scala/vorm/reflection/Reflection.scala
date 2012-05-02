@@ -14,15 +14,18 @@ object Reflection {
         t
       }
     }
+
   def tpe[T: TypeTag]: Type =
     tpe(tag[T].tpe)
+
   def tpe[T: TypeTag](instance: T): Type =
     tpe(tag[T].tpe)
+
 
   class Type(mt: mirror.Type) {
     lazy val generics =
       mt.typeArguments.indices
-        .map(i => new Generic(mt.typeArguments(i), this, i))
+        .map(i => new Generic(i, tpe(mt.typeArguments(i)), this))
 
     lazy val properties =
       mt.members.filter(m => !m.isMethod)
@@ -34,9 +37,11 @@ object Reflection {
     override def toString = mt.toString
   }
 
-  class Generic(mt: mirror.Type, val owner: Type, val index: Int) extends Type(mt) {
-    override def toString = super.toString + "@" + owner.toString
+
+  class Generic(val index: Int, val tpe: Type, val owner: Type) {
+    override def toString = tpe.toString + "@" + owner.toString
   }
+
 
   class Property(val name: String, val tpe: Type, val owner: Type) {
     override def toString = owner.toString + "." + name + ": " + tpe.toString

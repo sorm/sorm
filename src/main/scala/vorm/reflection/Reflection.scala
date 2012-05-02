@@ -31,8 +31,8 @@ object Reflection {
       mt.members.filter(m => !m.isMethod && m.owner == mt.typeSymbol)
         .map(p => new Property(p.name.decoded.trim, tpe(p.typeSignature), this))
 
-    lazy val propertyByNameMap =
-      properties.map(p => p.name -> p).toMap
+    def property(name: String) =
+      properties.find(_.name == name)
 
     override def toString = mt.toString
   }

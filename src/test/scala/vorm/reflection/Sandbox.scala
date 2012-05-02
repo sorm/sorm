@@ -10,6 +10,6 @@ object Sandbox extends App {
 
   println(tpe(Genre("")))
 
-  tpe[Artist].propertyByNameMap("genres").tpe.generics.foreach(println)
+  tpe[Artist].property("genres").get.tpe.generics.foreach(println)
 
 }

@@ -28,7 +28,7 @@ object Reflection {
         .map(i => new Generic(i, tpe(mt.typeArguments(i)), this))
 
     lazy val properties =
-      mt.members.filter(m => !m.isMethod)
+      mt.members.filter(m => !m.isMethod && m.owner == mt.typeSymbol)
         .map(p => new Property(p.name.decoded.trim, tpe(p.typeSignature), this))
 
     lazy val propertyByNameMap =

@@ -4,12 +4,19 @@ import Reflection._
 
 object Sandbox extends App {
   case class Genre(name: String)
-  case class Artist(id: String, name: String, genres: Set[Genre], tags: Set[String])
+  case class Artist(id: String, name: String, genres: Set[Genre], tags: Set[String]) {
+    def sings(song: String): Boolean = false
+  }
 
-  tpe[Artist].properties.foreach(println)
+  val artist = Artist("234", "Nirvana", Set(Genre("Grunge"), Genre("Rock")), Set("kurt-cobain", "grunge", "nirvana"))
 
-  println(tpe(Genre("")))
 
-  tpe[Artist].property("genres").get.tpe.generics.foreach(println)
+//  tpe[Artist].properties.foreach(println)
+//  tpe[Artist].property("genres").tpe.generics.foreach(println)
+
+
+  println {
+    tpe[Artist].constructors
+  }
 
 }

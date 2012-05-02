@@ -1,8 +1,8 @@
-package vorm
+package vorm.reflection
 
 import reflect.mirror
 
-package object reflection {
+object Reflection {
 
   private val tpeCache = collection.mutable.Map[mirror.Type, Type]()
   def tpe(mt: mirror.Type): Type =

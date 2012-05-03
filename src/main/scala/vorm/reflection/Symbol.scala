@@ -1,4 +1,4 @@
 package vorm.reflection
 
-trait Reflection
+trait Symbol
 

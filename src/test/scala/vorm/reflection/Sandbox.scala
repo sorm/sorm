@@ -9,26 +9,32 @@ object Sandbox extends App {
 
   val artist = Artist("234", "Nirvana", Set(Genre("Grunge"), Genre("Rock")), Set("kurt-cobain", "grunge", "nirvana"))
 
-  assert(reflection[Artist].name == "Artist", reflection[Artist].name)
-  assert(reflection[Set[String]].name == "Set")
-  assert(reflection[Artist].property("genres").tpe.name == "Set")
-
-  assert(reflection(Seq(342, 34)).is[AnyVal] == false)
-  assert(reflection(342).is[AnyVal] == true)
-
-  assert(reflection(Seq(342, 34)).is[Seq[_]])
-  assert(reflection(Map("a" -> 1, "b" -> 0)).is[Traversable[_]])
-  assert(reflection(Map("a" -> 1, "b" -> 0)).is[Map[_,_]])
-  assert(!reflection(Map("a" -> 1, "b" -> 0)).is[AnyVal])
+  assert(typeSymbol[Artist].t.name == "Artist")
+  assert(typeSymbol[Set[String]].t.name == "Set")
+  assert(typeSymbol[Artist].t.properties("genres").name == "Set")
+  assert(typeSymbol[Artist].properties("genres").t.name == "Set")
+  assert(typeSymbol[Artist].properties("genres").name == "genres")
 
 
-  reflection[Artist].properties.foreach(println)
-  reflection[Artist].property("genres").tpe.generics.foreach(println)
+  typeSymbol[Artist].properties.values.foreach(println)
+  typeSymbol[Artist].properties("genres").t.generics.foreach(println)
 
-  println(reflection[Artist].property("tags").value(artist))
+  println(typeSymbol[Artist].properties("tags").value(artist))
 
-  println {
-    reflection[Artist].method("sings").invoke(artist, List("AAAA"))
-  }
+  println(typeSymbol[Artist].methods("sings").result(artist, List("AAAA")))
+
+  assert(342.is[AnyVal])
+  assert(!Seq(123, 2313).is[AnyVal])
+  assert(Seq(123, 2313).is[Seq[_]])
+
+  assert(Seq(123, 2313).is[Traversable[_]])
+  assert(Map("a" -> 1, "b" -> 0).is[Traversable[_]])
+
+  assert(Seq(123, 2313).is[Seq[Int]])
+  assert(!Seq(123, 2313).is[Seq[String]])
+
+  assert(Map("a" -> 1, "b" -> 0).is[Map[_, _]])
+  assert(!Map("a" -> 1, "b" -> 0).is[AnyVal])
+
 
 }

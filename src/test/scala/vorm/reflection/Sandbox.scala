@@ -9,11 +9,12 @@ object Sandbox extends App {
 
   val artist = Artist("234", "Nirvana", Set(Genre("Grunge"), Genre("Rock")), Set("kurt-cobain", "grunge", "nirvana"))
 
+  assert(reflection[Artist].name == "Artist", reflection[Artist].name)
+  assert(reflection[Set[String]].name == "Set")
+  assert(reflection[Artist].property("genres").tpe.name == "Set")
 
-
-  println {
-    reflection(Seq(342, 34)).is[AnyVal]
-  }
+  assert(reflection(Seq(342, 34)).is[AnyVal] == false)
+  assert(reflection(342).is[AnyVal] == true)
 
 
   reflection[Artist].properties.foreach(println)

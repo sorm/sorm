@@ -38,7 +38,7 @@ class TypeReflection(val mt: mirror.Type) extends Reflection {
     mirror.typeToClass(mt)
 
   lazy val name =
-    javaClass.getSimpleName
+    mt.typeSymbol.name.decoded
 
 
   def is[T: TypeTag] =

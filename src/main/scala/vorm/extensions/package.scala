@@ -31,5 +31,8 @@ package object extensions {
     def matchingValue(p: T => Boolean) =
       if (p(x)) Some(x) else None
 
+    def println() {
+      Console.println(x)
+    }
   }
 }

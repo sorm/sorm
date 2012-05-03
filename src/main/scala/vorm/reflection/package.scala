@@ -19,5 +19,7 @@ package object reflection {
 
   def tpe[T: TypeTag]: Type =
     tpe(mirror.classToType(tag[T].erasure))
+  //     tpe(tag[T].tpe)
+
 
 }

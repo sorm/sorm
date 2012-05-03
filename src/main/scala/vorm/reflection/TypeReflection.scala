@@ -37,6 +37,9 @@ class TypeReflection(val mt: mirror.Type) extends Reflection {
   lazy val javaClass =
     mirror.typeToClass(mt)
 
+  lazy val name =
+    javaClass.getSimpleName
+
 
   def is[T: TypeTag] =
     mt <:< tag[T].tpe

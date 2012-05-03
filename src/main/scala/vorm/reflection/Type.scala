@@ -84,30 +84,15 @@ class Type(mt: mirror.Type) {
   val propertyValue = methodResult(_: String, _: AnyRef)
 
 
-  //  lazy val properties =
-  //    mt.members.filter(m => !m.isMethod && m.owner == mt.typeSymbol)
-  //      .map(p => new PropertySymbol(p.name.decoded.trim, this, reflection(p.typeSignature)))
-  //
-  //  lazy val methods =
-  //    mt.members.filter(m => m.isMethod && m.owner == mt.typeSymbol)
-  //      .map(method)
-  //
+  def inherits(t: Type): Boolean =
+  //    mt <:< tag[T].tpe
+    throw new NotImplementedError
+
+
   //  lazy val constructors =
   //    mt.members.filter(m => m.kind == "constructor" && m.owner == mt.typeSymbol)
   //      .map(method)
   //
-  //
-  //
-  //  def is[T: TypeTag] =
-  //    mt <:< tag[T].tpe
-  //
-  //
-  //  def property(name: String) =
-  //    properties.find(_.name == name).get
-  //
-  //  def method(name: String): MethodSymbol =
-  //    methods.find(_.name == name).get
-
 
   override def toString = mt.toString
 }

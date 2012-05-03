@@ -16,6 +16,11 @@ object Sandbox extends App {
   assert(reflection(Seq(342, 34)).is[AnyVal] == false)
   assert(reflection(342).is[AnyVal] == true)
 
+  assert(reflection(Seq(342, 34)).is[Seq[_]])
+  assert(reflection(Map("a" -> 1, "b" -> 0)).is[Traversable[_]])
+  assert(reflection(Map("a" -> 1, "b" -> 0)).is[Map[_,_]])
+  assert(!reflection(Map("a" -> 1, "b" -> 0)).is[AnyVal])
+
 
   reflection[Artist].properties.foreach(println)
   reflection[Artist].property("genres").tpe.generics.foreach(println)

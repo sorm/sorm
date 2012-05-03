@@ -3,7 +3,7 @@ package vorm.reflection
 import reflect.mirror
 
 /**
- * An abstraction over Scala's mirror
+ * An abstraction over Scala's mirror functionality
  */
 class Type(mt: mirror.Type) {
 
@@ -17,10 +17,8 @@ class Type(mt: mirror.Type) {
       .map(tpe(_))
   lazy val properties =
     mt.members.filter(m => !m.isMethod && m.owner == mt.typeSymbol)
-      .map(s => s.name.decoded.trim -> tpe(s.typeSignature))
-      .toMap
-
-  lazy val methods = {
+      .map(s => Property(s.name.decoded.trim, tpe(s.typeSignature)))
+  lazy val methods    = {
     def method(s: mirror.Symbol) = {
       type MethodType = {
         def params: List[mirror.Symbol]
@@ -28,13 +26,13 @@ class Type(mt: mirror.Type) {
       }
       val t = s.typeSignature.asInstanceOf[MethodType]
       val name = s.name.decoded.trim
-      val parameters =
-        t.params.map(p => (s.name.decoded, tpe(p.typeSignature))).toMap
-      val resultType = tpe(t.resultType)
-      name -> (parameters -> resultType)
+      val arguments =
+        t.params.map(p => Argument(p.name.decoded, tpe(p.typeSignature)))
+      val result = tpe(t.resultType)
+      Method(name, arguments, result)
     }
     mt.members.filter(m => m.isMethod && m.owner == mt.typeSymbol)
-      .map(method).toMap
+      .map(method)
   }
 
 
@@ -44,18 +42,24 @@ class Type(mt: mirror.Type) {
       mt.member(mirror.newTermName(name).asInstanceOf[mirror.Name])
     )(args: _*)
 
-  val propertyValue = methodResult(_: String, _: AnyRef)
+  def propertyValue(name: String, instance: AnyRef) =
+    methodResult(_: String, _: AnyRef)
 
-
-  def inherits(t: Type): Boolean =
-  //    mt <:< tag[T].tpe
-    throw new NotImplementedError
-
+  //  def inherits(t: Type): Boolean =
+  //    mt <:< t.mt
+  def inherits[T: TypeTag]: Boolean =
+    mt <:< tag[T].tpe
 
   //  lazy val constructors =
   //    mt.members.filter(m => m.kind == "constructor" && m.owner == mt.typeSymbol)
   //      .map(method)
   //
+
+
+  private lazy val methodByNameMap   = methods.map(m => m.name -> m).toMap
+  private lazy val propertyByNameMap = properties.map(p => p.name -> p).toMap
+  def method(name: String) = methodByNameMap(name)
+  def property(name: String) = propertyByNameMap(name)
 
   override def toString = mt.toString
 }

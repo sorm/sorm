@@ -23,18 +23,5 @@ object Sandbox extends App {
 
   println(typeSymbol[Artist].methods("sings").result(artist, List("AAAA")))
 
-  assert(342.is[AnyVal])
-  assert(!Seq(123, 2313).is[AnyVal])
-  assert(Seq(123, 2313).is[Seq[_]])
-
-  assert(Seq(123, 2313).is[Traversable[_]])
-  assert(Map("a" -> 1, "b" -> 0).is[Traversable[_]])
-
-  assert(Seq(123, 2313).is[Seq[Int]])
-  assert(!Seq(123, 2313).is[Seq[String]])
-
-  assert(Map("a" -> 1, "b" -> 0).is[Map[_, _]])
-  assert(!Map("a" -> 1, "b" -> 0).is[AnyVal])
-
 
 }

@@ -10,5 +10,5 @@ class MethodSymbol(
   val result = host.t.methodResult(name, _:AnyRef, _: List[Any])
 
   override def toString =
-    host.toString+"."+name+"("+argumentTypes.mkString(", ")+"): "+resultType.toString
+    host.toString+"."+name+"("+argumentTypes.map{case(name, t) => name+": "+t}.mkString(", ")+"): "+resultType.toString
 }

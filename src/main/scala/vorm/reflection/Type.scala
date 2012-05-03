@@ -17,46 +17,6 @@ class Type(mt: mirror.Type) {
       .map(s => s.name.decoded.trim -> tpe(s.typeSignature))
       .toMap
 
-  //case class PropertyDescriptor(
-  //  name: String,
-  //  t: Type
-  //)
-  //case class ArgumentDescriptor(
-  //  name: String,
-  //  t: Type
-  //)
-  //case class MethodDescriptor(
-  //  name: String,
-  //  arguments: List[ArgumentDescriptor],
-  //  result: Type
-  //)
-
-  //  lazy val methodParameters =
-  //    mt.members.filter(m => m.isMethod && m.owner == mt.typeSymbol)
-  //      .map(s =>
-  //        s.name.decoded.trim ->
-  //          s.asInstanceOf[{def params: List[mirror.Symbol]}].params
-  //            .map(s => reflection(s.typeSignature))
-  //      )
-  //      .toMap
-
-  //  lazy val methods = {
-  //    def method(s: mirror.Symbol) = {
-  //      type MethodType = {
-  //        def params: List[mirror.Symbol]
-  //        def resultType: mirror.Type
-  //      }
-  //      val t = s.typeSignature.asInstanceOf[MethodType]
-  //      new MethodDescriptor(
-  //        s.name.decoded.trim,
-  //        t.params.map(p => ArgumentDescriptor(s.name.decoded, reflection(p.typeSignature))),
-  //        reflection(t.resultType)
-  //      )
-  //    }
-  //    mt.members.filter(m => m.isMethod && m.owner == mt.typeSymbol)
-  //      .map(method)
-  //  }
-
   lazy val methods = {
     def method(s: mirror.Symbol) = {
       type MethodType = {

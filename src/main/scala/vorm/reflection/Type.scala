@@ -1,6 +1,7 @@
 package vorm.reflection
 
 import reflect.mirror
+import vorm.reflection.Type._
 
 /**
  * An abstraction over Scala's mirror functionality
@@ -62,4 +63,30 @@ class Type(mt: mirror.Type) {
   def property(name: String) = propertyByNameMap(name)
 
   override def toString = mt.toString
+}
+
+object Type {
+
+  case class Property(
+    name: String,
+    t: Type
+  ) {
+    override def toString = name + ":" + t
+  }
+
+  case class Argument(
+    name: String,
+    t: Type
+  ) {
+    override def toString = name + ":" + t
+  }
+
+  case class Method(
+    name: String,
+    arguments: List[Argument],
+    resultType: Type
+  ) {
+    override def toString = name + "(" + arguments.mkString(", ") + "): " + resultType.toString
+  }
+
 }

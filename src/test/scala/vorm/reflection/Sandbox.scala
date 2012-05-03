@@ -8,8 +8,8 @@ object Sandbox extends App {
 
   val artist = Artist("234", "Nirvana", Set(Genre("Grunge"), Genre("Rock")), Set("kurt-cobain", "grunge", "nirvana"))
 
-//  tpe[Artist].properties.foreach(println)
-//  tpe[Artist].methods.foreach(println)
+  tpe[Artist].properties.foreach(println)
+  tpe[Artist].methods.foreach(println)
 
 
 }

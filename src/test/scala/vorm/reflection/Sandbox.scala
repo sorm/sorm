@@ -9,19 +9,19 @@ object Sandbox extends App {
 
   val artist = Artist("234", "Nirvana", Set(Genre("Grunge"), Genre("Rock")), Set("kurt-cobain", "grunge", "nirvana"))
 
-  assert(typeSymbol[Artist].t.name == "Artist")
-  assert(typeSymbol[Set[String]].t.name == "Set")
-  assert(typeSymbol[Artist].t.properties("genres").name == "Set")
-  assert(typeSymbol[Artist].properties("genres").t.name == "Set")
-  assert(typeSymbol[Artist].properties("genres").name == "genres")
+  assert(reflection[Artist].t.name == "Artist")
+  assert(reflection[Set[String]].t.name == "Set")
+  assert(reflection[Artist].t.properties("genres").name == "Set")
+  assert(reflection[Artist].properties("genres").t.name == "Set")
+  assert(reflection[Artist].properties("genres").name == "genres")
 
 
-  typeSymbol[Artist].properties.values.foreach(println)
-  typeSymbol[Artist].properties("genres").t.generics.foreach(println)
+  reflection[Artist].properties.values.foreach(println)
+  reflection[Artist].properties("genres").t.generics.foreach(println)
 
-  println(typeSymbol[Artist].properties("tags").value(artist))
+  println(reflection[Artist].properties("tags").value(artist))
 
-  println(typeSymbol[Artist].methods("sings").result(artist, List("AAAA")))
+  println(reflection[Artist].methods("sings").result(artist, List("AAAA")))
 
 
 }

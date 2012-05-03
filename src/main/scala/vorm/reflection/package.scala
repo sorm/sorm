@@ -17,13 +17,7 @@ package object reflection {
       }
     }
 
-  def reflection[T: TypeTag] =
-    new TypeSymbol(tpe(mirror.classToType(tag[T].erasure)))
-
-  implicit def anyWrapper[T: TypeTag](any: T) = new AnyWrapper(any)
-  class AnyWrapper[T: TypeTag](source: T) {
-    def reflection =
-      vorm.reflection.reflection[T]
-  }
+  def tpe[T: TypeTag]: Type =
+    tpe(mirror.classToType(tag[T].erasure))
 
 }

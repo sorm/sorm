@@ -2,6 +2,9 @@ package vorm.reflection
 
 import reflect.mirror
 
+/**
+ * An abstraction over Scala's mirror
+ */
 class Type(mt: mirror.Type) {
 
 

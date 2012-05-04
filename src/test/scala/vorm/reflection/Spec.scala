@@ -35,9 +35,40 @@ class Spec extends Specification{
   }
 
   "A property" should {
+    val t = tpe[Artist]
     "have proper type generics" in
-      tpe[Artist].property("genres").t.generics.head === tpe[Genre]
+      t.property("genres").t.generics.head === tpe[Genre]
     "have proper type generics on primitive types" in
-      tpe[Artist].property("tags").t.generics.head === tpe[String]
+      t.property("tags").t.generics.head === tpe[String]
+  }
+
+  "A map of ints by strings Type" should {
+    val t = tpe[Map[String, Int]]
+    "inherit an unparameterized map" in
+      t.inherits[Map[_, _]]
+    "inherit an int by string map" in
+      t.inherits[Map[String, Int]]
+    "not inherit an int by int map" in
+      !t.inherits[Map[Int, Int]]
+  }
+  "A List of Ints by Set of Strings Map Type" should {
+    val t = tpe[Map[Set[String], List[Int]]]
+    "inherit the same type" in
+      t.inherits[Map[Set[String], List[Int]]]
+    "inherit the same main type with any generics" in
+      t.inherits[Map[_, _]]
+    "not inherit the same main type with different generics" in
+      !t.inherits[Map[Int, String]]
+    "not inherit the same main type with different deep generics" in
+      !t.inherits[Map[Set[Int], List[String]]]
+  }
+  "A Set of Ints Type" should {
+    val t = tpe[Set[Int]]
+    "inherit the same type" in
+      t.inherits[Set[Int]]
+    "inherit the same main type with any generics" in
+      t.inherits[Set[_]]
+    "not inherit the same main type with different generics" in
+      !t.inherits[Set[String]]
   }
 }

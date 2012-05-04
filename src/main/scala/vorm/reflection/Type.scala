@@ -46,10 +46,13 @@ class Type(mt: mirror.Type) {
   def propertyValue(name: String, instance: AnyRef) =
     methodResult(_: String, _: AnyRef)
 
-  //  def inherits(t: Type): Boolean =
-  //    mt <:< t.mt
   def inherits[T: TypeTag]: Boolean =
     mt <:< tag[T].tpe
+//    if (generics.nonEmpty)
+//      mt <:< tag[T].tpe
+//    else
+//      mt <:< mirror.classToType(tag[T].erasure)
+
 
   //  lazy val constructors =
   //    mt.members.filter(m => m.kind == "constructor" && m.owner == mt.typeSymbol)

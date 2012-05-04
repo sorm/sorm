@@ -25,10 +25,10 @@ package object extensions {
       }
     }
 
-    def notEmptyValue =
+    def notEmpty =
       if (isEmpty) None else Some(x)
 
-    def matchingValue(p: T => Boolean) =
+    def satisfying(p: T => Boolean) =
       if (p(x)) Some(x) else None
 
     def println() {

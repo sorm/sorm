@@ -11,19 +11,19 @@ class Spec extends Specification{
 
   "A Seq[Int] type" should {
     val t = tpe[Seq[Int]]
-    
+
     "inherit Seq[Int]" in
       t.inherits[Seq[Int]]
     "inherit Traversable[_]" in
       t.inherits[Traversable[_]]
     "inherit Traversable[Int]" in
       t.inherits[Traversable[Int]]
-    "not iherit AnyVal" in 
+    "not iherit AnyVal" in
       !t.inherits[AnyVal]
-    "inherit Any" in 
+    "inherit Any" in
       t.inherits[Any]
     "have Int as the only generic" in {
-      t.generics.length === 1 
+      t.generics.length === 1
       t.generics(0) == tpe[Int]
     }
   }
@@ -35,11 +35,12 @@ class Spec extends Specification{
   }
 
   "A property" should {
+    val s = tpe[String]
     val t = tpe[Artist]
     "have proper type generics" in
       t.property("genres").t.generics.head === tpe[Genre]
     "have proper type generics on primitive types" in
-      t.property("tags").t.generics.head === tpe[String]
+      t.property("tags").t.generics.head === s
   }
 
   "A map of ints by strings Type" should {

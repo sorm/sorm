@@ -2,15 +2,15 @@ package vorm.reflection
 
 import reflect.mirror
 import vorm.reflection.Type._
+import com.sun.org.apache.xalan.internal.xsltc.compiler.sym
 
 /**
  * An abstraction over Scala's mirror functionality
  */
 class Type(mt: mirror.Type) {
 
-
-  lazy val javaClass  =
-    mirror.typeToClass(mt)
+  lazy val fullName   =
+    mt.typeSymbol.fullName
   lazy val name       =
     mt.typeSymbol.name.decoded
   lazy val generics   =
@@ -46,13 +46,40 @@ class Type(mt: mirror.Type) {
   def propertyValue(name: String, instance: AnyRef) =
     methodResult(_: String, _: AnyRef)
 
+
+  /**
+   * Scala bugs trickery and black magic
+   */
+  lazy val javaClass: Class[_]  =
+    try mirror.typeToClass(mt)
+    catch {
+      case e: ClassNotFoundException =>
+        def classByName(n: String) = mirror.symbolToClass(mirror.symbolForName(n))
+        mt.typeSymbol.fullName match {
+          case n if n == "scala.Any" => classOf[Any]
+          case n => classByName(n)
+        }
+    }
+
+  def inherits(t: Type): Boolean =
+    t.fullName match {
+      case n if n == "scala.Any" => true
+      case _ =>
+        t.javaClass.isAssignableFrom(javaClass) &&
+        generics.zip(t.generics).forall {case (a, b) => a.inherits(b)}
+    }
+
+
   def inherits[T: TypeTag]: Boolean =
-    mt <:< tag[T].tpe
+    inherits(tpe[T])
+//    mirror.typeToClass(tag[T].tpe)
+//    mt <:< tag[T].tpe
+
+//    mt <:< tag[T].tpe
 //    if (generics.nonEmpty)
 //      mt <:< tag[T].tpe
 //    else
 //      mt <:< mirror.classToType(tag[T].erasure)
-
 
   //  lazy val constructors =
   //    mt.members.filter(m => m.kind == "constructor" && m.owner == mt.typeSymbol)
@@ -89,7 +116,7 @@ object Type {
     arguments: List[Argument],
     resultType: Type
   ) {
-    override def toString = name + "(" + arguments.mkString(", ") + "): " + resultType.toString
+    override def toString = name + "(" + arguments.mkString(",") + "):" + resultType.toString
   }
 
 }

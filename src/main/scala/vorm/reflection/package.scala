@@ -10,16 +10,18 @@ package object reflection {
   private[reflection] def tpe[T](mt: mirror.Type): Type =
     try tpeCache(mt)
     catch {
-      case _ => {
+      case _ =>
         val t = new Type(mt)
         tpeCache.update(mt, t)
         t
-      }
     }
 
   def tpe[T: TypeTag]: Type =
-//    tpe(mirror.classToType(tag[T].erasure))
-       tpe(tag[T].tpe)
+    tpe(tag[T].tpe)
+
+
+//    tpe(tag[T].tpe)
+//      tpe(mirror.classToType(tag[T].erasure))
 
 
 }

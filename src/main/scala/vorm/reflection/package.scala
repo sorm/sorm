@@ -20,8 +20,4 @@ package object reflection {
     tpe(tag[T].tpe)
 
 
-//    tpe(tag[T].tpe)
-//      tpe(mirror.classToType(tag[T].erasure))
-
-
 }

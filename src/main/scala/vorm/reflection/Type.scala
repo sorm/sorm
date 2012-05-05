@@ -46,9 +46,7 @@ class Type(mt: mirror.Type) {
     methodResult(_: String, _: AnyRef)
 
 
-  /**
-   * Scala bugs trickery and black magic
-   */
+
   lazy val javaClass: Class[_]  =
     try mirror.typeToClass(mt)
     catch {
@@ -60,6 +58,10 @@ class Type(mt: mirror.Type) {
         }
     }
 
+  /**
+   * Scala bugs trickery and black magic.
+   * Should have been based on <code>mt <:< tag[T].tpe</code> but there are bugs in there.
+   */
   def inherits(t: Type): Boolean =
     t.fullName match {
       case n if n == "scala.Any" => true
@@ -73,20 +75,11 @@ class Type(mt: mirror.Type) {
 
   def inherits[T: TypeTag]: Boolean =
     inherits(tpe[T])
-//    mirror.typeToClass(tag[T].tpe)
-//    mt <:< tag[T].tpe
-
-//    mt <:< tag[T].tpe
-//    if (generics.nonEmpty)
-//      mt <:< tag[T].tpe
-//    else
-//      mt <:< mirror.classToType(tag[T].erasure)
 
   //  lazy val constructors =
   //    mt.members.filter(m => m.kind == "constructor" && m.owner == mt.typeSymbol)
   //      .map(method)
   //
-
 
   private lazy val methodByNameMap   = methods.map(m => m.name -> m).toMap
   private lazy val propertyByNameMap = properties.map(p => p.name -> p).toMap

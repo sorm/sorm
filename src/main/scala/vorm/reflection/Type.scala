@@ -2,7 +2,6 @@ package vorm.reflection
 
 import reflect.mirror
 import vorm.reflection.Type._
-import com.sun.org.apache.xalan.internal.xsltc.compiler.sym
 
 /**
  * An abstraction over Scala's mirror functionality
@@ -64,6 +63,8 @@ class Type(mt: mirror.Type) {
   def inherits(t: Type): Boolean =
     t.fullName match {
       case n if n == "scala.Any" => true
+      case n if n == "scala.AnyVal" =>
+        mt.typeSymbol.isPrimitiveValueClass
       case _ =>
         t.javaClass.isAssignableFrom(javaClass) &&
         generics.zip(t.generics).forall {case (a, b) => a.inherits(b)}

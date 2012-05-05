@@ -8,7 +8,22 @@ class Spec extends Specification{
     def sings(song: String) = song + "sldfjsldkjf"
   }
   val artist = Artist("234", "Nirvana", Set(Genre("Grunge"), Genre("Rock")), Set("kurt-cobain", "grunge", "nirvana"))
-
+  "An Int type" should {
+    "inherit AnyVal" in
+      tpe[Int].inherits[AnyVal]
+    "inherit Any" in
+      tpe[Int].inherits[Any]
+    "not inherit AnyRef" in
+      !tpe[Int].inherits[AnyRef]
+    "inherit Int" in
+      tpe[Int].inherits[Int]
+  }
+  "A String type" should {
+    "inherit Any" in
+      tpe[String].inherits[Any]
+    "inherit String" in
+      tpe[String].inherits[String]
+  }
   "A Seq[Int] type" should {
     val t = tpe[Seq[Int]]
 
@@ -27,13 +42,11 @@ class Spec extends Specification{
       t.generics(0) == tpe[Int]
     }
   }
-
   "A type" should {
     "have proper primitive generics" in
       tpe[Set[String]].generics.head === tpe[String]
 
   }
-
   "A property" should {
     val s = tpe[String]
     val t = tpe[Artist]
@@ -42,7 +55,6 @@ class Spec extends Specification{
     "have proper type generics on primitive types" in
       t.property("tags").t.generics.head === s
   }
-
   "A map of ints by strings Type" should {
     val t = tpe[Map[String, Int]]
     "inherit an unparameterized map" in

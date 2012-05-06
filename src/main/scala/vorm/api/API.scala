@@ -18,6 +18,13 @@ trait API {
 
   def save[T](values: List[T]): List[T with Persisted]
 
-  def all[T]: QueryStream[T with Persisted]
+  def all[T] =
+    new QueryStream[T with Persisted](connection)
+
+  def one[T] =
+    new QueryStream[T with Persisted](connection)
+      .limit(1)
+
+  private def connection: Connection
 
 }

@@ -6,7 +6,7 @@ import tools.nsc._
 
 package object persisted {
 
-  def toPersisted[T <: AnyRef : TypeTag](instance: T, id: String): T with Persisted = {
+  def toPersisted[T <: AnyRef : TypeTag](instance: T, id: Long): T with Persisted = {
     val t = tpe[T]
 
     val args =
@@ -52,13 +52,13 @@ package object persisted {
             sourceArgs.map(a => a.name + ": " + a.t.signature)
 
           val newArgSignatures =
-            "val key: String" :: sourceArgSignatures
+            "val id: Long" :: sourceArgSignatures
 
           val copyMethodArgSignatures =
             sourceArgs.map(a => a.name + ": " + a.t.signature + " = " + a.name)
 
           val copyMethodInstantiationArgs =
-            "key" :: sourceArgs.map(_.name)
+            "id" :: sourceArgs.map(_.name)
 
           """
           class """ + name + """(""" + newArgSignatures.mkString(", ") + """)

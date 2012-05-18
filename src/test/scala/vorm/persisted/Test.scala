@@ -16,11 +16,11 @@ class Suite extends FunSuite with ShouldMatchers {
     val artist = Artist("Nirvana", Set(Genre("rock"), Genre("grunge")))
 
 
-    val persisted = toPersisted(artist, "some-key")
+    val persisted = toPersisted(artist, 24)
 
     assert(persisted.isInstanceOf[Persisted])
     assert(persisted.isInstanceOf[Artist])
-    assert(persisted.key == "some-key")
+    assert(persisted.id == 24)
     assert(persisted.name == "Nirvana")
     assert(persisted == artist) //  an interesting and useful effect
 
@@ -30,7 +30,7 @@ class Suite extends FunSuite with ShouldMatchers {
     assert(copy.isInstanceOf[Persisted])
     assert(copy.isInstanceOf[Artist])
     //  the only problem: compiler thinks that `copy` does not implement `Persisted`, so to access `key` we have to specify it manually:
-    assert(copy.asInstanceOf[Artist with Persisted].key == "some-key")
+    assert(copy.asInstanceOf[Artist with Persisted].id == 24)
     assert(copy.name == "Puddle of Mudd")
     assert(copy != persisted)
 

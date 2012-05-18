@@ -1,9 +1,12 @@
 package vorm.extensions
 
-class AnyWrapper[T: TypeTag](x: T) {
+class AnyExtensions[T: TypeTag](x: T) {
   def as[Result](closure: T => Result) =
     closure(x)
 
+  /**
+   * Generics-aware version
+   */
   def isInstanceOf1[T2: TypeTag] =
     tag[T].tpe <:< tag[T2].tpe
 

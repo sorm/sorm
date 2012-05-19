@@ -6,7 +6,7 @@ import tools.nsc._
 
 package object persisted {
 
-  def toPersisted[T <: AnyRef : TypeTag](instance: T, id: Long): T with Persisted = {
+  def persisted[T <: AnyRef : TypeTag](instance: T, id: Long): T with Persisted = {
     val t = tpe[T]
 
     val args =
@@ -19,6 +19,10 @@ package object persisted {
       .newInstance(args.asInstanceOf[List[Object]]: _*)
       .asInstanceOf[T with Persisted]
 
+  }
+
+  def persisted[T <: AnyRef : TypeTag](properties: Map[String, Any], id: Long): T with Persisted = {
+    throw new NotImplementedError
   }
 
 

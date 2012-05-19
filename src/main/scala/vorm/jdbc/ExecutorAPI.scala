@@ -1,19 +1,14 @@
 package vorm.jdbc
 
-import worm.reflection._
-import worm.util.Extensions._
 import com.weiglewilczek.slf4s.Logging
-import worm.reflection.ReflectionUtil._
 import java.sql.{ResultSet, PreparedStatement, Connection, Statement => JStatement}
+import org.joda.time.DateTime
 
 trait ExecutorAPI extends Logging {
   protected def connection: Connection
 
-  /**
-   * @return Parsed results
-   */
-  protected def executeSelect(stmt: Statement): List[AnyRef] = {
-    throw new UnsupportedOperationException("TODO")
+  protected def executeSelect(stmt: Statement): () => ResultSet = {
+    throw new NotImplementedError
   }
   /**
    * @return How many rows updated
@@ -42,8 +37,7 @@ trait ExecutorAPI extends Logging {
       val js = connection.createStatement()
       js.executeUpdate(stmt.sql).ensuring(_ == 1)
       js.getGeneratedKeys
-    }
-    else {
+    } else {
       val js = prepareJDBCStatement(stmt, true)
       js.executeUpdate().ensuring(_ == 1)
       js.getGeneratedKeys
@@ -54,11 +48,17 @@ trait ExecutorAPI extends Logging {
     else prepareJDBCStatement(stmt).executeUpdate()
   }
   private def prepareJDBCStatement(stmt: Statement, generatedKeys: Boolean = false) = {
-    connection.prepareStatement(stmt.sql, if (generatedKeys) JStatement.RETURN_GENERATED_KEYS else JStatement.NO_GENERATED_KEYS).tap(s =>
-      stmt.data.indices.foreach(i =>
-        stmt.data(i).tap {case (v, t) => setJDBCStmtVar(s, i + 1, v, t)}
+    val s =
+      connection.prepareStatement(
+        stmt.sql,
+        if (generatedKeys) JStatement.RETURN_GENERATED_KEYS else JStatement.NO_GENERATED_KEYS
       )
-    )
+
+    stmt.data.zipWithIndex.foreach {
+      case (v, i) => setJDBCStmtVar(s, i, v)
+    }
+
+    s
   }
   /**
    * @see <a href=http://docstore.mik.ua/orelly/java-ent/servlet/ch09_02.htm#ch09-22421>jdbc table
@@ -74,6 +74,7 @@ trait ExecutorAPI extends Logging {
       case v: Double               => s.setDouble(i, v)
       case v: BigDecimal           => s.setBigDecimal(i, v.bigDecimal)
       case v: java.math.BigDecimal => s.setBigDecimal(i, v)
+      case v: DateTime             => s.setDate(i, new java.sql.Date(v.getMillis))
     }
   }
 

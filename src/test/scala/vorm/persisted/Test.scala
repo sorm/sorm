@@ -54,7 +54,6 @@ class Suite extends FunSuite with ShouldMatchers {
   }
   test("dynamic persisted fails on incorrect map") {
     evaluating {persisted[Artist](Map("name" -> "Nirvana"), 35)} should produce[Exception]
-    evaluating {persisted[Artist](Map("name" -> "", "genres" -> Set(), "sddfsdf" -> 0), 0)} should produce[Exception]
   }
 
 }

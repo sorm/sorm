@@ -11,7 +11,8 @@ package object persisted {
 
     val args =
       id ::
-      t.constructors.head.arguments.map(_.name)
+      t.constructors.head
+        .arguments.map(_.name)
         .map(t.propertyValue(_, instance))
 
     persistedClass[T](t)
@@ -22,7 +23,19 @@ package object persisted {
   }
 
   def persisted[T <: AnyRef : TypeTag](properties: Map[String, Any], id: Long): T with Persisted = {
-    throw new NotImplementedError
+    val t = tpe[T]
+
+    val args =
+      id ::
+      t.constructors.head
+        .arguments.map(_.name)
+        .map(properties)
+
+    persistedClass[T](t)
+      .getConstructors.head
+      .newInstance(args.asInstanceOf[List[Object]]: _*)
+      .asInstanceOf[T with Persisted]
+
   }
 
 

@@ -16,23 +16,23 @@ class Suite extends FunSuite with ShouldMatchers {
     val artist = Artist("Nirvana", Set(Genre("rock"), Genre("grunge")))
 
 
-    val persisted = persisted(artist, 24)
+    val instance = persisted(artist, 24)
 
-    assert(persisted.isInstanceOf[Persisted])
-    assert(persisted.isInstanceOf[Artist])
-    assert(persisted.id == 24)
-    assert(persisted.name == "Nirvana")
-    assert(persisted == artist) //  an interesting and useful effect
+    assert(instance.isInstanceOf[Persisted])
+    assert(instance.isInstanceOf[Artist])
+    assert(instance.id == 24)
+    assert(instance.name == "Nirvana")
+    assert(instance == artist) //  an interesting and useful effect
 
 
-    val copy = persisted.copy(name = "Puddle of Mudd")
+    val copy = instance.copy(name = "Puddle of Mudd")
 
     assert(copy.isInstanceOf[Persisted])
     assert(copy.isInstanceOf[Artist])
     //  the only problem: compiler thinks that `copy` does not implement `Persisted`, so to access `key` we have to specify it manually:
     assert(copy.asInstanceOf[Artist with Persisted].id == 24)
     assert(copy.name == "Puddle of Mudd")
-    assert(copy != persisted)
+    assert(copy != instance)
 
 
   }

@@ -63,17 +63,17 @@ trait ExecutorAPI extends Logging {
   /**
    * @see <a href=http://docstore.mik.ua/orelly/java-ent/servlet/ch09_02.htm#ch09-22421>jdbc table
    */
-  private def setJDBCStmtVar(s: PreparedStatement, n: Int, v: Any, t: TypeReflection) {
-    t match {
-      case _ if t.is[String] => s.setString(n, v.asInstanceOf[String])
-      case _ if t.is[java.math.BigDecimal] => s.setBigDecimal(n, v.asInstanceOf[java.math.BigDecimal])
-      case _ if t.is[BigDecimal] => s.setBigDecimal(n, v.asInstanceOf[BigDecimal].bigDecimal)
-      case _ if t.is[Boolean] => s.setBoolean(n, v.asInstanceOf[Boolean])
-      case _ if t.is[Integer] || t.is[Int] => s.setInt(n, v.asInstanceOf[Int])
-      case _ if t.is[Long] => s.setLong(n, v.asInstanceOf[Long])
-      case _ if t.is[Float] => s.setFloat(n, v.asInstanceOf[Float])
-      case _ if t.is[Double] => s.setDouble(n, v.asInstanceOf[Double])
-      case _ => throw new UnsupportedOperationException("Type " + t.typeName + " not supported")
+  private def setJDBCStmtVar(s: PreparedStatement, i: Int, v: Any) {
+    v match {
+      case v: Boolean              => s.setBoolean(i, v)
+      case v: String               => s.setString(i, v)
+      case v: Int                  => s.setInt(i, v)
+      case v: Integer              => s.setInt(i, v)
+      case v: Long                 => s.setLong(i, v)
+      case v: Float                => s.setFloat(i, v)
+      case v: Double               => s.setDouble(i, v)
+      case v: BigDecimal           => s.setBigDecimal(i, v.bigDecimal)
+      case v: java.math.BigDecimal => s.setBigDecimal(i, v)
     }
   }
 

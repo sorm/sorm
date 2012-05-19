@@ -22,9 +22,10 @@ package object persisted {
 
   }
 
-  def persisted[T <: AnyRef : TypeTag](properties: Map[String, Any], id: Long): T with Persisted = {
-    val t = tpe[T]
+  def persisted[T <: AnyRef : TypeTag](properties: Map[String, Any], id: Long) : T with Persisted =
+    persisted(tpe[T], properties, id)
 
+  def persisted[T <: AnyRef](t: Type, properties: Map[String, Any], id: Long) : T with Persisted = {
     val args =
       id ::
       t.constructors.head
@@ -35,7 +36,6 @@ package object persisted {
       .getConstructors.head
       .newInstance(args.asInstanceOf[List[Object]]: _*)
       .asInstanceOf[T with Persisted]
-
   }
 
 

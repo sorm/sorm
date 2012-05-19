@@ -2,12 +2,12 @@ package vorm.persisted
 
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
-import vorm.persisted.Suite._
+import vorm.persisted.Test._
 import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
 
 @RunWith(classOf[JUnitRunner])
-class Suite extends FunSuite with ShouldMatchers {
+class Test extends FunSuite with ShouldMatchers {
 
 
   test("all is fine") {
@@ -57,7 +57,7 @@ class Suite extends FunSuite with ShouldMatchers {
   }
 
 }
-object Suite {
+object Test {
 
   case class Artist(name: String, genres: Set[Genre])
 

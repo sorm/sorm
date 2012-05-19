@@ -91,7 +91,7 @@ class ConnectionAPI(connection: Connection) extends Logging {
         else JStatement.NO_GENERATED_KEYS
       )
     stmt.data.zipWithIndex.foreach {
-      case (v, i) => s.set(i, v)
+      case (v, i) => s.set(i + 1, v)
     }
 
     s

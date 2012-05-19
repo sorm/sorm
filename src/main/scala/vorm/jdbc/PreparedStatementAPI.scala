@@ -19,6 +19,8 @@ class PreparedStatementAPI (s: PreparedStatement) {
       case v: BigDecimal           => s.setBigDecimal(i, v.bigDecimal)
       case v: java.math.BigDecimal => s.setBigDecimal(i, v)
       case v: DateTime             => s.setDate(i, new java.sql.Date(v.getMillis))
+      case Some(v)                 => set(i, v)
+      case None                    => s.setNull(i, java.sql.Types.NULL)
     }
   }
 }

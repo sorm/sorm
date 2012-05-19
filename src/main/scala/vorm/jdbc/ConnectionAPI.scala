@@ -50,11 +50,11 @@ class ConnectionAPI(connection: Connection) extends Logging {
     val s =
       connection.prepareStatement(
         stmt.sql,
-        if (generatedKeys) JStatement.RETURN_GENERATED_KEYS else JStatement.NO_GENERATED_KEYS
+        if (generatedKeys) JStatement.RETURN_GENERATED_KEYS
+        else JStatement.NO_GENERATED_KEYS
       )
-
     stmt.data.zipWithIndex.foreach {
-      case (v, i) => setStmtVar(s, v, i)
+      case (v, i) => s.set(i, v)
     }
 
     s

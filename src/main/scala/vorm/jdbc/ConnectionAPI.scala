@@ -4,8 +4,7 @@ import com.weiglewilczek.slf4s.Logging
 import java.sql.{ResultSet, PreparedStatement, Connection, Statement => JStatement}
 import org.joda.time.DateTime
 
-trait ExecutorAPI extends Logging {
-  protected def connection: Connection
+class ConnectionAPI(connection: Connection) extends Logging {
 
   protected def executeSelect(stmt: Statement): () => ResultSet = {
     throw new NotImplementedError

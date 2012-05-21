@@ -10,7 +10,7 @@ import collection.immutable.Queue
 class OrderedMapTest extends FunSuite with ShouldMatchers {
   test("preserves order of creation") {
     val elems = (1 to 100) zip (1 to 100)
-    OrderedMap(elems: _*).toSeq should equal(elems)
+    OrderedMap(elems: _*).toSeq should equal (elems)
   }
   test("preserves order of addition") {
     val elems1 = (1 to 100) zip (1 to 100)

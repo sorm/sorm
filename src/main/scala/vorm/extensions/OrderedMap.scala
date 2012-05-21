@@ -11,8 +11,8 @@ object OrderedMap {
  * removal, where it performs linearly.
  */
 class OrderedMap[A, B](
-  map: Map[A, B] = Map[A, B](),
-  protected val queue: Queue[(A, B)] = Queue()
+  map: Map[A, B],
+  protected val queue: Queue[(A, B)]
 ) extends Map[A, B] {
   def get(key: A) =
     map.get(key)

@@ -12,7 +12,7 @@ object OrderedMap {
  */
 class OrderedMap[A, B](
   map: Map[A, B] = Map[A, B](),
-  queue: Queue[(A, B)] = Queue()
+  protected val queue: Queue[(A, B)] = Queue()
 ) extends Map[A, B] {
   def get(key: A) =
     map.get(key)
@@ -28,4 +28,13 @@ class OrderedMap[A, B](
       map - key,
       queue filter (_._1 != key)
     )
+  override def hashCode() =
+    queue.hashCode
+  override def equals(that: Any) =
+    that match {
+      case that: OrderedMap[A, B] =>
+        queue.equals(that.queue)
+      case _ =>
+        super.equals(that)
+    }
 }

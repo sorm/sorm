@@ -1,14 +1,19 @@
 package vorm.extensions
 
 class AnyExtensions[T: TypeTag](x: T) {
-  def as[Result](closure: T => Result) =
-    closure(x)
+  def tap[ResultT](f: T => ResultT) = {
+    f(x)
+    x
+  }
+
+  def as[ResultT](f: T => ResultT) =
+    f(x)
 
   /**
    * Generics-aware version
    */
-  def isInstanceOf1[T2: TypeTag] =
-    tag[T].tpe <:< tag[T2].tpe
+  def isInstanceOf1[ComparedT: TypeTag] =
+    tag[T].tpe <:< tag[ComparedT].tpe
 
   def isEmpty = {
     x match {

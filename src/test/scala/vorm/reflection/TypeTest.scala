@@ -16,6 +16,7 @@ class TypeTest extends FunSuite with ShouldMatchers {
   object StaticWrapper {
     class WrappedClass
   }
+  trait Mixin
 
   test("appropriate constructors") {
     tpe[Artist].constructors should have length (3)
@@ -49,6 +50,8 @@ class TypeTest extends FunSuite with ShouldMatchers {
   test("inner class fullName") {
     tpe[Genre].fullName should equal("vorm.reflection.TypeTest#Genre")
   }
-
+  test("properties of types with mixins") {
+    tpe[Artist with Mixin].properties should equal (tpe[Artist].properties)
+  }
 
 }

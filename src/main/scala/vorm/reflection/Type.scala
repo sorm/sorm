@@ -19,14 +19,14 @@ class Type(protected val mt: mirror.Type) {
   lazy val name         =
     mirrorQuirks.name(mt.typeSymbol)
   lazy val generics     =
-    mt.typeArguments.toList
+    mirrorQuirks.generics(mt)
       .map(tpe(_))
   lazy val properties   =
-    mt.members.toList.filter(m => !m.isMethod && m.owner == mt.typeSymbol)
-      .map(s => PropertyProperties(s.name.decoded.trim, tpe(s.typeSignature)))
+    mirrorQuirks.properties(mt).toList
+      .map(s => PropertyProperties(mirrorQuirks.name(s), tpe(s.typeSignature)))
 
-  lazy val methods      = {
-    def methodProperties(s: mirror.Symbol) = {
+  lazy val methods      =
+    mirrorQuirks.methods(mt).toList.map { s =>
       type MethodType = {
         def params: List[mirror.Symbol]
         def resultType: mirror.Type
@@ -38,37 +38,17 @@ class Type(protected val mt: mirror.Type) {
       val result = tpe(t.resultType)
       MethodProperties(name, arguments, result)
     }
-
-    mt.members.toList.filter(m => m.isMethod && m.owner == mt.typeSymbol)
-      .map(methodProperties)
-  }
   lazy val constructors =
-    mt.members.toList.filter(m => m.kind == "constructor" && m.owner == mt.typeSymbol)
+    mirrorQuirks.constructors(mt)
       .map(
-        _.typeSignature.asInstanceOf[{def params: List[mirror.Symbol]}].params
-          .map(p => ArgumentProperties(p.name.decoded, tpe(p.typeSignature))))
+        _.typeSignature
+          .asInstanceOf[{def params: List[mirror.Symbol]}].params
+          .map(p => ArgumentProperties(p.name.decoded, tpe(p.typeSignature)))
+      )
       .map(ConstructorProperties)
-      .reverse
 
-  lazy val javaClass: Class[_] =
-    try mirror.typeToClass(mt)
-    catch {
-      case e: ClassNotFoundException =>
-        def classByName(n: String) = mirror.symbolToClass(mirror.symbolForName(n))
-
-        def javaClassName(s: mirror.Symbol): String =
-          s.owner match {
-            case o if o.isPackageClass =>
-              s.fullName
-            case o if o.isClass =>
-              javaClassName(o) + "$" + s.name.decoded.trim
-          }
-
-        mt.typeSymbol match {
-          case s if s.fullName == "scala.Any" => classOf[Any]
-          case s => classByName(javaClassName(s))
-        }
-    }
+  lazy val javaClass =
+    mirrorQuirks.javaClass(mt)
 
   /**
    * Scala bugs trickery and black magic.

@@ -6,7 +6,7 @@ import vorm.mirrorQuirks
 /**
  * An abstraction over Scala's mirror functionality
  */
-class Type(mt: mirror.Type) {
+class Type(protected val mt: mirror.Type) {
 
   lazy val signature: String =
     generics match {
@@ -104,4 +104,12 @@ class Type(mt: mirror.Type) {
 
 
   override def toString = mt.toString
+  override def equals(x: Any) =
+    x match {
+      case x: Type =>
+        eq(x) ||
+        mt.typeSymbol == x.mt.typeSymbol &&
+        generics == x.generics
+      case _ => super.equals(x)
+    }
 }

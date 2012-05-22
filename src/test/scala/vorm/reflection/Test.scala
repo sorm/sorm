@@ -11,14 +11,12 @@ class Test extends FunSuite with ShouldMatchers {
     case class Genre(name: String)
     val t = tpe[Genre]
   }
-  test("tpe returns the same Type when called from different contexts") {
+  test("tpe returns an equaling Type when called from different contexts") {
 
     val t1 = tpe[Container.Genre]
     val t2 = Container.t
 
     t1 should equal(t2)
-    t1.hashCode should equal(t2.hashCode)
-//    t1 should be theSameInstanceAs(t2)
 
   }
   test("tpe returns different Type`s for types with different generics") {

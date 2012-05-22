@@ -17,7 +17,7 @@ class Type(protected val mt: mirror.Type) {
   lazy val fullName     =
     mirrorQuirks.fullName(mt.typeSymbol)
   lazy val name         =
-    mt.typeSymbol.name.decoded
+    mirrorQuirks.name(mt.typeSymbol)
   lazy val generics     =
     mt.typeArguments.toList
       .map(tpe(_))

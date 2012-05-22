@@ -2,6 +2,7 @@ package vorm.reflection
 
 import reflect.mirror
 import vorm.mirrorQuirks
+import util.MurmurHash3
 
 /**
  * An abstraction over Scala's mirror functionality
@@ -112,4 +113,6 @@ class Type(protected val mt: mirror.Type) {
         generics == x.generics
       case _ => super.equals(x)
     }
+  override def hashCode =
+    MurmurHash3.finalizeHash(mt.typeSymbol.hashCode, generics.hashCode)
 }

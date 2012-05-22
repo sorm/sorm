@@ -1,18 +1,11 @@
 package vorm.mirrorQuirks
 
 
-
 object Sandbox extends App {
   case class Genre(name: String)
-
-
-
-}
-
-class AA {
-
   case class Artist(name: String, genres: Set[Genre])
+  trait Persisted
 
-  case class Genre(name: String)
-
+  println(name(tag[Artist with Persisted].sym))
 }
+

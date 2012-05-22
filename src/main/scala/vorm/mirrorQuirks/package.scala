@@ -11,7 +11,13 @@ package object mirrorQuirks {
     symbolToClass(symbolForName(n))
 
   def name(s: Symbol) =
-    s.name.decoded.trim
+    s.name.decoded.trim match {
+      //  mixed in types bug workaround
+      case "<refinement>" =>
+        s.typeSignature.parents.head.typeSymbol.name.decoded
+      case n => n
+    }
+
 
   def javaClassName(s: Symbol): String =
     s.owner match {
@@ -34,13 +40,10 @@ package object mirrorQuirks {
     s.kind == "class"
 
   /**
-   * Checks whether this type is nested inside a class (not a static object).
+   * Checks whether this symbol is nested inside a class (not a static object)
    */
   def isInner(s: Symbol) =
     isClass(s.owner)
-
-  //  def isInner(t: Type) =
-  //    t.toString.matches("^(\\w+\\.|\\w+#)*\\w+#\\w+(?=$|\\[|\\s)")
 
   def fullName(s: Symbol) =
     symbolsTree(s).foldRight("") {

@@ -11,10 +11,8 @@ package object mirrorQuirks {
     t.kind == "RefinedType"
 
   private def theType(t: Type) =
-    if (isMixedIn(t)) {
-      println(t.parents)
-      t.parents.head
-    } else t
+    if (isMixedIn(t)) t.parents.head
+    else t
 
   def properties(t: Type) =
     theType(t) match { case t =>
@@ -53,19 +51,10 @@ package object mirrorQuirks {
     try typeToClass(mt)
     catch {
       case e: ClassNotFoundException =>
-        def classByName(n: String) = symbolToClass(symbolForName(n))
-
-        def javaClassName(s: Symbol): String =
-          s.owner match {
-            case o if o.isPackageClass =>
-              s.fullName
-            case o if o.isClass =>
-              javaClassName(o) + "$" + s.name.decoded.trim
-          }
-
         mt.typeSymbol match {
           case s if s.fullName == "scala.Any" => classOf[Any]
-          case s => classByName(javaClassName(s))
+          case s =>
+            classByName(javaClassName(s))
         }
     }
 

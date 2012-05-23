@@ -10,29 +10,32 @@ package object mirrorQuirks {
   def isMixedIn(t: Type) =
     t.kind == "RefinedType"
 
-  private def theType(t: Type) =
+  /**
+   * Either the type itself if it's not mixed in or the first of its parents
+   */
+  def mixinBasis(t: Type) =
     if (isMixedIn(t)) t.parents.head
     else t
 
   def properties(t: Type) =
-    theType(t) match { case t =>
+    mixinBasis(t) match { case t =>
       t.members
         .filter(m => !m.isMethod && m.owner == t.typeSymbol)
         .toList
     }
 
   def methods(t: Type) =
-    theType(t) match { case t =>
+    mixinBasis(t) match { case t =>
       t.members
         .filter(m => m.isMethod && m.owner == t.typeSymbol)
         .toList
     }
 
   def generics(t: Type) =
-    theType(t).typeArguments
+    mixinBasis(t).typeArguments
 
   def constructors(t: Type) =
-    theType(t) match { case t =>
+    mixinBasis(t) match { case t =>
       t.members
         .filter(m => m.kind == "constructor" && m.owner == t.typeSymbol)
         .toList.reverse

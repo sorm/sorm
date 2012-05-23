@@ -10,31 +10,32 @@ package object mirrorQuirks {
   def isMixedIn(t: Type) =
     t.kind == "RefinedType"
 
-  private def theType(t: Type) =
-    if (isMixedIn(t)) {
-      println(t.parents)
-      t.parents.head
-    } else t
+  /**
+   * Either the type itself if it's not mixed in or the first of its parents
+   */
+  def mixinBasis(t: Type) =
+    if (isMixedIn(t)) t.parents.head
+    else t
 
   def properties(t: Type) =
-    theType(t) match { case t =>
+    mixinBasis(t) match { case t =>
       t.members
         .filter(m => !m.isMethod && m.owner == t.typeSymbol)
         .toList
     }
 
   def methods(t: Type) =
-    theType(t) match { case t =>
+    mixinBasis(t) match { case t =>
       t.members
         .filter(m => m.isMethod && m.owner == t.typeSymbol)
         .toList
     }
 
   def generics(t: Type) =
-    theType(t).typeArguments
+    mixinBasis(t).typeArguments
 
   def constructors(t: Type) =
-    theType(t) match { case t =>
+    mixinBasis(t) match { case t =>
       t.members
         .filter(m => m.kind == "constructor" && m.owner == t.typeSymbol)
         .toList.reverse
@@ -53,19 +54,10 @@ package object mirrorQuirks {
     try typeToClass(mt)
     catch {
       case e: ClassNotFoundException =>
-        def classByName(n: String) = symbolToClass(symbolForName(n))
-
-        def javaClassName(s: Symbol): String =
-          s.owner match {
-            case o if o.isPackageClass =>
-              s.fullName
-            case o if o.isClass =>
-              javaClassName(o) + "$" + s.name.decoded.trim
-          }
-
         mt.typeSymbol match {
           case s if s.fullName == "scala.Any" => classOf[Any]
-          case s => classByName(javaClassName(s))
+          case s =>
+            classByName(javaClassName(s))
         }
     }
 

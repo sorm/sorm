@@ -36,7 +36,6 @@ class Test extends FunSuite with ShouldMatchers {
 
 
   }
-
   test("dynamic persisted") {
     val properties = Map("name" -> "Nirvana", "genres" -> Set(Genre("grunge")))
     val instance = persisted[Artist](properties, 35)
@@ -46,16 +45,18 @@ class Test extends FunSuite with ShouldMatchers {
   }
   test("dynamic persisted untyped iterable") {
     persisted[Artist](Map("name" -> "", "genres" -> Set()), 0) should
-      have(
-        'name(""),
-        'genres(Set()),
-        'id(0)
-      )
+    have(
+      'name(""),
+      'genres(Set()),
+      'id(0)
+    )
   }
   test("dynamic persisted fails on incorrect map") {
     evaluating {persisted[Artist](Map("name" -> "Nirvana"), 35)} should produce[Exception]
   }
-
+  test("persisted on persisted") {
+    persisted(persisted(Artist("Nirvana", Set()), 2), 4).id should equal(4)
+  }
 }
 object Test {
 

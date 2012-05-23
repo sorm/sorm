@@ -5,25 +5,51 @@ import java.sql._
 
 
 class ResultSetAPI(rs: ResultSet) {
+  private def parseIndexTypeList(indexTypeList: List[(Int, Int)]): List[List[Any]] = {
+    val b = ListBuffer[List[Any]]()
 
+    while (rs.next())
+      b += indexTypeList.map {case (i, t) => value(i, t)}
+
+    rs.close()
+    b.toList
+  }
+
+  def parseAndClose(types: List[Int]): List[List[Any]] =
+    parseIndexTypeList((1 to types.length).toList zip types)
+
+
+  def parseAndClose() = {
+    val md = rs.getMetaData
+
+    val indexTypeList =
+      (1 to md.getColumnCount)
+        .map(i => i -> md.getColumnType(i))
+        .toList
+
+    parseIndexTypeList(indexTypeList)
+  }
+
+  @deprecated("use parseAndClose()")
   def parseToListsAndClose() = {
-    val r = ListBuffer[List[Any]]()
+    val b = ListBuffer[List[Any]]()
 
     val md = rs.getMetaData
 
     val indexTypeList =
       (1 to md.getColumnCount)
-        .map(i => (i -> md.getColumnType(i)))
+        .map(i => i -> md.getColumnType(i))
         .toList
 
-    while (rs.next()) r += indexTypeList.map {case (i, t) => value(i, t)}
+    while (rs.next()) b += indexTypeList.map {case (i, t) => value(i, t)}
 
     rs.close()
-    r.toList
+    b.toList
   }
 
+  @deprecated("index based approach is preferred")
   def parseToMapsAndClose() = {
-    val r = ListBuffer[Map[String, Any]]()
+    val b = ListBuffer[Map[String, Any]]()
 
     val md = rs.getMetaData
 
@@ -32,10 +58,10 @@ class ResultSetAPI(rs: ResultSet) {
         .map(i => md.getColumnName(i) -> (i -> md.getColumnType(i)))
         .toMap
 
-    while (rs.next()) r += indexTypeByNameMap.mapValues {case (i, t) => value(i, t)}
+    while (rs.next()) b += indexTypeByNameMap.mapValues {case (i, t) => value(i, t)}
 
     rs.close()
-    r.toList
+    b.toList
   }
 
   private def value(i: Int, t: Int): Any = {

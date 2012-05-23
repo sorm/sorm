@@ -7,8 +7,10 @@ import util.MurmurHash3
 /**
  * An abstraction over Scala's mirror functionality
  */
-class Type(protected val mt: mirror.Type) {
+class Type(protected val mt: mirror.Type, jc: Option[Class[_]]) {
 
+  lazy val mixinBasis =
+    tpe(mirrorQuirks.mixinBasis(mt))
   lazy val signature: String =
     generics match {
       case Nil => fullName
@@ -48,7 +50,7 @@ class Type(protected val mt: mirror.Type) {
       .map(ConstructorProperties)
 
   lazy val javaClass =
-    mirrorQuirks.javaClass(mt)
+    jc getOrElse mirrorQuirks.javaClass(mt)
 
   /**
    * Scala bugs trickery and black magic.
@@ -74,11 +76,6 @@ class Type(protected val mt: mirror.Type) {
 
   def methodResult(name: String, instance: AnyRef, args: List[Any] = Nil) =
     javaClass.getMethods.find(_.getName == name).get.invoke(instance)
-
-//    mirror.invoke(
-//      instance,
-//      mt.member(mirror.newTermName(name).asInstanceOf[mirror.Name])
-//    )(args: _*)
 
   def propertyValue(name: String, instance: AnyRef) =
     methodResult(name, instance)

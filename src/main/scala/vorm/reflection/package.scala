@@ -7,17 +7,17 @@ package object reflection {
   private val tpeCache =
     collection.mutable.Map[mirror.Type, Type]()
 
-  private[reflection] def tpe[T](mt: mirror.Type): Type =
+  private[reflection] def tpe[T](mt: mirror.Type, jc: Option[Class[_]] = None): Type =
     try tpeCache(mt)
     catch {
       case _ =>
-        val t = new Type(mt)
+        val t = new Type(mt, jc)
         tpeCache.update(mt, t)
         t
     }
 
   def tpe[T: TypeTag]: Type =
-    tpe(tag[T].tpe)
+    tag[T] match { case t => tpe(t.tpe, Some(t.erasure)) }
 
   implicit def anyExtensions[T: TypeTag](x: T) = new AnyExtensions(x)
   /**

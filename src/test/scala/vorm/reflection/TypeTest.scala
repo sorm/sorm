@@ -7,16 +7,9 @@ import org.scalatest.junit.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
 class TypeTest extends FunSuite with ShouldMatchers {
+  import TypeTest._
 
-  case class Genre(name: String)
-  case class Artist(id: String, name: String, genres: Set[Genre], tags: Set[String]) {
-    def this() = this("", "", Set(), Set())
-    def this(id: String) = this(id, "", Set(), Set())
-  }
-  object StaticWrapper {
-    class WrappedClass
-  }
-  trait Mixin
+  class InnerClass
 
   test("appropriate constructors") {
     tpe[Artist].constructors should have length (3)
@@ -48,10 +41,29 @@ class TypeTest extends FunSuite with ShouldMatchers {
       equal("scala.Int")
   }
   test("inner class fullName") {
-    tpe[Genre].fullName should equal("vorm.reflection.TypeTest#Genre")
+    tpe[InnerClass].fullName should equal("vorm.reflection.TypeTest#InnerClass")
   }
   test("properties of types with mixins") {
     tpe[Artist with Mixin].properties should equal (tpe[Artist].properties)
   }
+  test("instance works") {
+    tpe[Artist].instance(Map("id" -> "id1", "name" -> "name1", "genres" -> Set(), "tags" -> Set("tag1"))) should
+      equal (Artist("id1", "name1", Set(), Set("tag1")))
+  }
 
+  test("instance fails on lacking map") {
+    evaluating(tpe[Artist].instance(Map("id" -> "id1"))) should produce [Exception]
+  }
+}
+object TypeTest {
+
+  case class Genre(name: String)
+  case class Artist(id: String, name: String, genres: Set[Genre], tags: Set[String]) {
+    def this() = this("", "", Set(), Set())
+    def this(id: String) = this(id, "", Set(), Set())
+  }
+  object StaticWrapper {
+    class WrappedClass
+  }
+  trait Mixin
 }

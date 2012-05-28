@@ -64,12 +64,22 @@ class ResultSetAPI(rs: ResultSet) {
     b.toList
   }
 
-  private def value(i: Int, t: Int): Any = {
+  def value(i: Int, t: Int): Any = {
     import Types._
     t match {
       case INTEGER => rs.getInt(i)
       case BIGINT => rs.getLong(i)
       case CHAR | VARCHAR => rs.getString(i)
+      case _ => throw new NotImplementedError
+    }
+  }
+
+  def value(name: String, t: Int): Any = {
+    import Types._
+    t match {
+      case INTEGER => rs.getInt(name)
+      case BIGINT => rs.getLong(name)
+      case CHAR | VARCHAR => rs.getString(name)
       case _ => throw new NotImplementedError
     }
   }

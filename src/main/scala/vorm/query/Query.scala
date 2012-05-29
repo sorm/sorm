@@ -1,9 +1,9 @@
 package vorm.query
 
-/**
- * This class may be used both to construct queries and to
- */
+import vorm.reflection._
+
 case class Query(
+  t: Type,
   filters: List[Filter] = Nil,
   orderings: List[Ordering] = Nil,
   limit: Limit = Limit(0, None)

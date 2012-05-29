@@ -2,7 +2,7 @@ package vorm.api
 
 import vorm.query._
 
-class QueryStream[T <: Persisted](connection: Connection, query: Query = Query()) extends Stream[T] {
+class QueryStream[T <: AnyRef](connection: Connection, query: Query = Query()) extends Stream[T with Persisted] {
 
   def filter(filter: Filter) =
     new QueryStream[T](
@@ -37,10 +37,10 @@ class QueryStream[T <: Persisted](connection: Connection, query: Query = Query()
   override def isEmpty: Boolean =
     throw new NotImplementedError
 
-  override def head: T =
+  override def head: T with Persisted =
     throw new NotImplementedError
 
-  override def tail: QueryStream[T] =
+  override def tail: QueryStream[T with Persisted] =
     throw new NotImplementedError
 
   override protected def tailDefined: Boolean =

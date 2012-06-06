@@ -2,28 +2,28 @@ package vorm
 
 package sql {
 
-  case class Select(
-    columns: List[Column],
-    from: From,
-    joins: List[Join]     = Nil,
-    where: Option[Where]  = None,
-    order: Option[Order]  = None,
-    limit: Option[Limit]  = None
+  case class Select (
+    columns : List[Column],
+    from    : From,
+    joins   : List[Join]     = Nil,
+    where   : Option[Where]  = None,
+    order   : Option[Order]  = None,
+    limit   : Option[Limit]  = None
   )
 
-  case class Column(
-    name: String,
-    table: Option[String] = None,
-    alias: Option[String] = None
+  case class Column (
+    name    : String,
+    table   : Option[String] = None,
+    alias   : Option[String] = None
   )
 
-  case class From(
-    table: Table
+  case class From (
+    table   : Table
   )
 
-  case class Table(
-    name: String,
-    alias: Option[String] = None
+  case class Table (
+    name    : String,
+    alias   : Option[String] = None
   )
 
   /**
@@ -34,11 +34,11 @@ package sql {
    *                 the name of column of the target table
    * @param t A type of join. `Left` by default
    */
-  case class Join(
-    table: Table,
-    targetTable: String,
-    mappings: List[(String, String)],
-    t: JoinType = JoinType.Left
+  case class Join (
+    table       : Table,
+    targetTable : String,
+    mappings    : List[(String, String)],
+    t           : JoinType = JoinType.Left
   )
 
   private final class JoinType

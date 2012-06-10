@@ -18,16 +18,13 @@ package sql {
   )
 
   case class From (
-    table   : Table
-  )
-
-  case class Table (
     name    : String,
     alias   : Option[String] = None
   )
 
   /**
-   * @param table A declaration of the table being joined to the target table
+   * @param table 
+   * @param alias
    * @param targetTable An identifier (name or alias) of the table to which the join
    *                    is performed
    * @param mappings A list of mappings of name of column of the table being joined to
@@ -35,15 +32,17 @@ package sql {
    * @param t A type of join. `Left` by default
    */
   case class Join (
-    table       : Table,
+    table       : String,
+    alias       : Option[String] = None,
     targetTable : String,
     mappings    : List[(String, String)],
-    t           : JoinType = JoinType.Left
+    kind        : JoinKind = JoinKind.Left
   )
 
-  private final class JoinType
-  object JoinType {
-    val Left, Right = new JoinType
+  sealed trait JoinKind
+  object JoinKind {
+    object Left  extends JoinKind
+    object Right extends JoinKind
   }
 
   case class Where(

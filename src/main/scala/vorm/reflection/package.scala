@@ -21,7 +21,8 @@ package object reflection {
 
 
   implicit class AnyExtensions[T: TypeTag](x: T) {
-    def tpe = reflection.tpe[T]
+    def tpe = vorm.reflection.tpe[T]
+    def reflection = vorm.reflection.reflection[T]
   }
 
   implicit class AnyRefExtensions[T <: AnyRef : TypeTag](x: T) {
@@ -33,5 +34,21 @@ package object reflection {
     def propertyValue(name: String) =
       t.propertyValue(name, x)
   }
+
+
+  private val reflectionCache =
+    new collection.mutable.HashMap[(mirror.Type, Class[_]), Reflection]() {
+      override def default(key: (mirror.Type, Class[_])) = {
+        val value = new Reflection(key._1, key._2)
+        update(key, value)
+        value
+      }
+    }
+
+  def reflection(mt: mirror.Type): Reflection =
+    reflectionCache(mt, mirrorQuirks.javaClass(mt))
+
+  def reflection[T](implicit t: TypeTag): Reflection =
+    reflectionCache(t.tpe, t.erasure)
 
 }

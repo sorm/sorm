@@ -19,10 +19,19 @@ package object reflection {
   def tpe[T: TypeTag]: Type =
     tag[T] match { case t => tpe(t.tpe, Some(t.erasure)) }
 
-  implicit def anyExtensions[T: TypeTag](x: T) = new AnyExtensions(x)
-  /**
-   * Seems like a bit too much
-   */
-  implicit def anyRefExtensions[T <: AnyRef : TypeTag](x: T) = new AnyRefExtensions(x)
+
+  implicit class AnyExtensions[T: TypeTag](x: T) {
+    def tpe = reflection.tpe[T]
+  }
+
+  implicit class AnyRefExtensions[T <: AnyRef : TypeTag](x: T) {
+    private lazy val t = tpe[T]
+    def propertyValueByName =
+      t.propertyByNameMap.keys.view
+        .map(n => n -> t.propertyValue(n, x))
+        .toMap
+    def propertyValue(name: String) =
+      t.propertyValue(name, x)
+  }
 
 }

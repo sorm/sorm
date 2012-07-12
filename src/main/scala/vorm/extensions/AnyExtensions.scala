@@ -39,4 +39,9 @@ class AnyExtensions[T: TypeTag](x: T) {
   def println() {
     Console.println(x)
   }
+
+  def trying
+    [ ResultT ]
+    ( f : T => ResultT )
+    = try Some(f(x)) catch { case _ => None }
 }

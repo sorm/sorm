@@ -2,8 +2,9 @@ package vorm.extensions
 
 object Sandbox extends App {
 
-
-  21.asSatisfying(_ > 20).println()
+  println {
+    0 -> List(2,3,4) foldLeft (_ + _)
+  }
 
 
 }

@@ -9,15 +9,15 @@ package object extensions {
 
   implicit class TupleFoldableExtender
     [ ItemT, ResultT ]
-    ( tuple : ( ResultT, Traversable [ ItemT ] ) )
+    ( tuple : (ResultT, Traversable[ItemT]) )
     {
       private val (initial, foldable) = tuple
       def foldRight
-        ( f : ( ItemT, ResultT ) => ResultT )
-        = ( foldable foldRight initial ) ( f )
+        ( f : (ItemT, ResultT) => ResultT )
+        = (foldable foldRight initial)(f)
       def foldLeft
-        ( f : ( ResultT, ItemT ) => ResultT )
-        = ( foldable foldLeft initial ) ( f )
+        ( f : (ResultT, ItemT) => ResultT )
+        = (foldable foldLeft initial)(f)
     }
 
 }

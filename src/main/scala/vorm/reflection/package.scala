@@ -22,7 +22,7 @@ package object reflection {
 
   implicit class AnyExtensions[T: TypeTag](x: T) {
     def tpe = vorm.reflection.tpe[T]
-    def reflection = vorm.reflection.reflection[T]
+    def reflection = vorm.reflection.reflectionOf[T]
   }
 
   implicit class AnyRefExtensions[T <: AnyRef : TypeTag](x: T) {
@@ -45,10 +45,10 @@ package object reflection {
       }
     }
 
-  def reflection(mt: mirror.Type): Reflection =
+  def reflectionOf(mt: mirror.Type): Reflection =
     reflectionCache(mt, mirrorQuirks.javaClass(mt))
 
-  def reflection[T](implicit t: TypeTag): Reflection =
+  def reflectionOf[T](implicit t: TypeTag): Reflection =
     reflectionCache(t.tpe, t.erasure)
 
 }

@@ -49,6 +49,6 @@ package object reflection {
     reflectionCache(mt, mirrorQuirks.javaClass(mt))
 
   def reflectionOf[T](implicit t: TypeTag): Reflection =
-    reflectionCache(t.tpe, t.erasure)
+    reflectionCache(t.tpe -> t.erasure)
 
 }

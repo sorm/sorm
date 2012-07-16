@@ -3,46 +3,71 @@ package vorm.reflection
 import reflect.mirror
 import vorm._
 
-sealed class Reflection (mt: mirror.Type, jc: Class[_]) {
-  import Reflection._
+sealed class Reflection 
+  ( t: mirror.Type, 
+    javaClass: Class[_] ) 
+  {
+    lazy val fullName
+      = mirrorQuirks.fullName(t.typeSymbol)
 
-  lazy val properties
-    = mirrorQuirks.properties(mt).view
-        .map {
-          s ⇒ Property(mirrorQuirks.name(s), reflectionOf(s.typeSignature)) 
-        }
-        .toMap
+    lazy val name
+      = mirrorQuirks.name(t.typeSymbol)
 
-  lazy val generics
-    = mirrorQuirks.generics(mt).view.zipWithIndex
-        .map {
-          case (t, i) ⇒ Generic(i, reflectionOf(t))
-        }
-        .toIndexedSeq
-
-  lazy val methods
-    = mirrorQuirks.methods(mt).map { 
-        s ⇒ 
-          type MethodType = {
-            def params: List[mirror.Symbol]
-            def resultType: mirror.Type
+    lazy val properties
+      = mirrorQuirks.properties(t).view
+          .map {
+            s ⇒ mirrorQuirks.name(s) → 
+                reflectionOf(s.typeSignature) 
           }
+          .toMap
 
-          val t = s.typeSignature.asInstanceOf[MethodType]
-          val name = s.name.decoded.trim
-          val arguments =
-            t.params.map(
-              p ⇒ Argument(mirrorQuirks.name(p), reflectionOf(p.typeSignature))
-            )
-          val result = reflectionOf(t.resultType)
-          Method(name, arguments, result)
-      }
+    lazy val generics
+      = mirrorQuirks.generics(t).view
+          .map(reflectionOf)
+          .toIndexedSeq
 
-}
-object Reflection {
-  sealed case class Argument(name: String, reflection: Reflection)
-  sealed case class Property(name: String, reflection: Reflection)
-  sealed case class Generic(index: Int, reflection: Reflection)
-  sealed case class Method(name: String, arguments: List[Argument], reflection: Reflection)
-  sealed case class Constructor(arguments: List[Argument])
-}
+    def inheritsFrom
+      ( reflection : Reflection )
+      = reflection.fullName match {
+          case n if n == "scala.Any" 
+            ⇒ true
+          case n if n == "scala.AnyVal" 
+            ⇒ t.typeSymbol.isPrimitiveValueClass
+          case _ 
+            ⇒ reflection.javaClass.isAssignableFrom(javaClass) &&
+              generics.view
+                .zip(reflection.generics)
+                .forall {case (a, b) => a.inheritsFrom(b)}
+        }
+
+
+    // lazy val methods
+    //   = mirrorQuirks.methods(t).map { 
+    //       s ⇒ 
+    //         type MethodType = {
+    //           def params: List[mirror.Symbol]
+    //           def resultType: mirror.Type
+    //         }
+
+    //         val t = s.typeSignature.asInstanceOf[MethodType]
+    //         val name = s.name.decoded.trim
+    //         val arguments =
+    //           t.params.map(
+    //             p ⇒ Argument(mirrorQuirks.name(p), reflectionOf(p.typeSignature))
+    //           )
+    //         val result = reflectionOf(t.resultType)
+    //         Method(name, arguments, result)
+    //     }
+
+    // lazy val methodNames
+    // lazy val methodResults
+
+
+  }
+// object Reflection {
+//   sealed case class Argument(name: String, reflection: Reflection)
+//   sealed case class Property(name: String, reflection: Reflection)
+//   sealed case class Generic(index: Int, reflection: Reflection)
+//   sealed case class Method(name: String, arguments: List[Argument], reflection: Reflection)
+//   sealed case class Constructor(arguments: List[Argument])
+// }

@@ -37,13 +37,14 @@ object ReflectionNode {
 
   sealed case class Generic
     ( index : Int, 
-      reflection : Reflection, 
-      parent : ReflectionNode )
+      parent : ReflectionNode,
+      reflection : Reflection ) 
     extends Child
 
   sealed case class Property
     ( name : String,
-      reflection : Reflection,
-      parent : ReflectionNode )
+      parent : ReflectionNode,
+      reflection : Reflection )
     extends Child
+    
 }

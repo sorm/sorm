@@ -3,13 +3,13 @@ package vorm
 package object mapping {
 
 
-  implicit class StringSqlifiedSupport 
-    ( val x : String )
-    extends AnyVal
+  implicit class StringDdlFormattedSupport
+    ( val string : String )
     {
-      def sqlified
+      import com.google.common.base.CaseFormat._
+      def ddlFormatted
         : String
-        = throw new NotImplementedError
+        = UPPER_CAMEL.to(LOWER_UNDERSCORE, string)
     }
 
 

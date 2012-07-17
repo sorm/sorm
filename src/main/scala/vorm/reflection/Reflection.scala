@@ -14,6 +14,7 @@ sealed class Reflection
       = mirrorQuirks.name(t.typeSymbol)
 
     lazy val properties
+      : Map[String, Reflection]
       = mirrorQuirks.properties(t).view
           .map {
             s ⇒ mirrorQuirks.name(s) → 
@@ -22,6 +23,7 @@ sealed class Reflection
           .toMap
 
     lazy val generics
+      : IndexedSeq[Reflection]
       = mirrorQuirks.generics(t).view
           .map(reflectionOf)
           .toIndexedSeq

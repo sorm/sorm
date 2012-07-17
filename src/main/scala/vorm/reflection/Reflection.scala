@@ -4,8 +4,8 @@ import reflect.mirror
 import vorm._
 
 sealed class Reflection 
-  ( t: mirror.Type, 
-    javaClass: Class[_] ) 
+  ( val t: mirror.Type,
+    val javaClass: Class[_] )
   {
     lazy val fullName
       = mirrorQuirks.fullName(t.typeSymbol)
@@ -28,6 +28,7 @@ sealed class Reflection
 
     def inheritsFrom
       ( reflection : Reflection )
+      : Boolean
       = reflection.fullName match {
           case n if n == "scala.Any" 
             ⇒ true

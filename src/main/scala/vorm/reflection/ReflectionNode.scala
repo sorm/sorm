@@ -5,11 +5,11 @@ sealed trait ReflectionNode {
   def generics
     = reflection.generics.view
         .zipWithIndex
-        .map { case (r, i) ⇒ new ReflectionNode.Generic(i, r, this) }
+        .map { case (r, i) ⇒ new ReflectionNode.Generic(i, this, r) }
         .toIndexedSeq
   def properties
     = reflection.properties
-        .map { case (n, r) ⇒ new ReflectionNode.Property(n, r, this) }
+        .map { case (n, r) ⇒ new ReflectionNode.Property(n, this, r) }
 }
 
 object ReflectionNode {

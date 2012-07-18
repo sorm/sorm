@@ -6,7 +6,7 @@ package object mapping {
 
 
   implicit class StringDdlNameSupport
-    ( val string : String )
+    ( string : String )
     {
       import com.google.common.base.CaseFormat._
       def ddlName
@@ -15,7 +15,7 @@ package object mapping {
     }
 
   implicit class ReflectionDdlColumnTypeSupport
-    ( val reflection : Reflection )
+    ( reflection : Reflection )
     {
       def ddlColumnType
         ( isKeyPart : Boolean )

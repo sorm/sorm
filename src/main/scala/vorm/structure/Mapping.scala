@@ -1,4 +1,4 @@
-package vorm.mapping
+package vorm.structure
 
 import vorm.reflection._
 

@@ -1,6 +1,6 @@
 package vorm
 
-package object mapping {
+package object structure {
 
   import reflection._
 

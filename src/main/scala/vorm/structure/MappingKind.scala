@@ -1,6 +1,7 @@
-package vorm.mapping
+package vorm.structure
 
-import vorm.reflection._
+import vorm._
+import reflection._
 
 sealed trait MappingKind
 
@@ -22,26 +23,26 @@ object MappingKind {
     extends MappingKind
 
   def apply
-    ( reflection : Reflection ) 
+    ( reflection : Reflection )
     = reflection match {
-        case _ 
+        case _
           if reflection inheritsFrom reflectionOf[collection.Seq[_]]
           ⇒ Seq
-        case _ 
-          if reflection inheritsFrom reflectionOf[collection.Set[_]]     
+        case _
+          if reflection inheritsFrom reflectionOf[collection.Set[_]]
           ⇒ Set
-        case _ 
-          if reflection inheritsFrom reflectionOf[collection.Map[_, _]]  
+        case _
+          if reflection inheritsFrom reflectionOf[collection.Map[_, _]]
           ⇒ Map
         case _
           if reflection inheritsFrom reflectionOf[scala.Option[_]]
           ⇒ Option
-        case _ 
+        case _
           if (reflection inheritsFrom reflectionOf[AnyVal])
           || (reflection inheritsFrom reflectionOf[String])
           || (reflection inheritsFrom reflectionOf[org.joda.time.DateTime])
           ⇒ Value
-        case _ 
+        case _
           if (reflection inheritsFrom reflectionOf[Tuple1[_]])
           || (reflection inheritsFrom reflectionOf[Tuple2[_, _]])
           || (reflection inheritsFrom reflectionOf[Tuple3[_, _, _]])
@@ -65,7 +66,7 @@ object MappingKind {
 //          || (reflection inheritsFrom reflectionOf[Tuple21[_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _]])
 //          || (reflection inheritsFrom reflectionOf[Tuple22[_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _]])
           ⇒ Tuple
-        case _                                      
+        case _
           ⇒ Entity
       }
 }

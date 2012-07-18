@@ -1,10 +1,10 @@
-package vorm.mapping
+package vorm.structure
 
-sealed trait Membership 
-  {
-    def parent : Mapping
-  }
-object Membership 
+sealed trait Membership {
+  def parent: Mapping
+}
+
+object Membership
   {
     sealed case class EntityProperty
       ( name : String, parent : Mapping )

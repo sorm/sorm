@@ -20,21 +20,6 @@ package object reflection {
     tag[T] match { case t => tpe(t.tpe, Some(t.erasure)) }
 
 
-  implicit class AnyExtensions[T: TypeTag](x: T) {
-    def tpe = vorm.reflection.tpe[T]
-    def reflection = vorm.reflection.reflectionOf[T]
-  }
-
-  implicit class AnyRefExtensions[T <: AnyRef : TypeTag](x: T) {
-    private lazy val t = tpe[T]
-    def propertyValueByName =
-      t.propertyByNameMap.keys.view
-        .map(n => n -> t.propertyValue(n, x))
-        .toMap
-    def propertyValue(name: String) =
-      t.propertyValue(name, x)
-  }
-
 
   private val reflectionCache =
     new collection.mutable.HashMap[(mirror.Type, Class[_]), Reflection]() {

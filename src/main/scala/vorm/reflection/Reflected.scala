@@ -9,7 +9,7 @@ class Reflected
     val reflection : Reflection )
   {
 
-    def properties
+    def propertyValues
       : Map[String, Any]
       = reflection.properties.view.unzip._1.zipBy(propertyValue).toMap
 

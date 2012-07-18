@@ -20,4 +20,21 @@ package object extensions {
         = (foldable foldLeft initial)(f)
     }
 
+
+  implicit class IterableExtensions
+    [ ItemT,
+      IterableT[ItemT] <: Iterable[ItemT] ]
+    ( iterable : IterableT[ItemT] )
+    {
+      import collection.generic.CanBuildFrom
+
+      def zipBy
+        [ ResultItemT,
+          ResultT ]
+        ( f : ItemT ⇒ ResultItemT )
+        ( implicit bf : CanBuildFrom[IterableT[ItemT], (ItemT, ResultItemT), ResultT] )
+        : ResultT
+        = iterable.map(x ⇒ x → f(x)).asInstanceOf[ResultT]
+    }
+
 }

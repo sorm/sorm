@@ -67,10 +67,15 @@ sealed class Reflection
 
 
   }
-// object Reflection {
-//   sealed case class Argument(name: String, reflection: Reflection)
-//   sealed case class Property(name: String, reflection: Reflection)
-//   sealed case class Generic(index: Int, reflection: Reflection)
-//   sealed case class Method(name: String, arguments: List[Argument], reflection: Reflection)
-//   sealed case class Constructor(arguments: List[Argument])
-// }
+object Reflection {
+  def apply
+    ( implicit tag : TypeTag[_] )
+    : Reflection
+    = reflectionOf( tag )
+
+  // sealed case class Argument(name: String, reflection: Reflection)
+  // sealed case class Property(name: String, reflection: Reflection)
+  // sealed case class Generic(index: Int, reflection: Reflection)
+  // sealed case class Method(name: String, arguments: List[Argument], reflection: Reflection)
+  // sealed case class Constructor(arguments: List[Argument])
+}

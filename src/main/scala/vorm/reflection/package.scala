@@ -48,7 +48,19 @@ package object reflection {
   def reflectionOf(mt: mirror.Type): Reflection =
     reflectionCache(mt, mirrorQuirks.javaClass(mt))
 
+  // todo : to move to apply of Reflection
   def reflectionOf[T](implicit t: TypeTag[T]): Reflection =
     reflectionCache(t.tpe, t.erasure)
+
+
+  implicit class AnyReflectedSupport
+    [ T : TypeTag ]
+    ( any : T )
+    {
+      def reflected
+        = new Reflected( any, Reflection( typeTag[T] ) )
+    }
+
+
 
 }

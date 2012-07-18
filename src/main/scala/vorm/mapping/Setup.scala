@@ -5,16 +5,16 @@ import reflection._
 
 trait Setup {
   
-  def primaryKeys
-    : Map[Reflection, Seq[String]]
+  def primaryKey
+    : Reflection => Option[Seq[String]]
 
   def uniqueKeys
-    : Map[Reflection, Set[Seq[String]]]
+    : Reflection => Set[Seq[String]]
 
   def indexes
-    : Map[Reflection, Set[Seq[String]]]
+    : Reflection => Set[Seq[String]]
 
-  def autoIncrements
-    : Set[(Reflection, String)]
+  def autoIncremented
+    : (Reflection, String) => Boolean
 
 }

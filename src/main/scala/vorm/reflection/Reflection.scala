@@ -18,14 +18,14 @@ sealed class Reflection
       = mirrorQuirks.properties(t).view
           .map {
             s ⇒ mirrorQuirks.name(s) → 
-                reflectionOf(s.typeSignature) 
+                Reflection(s.typeSignature)
           }
           .toMap
 
     lazy val generics
       : IndexedSeq[Reflection]
       = mirrorQuirks.generics(t).view
-          .map(reflectionOf)
+          .map(Reflection(_))
           .toIndexedSeq
 
     def inheritsFrom
@@ -44,10 +44,28 @@ sealed class Reflection
         }
 
   }
+  
 object Reflection {
+
+  private val cache 
+    = new collection.mutable.HashMap[( mirror.Type, Class[_] ), Reflection] {
+        override def default
+          ( key : ( mirror.Type, Class[_] ) ) 
+          = {
+            val value = new Reflection(key._1, key._2)
+            update(key, value)
+            value
+          }
+      }
+
   def apply
     ( implicit tag : TypeTag[_] )
     : Reflection
-    = reflectionOf( tag )
+    = cache( tag.tpe, tag.erasure )
+
+  def apply
+    ( mt : mirror.Type )
+    : Reflection 
+    = cache( mt, mirrorQuirks.javaClass( mt ) )
 
 }

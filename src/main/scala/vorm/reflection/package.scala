@@ -21,23 +21,6 @@ package object reflection {
 
 
 
-  private val reflectionCache =
-    new collection.mutable.HashMap[(mirror.Type, Class[_]), Reflection]() {
-      override def default(key: (mirror.Type, Class[_])) = {
-        val value = new Reflection(key._1, key._2)
-        update(key, value)
-        value
-      }
-    }
-
-  def reflectionOf(mt: mirror.Type): Reflection =
-    reflectionCache(mt, mirrorQuirks.javaClass(mt))
-
-  // todo : to move to apply of Reflection
-  def reflectionOf[T](implicit t: TypeTag[T]): Reflection =
-    reflectionCache(t.tpe, t.erasure)
-
-
   implicit class AnyReflectedSupport
     [ T : TypeTag ]
     ( any : T )

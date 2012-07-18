@@ -1,36 +1,41 @@
 package vorm
 
-import vorm.reflection._
+import vorm._
+import reflection._
 import tools.nsc.interpreter.IMain
 import tools.nsc._
 
 package object persisted {
 
-  def persisted[T <: AnyRef : TypeTag](instance: T, id: Long) : T with Persisted = {
-    val t = tpe[T]
 
-    val properties =
-      t.propertyByNameMap
-        .mapValues(p => t.propertyValue(p.name, instance))
+  def persisted
+    [ T <: AnyRef : TypeTag ]
+    ( instance: T, 
+      id: Long )
+    : T with Persisted 
+    = persisted( instance.reflected, id )
 
-    persisted(t, properties, id)
-  }
+  def persisted
+    [ T ]
+    ( reflected : Reflected,
+      id : Long )
+    : T with Persisted
+    = {
+      val args
+        = id ::
+          reflected.reflection.constructorArgs.view
+            .map(_.name)
+            .map(reflected.propertyValue)
+            .toList
 
-  def persisted[T <: AnyRef : TypeTag](properties: Map[String, Any], id: Long) : T with Persisted =
-    persisted(tpe[T], properties, id)
+      persistedClass[T](reflected.reflection)
+        .getConstructors.head
+        .newInstance(args.asInstanceOf[List[Object]]: _*)
+        .asInstanceOf[T with Persisted]
 
-  def persisted[T <: AnyRef](t: Type, properties: Map[String, Any], id: Long) : T with Persisted = {
-    val args =
-      id ::
-      t.constructors.head
-        .arguments.map(_.name)
-        .map(properties)
+    }
 
-    persistedClass[T](t)
-      .getConstructors.head
-      .newInstance(args.asInstanceOf[List[Object]]: _*)
-      .asInstanceOf[T with Persisted]
-  }
+
 
 
   private lazy val interpreter = {

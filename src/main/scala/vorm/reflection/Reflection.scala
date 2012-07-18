@@ -18,14 +18,14 @@ sealed class Reflection
       = mirrorQuirks.properties(t).view
           .map {
             s ⇒ mirrorQuirks.name(s) → 
-                reflectionOf(s.typeSignature) 
+                Reflection(s.typeSignature)
           }
           .toMap
 
     lazy val generics
       : IndexedSeq[Reflection]
       = mirrorQuirks.generics(t).view
-          .map(reflectionOf)
+          .map(Reflection(_))
           .toIndexedSeq
 
     def inheritsFrom
@@ -43,34 +43,29 @@ sealed class Reflection
                 .forall {case (a, b) => a.inheritsFrom(b)}
         }
 
-
-    // lazy val methods
-    //   = mirrorQuirks.methods(t).map { 
-    //       s ⇒ 
-    //         type MethodType = {
-    //           def params: List[mirror.Symbol]
-    //           def resultType: mirror.Type
-    //         }
-
-    //         val t = s.typeSignature.asInstanceOf[MethodType]
-    //         val name = s.name.decoded.trim
-    //         val arguments =
-    //           t.params.map(
-    //             p ⇒ Argument(mirrorQuirks.name(p), reflectionOf(p.typeSignature))
-    //           )
-    //         val result = reflectionOf(t.resultType)
-    //         Method(name, arguments, result)
-    //     }
-
-    // lazy val methodNames
-    // lazy val methodResults
-
-
   }
-// object Reflection {
-//   sealed case class Argument(name: String, reflection: Reflection)
-//   sealed case class Property(name: String, reflection: Reflection)
-//   sealed case class Generic(index: Int, reflection: Reflection)
-//   sealed case class Method(name: String, arguments: List[Argument], reflection: Reflection)
-//   sealed case class Constructor(arguments: List[Argument])
-// }
+  
+object Reflection {
+
+  private val cache 
+    = new collection.mutable.HashMap[( mirror.Type, Class[_] ), Reflection] {
+        override def default
+          ( key : ( mirror.Type, Class[_] ) ) 
+          = {
+            val value = new Reflection(key._1, key._2)
+            update(key, value)
+            value
+          }
+      }
+
+  def apply
+    ( implicit tag : TypeTag[_] )
+    : Reflection
+    = cache( tag.tpe, tag.erasure )
+
+  def apply
+    ( mt : mirror.Type )
+    : Reflection 
+    = cache( mt, mirrorQuirks.javaClass( mt ) )
+
+}

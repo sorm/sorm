@@ -4,10 +4,13 @@ import reflect.mirror
 import vorm.mirrorQuirks
 import util.MurmurHash3
 
+
 /**
  * An abstraction over Scala's mirror functionality
  */
 class Type(protected val mt: mirror.Type, jc: Option[Class[_]]) {
+
+
 
   lazy val mixinBasis =
     tpe(mirrorQuirks.mixinBasis(mt))
@@ -33,6 +36,7 @@ class Type(protected val mt: mirror.Type, jc: Option[Class[_]]) {
         def params: List[mirror.Symbol]
         def resultType: mirror.Type
       }
+
       val t = s.typeSignature.asInstanceOf[MethodType]
       val name = s.name.decoded.trim
       val arguments =
@@ -80,6 +84,19 @@ class Type(protected val mt: mirror.Type, jc: Option[Class[_]]) {
   def propertyValue(name: String, instance: AnyRef) =
     methodResult(name, instance)
 
+  def instance(params: Map[String, Any]) = {
+    if (mirrorQuirks.isInner(mt.typeSymbol))
+      throw new UnsupportedOperationException("Dynamic instantiation of inner classes is not supported")
+
+    val args =
+      constructors.head
+        .arguments.map(_.name)
+        .map(params)
+
+    val constructor = javaClass.getConstructors.head
+
+    constructor.newInstance(args.asInstanceOf[List[Object]]: _*)
+  }
 
   override def toString = mt.toString
   override def equals(x: Any) =

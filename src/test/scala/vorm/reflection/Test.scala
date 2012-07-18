@@ -27,5 +27,9 @@ class Test extends FunSuite with ShouldMatchers {
   test("tpe returns the same Type with for types with same generics") {
     tpe[Seq[Int]] should equal(tpe[Seq[Int]])
   }
+  test("type reflection extensions") {
+    Seq(1,1,3).tpe should equal(tpe[Seq[Int]])
+    Seq(1,1,3).tpe should not equal(tpe[Seq[Long]])
+  }
 
 }

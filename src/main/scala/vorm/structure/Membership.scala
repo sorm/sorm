@@ -27,5 +27,4 @@ object Membership
     sealed case class MapValue
       ( parent : Mapping )
       extends Membership
-
   }

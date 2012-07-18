@@ -2,4 +2,6 @@ package vorm.structure
 
 import vorm.reflection._
 
-trait Mapping
+trait Mapping {
+  def membership : Option[Membership]
+}

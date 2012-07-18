@@ -6,15 +6,15 @@ import reflection._
 trait Setup {
 
   def primaryKey
-  : Reflection => Option[Seq[String]]
+    : Reflection => Option[Seq[String]]
 
   def uniqueKeys
-  : Reflection => Set[Seq[String]]
+    : Reflection => Set[Seq[String]]
 
   def indexes
-  : Reflection => Set[Seq[String]]
+    : Reflection => Set[Seq[String]]
 
   def autoIncremented
-  : (Reflection, String) => Boolean
+    : (Reflection, String) => Boolean
 
 }

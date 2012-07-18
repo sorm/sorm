@@ -3,24 +3,24 @@ package vorm.structure
 import vorm._
 import reflection._
 
-sealed trait MappingKind
+sealed trait ReflectionKind
 
-object MappingKind {
+object ReflectionKind {
 
   case object Entity
-    extends MappingKind
+    extends ReflectionKind
   case object Value
-    extends MappingKind
+    extends ReflectionKind
   case object Tuple
-    extends MappingKind
+    extends ReflectionKind
   case object Option
-    extends MappingKind
+    extends ReflectionKind
   case object Seq
-    extends MappingKind
+    extends ReflectionKind
   case object Set
-    extends MappingKind
+    extends ReflectionKind
   case object Map
-    extends MappingKind
+    extends ReflectionKind
 
   def apply
     ( reflection : Reflection )

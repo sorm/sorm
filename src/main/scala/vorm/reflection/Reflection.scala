@@ -43,29 +43,6 @@ sealed class Reflection
                 .forall {case (a, b) => a.inheritsFrom(b)}
         }
 
-
-    // lazy val methods
-    //   = mirrorQuirks.methods(t).map { 
-    //       s ⇒ 
-    //         type MethodType = {
-    //           def params: List[mirror.Symbol]
-    //           def resultType: mirror.Type
-    //         }
-
-    //         val t = s.typeSignature.asInstanceOf[MethodType]
-    //         val name = s.name.decoded.trim
-    //         val arguments =
-    //           t.params.map(
-    //             p ⇒ Argument(mirrorQuirks.name(p), reflectionOf(p.typeSignature))
-    //           )
-    //         val result = reflectionOf(t.resultType)
-    //         Method(name, arguments, result)
-    //     }
-
-    // lazy val methodNames
-    // lazy val methodResults
-
-
   }
 object Reflection {
   def apply
@@ -73,9 +50,4 @@ object Reflection {
     : Reflection
     = reflectionOf( tag )
 
-  // sealed case class Argument(name: String, reflection: Reflection)
-  // sealed case class Property(name: String, reflection: Reflection)
-  // sealed case class Generic(index: Int, reflection: Reflection)
-  // sealed case class Method(name: String, arguments: List[Argument], reflection: Reflection)
-  // sealed case class Constructor(arguments: List[Argument])
 }

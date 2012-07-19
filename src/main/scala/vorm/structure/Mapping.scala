@@ -1,29 +1,25 @@
 package vorm.structure
 
-import vorm.reflection._
+import vorm._
+import structure._
+import reflection._
+import mapping._
 
 trait Mapping {
-  def membership : Option[Membership]
+  def settings : Settings
 }
 object Mapping {
-  
-  def apply 
+  /**
+   * Root
+   */
+  def apply
+    ( settings : Settings )
+    = new Root( settings )
+    
+  def apply
     ( reflection : Reflection,
-      setup : Setup )
-    : Mapping
-    = apply( None, reflection, setup )
-
-  def apply 
-    ( membership : Membership,
-      reflection : Reflection,
-      setup : Setup )
-    : Mapping
-    = apply( Some(membership), reflection, setup )
-
-  def apply 
-    ( membership : Option[Membership],
-      reflection : Reflection,
-      setup : Setup )
+      parent : Mapping,
+      settings : Settings )
     : Mapping
     = throw new NotImplementedError
 

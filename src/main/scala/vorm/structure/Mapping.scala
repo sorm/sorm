@@ -1,8 +1,9 @@
-package vorm.structure.mapping
+package vorm.structure
 
 import vorm._
 import structure._
 import reflection._
+import mapping._
 
 trait Mapping {
   def settings : Settings

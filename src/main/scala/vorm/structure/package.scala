@@ -14,6 +14,7 @@ package object structure {
         = UPPER_CAMEL.to( LOWER_UNDERSCORE, string )
     }
 
+
   implicit class ReflectionDdlColumnTypeSupport
     ( reflection : Reflection )
     {
@@ -41,5 +42,9 @@ package object structure {
               ⇒ vorm.ddl.Column.Type.Decimal
           }
     }
+
+
+  type Settings = collection.Map[Reflection, EntitySettings]
+
 
 }

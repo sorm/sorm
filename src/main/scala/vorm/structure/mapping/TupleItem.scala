@@ -5,7 +5,7 @@ import structure._
 import reflection._
 
 class TupleItem
-  ( val settings : Map[Reflection, EntitySettings],
+  ( val settings : Settings,
     val reflection : Reflection,
     val parent : Mapping,
     val index : Int )

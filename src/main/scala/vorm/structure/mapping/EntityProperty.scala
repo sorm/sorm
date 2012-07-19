@@ -5,7 +5,7 @@ import structure._
 import reflection._
 
 class EntityProperty
-  ( val settings : Map[Reflection, EntitySettings],
+  ( val settings : Settings,
     val reflection : Reflection,
     val parent : Mapping,
     val name : String )

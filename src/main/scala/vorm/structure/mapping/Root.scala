@@ -5,7 +5,7 @@ import structure._
 import reflection._
 
 class Root
-  ( val settings : Map[Reflection, EntitySettings] )
+  ( val settings : Settings )
   extends Mapping with HasChildren
   {
     lazy val children

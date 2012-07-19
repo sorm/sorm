@@ -5,18 +5,18 @@ import structure._
 import reflection._
 
 trait Mapping {
-  def settings : Map[Reflection, EntitySettings]
+  def settings : Settings
 }
 object Mapping {
   /**
    * Root
    */
   def apply
-    ( settings : Map[Reflection, EntitySettings] )
+    ( settings : Settings )
     = new Root( settings )
     
   def apply
-    ( settings : Map[Reflection, EntitySettings],
+    ( settings : Settings,
       reflection : Reflection,
       parent : Mapping )
     : Mapping

@@ -7,14 +7,13 @@ import reflection._
 class EntityProperty
   ( val name : String,
     val reflection : Reflection,
-    val parent : Mapping,
+    val parent : Entity,
     val settings : Settings )
   extends Mapping
   with HasParent
-  with HasChildren
+  with HasChild
   with HasReflection
   {
-    lazy val children
-      = Mapping( reflection, this, settings ) ::
-        Nil
+    lazy val child
+      = Mapping( reflection, this, settings )
   }

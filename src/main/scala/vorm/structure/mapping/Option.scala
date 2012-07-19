@@ -10,10 +10,9 @@ class Option
     val settings : Settings )
   extends Mapping
   with HasParent
-  with HasChildren
+  with HasChild
   with HasReflection
   {
-    lazy val children
-      = new OptionItem( reflection.generics(0), this, settings ) :: 
-        Nil
+    lazy val child
+      = new OptionItem( reflection.generics(0), this, settings )
   }

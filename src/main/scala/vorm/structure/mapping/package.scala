@@ -1,6 +1,7 @@
 package vorm.structure
 
 import vorm._
+import structure._
 import reflection._
 
 package object mapping {
@@ -16,13 +17,5 @@ package object mapping {
   trait HasReflection {
     def reflection : Reflection
   }
-
-  // case class Root
-  //   ( val setup : Setup )
-  //   extends Mapping with HasChildren
-  //   {
-  //     lazy val children
-  //       = setup.entities.map( Mapping( setup, this) )
-  //   }
 
 }

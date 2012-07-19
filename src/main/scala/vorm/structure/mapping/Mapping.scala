@@ -1,23 +1,22 @@
 package vorm.structure.mapping
 
-import vorm.reflection._
-import vorm.structure.Setup
+import vorm._
+import structure._
+import reflection._
 
 trait Mapping {
-  def setup: Setup
+  def settings : Map[Reflection, EntitySettings]
 }
 object Mapping {
   /**
    * Root
    */
   def apply
-    ( setup : Setup,
-      reflection : Reflection )
-    : Mapping
-    = throw new NotImplementedError
-
+    ( settings : Map[Reflection, EntitySettings] )
+    = new Root( settings )
+    
   def apply
-    ( setup : Setup,
+    ( settings : Map[Reflection, EntitySettings],
       reflection : Reflection,
       parent : Mapping )
     : Mapping

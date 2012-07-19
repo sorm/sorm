@@ -5,7 +5,7 @@ import structure._
 import reflection._
 
 class TupleItem
-  ( val setup : Setup,
+  ( val settings : Map[Reflection, EntitySettings],
     val reflection : Reflection,
     val parent : Mapping )
   extends Mapping
@@ -14,6 +14,6 @@ class TupleItem
   with HasReflection
   {
     lazy val children
-      = Mapping( setup, reflection, this ) ::
+      = Mapping( settings, reflection, this ) ::
         Nil
   }

@@ -22,4 +22,6 @@ package object mapping {
     def reflection : Reflection
   }
 
+  type Settings = Map[Reflection, EntitySettings]
+
 }

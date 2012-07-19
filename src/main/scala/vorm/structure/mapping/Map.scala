@@ -4,7 +4,7 @@ import vorm._
 import structure._
 import reflection._
 
-class Entity
+class Map
   ( val reflection : Reflection,
     val parent : Mapping,
     val settings : Settings )
@@ -14,9 +14,7 @@ class Entity
   with HasReflection
   {
     lazy val children
-      = reflection.properties
-          .map { case (n, r) ⇒ new EntityProperty( n, r, this, settings ) }
-          .toList
-
-    lazy val settings1 = settings(reflection)
+      = new MapKey( reflection.generics(0), this, settings ) ::
+        new MapValue( reflection.generics(1), this, settings ) ::
+        Nil
   }

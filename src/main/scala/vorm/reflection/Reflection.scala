@@ -59,7 +59,8 @@ object Reflection {
       }
 
   def apply
-    ( implicit tag : TypeTag[_] )
+    [ T ]
+    ( implicit tag : TypeTag[T] )
     : Reflection
     = cache( tag.tpe, tag.erasure )
 

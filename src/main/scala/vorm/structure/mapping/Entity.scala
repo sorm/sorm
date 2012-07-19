@@ -17,4 +17,6 @@ class Entity
       = reflection.properties
           .map { case (n, r) ⇒ new EntityProperty( n, r, this, settings ) }
           .toList
+
+    lazy val settings1 = settings(reflection)
   }

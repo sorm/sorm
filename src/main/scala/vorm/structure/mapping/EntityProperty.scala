@@ -4,11 +4,11 @@ import vorm._
 import structure._
 import reflection._
 
-class TupleItem
+class EntityProperty
   ( val settings : Map[Reflection, EntitySettings],
     val reflection : Reflection,
     val parent : Mapping,
-    val index : Int )
+    val name : String )
   extends Mapping
   with HasParent
   with HasChildren

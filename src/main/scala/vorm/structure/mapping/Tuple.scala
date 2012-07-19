@@ -15,7 +15,7 @@ class Tuple
   {
     lazy val children
       = reflection.generics.view
-          .zipWithIndex.map { case (r, i) ⇒ new TupleItem(settings, r, this) }
+          .zipWithIndex.map { case (r, i) ⇒ new TupleItem(settings, r, this, i) }
           .toList
 
   }

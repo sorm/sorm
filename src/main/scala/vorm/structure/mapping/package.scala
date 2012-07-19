@@ -11,7 +11,11 @@ package object mapping {
   }
 
   trait HasChildren {
-    def children : Seq[Mapping]
+    def children : collection.Seq[Mapping]
+  }
+
+  trait HasChild {
+    def child : Mapping
   }
 
   trait HasReflection {

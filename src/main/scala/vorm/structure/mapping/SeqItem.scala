@@ -4,11 +4,10 @@ import vorm._
 import structure._
 import reflection._
 
-class TupleItem
+class SeqItem
   ( val settings : Map[Reflection, EntitySettings],
     val reflection : Reflection,
-    val parent : Mapping,
-    val index : Int )
+    val parent : Seq )
   extends Mapping
   with HasParent
   with HasChildren

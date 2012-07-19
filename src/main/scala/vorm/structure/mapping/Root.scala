@@ -9,5 +9,5 @@ class Root
   extends Mapping with HasChildren
   {
     lazy val children
-      = settings.keys.map( Mapping( settings, _, this) ).toList
+      = settings.keys.map( Mapping( _, this, settings ) ).toList
   }

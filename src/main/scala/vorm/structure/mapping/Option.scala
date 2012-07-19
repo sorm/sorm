@@ -5,15 +5,15 @@ import structure._
 import reflection._
 
 class Option
-  ( val settings : Settings,
-    val reflection : Reflection,
-    val parent : Mapping )
+  ( val reflection : Reflection,
+    val parent : Mapping,
+    val settings : Settings )
   extends Mapping
   with HasParent
   with HasChildren
   with HasReflection
   {
     lazy val children
-      = new OptionItem( settings, reflection.generics(0), this ) :: 
+      = new OptionItem( reflection.generics(0), this, settings ) :: 
         Nil
   }

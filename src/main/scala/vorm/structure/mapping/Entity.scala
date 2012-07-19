@@ -5,9 +5,9 @@ import structure._
 import reflection._
 
 class Entity
-  ( val settings : Settings,
-    val reflection : Reflection,
-    val parent : Mapping )
+  ( val reflection : Reflection,
+    val parent : Mapping,
+    val settings : Settings )
   extends Mapping
   with HasParent
   with HasChildren
@@ -15,6 +15,6 @@ class Entity
   {
     lazy val children
       = reflection.properties
-          .map { case (name, r) ⇒ new EntityProperty( settings, r, this, name ) }
+          .map { case (n, r) ⇒ new EntityProperty( n, r, this, settings ) }
           .toList
   }

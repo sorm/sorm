@@ -5,16 +5,16 @@ import structure._
 import reflection._
 
 class EntityProperty
-  ( val settings : Settings,
+  ( val name : String,
     val reflection : Reflection,
     val parent : Mapping,
-    val name : String )
+    val settings : Settings )
   extends Mapping
   with HasParent
   with HasChildren
   with HasReflection
   {
     lazy val children
-      = Mapping( settings, reflection, this ) ::
+      = Mapping( reflection, this, settings ) ::
         Nil
   }

@@ -5,17 +5,19 @@ import structure._
 import reflection._
 
 class Tuple
-  ( val settings : Settings,
-    val reflection : Reflection,
-    val parent : Mapping )
+  ( val reflection : Reflection,
+    val parent : Mapping,
+    val settings : Settings )
   extends Mapping
   with HasParent
   with HasChildren
   with HasReflection
   {
     lazy val children
-      = reflection.generics.view
-          .zipWithIndex.map { case (r, i) ⇒ new TupleItem(settings, r, this, i) }
+      = reflection.generics
+          .view
+          .zipWithIndex
+          .map { case (r, i) ⇒ new TupleItem(i, r, this, settings) }
           .toList
 
   }

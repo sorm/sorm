@@ -16,9 +16,9 @@ object Mapping {
     = new Root( settings )
     
   def apply
-    ( settings : Settings,
-      reflection : Reflection,
-      parent : Mapping )
+    ( reflection : Reflection,
+      parent : Mapping,
+      settings : Settings )
     : Mapping
     = throw new NotImplementedError
 

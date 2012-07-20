@@ -1,29 +1,35 @@
 package vorm.structure
 
 sealed trait ColumnRole {
-  def mapping: Mapping
+  def mapping : Mapping
+  def jdbcType : Int
 }
 object ColumnRole {
 
   sealed case class GeneratedId
-    ( mapping : Mapping )
-    extends ColumnRole
+    ( jdbcType : Int, 
+      mapping : Mapping )
+    extends ColumnRole 
 
   sealed case class Value
-    ( mapping : Mapping )
+    ( jdbcType : Int, 
+      mapping : Mapping )
     extends ColumnRole
 
   sealed case class ForeignKeyPart
-    ( index : Int,
+    ( jdbcType : Int, 
+      index : Int,
       mapping : Mapping )
     extends ColumnRole
 
   sealed case class Index
-    ( mapping : Mapping )
+    ( jdbcType : Int, 
+      mapping : Mapping )
     extends ColumnRole
 
   sealed case class Hash
-    ( mapping : Mapping )
+    ( jdbcType : Int, 
+      mapping : Mapping )
     extends ColumnRole
 
 }

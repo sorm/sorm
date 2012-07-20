@@ -43,6 +43,35 @@ sealed class Reflection
                 .forall {case (a, b) => a.inheritsFrom(b)}
         }
 
+    lazy val constructorArguments
+      : Map[String, Reflection]
+      = mirrorQuirks.constructors(t)
+          .head
+          .typeSignature
+          .asInstanceOf[{def params: List[mirror.Symbol]}]
+          .params
+          .map(s ⇒ mirrorQuirks.name(s) → Reflection(s.typeSignature) )
+          .toMap
+
+
+    def instantiate
+      ( params : Map[String, Any] )
+      : Any
+      = instantiate( constructorArguments.keys.map(params) )
+
+    def instantiate
+      ( args : Traversable[Any] = Nil )
+      : Any
+      = {
+        if ( mirrorQuirks.isInner(t.typeSymbol) )
+          throw new UnsupportedOperationException(
+              "Dynamic instantiation of inner classes is not supported"
+            )
+        
+        javaClass.getConstructors.head
+          .newInstance( args.asInstanceOf[Seq[Object]] : _* )
+      }
+
   }
   
 object Reflection {

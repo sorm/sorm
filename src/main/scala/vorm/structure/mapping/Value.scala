@@ -12,4 +12,7 @@ class Value
   with HasParent
   with HasReflection
   {
+    lazy val column
+      : ddl.Column
+      = ???
   }

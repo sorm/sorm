@@ -12,9 +12,12 @@ class Map
   with HasParent
   with HasChildren
   with HasReflection
+  with Table
   {
     lazy val children
-      = new MapKey( reflection.generics(0), this, settings ) ::
-        new MapValue( reflection.generics(1), this, settings ) ::
-        Nil
+      = key :: value :: Nil
+    lazy val key
+      = new MapKey( reflection.generics(0), this, settings )
+    lazy val value
+      = new MapValue( reflection.generics(1), this, settings )
   }

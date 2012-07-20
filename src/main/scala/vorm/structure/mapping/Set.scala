@@ -12,6 +12,7 @@ class Set
   with HasParent
   with HasChild
   with HasReflection
+  with Table
   {
     lazy val child
       = new SetItem( reflection.generics(0), this, settings )

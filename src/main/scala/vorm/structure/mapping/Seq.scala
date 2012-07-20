@@ -12,6 +12,7 @@ class Seq
   with HasParent
   with HasChild
   with HasReflection
+  with Table
   {
     lazy val child
       = new SeqItem( reflection.generics(0), this, settings )

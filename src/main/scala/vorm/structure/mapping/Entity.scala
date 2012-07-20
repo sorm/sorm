@@ -12,6 +12,7 @@ class Entity
   with HasParent
   with HasChildren
   with HasReflection
+  with Table
   {
     lazy val children
       = reflection.properties

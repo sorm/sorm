@@ -8,11 +8,11 @@ trait Table
   extends Mapping
   with HasChildren
   {
-    lazy val primaryKeyColumnRoles
-      : scala.Seq[ColumnRole]
+    lazy val primaryKeyColumns
+      : scala.Seq[ddl.Column]
       = ???
-    lazy val resultSetColumnRoles
-      : scala.Seq[ColumnRole]
+    lazy val resultSetColumns
+      : scala.Seq[ddl.Column]
       = ???
     lazy val subTableMappings
       : scala.Seq[Table]

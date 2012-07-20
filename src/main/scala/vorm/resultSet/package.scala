@@ -1,6 +1,7 @@
 package vorm
 
 import vorm._
+import extensions._
 import reflection._
 import structure._
 import jdbc._
@@ -32,15 +33,12 @@ package object resultSet {
 
           case class Row
             ( data : Map[ColumnRole, Any],
-              rowsOfSubmappings : RowGroupsOfMappings )
+              rowsOfSubmappings : Map[Mapping, Map[PrimaryKey, Row]] )
 
-          type RowGroup = Map[Seq[Any], Row]
-
-          type RowGroupsOfMappings = Map[Mapping, RowGroup]
-
+          type PrimaryKey = Seq[Any]
             
           def fetchRowsAndClose()
-            : RowGroupsOfMappings
+            : Map[Mapping, Map[PrimaryKey, Row]]
             = {
 
               def value
@@ -49,13 +47,39 @@ package object resultSet {
 
               def updatedRows
                 ( mapping : Mapping,
-                  rows : RowGroupsOfMappings )
-                : RowGroupsOfMappings
-                = ???
+                  rows : Map[PrimaryKey, Row] )
+                : Map[PrimaryKey, Row]
+                = mapping match {
+                    case mapping : structure.mapping.Entity
+                      ⇒ val primaryKey = mapping.primaryKeyColumnRoles map value
+                        rows get primaryKey match {
+                          case Some(row)
+                            ⇒ rows +
+                              ( primaryKey,
+                                row copy (
+                                  rowsOfSubmappings
+                                    = rowsOfSubmappings
+                                        .map {
+                                          case (m, rows)
+                                            ⇒ updatedRows(m, rows)
+                                        }
+                                  )
+                                )
+                          case None
+                            ⇒ Row(
+                                data 
+                                  = mapping.resultSetColumnRoles.view
+                                      .zipBy(value).toMap,
+                                rowsOfSubmappings
+                                  = mapping.subTableMappings.view
+                                      .zipBy(updatedRows(_, Map())).toMap
+                                )
+                        }
+                  }
 
 
 
-              var rows : RowGroupsOfMappings = Map()
+              var rows : Map[Mapping, Map[PrimaryKey, Row]] = Map()
 
               rs.beforeFirst()
               while ( rs.next() ) {
@@ -70,7 +94,7 @@ package object resultSet {
 
 
           def instances
-            ( rows : RowGroupsOfMappings )
+            ( rows : Map[Mapping, Map[PrimaryKey, Row]] )
             : Map[Mapping, Seq[_]]
             = ???
 

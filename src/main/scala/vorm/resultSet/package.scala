@@ -16,11 +16,13 @@ package object resultSet {
         [ T ]
         ( columnRoles : IndexedSeq[ColumnRole] )
         : Seq[T]
-        = fetchInstances( 
-              Set() + columnRoles.head.mapping.root,
-              columnRoles.view.zipWithIndex.toMap
-            )
-            .asInstanceOf[Seq[T]]
+        = ???
+        // = fetchInstances( 
+        //       Set() + columnRoles.head.mapping.root,
+        //       columnRoles.view.zipWithIndex.toMap
+        //     )
+        //     .apply(columnRoles.head.mapping.root)
+        //     .asInstanceOf[Seq[T]]
 
       def fetchInstances
         ( mappings : Set[Mapping],
@@ -37,29 +39,23 @@ package object resultSet {
           type RowGroupsOfMappings = Map[Mapping, RowGroup]
 
             
-          def fetchRows()
+          def fetchRowsAndClose()
             : RowGroupsOfMappings
             = {
 
               def value
                 ( role : ColumnRole )
-                // = rs.value( indexesOfColumnRoles(role), role.column.t.jdbcType )
-                = role match {
-                    case ColumnRole.Value( mapping )
-                      ⇒ rs.value( indexesOfColumnRoles(role), mapping.column.jdbcType )
-                    case ColumnRole.Hash( mapping )
-                      ⇒ rs.value( indexesOfColumnRoles(role), Column.Type.Integer.jdbcType )
-                  }
+                = rs.value( indexesOfColumnRoles(role), role.jdbcType )
 
               def updatedRows
                 ( mapping : Mapping,
                   rows : RowGroupsOfMappings )
                 : RowGroupsOfMappings
-                = throw new NotImplementedError
+                = ???
 
 
 
-              var rows = RowGroupsOfMappings()
+              var rows : RowGroupsOfMappings = Map()
 
               rs.beforeFirst()
               while ( rs.next() ) {
@@ -76,10 +72,10 @@ package object resultSet {
           def instances
             ( rows : RowGroupsOfMappings )
             : Map[Mapping, Seq[_]]
-            = throw new NotImplementedError
+            = ???
 
 
-          instances( fetchRows() )
+          instances( fetchRowsAndClose() )
 
         }
 

@@ -66,13 +66,16 @@ package object resultSet {
                                   )
                                 )
                           case None
-                            ⇒ Row(
-                                data 
-                                  = mapping.resultSetColumnRoles.view
-                                      .zipBy(value).toMap,
-                                rowsOfSubmappings
-                                  = mapping.subTableMappings.view
-                                      .zipBy(updatedRows(_, Map())).toMap
+                            ⇒ rows + 
+                              ( primaryKey,
+                                Row(
+                                  data 
+                                    = mapping.resultSetColumnRoles.view
+                                        .zipBy(value).toMap,
+                                  rowsOfSubmappings
+                                    = mapping.subTableMappings.view
+                                        .zipBy(updatedRows(_, Map())).toMap
+                                  )
                                 )
                         }
                   }

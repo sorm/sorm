@@ -14,7 +14,7 @@ package object resultSet {
     ( rs : ResultSet )
     {
 
-      def fetchInstances
+      def fetchInstancesAndClose
         ( m : mapping.Table,
           indexes : Map[(mapping.Table, Column), Int] )
         : Seq[_]

@@ -1,10 +1,10 @@
 package vorm.query
 
-import vorm.reflection._
+import vorm._
+import reflection._
 
-case class Query(
-  t: Type,
-  filters: List[Filter] = Nil,
-  orderings: List[Ordering] = Nil,
-  limit: Limit = Limit(0, None)
-)
+case class Query
+  ( mapping     : Mapping,
+    filter      : Filter      = Nil,
+    orders      : Seq[Order]  = Nil,
+    limit       : Limit       = Limit() )

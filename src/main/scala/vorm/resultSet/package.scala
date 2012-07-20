@@ -13,82 +13,77 @@ package object resultSet {
   implicit class ResultSetExtensions
     ( rs : ResultSet )
     {
-      def fetchInstances
-        [ T ]
-        ( columnRoles : IndexedSeq[ColumnRole] )
-        : Seq[T]
-        = ???
-        // = fetchInstances( 
-        //       Set() + columnRoles.head.mapping.root,
-        //       columnRoles.view.zipWithIndex.toMap
-        //     )
-        //     .apply(columnRoles.head.mapping.root)
-        //     .asInstanceOf[Seq[T]]
+      type MappingColumn = (structure.mapping.Table, Column)
 
       def fetchInstances
-        ( mappings : Set[Mapping],
-          indexesOfColumnRoles : Map[ColumnRole, Int] )
-        : Map[Mapping, Seq[_]]
+        ( mapping : structure.mapping.Table,
+          indexes : Map[MappingColumn, Int] )
+        : Seq[_]
         = {
 
           case class Row
-            ( data : Map[ColumnRole, Any],
-              rowsOfSubmappings : Map[Mapping, Map[PrimaryKey, Row]] )
-
+            ( data : Map[Column, Any],
+              rowsOfSubmappings : Map[structure.mapping.Table, Map[PrimaryKey, Row]] )
           type PrimaryKey = Seq[Any]
             
           def fetchRowsAndClose()
-            : Map[Mapping, Map[PrimaryKey, Row]]
+            : Map[PrimaryKey, Row]
             = {
 
-              def value
-                ( role : ColumnRole )
-                = rs.value( indexesOfColumnRoles(role), role.jdbcType )
-
               def updatedRows
-                ( mapping : Mapping,
+                ( mapping : structure.mapping.Table,
                   rows : Map[PrimaryKey, Row] )
                 : Map[PrimaryKey, Row]
-                = mapping match {
-                    case mapping : structure.mapping.Entity
-                      ⇒ val primaryKey = mapping.primaryKeyColumnRoles map value
-                        rows get primaryKey match {
-                          case Some(row)
-                            ⇒ rows +
-                              ( primaryKey,
-                                row copy (
-                                  rowsOfSubmappings
-                                    = rowsOfSubmappings
-                                        .map {
-                                          case (m, rows)
-                                            ⇒ updatedRows(m, rows)
-                                        }
-                                  )
-                                )
-                          case None
-                            ⇒ rows + 
-                              ( primaryKey,
-                                Row(
-                                  data 
-                                    = mapping.resultSetColumnRoles.view
-                                        .zipBy(value).toMap,
-                                  rowsOfSubmappings
-                                    = mapping.subTableMappings.view
-                                        .zipBy(updatedRows(_, Map())).toMap
-                                  )
-                                )
-                        }
+                = {
+                  def value
+                    ( column : Column )
+                    = rs.value(
+                          indexes(mapping → column),
+                          column.t.jdbcType
+                        )
+
+                  val primaryKey
+                    = mapping.primaryKeyColumns map value
+
+                  rows.get(primaryKey) match {
+                    case Some(row)
+                      ⇒ rows +
+                        ( primaryKey → 
+                          row.copy(
+                              rowsOfSubmappings
+                                = row.rowsOfSubmappings.map {
+                                    case (m, rows)
+                                      ⇒ m → updatedRows(m, rows)
+                                  }
+                            )
+                        )
+                    case None
+                      ⇒ rows +
+                        ( primaryKey → 
+                          Row(
+                              data
+                                = mapping.resultSetColumns
+                                    .view
+                                    .zipBy(value)
+                                    .toMap,
+                              rowsOfSubmappings
+                                = mapping.subTableMappings
+                                    .view
+                                    .zipBy( updatedRows(_, Map()) )
+                                    .toMap
+                            )
+                        )
                   }
+                  
+
+                }
 
 
-
-              var rows : Map[Mapping, Map[PrimaryKey, Row]] = Map()
+              var rows : Map[PrimaryKey, Row] = Map()
 
               rs.beforeFirst()
               while ( rs.next() ) {
-                for ( mapping ← mappings ) {
-                  rows = updatedRows( mapping, rows )
-                }
+                rows = updatedRows( mapping, rows )
               }
               rs.close()
 
@@ -97,8 +92,8 @@ package object resultSet {
 
 
           def instances
-            ( rows : Map[Mapping, Map[PrimaryKey, Row]] )
-            : Map[Mapping, Seq[_]]
+            ( rows : Map[PrimaryKey, Row] )
+            : Seq[_]
             = ???
 
 

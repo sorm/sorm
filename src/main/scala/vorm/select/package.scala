@@ -1,67 +1,59 @@
 package vorm
 
 import extensions._
+import query._
+import structure._
 
 package object select {
   
-  def sql
-    ( node : SelectNode )
-    : String
+  sealed case class Statement
+    ( sql : String,
+      data : Seq[(Any, JdbcType)],
+      resultSetColumns : Seq[(ddl.Column, mapping.Table)] )
+  
+  type JdbcType = Int
+
+
+  def statement
+    ( query : Query )
+    : Statement
     = {
 
-      case class Join
-        ( name      : String,
-          alias     : String,
-          leftAlias : String,
-          mappings  : Set[(String, String)] )
+        sealed case class SelectNode
+          // ( table : String,
+          //   columns : List[String],
+          //   mappings : Set[(String, String)],
+          //   children : List[SelectNode] )
 
-      def unfold
-        ( node        : SelectNode,
-          columns     : List[String]    = Nil,
-          joins       : List[Join]      = Nil,
-          parentAlias : Option[String]  = None,
-          index       : Int             = 0 )
-        : ( List[String], List[Join], Int )
-        = {
-          val alias
-            = "t" + index
-          val columns1 
-            = node.columns.map(alias + "." + _)
-          val join 
-            = parentAlias.map {
-                parentAlias =>
-                  Join (
-                    name = node.table,
-                    alias = alias,
-                    leftAlias = parentAlias,
-                    mappings = node.mappings
-                  )
-              }
+        def selectNode
+          ( m : mapping.Table )
+          : SelectNode
+          = SelectNode(
+              table
+                = m.table.name,
+              columns
+                = m.table.columns.map( _ → m ),
+              parentMappings
+                = ???,
+              children
+                = m.subTableMappings.map( selectNode ),
+              where
+                = 
 
-          (columns1 ::: columns, join ++: joins, index + 1) →
-          node.children foldRight {
-            case (child, (columns, joins, index))
-              ⇒ unfold(child, columns, joins, Some(alias), index)
-          }
-        }
-
-      val (columns, joins, _)
-        = unfold(node)
+            )
 
 
-      "SELECT " + columns.mkString(", ") + "\n" +
-      "FROM " + node.table + " AS t0" + "\n" +
-      joins
-        .map {
-          j ⇒ "LEFT JOIN " + j.name + " AS " + j.alias + " ON " + 
-              j.mappings
-                .map {
-                  case (right, left)
-                    ⇒ j.leftAlias + "." + left + " = " + j.alias + "." + right
-                }
-                .mkString(" AND ")
-        }
-        .mkString("\n")
-    }
+        def statement
+          ( selectNode : SelectNode )
+          : Statement
+          = ???
+
+
+        statement( selectNode( query.mapping ) )
+        
+      }
+
+    
+
 
 }

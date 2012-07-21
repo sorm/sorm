@@ -7,28 +7,61 @@ import structure._
 sealed trait WhereNode
 object WhereNode {
 
-  sealed case class Filter
-    ( kind : Filter.Kind,
-      mapping : Mapping,
-      value : Any )
-    extends WhereNode
 
-  object Filter {
-    trait Kind
-    object Kind {
-      case object Equals extends Kind
-      case object NotEquals extends Kind
-      case object Bigger extends Kind
-      case object BiggerIncluding extends Kind
-      case object Smaller extends Kind
-      case object SmallerIncluding extends Kind
-      case object In extends Kind
-      case object Contains extends Kind
-      case object Like extends Kind
-      case object Regex extends Kind
-
-    }
+  sealed trait Filter extends WhereNode {
+    def mapping : Mapping
+    def value : Any
   }
+
+  sealed case class Equals
+    ( mapping : Mapping,
+      value: Any )
+    extends Filter
+
+  sealed case class NotEquals
+    ( mapping : Mapping,
+      value: Any )
+    extends Filter
+
+  sealed case class Bigger
+    ( mapping : Mapping,
+      value : Any )
+    extends Filter
+
+  sealed case class BiggerIncluding
+    ( mapping : Mapping,
+      value : Any )
+    extends Filter
+
+  sealed case class Smaller
+    ( mapping : Mapping,
+      value : Any )
+    extends Filter
+
+  sealed case class SmallerIncluding
+    ( mapping : Mapping,
+      value : Any )
+    extends Filter
+
+  sealed case class In
+    ( mapping : Mapping,
+      value : Any )
+    extends Filter
+
+  sealed case class Contains
+    ( mapping : Mapping,
+      value : Any )
+    extends Filter
+
+  sealed case class Like
+    ( mapping : Mapping,
+      value : Any )
+    extends Filter
+
+  sealed case class Regex
+    ( mapping : Mapping,
+      value : Any )
+    extends Filter
 
 
   sealed trait Composite extends WhereNode

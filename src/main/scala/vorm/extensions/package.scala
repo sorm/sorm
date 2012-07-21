@@ -7,7 +7,7 @@ package object extensions {
 
   implicit def mapExtensions[K, V](x: Map[K, V]) = new MapExtensions[K, V](x)
 
-  implicit class TupleFoldableExtender
+  implicit class TupleFoldableView
     [ ItemT, ResultT ]
     ( tuple : (ResultT, Traversable[ItemT]) )
     {
@@ -18,6 +18,23 @@ package object extensions {
       def foldLeft
         ( f : (ResultT, ItemT) => ResultT )
         = (foldable foldLeft initial)(f)
+    }
+
+
+  implicit class TraversableExtensions
+    [ ItemT,
+      TraversableT[ItemT] <: Traversable[ItemT] ]
+    ( traversable : TraversableT[ItemT] )
+    {
+      import collection.generic.CanBuildFrom
+
+      def zipBy
+        [ ResultItemT,
+          ResultT ]
+        ( f : ItemT ⇒ ResultItemT )
+        ( implicit bf : CanBuildFrom[TraversableT[ItemT], (ItemT, ResultItemT), ResultT] )
+        : ResultT
+        = traversable.map(x ⇒ x → f(x)).asInstanceOf[ResultT]
     }
 
 }

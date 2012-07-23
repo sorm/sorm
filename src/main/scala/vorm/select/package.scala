@@ -20,18 +20,10 @@ package object select {
     : Statement
     = {
 
-      // val aliases
-      //   = {
-      //     def aliases
-      //       ( m : mapping.Table, 
-      //         acc : Map[mapping.Table, String] )
-      //       : Map[mapping.Table, String]
-      //       = m.subTableMappings
-      //           .foldRight( acc + (m → ("t" + acc.size) ))( aliases )
-      //     aliases( query.mapping, Map() )
-      //   }
+      //  PLAIN
 
-      val alias
+      val mainTreeTableAlias
+        : mapping.Table ⇒ String
         = new collection.mutable.HashMap[mapping.Table, String]() {
             override def default
               ( m : mapping.Table )
@@ -40,93 +32,77 @@ package object select {
                 update(m, n)
                 n
               }
-
           }
 
+      val filterNodeTableAlias
+        : Query.WhereNode ⇒ String
+        = ???
 
-      // def and
-      //   ( items : Seq[WhereNode] )
-      //   // = items match {
-      //   //   case x :: xs ⇒ sql.WhereNode.And(x, and(xs)) 
-      //   // }
-      //   = items.tail.foldRight(items.head)(sql.WhereNode.And)
+      case class Select
+        ( columns : Seq[sql.Column],
+          from    : sql.From,
+          joins   : Seq[sql.Join]      = Nil,
+          where   : Option[sql.Where]  = None,
+          order   : Option[sql.Order]  = None,
+          limit   : Option[sql.Limit]  = None )
 
-
-
-      // approximately like that
-      // case class SqlClausesNode
-      //   ( where : _,
-      //     groups : _ )
-
-      def where
-        ( n : query.WhereNode )
-        : sql.WhereNode
-        = n match {
-            case query.WhereNode.And(left, right)
-              ⇒ sql.WhereNode.And( where(left), where(right) )
-            case query.WhereNode.Or(left, right)
-              ⇒ sql.WhereNode.Or( where(left), where(right) )
-
-            case query.WhereNode.Equals( m : mapping.Value, v )
-              ⇒ sql.WhereNode.Equals(
-                  alias(m.parentTableMapping) + "." + m.column.name,
-                  (v, m.column.t.jdbcType)
-                )
-            case query.WhereNode.Equals( m : mapping.Tuple, v : Product ) 
-              ⇒ m.children
-                  .view
-                  .map( m ⇒ m.child -> m.index )
-                  .map{ 
-                    case (m, i) 
-                      ⇒ query.WhereNode.Equals( m, v.productElement(i) ) 
-                  }
-                  .map( where )
-                  .reduce( sql.WhereNode.And )
-            case query.WhereNode.Equals( m : mapping.Option, v : Option[_] )
-              ⇒ v match {
-                  case Some(v) 
-                    ⇒ where( query.WhereNode.Equals(m.child.child, v) )
-                  case None
-                    ⇒ where( query.WhereNode.Equals(m.child.child, null) )
-                }
-            case query.WhereNode.Equals( m : mapping.)
-          }
-
-
-
-      sealed case class SelectNode
-        // ( table : String,
-        //   columns : List[String],
-        //   mappings : Set[(String, String)],
-        //   children : List[SelectNode] )
-      
-
-      def selectNode
+      def unfilteredSelect
         ( m : mapping.Table )
-        : SelectNode
-        = SelectNode(
-            table
-              = m.table.name,
-            columns
-              = m.table.columns.map( _ → m ),
-            parentMappings
-              = ???,
-            children
-              = m.subTableMappings.map( selectNode ),
-            where
-              = 
+        : Select
+        = {
+          def join
+            ( m : mapping.Table,
+              s : Select )
+            : Select
+            = s.copy(
+                  columns 
+                    = m.resultSetColumns
+                        .toStream
+                        .map(_.name)
+                        .map(sql.Column(_, mainTreeTableAlias(m).some)) ++:
+                      s.columns,
+                  joins
+                    = sql.Join(
+                        name = m.tableName,
+                        alias = mainTreeTableAlias(m).some,
+                        targetTable = mainTreeTableAlias(m.ownerTableMapping),
+                        on = m.ownerTableColumnMappings
+                      ) +:
+                      s.joins
+                )
 
-          )
+          Select(
+              columns 
+                = m.resultSetColumns
+                    .toStream
+                    .map(_.name)
+                    .map(sql.Column(_, mainTreeTableAlias(m).some)),
+              from 
+                = sql.From(m.tableName, mainTreeTableAlias(m).some)
+            ) 
+            .foldTo( m.subTableMappings )( join )
+        }
+
+      def filtered
+        ( n : Query.WhereNode,
+          s : Select )
+        : Select
+        = n match {
+            case Query.WhereNode.Equals( m : mapping.Seq, v : Seq[_] )
+              ⇒ ???
+          }
 
 
       def statement
-        ( selectNode : SelectNode )
+        ( select : Select )
         : Statement
         = ???
 
 
-      statement( selectNode( query.mapping ) )
-      
+      unfilteredSelect(q.mapping)
+        .foldTo(q.where)(filtered)
+        .applyTo(statement)
+
     }
 
     

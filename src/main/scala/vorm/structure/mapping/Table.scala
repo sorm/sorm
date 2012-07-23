@@ -22,4 +22,16 @@ trait Table
     lazy val subTableMappings
       : scala.Seq[Table]
       = ???
+
+    lazy val tableName
+      : String
+      = ???
+
+    lazy val ownerTableColumnMappings
+      : scala.Seq[(String, String)]
+      = ???
+
+    lazy val ownerTableMapping
+      : Table
+      = ???
   }

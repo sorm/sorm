@@ -21,12 +21,16 @@ package object reflection {
 
 
 
-  implicit class AnyReflectedSupport
+  implicit class AnyExtensions
     [ T : TypeTag ]
     ( any : T )
     {
       def reflected
         = new Reflected( any, Reflection( typeTag[T] ) )
+      def isInstanceOf
+        ( r : Reflection )
+        : Boolean
+        = reflected.reflection inheritsFrom r
     }
 
 

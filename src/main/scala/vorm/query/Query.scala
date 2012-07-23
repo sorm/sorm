@@ -3,14 +3,13 @@ package vorm.query
 import vorm._
 import reflection._
 import structure._
-import Query._
 
-case class Query
-  ( kind    : Kind,
+sealed case class Query
+  ( kind    : Query.Kind,
     mapping : structure.mapping.Table,
-    where   : Option[WhereNode] = None,
-    order   : Seq[Order]        = Nil,
-    limit   : Limit             = Limit() )
+    where   : Option[Query.WhereNode] = None,
+    order   : Seq[Query.Order]        = Nil,
+    limit   : Query.Limit             = Query.Limit() )
 object Query {
 
   trait Kind

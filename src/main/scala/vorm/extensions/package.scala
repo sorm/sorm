@@ -44,6 +44,10 @@ package object extensions {
     def as[ResultT](f: A => ResultT) =
       f(x)
 
+    def applyTo[ResultT](f: A => ResultT) =
+      f(x)
+
+
     def isEmpty = {
       x match {
         case null | () => true

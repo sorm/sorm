@@ -13,8 +13,7 @@ package sql {
 
   case class Column (
     name    : String,
-    table   : Option[String] = None,
-    alias   : Option[String] = None
+    table   : Option[String] = None
   )
 
   case class From (
@@ -23,19 +22,17 @@ package sql {
   )
 
   /**
-   * @param table 
-   * @param alias
-   * @param targetTable An identifier (name or alias) of the table to which the join
-   *                    is performed
-   * @param mappings A list of mappings of name of column of the table being joined to
-   *                 the name of column of the target table
-   * @param t A type of join. `Left` by default
+   * @param targetTable An identifier (name or alias) of the table to which the
+   * join is applied
+   * @param on A list of mappings of name of column of the table being joined to
+   * the name of column of the target table
+   * @param kind A type of join. `Left` by default
    */
   case class Join (
-    table       : String,
+    name        : String,
     alias       : Option[String] = None,
     targetTable : String,
-    mappings    : List[(String, String)],
+    on          : Seq[(String, String)],
     kind        : JoinKind = JoinKind.Left
   )
 

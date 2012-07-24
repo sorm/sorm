@@ -6,215 +6,72 @@ import structure._
 import reflection._
 
 package object select {
-  
-  sealed case class Statement
-    ( template : String,
-      values : Seq[(Any, JdbcType)],
-      //  should really be just direct mappings to values, if only they somehow covered special columns like index
-      resultSetColumns : Seq[(ddl.Column, mapping.Table)] )
-  
-  private type JdbcType = Int
 
 
-
-
-
-  case class Select
-    ( columns : Seq[sql.Column],
-      from    : sql.From,
-      joins   : Seq[sql.Join]      = Nil,
-      where   : Option[sql.Where]  = None,
-      order   : Option[sql.Order]  = None,
-      limit   : Option[sql.Limit]  = None,
-      groupBy : Seq[sql.Column]    = Nil,
-      having  : Seq[sql.Where]     = Nil )
-
-  
   /**
    * left and right must select the same columns
    */
-  def intersection
-    ( left : Select, right : Select )
+  def intersect
+    ( left : Select,
+      right : Select )
     : Select
-    = {
-      left.copy(
-          joins
-            = sql.Join(
-                  what = Right(right),
-                  alias = "t" + (left.joins.size + 2),
-                  targetTable = left.from.alias.getOrElse(left.from.name),
-                  on = left.columns.view.map(_.name).map(n ⇒ n → n).toList,
-                  kind = sql.JoinKind.Inner
-                )
-        )
-    }
-  // def intersection
-  //   ( selects : Seq[Select] )
-  //   : Select
-  //   = selects.head.foldTo(selects.tail)(intersection)
+    = if( left.having == Nil || right.having == Nil )
+        left.copy(
+            where 
+              = ( left.where, right.where ) match {
+                  case ( Some(l), Some(r) ) 
+                    ⇒ Some( Where.And(l, r) )
+                  case ( _, _ ) 
+                    ⇒ ( left.where +: right.where +: Nil ).headOption
+                },
+            having 
+              = left.having ++ right.having
+          )
+      else 
+        left.copy(
+            joins
+              = Join(
+                    what = right,
+                    as = "t" + (left.joins.size + 1),
+                    to = left.from.alias.getOrElse(left.from.name),
+                    on = left.columns.map(c ⇒ c.name → c.name),
+                    kind = JoinKind.Inner
+                  ) +:
+                left.joins
+          )
 
-  // def union
-  //   ( selects : Seq[Select] )
-  //   : Select
-  //   = ???
-
-  def filterSelect
-    ( n : Query.WhereNode )
+  /**
+   * left and right must select the same columns
+   */
+  def union
+    ( left : Select,
+      right : Select )
     : Select
-    = {
-      def enclosingTableInstructions
-        ( m : mapping.Table, 
-          i : TableInstructions )
-        = TableInstructions(
-              name 
-                = m.tableName,
-              columns
-                = m.ownerTableMapping.map(Nil)
-                    .getOrElse(m.primaryKeyColumns),
-              subInstructions 
-                = i :: Nil,
-              columnMappings
-                = m.mappings 
+    = if( left.having == Nil || right.having == Nil )
+        left.copy(
+            where 
+              = ( left.where, right.where ) match {
+                  case ( Some(l), Some(r) ) 
+                    ⇒ Some( Where.Or(l, r) )
+                  case ( _, _ ) 
+                    ⇒ ( left.where +: right.where +: Nil ).headOption
+                },
+            having 
+              = left.having ++ right.having
+          )
+      else 
+        left.copy(
+            joins
+              = Join(
+                    what = right,
+                    as = "t" + (left.joins.size + 1),
+                    to = left.from.alias.getOrElse(left.from.name),
+                    on = left.columns.map(c ⇒ c.name → c.name),
+                    kind = JoinKind.Outer
+                  ) +:
+                left.joins
+          )
 
-            )
-
-      n match {
-        case Query.WhereNode.Filter( k, m : mapping.Seq, v : Seq[_] )
-          ⇒ 
-            TableInstructions
-                having
-                  = Nil :+
-                    sql.HavingClause(
-                        sql.Count(
-                            distinct = true,
-                            columns = 
-                          )
-                      )
-              )
-      }
-    }
-  def resultSetSelect
-    ( m : Mapping )
-    : Select
-    = ???
-
-  resultSetSelect(q.mapping).foldTo( q.where.map(filterSelect) )(intersection)
-
-
-  def statement
-    ( q : Query )
-    : Statement
-    = {
-
-
-
-
-      lazy val pksSelect
-        = {
-
-          def selectWithWhereNode
-            ( n : Query.WhereNode,
-              s : Select )
-            : Select
-            = n match {
-                case Query.WhereNode.Filter( k, m : mapping.Seq, v : Seq[_] )
-                  ⇒ s.copy(
-                        having
-                          = Nil :+
-                            sql.HavingClause(
-                                sql.Count(
-                                    distinct = true,
-                                    columns = 
-                                  )
-                              )
-                      )
-              }
-
-          val columns
-            = q.mapping.primaryKeyColumns
-                .toStream
-                .map(_.name)
-                .map(sql.Column(_, mainTreeTableAlias(q.mapping).some))
-
-          //  no. The tree should be generated by each clause individually for ability to create OR clauses.
-          basisSelect
-            .foldTo(q.where)(selectWithWhereNode)
-            .copy(columns = columns, groupBy = columns)
-
-        }
-
-
-      //  PLAIN
-
-      val mainTreeTableAlias
-        : mapping.Table ⇒ String
-        = new collection.mutable.HashMap[mapping.Table, String]() {
-            override def default
-              ( m : mapping.Table )
-              = {
-                val n = "t" + size
-                update(m, n)
-                n
-              }
-          }
-
-      val filterNodeTableAlias
-        : Query.WhereNode ⇒ String
-        = ???
-
-
-      lazy val basisSelect
-        : Select
-        = {
-          def join
-            ( m : mapping.Table,
-              s : Select )
-            : Select
-            = s.copy(
-                  columns 
-                    = m.resultSetColumns
-                        .toStream
-                        .map(_.name)
-                        .map(sql.Column(_, mainTreeTableAlias(m).some)) ++:
-                      s.columns,
-                  joins
-                    = sql.Join(
-                          name = m.tableName,
-                          alias = mainTreeTableAlias(m).some,
-                          targetTable = mainTreeTableAlias(m.ownerTableMapping),
-                          on = m.ownerTableColumnMappings
-                        ) +:
-                      s.joins
-                )
-
-          Select(
-              columns 
-                = q.mapping.resultSetColumns
-                    .toStream
-                    .map(_.name)
-                    .map(sql.Column(_, mainTreeTableAlias(q.mapping).some)),
-              from 
-                = sql.From(
-                      q.mapping.tableName, 
-                      mainTreeTableAlias(q.mapping).some
-                    )
-            ) 
-            .foldTo( q.mapping.subTableMappings )( join )
-        }
-
-
-
-      def statement
-        ( select : Select )
-        : Statement
-        = ???
-
-
-      unfilteredSelect(q.mapping)
-        .foldTo(q.where)(filtered)
-        .applyTo(statement)
-
-    }
 
     
 

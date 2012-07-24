@@ -7,14 +7,16 @@ import structure._
 import reflection._
 
 
-trait SelectWhat
 case class Select
   ( what : Seq[SelectWhat],
+    from : From,
     joins : Seq[Join],
     where : Option[Clause],
     groupBy : Option[GroupBy],
     having : Option[Clause] )
   extends FromWhat with JoinWhat
+
+trait SelectWhat
 
 case class Table
   ( name : String )
@@ -58,16 +60,23 @@ case class Count
 
 trait Clause
 
-case class Composite
-  ( left : Clause, 
-    relation : CompositeRelation,
-    right : Clause )
-  extends Clause
+object Clause {
+  
+  trait Composite extends Clause {
+    def left : Clause
+    def right : Clause
+  }
 
-trait CompositeRelation
-object CompositeRelation {
-  case object And extends CompositeRelation
-  case object Or extends CompositeRelation
+  case class And
+    ( left : Clause,
+      right : Clause )
+    extends Composite
+
+  case class Or
+    ( left : Clause,
+      right : Clause )
+    extends Composite
+
 }
 
 case class Condition

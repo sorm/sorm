@@ -7,9 +7,9 @@ import structure._
 sealed case class Query
   ( kind    : Query.Kind,
     mapping : structure.mapping.Table,
-    where   : Option[Query.WhereNode] = None,
-    order   : Seq[Query.Order]        = Nil,
-    limit   : Query.Limit             = Query.Limit() )
+    where   : Option[Query.Where] = None,
+    order   : Seq[Query.Order] = Nil,
+    limit   : Query.Limit = Query.Limit() )
 object Query {
 
   trait Kind
@@ -18,11 +18,11 @@ object Query {
     case object Count extends Kind
   }
 
-  sealed trait WhereNode
-  object WhereNode {
+  sealed trait Where
+  object Where {
 
 
-    sealed trait Filter extends WhereNode {
+    sealed trait Filter extends Where {
       def mapping : Mapping
       def value : Any
     }
@@ -104,16 +104,16 @@ object Query {
       extends Filter
 
 
-    sealed trait Composite extends WhereNode
+    sealed trait Composite extends Where
 
     sealed case class And
-      ( left : WhereNode,
-        right : WhereNode )
+      ( left : Where,
+        right : Where )
       extends Composite
 
     sealed case class Or
-      ( left : WhereNode,
-        right : WhereNode )
+      ( left : Where,
+        right : Where )
       extends Composite
   }
 

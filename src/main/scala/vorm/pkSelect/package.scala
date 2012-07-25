@@ -50,5 +50,36 @@ package object pkSelect {
       }
 
 
+  def select
+    ( c : Clause )
+    : sql.Select
+    = {
+      val skeletonAliases
+        : Map[Mapping, String]
+        = {
+          def subSelects
+            ( c : Clause )
+            : Stream[Clause.Select]
+            = c match {
+              case c : Clause.Composite
+                ⇒ subSelects(c.left) ++
+                  subSelects(c.right)
+              case c : Clause.Select
+                ⇒ Stream(c)
+              case _ 
+                ⇒ Stream()
+            }
+
+          subSelects( c )
+            .map( _.mapping )
+            .zipWithIndex
+            .map{ case (m, i) ⇒ m → "t" + (i + 1) }
+            .toMap
+        }
+
+      
+    }
+
+
 
 }

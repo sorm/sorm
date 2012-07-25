@@ -8,7 +8,7 @@ import reflection._
 
 
 case class Select
-  ( what : Seq[SelectWhat],
+  ( what : Seq[(SelectWhat, ResultSetColumn)],
     from : From,
     joins : Seq[Join],
     where : Option[Clause],

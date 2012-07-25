@@ -2,78 +2,50 @@ package vorm
 
 import vorm._
 import extensions._
-import reflection._
 import structure._
 import query._
-import select._
-import selectionNode._
+import selectAbstraction._
 
 package object pkSelect {
 
-  def selectionNode
+  def clause
     ( n : Query.Where )
-    : SelectionNode
+    : Clause
     = n match {
         case Query.Where.Contains( m : mapping.Seq, v )
-          ⇒ selectionNode( Query.Where.Includes(m, Seq(v)) )
+          ⇒ clause( Query.Where.Includes(m, Seq(v)) )
         case Query.Where.Includes( m : mapping.Seq, v : Seq[_] )
-         // ⇒ SelectionNode.Select(
-         //       task
-         //         = SelectionNode.Task.PrimaryKey,
-         //       mapping
-         //         = m,
-         //       rows
-         //         = Some(0)
-         //     )
-         //     .foldFrom( v.view.map( Query.Where.Equals(m.child, _) ) ) {
-         //       (a, n)
-         //         ⇒ a.copy(
-         //               clause = a.clause.foldLeft(n)(SelectionNode.Or).some,
-         //               rows = a.rows.map(_ + 1)
-         //             )
-         //     }
-          ⇒ SelectionNode.Select(
-                 task
-                   = SelectionNode.Task.PrimaryKey,
+          ⇒ Clause.Select(
                  mapping
                    = m,
                  clause
                    = v.view
                        .map( Query.Where.Equals(m.child, _) )
-                       .map( selectionNode )
-                       .reduceOption( SelectionNode.Or ),
+                       .map( clause )
+                       .reduceOption( Clause.Or ),
                  rows
-                   = Some( v.size )
+                   = Some( v.length )
                )
         case Query.Where.Equals( m : mapping.Seq, v : Seq[_] )
-          ⇒ SelectionNode.Select(
-                task 
-                  = SelectionNode.Task.PrimaryKey,
+          ⇒ Clause.Select(
                 mapping 
                   = m,
                 clause
                   = v.view
                       .map( Query.Where.Equals(m.child, _) )
-                      .map( selectionNode )
-                      .reduceOption( SelectionNode.Or )
+                      .map( clause )
+                      .reduceOption( Clause.Or )
                       .foldRight( 
-                          selectionNode( Query.Where.HasSize( m, v.size ) )
-                        )( SelectionNode.And )
+                          clause( Query.Where.HasSize( m, v.length ) )
+                        )( Clause.And )
                       .some,
                 rows 
-                  = Some( v.size )
+                  = Some( v.length )
               )
         case Query.Where.HasSize( m : mapping.Table, v : Int )
-          ⇒ SelectionNode.Select(
-                task 
-                  = SelectionNode.Task.PrimaryKey,
-                mapping 
-                  = m,
-                rows 
-                  = Some( v )
-              )
+          ⇒ Clause.Select( m, None, Some(v) )
         case Query.Where.Equals( m : mapping.Value, v )
-          ⇒ SelectionNode.Equals( m, v )
+          ⇒ Clause.Equals( m, v )
 
       }
 

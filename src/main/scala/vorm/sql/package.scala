@@ -2,75 +2,99 @@ package vorm
 
 package sql {
 
-  case class Select (
-    columns : List[Column],
-    from    : From,
-    joins   : List[Join]     = Nil,
-    where   : Option[Where]  = None,
-    order   : Option[Order]  = None,
-    limit   : Option[Limit]  = None
-  )
+  case class Select
+    ( what : Seq[SelectObject],
+      from : From,
+      join : Seq[Join],
+      where : Option[Clause],
+      groupBy : Option[GroupBy],
+      having : Option[Clause] )
+    extends FromObject with JoinObject
 
-  case class Column (
-    name    : String,
-    table   : Option[String] = None
-  )
+  trait SelectObject
 
-  case class From (
-    name    : String,
-    alias   : Option[String] = None
-  )
+  case class Table
+    ( name : String )
+    extends FromObject with JoinObject
 
-  /**
-   * @param targetTable An identifier (name or alias) of the table to which the
-   * join is applied
-   * @param on A list of mappings of name of column of the table being joined to
-   * the name of column of the target table
-   * @param kind A type of join. `Left` by default
-   */
-  case class Join (
-    name        : String,
-    alias       : Option[String] = None,
-    targetTable : String,
-    on          : Seq[(String, String)],
-    kind        : JoinKind = JoinKind.Left
-  )
+  case class From
+    ( what : FromObject,
+      as : Option[String] = None )
 
-  sealed trait JoinKind
+  trait FromObject
+
+  case class Join
+    ( what : JoinObject,
+      as : Option[String],
+      on : Seq[(Column, Column)] = Nil,
+      kind : JoinKind = JoinKind.Left )
+
+  trait JoinObject
+
+  trait JoinKind
   object JoinKind {
     object Left  extends JoinKind
     object Right extends JoinKind
+    object Inner extends JoinKind
+    object Outer extends JoinKind
   }
 
-  case class Where(
-    condition: Condition
-  )
 
-  case class Order(
+  case class Column
+    ( name : String,
+      table : Option[String] )
+    extends SelectObject with ConditionObject
 
-  ) {
-    throw new NotImplementedError
+  case class Count
+    ( what : Seq[Column],
+      distinct : Boolean = false )
+    extends ConditionObject
+
+
+
+  trait Clause
+
+  object Clause {
+    
+    trait Composite extends Clause {
+      def left : Clause
+      def right : Clause
+    }
+
+    case class And
+      ( left : Clause,
+        right : Clause )
+      extends Composite
+
+    case class Or
+      ( left : Clause,
+        right : Clause )
+      extends Composite
+
   }
 
-  case class Limit(
+  case class Condition
+    ( left : Either[ConditionObject, Any],
+      relation : ConditionRelation,
+      right : Either[ConditionObject, Any] )
+    extends Clause
 
-  ) {
-    throw new NotImplementedError
+  trait ConditionObject
+
+  trait ConditionRelation
+  object ConditionRelation {
+    case object Equal extends ConditionRelation
+    case object NotEqual extends ConditionRelation
+    case object Larger extends ConditionRelation
+    case object LargerIncluding extends ConditionRelation
+    case object Smaller extends ConditionRelation
+    case object SmallerIncluding extends ConditionRelation
+    case object Contains extends ConditionRelation
+    case object In extends ConditionRelation
   }
 
-  trait Condition
-  object Condition {
-    case class Equal(column: String, value: Any) extends Condition
-    case class NotEqual(column: String, value: Any) extends Condition
-    case class More(column: String, value: Any) extends Condition
-    case class MoreIncluding(column: String, value: Any) extends Condition
-    case class Less(column: String, value: Any) extends Condition
-    case class LessIncluding(column: String, value: Any) extends Condition
-    case class Like(column: String, value: Any) extends Condition
-    case class Regex(column: String, value: Any) extends Condition
-    case class In(column: String, value: Any) extends Condition
+  case class GroupBy
+    ( what : Seq[Column] )
 
-    case class Or(left: Condition, right: Condition) extends Condition
-    case class And(left: Condition, right: Condition) extends Condition
-  }
+
 }

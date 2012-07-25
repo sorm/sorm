@@ -5,20 +5,6 @@ package object extensions {
 
   implicit def mapExtensions[K, V](x: Map[K, V]) = new MapExtensions[K, V](x)
 
-  implicit class TupleFoldableView
-    [ ItemT, ResultT ]
-    ( tuple : (ResultT, Traversable[ItemT]) )
-    {
-      private val (initial, foldable) = tuple
-      def foldRight
-        ( f : (ItemT, ResultT) => ResultT )
-        = (foldable foldRight initial)(f)
-      def foldLeft
-        ( f : (ResultT, ItemT) => ResultT )
-        = (foldable foldLeft initial)(f)
-    }
-
-
   implicit class TraversableExtensions
     [ ItemT,
       TraversableT[ItemT] <: Traversable[ItemT] ]

@@ -5,6 +5,7 @@ import extensions._
 import structure._
 import query._
 import selectAbstraction._
+import vorm.{sql => Sql}
 
 package object pkSelect {
 
@@ -50,11 +51,27 @@ package object pkSelect {
       }
 
 
+
+
   def select
-    ( c : Clause )
-    : sql.Select
+    ( c : Clause.Select )
+    : Sql.Select
     = {
-      val skeletonAliases
+
+      val skeletonTablesAliases
+        : Map[Mapping, String]
+        = {
+          def aliases
+            ( m : mapping.Table, 
+              acc : Map[mapping.Table, String] )
+            : Map[mapping.Table, String]
+            = m.subTableMappings
+                .foldRight( acc + (m → ("t" + acc.length) ))( aliases )
+
+          aliases( c.mapping, Map() )
+        }
+
+      val selectClauseAliases
         : Map[Mapping, String]
         = {
           def subSelects
@@ -77,7 +94,39 @@ package object pkSelect {
             .toMap
         }
 
-      
+      def selectWithClause
+        ( s : Sql.Select, c : Clause )
+        : Sql.Select
+        = ???
+
+
+      Sql.Select(
+          what 
+            = c.mapping.primaryKeyColumns.view
+                .map( _.name )
+                .map( Sql.Column(_, Some(skeletonTablesAliases(c.mapping))) ),
+          from 
+            = Sql.From(
+                  Sql.Table( c.mapping.tableName ),
+                  Some( skeletonTablesAliases(c.mapping) )
+                )
+        )
+        .foldFrom(c.rows) {
+          (s, r)
+            ⇒ s.copy(
+                  having
+                    = Sql.Clause.Equals(
+                          Sql.Count(
+                              s.what.asInstanceOf[Seq[Sql.Column]],
+                              true
+                            ),
+                          r
+                        ),
+                  groupBy
+                    = s.what.asInstanceOf[Seq[Sql.Column]]
+                )
+        }
+        .foldFrom(c.clause)(selectWithClause)
     }
 
 

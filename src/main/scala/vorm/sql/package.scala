@@ -5,10 +5,10 @@ package sql {
   case class Select
     ( what : Seq[SelectObject],
       from : From,
-      join : Seq[Join],
-      where : Option[Clause],
-      groupBy : Option[GroupBy],
-      having : Option[Clause] )
+      join : Seq[Join] = Nil,
+      where : Option[Clause] = None,
+      groupBy : Seq[Column] = Nil,
+      having : Option[Clause] = None )
     extends FromObject with JoinObject
 
   trait SelectObject

@@ -53,6 +53,7 @@ package sql {
 
 
   trait Clause
+  trait ConditionObject
 
   object Clause {
     
@@ -71,27 +72,19 @@ package sql {
         right : Clause )
       extends Composite
 
+    trait Condition extends Clause
+    
+    case class Equals
+      ( left : ConditionObject,
+        right : ConditionObject )
+      extends Condition
+
   }
 
-  case class Condition
-    ( left : Either[ConditionObject, Any],
-      relation : ConditionRelation,
-      right : Either[ConditionObject, Any] )
-    extends Clause
+  case class Value
+    ( value : Any )
+    extends ConditionObject
 
-  trait ConditionObject
-
-  trait ConditionRelation
-  object ConditionRelation {
-    case object Equal extends ConditionRelation
-    case object NotEqual extends ConditionRelation
-    case object Larger extends ConditionRelation
-    case object LargerIncluding extends ConditionRelation
-    case object Smaller extends ConditionRelation
-    case object SmallerIncluding extends ConditionRelation
-    case object Contains extends ConditionRelation
-    case object In extends ConditionRelation
-  }
 
   case class GroupBy
     ( what : Seq[Column] )

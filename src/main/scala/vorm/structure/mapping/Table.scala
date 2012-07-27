@@ -33,15 +33,6 @@ trait Table
       : scala.Seq[(String, String)]
       = ???
 
-    lazy val ownerTableMapping
-      : Table
-      = ???
-
-
-
-    lazy val ownerTable
-      : Table
-      = ???
 
     lazy val deepSubtableMappings
       : scala.Seq[Table]

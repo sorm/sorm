@@ -15,7 +15,8 @@ class Value
     lazy val column
       : ddl.Column
       = ???
-    lazy val parentTableMapping
-      : Table
+    lazy val columnName
+      : String
       = ???
+
   }

@@ -7,6 +7,9 @@ import mapping._
 
 trait Mapping {
   def settings : Settings
+  lazy val parentTableMapping
+    : scala.Option[Table]
+    = ???
 }
 object Mapping {
   /**

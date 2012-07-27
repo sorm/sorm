@@ -82,7 +82,7 @@ case class MappingSelect
       = copy(
             joins
               = joins :+
-                Sql.Join( s.primaryKey.sql, Some(newAlias),
+                Sql.Join( s.sql, Some(newAlias),
                           kind = Sql.JoinKind.Inner ),
             where
               = ( where ++
@@ -91,25 +91,13 @@ case class MappingSelect
                     .map{ n ⇒ 
                         Sql.Clause.Equals(
                             Sql.Column(n, Some(newAlias)),
+                            //  TODO: optimize to bind to parent
                             Sql.Column(n, Some(skeletonAliases(s.mapping)))
                           )
                       } 
                     .reduceOption{ Sql.Clause.And } )
                   .reduceOption{ o }
           )
-
-    def withFilter
-      ( w : Query.Where.Filter, 
-        o : (Sql.Clause, Sql.Clause) => Sql.Clause )
-      = MappingSelect(w)
-          .map{ withSelect(_, o) }
-          .getOrElse{ 
-            copy( 
-                where
-                  = ( where ++ condition(w) ) 
-                      .reduceOption(o)
-              )
-          }
 
     private def condition
       ( w : Query.Where.Filter )
@@ -124,6 +112,11 @@ case class MappingSelect
               .some
         }
 
+    def havingRowsCount
+      ( r : Int )
+      : MappingSelect
+      = ???
+
     def andFilter
       ( w : Query.Where.Filter )
       = withSkeletonTo( w.mapping )
@@ -134,26 +127,42 @@ case class MappingSelect
       = withSkeletonTo( w.mapping )
           .withFilter( w, Sql.Clause.Or )
 
-    def havingRows
-      ( r : Int )
+    def withFilter
+      ( w : Query.Where.Filter, 
+        o : (Sql.Clause, Sql.Clause) => Sql.Clause )
       : MappingSelect
-      = ???
+      = w match {
+          case Query.Where.Contains( m : SeqMapping, v ) ⇒ 
+            withFilter( Query.Where.Includes( m, Seq(v) ), o )
+          case Query.Where.Includes( m : SeqMapping, v : Seq[_] ) ⇒ 
+            withSelect(
+                MappingSelect(m).primaryKey
+                  .foldFrom(v){ (s, v) ⇒ 
+                      s.withFilter( Query.Where.Equals(m.child.child, v),
+                                    Sql.Clause.Or )
+                    }
+                  .havingRowsCount(v.length),
+                o
+              )
+          case Query.Where.Equals( m : SeqMapping, v : Seq[_] ) ⇒ 
+            MappingSelect(m).primaryKey
+              .foldFrom(v){ (s, v) ⇒ 
+                  s.withFilter( Query.Where.Equals(m.child.child, v),
+                                Sql.Clause.Or )
+                }
+              .havingRowsCount(v.length)
+              .withSelect( 
+                  MappingSelect(m).primaryKey.havingRowsCount(v.length), 
+                  Sql.Clause.And 
+                )
+          case Query.Where.HasSize( m : SeqMapping, v : Int ) ⇒ 
+            withSelect( MappingSelect(m).primaryKey.havingRowsCount(v), o )
+        }
+
 
   }
 
 object MappingSelect {
-  def apply
-    ( w : Query.Where )
-    : Option[MappingSelect]
-    = w match {
-        case Query.Where.Includes( m : SeqMapping, v : Seq[_] ) ⇒ 
-          MappingSelect(m).primaryKey
-            .foldFrom(v){ (s, v) ⇒
-                s.orFilter( Query.Where.Equals(m.child.child, v) )
-              }
-            .havingRows( v.length )
-            .some
-      }
 
   /**
    * Has all the skeleton mappings applied. 

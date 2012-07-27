@@ -98,14 +98,7 @@ case class MappingSelect
                   .reduceOption{ o }
           )
 
-
-    // def withWhere
-    //   ( c : Option[Sql.Clause],
-    //     o : (Sql.Clause, Sql.Clause) => Sql.Clause )
-    //   = copy( where = ( where ++ c ) reduceOption o )
-
-
-    def withWhere
+    def withFilter
       ( w : Query.Where.Filter, 
         o : (Sql.Clause, Sql.Clause) => Sql.Clause )
       = MappingSelect(w)
@@ -131,11 +124,20 @@ case class MappingSelect
               .some
         }
 
-    def orWhere
+    def andFilter
       ( w : Query.Where.Filter )
-      = withSkeletonTo(w.mapping)
-          .withWhere(w, Sql.Clause.Or)
+      = withSkeletonTo( w.mapping )
+          .withFilter( w, Sql.Clause.And )
 
+    def orFilter
+      ( w : Query.Where.Filter )
+      = withSkeletonTo( w.mapping )
+          .withFilter( w, Sql.Clause.Or )
+
+    def havingRows
+      ( r : Int )
+      : MappingSelect
+      = ???
 
   }
 
@@ -144,15 +146,36 @@ object MappingSelect {
     ( w : Query.Where )
     : Option[MappingSelect]
     = w match {
-        case Query.Where.Equals( m : SeqMapping, v : Seq[_] ) ⇒ 
-          ???
-          // ⇒ m.select.primaryKey
-          //     .foldFrom(v) { (s, v) ⇒ 
-          //       s.orWhere(
-          //           Query.Where.Equals(m.child.child, v)
-          //         )
-          //     }
+        case Query.Where.Includes( m : SeqMapping, v : Seq[_] ) ⇒ 
+          MappingSelect(m).primaryKey
+            .foldFrom(v){ (s, v) ⇒
+                s.orFilter( Query.Where.Equals(m.child.child, v) )
+              }
+            .havingRows( v.length )
+            .some
       }
 
+  /**
+   * Has all the skeleton mappings applied. 
+   */
+  def resultSetReady
+    ( m : TableMapping )
+    : MappingSelect
+    = {
+      def leaves
+        ( m : Mapping )
+        : Seq[Mapping]
+        = m match {
+            case m : mapping.HasChildren ⇒ m.children.flatMap(leaves)
+            case m : mapping.HasChild ⇒ leaves(m.child)
+            case _ ⇒ Vector(m)
+          }
+
+      leaves(m).foldLeft(MappingSelect(m)){ _ withSkeletonTo _ }
+    }
+
+  def apply
+    ( q : Query )
+    = ???
 }
 

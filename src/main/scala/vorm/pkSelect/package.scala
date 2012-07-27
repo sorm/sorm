@@ -58,58 +58,18 @@ package object pkSelect {
     : Sql.Select
     = {
 
-      val skeletonTablesAliases
-        : Map[Mapping, String]
-        = {
-          def aliases
-            ( m : mapping.Table, 
-              acc : Map[mapping.Table, String] )
-            : Map[mapping.Table, String]
-            = m.subTableMappings
-                .foldRight( acc + (m → ("t" + acc.length) ))( aliases )
-
-          aliases( c.mapping, Map() )
-        }
-
-      val selectClauseAliases
-        : Map[Mapping, String]
-        = {
-          def subSelects
-            ( c : Clause )
-            : Stream[Clause.Select]
-            = c match {
-              case c : Clause.Composite
-                ⇒ subSelects(c.left) ++
-                  subSelects(c.right)
-              case c : Clause.Select
-                ⇒ Stream(c)
-              case _ 
-                ⇒ Stream()
-            }
-
-          subSelects( c )
-            .map( _.mapping )
-            .zipWithIndex
-            .map{ case (m, i) ⇒ m → "t" + (i + 1) }
-            .toMap
-        }
-
       def selectWithClause
         ( s : Sql.Select, c : Clause )
         : Sql.Select
         = ???
 
 
-      Sql.Select(
+      c.mapping.selectSkeleton.copy(
           what 
             = c.mapping.primaryKeyColumns.view
                 .map( _.name )
-                .map( Sql.Column(_, Some(skeletonTablesAliases(c.mapping))) ),
-          from 
-            = Sql.From(
-                  Sql.Table( c.mapping.tableName ),
-                  Some( skeletonTablesAliases(c.mapping) )
-                )
+                .map( Sql.Column(_, Some(c.mapping.skeletonTablesAliases(c.mapping))) )
+                .toList
         )
         .foldFrom(c.rows) {
           (s, r)

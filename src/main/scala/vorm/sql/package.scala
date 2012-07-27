@@ -73,8 +73,13 @@ package sql {
       extends Composite
 
     trait Condition extends Clause
-    
+
     case class Equals
+      ( left : ConditionObject,
+        right : ConditionObject )
+      extends Condition
+
+    case class NotEquals
       ( left : ConditionObject,
         right : ConditionObject )
       extends Condition

@@ -145,20 +145,39 @@ case class MappingSelect
                 )
           case Query.Where.HasSize( m : SeqMapping, v : Int ) ⇒ 
             withSelect( MappingSelect(m).primaryKey.havingRowsCount(v), o )
-          case Query.Where.Equals( m : ValueMapping, v ) ⇒ 
-            withCondition( 
-                Sql.Clause.Equals(
-                    Sql.Column( 
-                        m.columnName,
-                        Some( skeletonAliases(m.parentTableMapping.get) )
-                      ),
-                    Sql.Value(v)
-                  ),
-                o
-              )
+          case f : Query.Where.Filter ⇒ 
+            f.mapping match {
+              case m : ValueMapping ⇒ 
+                withCondition( m, f.value, conditionOperator(f), o )
+            }
         }
 
-    def withCondition
+    private def conditionOperator
+      ( f : Query.Where.Filter )
+      : (Sql.ConditionObject, Sql.ConditionObject) => Sql.Clause.Condition
+      = f match {
+          case f : Query.Where.Equals ⇒ Sql.Clause.Equals
+          case f : Query.Where.NotEquals ⇒ Sql.Clause.NotEquals
+        }
+
+    private def withCondition
+      ( m : ValueMapping,
+        v : Any,
+        cf : (Sql.ConditionObject, Sql.ConditionObject) => Sql.Clause.Condition,
+        of : (Sql.Clause, Sql.Clause) => Sql.Clause )
+      : MappingSelect
+      = withCondition(
+            cf(
+                Sql.Column( 
+                    m.columnName,
+                    Some( skeletonAliases(m.parentTableMapping.get) )
+                  ),
+                Sql.Value(v)
+              ),
+            of
+          )
+
+    private def withCondition
       ( c : Sql.Clause.Condition,
         o : (Sql.Clause, Sql.Clause) => Sql.Clause )
       = copy(

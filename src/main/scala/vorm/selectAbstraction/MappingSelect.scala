@@ -18,7 +18,8 @@ import mapping.{Table => TableMapping, Seq => SeqMapping}
  *      ???
  */
 case class MappingSelect
-  ( mapping : TableMapping )
+  ( mapping : TableMapping,
+    subSelects : Map[MappingSelect, String] )
   {
 
     def andWhere
@@ -52,16 +53,17 @@ object MappingSelect {
 
   def apply
     ( w : Query.Where )
-    = w match {
-        case Query.Where.Equals( m : SeqMapping, v : Seq[_] ) ⇒ 
-          ???
-          // ⇒ m.select.primaryKey
-          //     .foldFrom(v) { (s, v) ⇒ 
-          //       s.orWhere(
-          //           Query.Where.Equals(m.child.child, v)
-          //         )
-          //     }
-      }
+    = apply( Clause(w) )
 
+  def apply
+    ( c : Clause.Filter )
+    = c match {
+        case Clause.Select ⇒ 
+          MappingSelect(
+              subSelects
+                = ???
+            )
+      }
+  
 }
 

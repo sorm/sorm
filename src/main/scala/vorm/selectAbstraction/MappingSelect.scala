@@ -99,18 +99,6 @@ case class MappingSelect
                   .reduceOption{ o }
           )
 
-    private def condition
-      ( w : Query.Where.Filter )
-      : Option[Sql.Clause]
-      = w match {
-          case Query.Where.Equals( m : ValueMapping, v ) ⇒ 
-            Sql.Clause.Equals( 
-                Sql.Column( m.columnName, 
-                            Some( skeletonAliases(m.parentTableMapping.get) ) ),
-                Sql.Value( v )
-              )
-              .some
-        }
 
     def havingRowsCount
       ( r : Int )
@@ -157,8 +145,26 @@ case class MappingSelect
                 )
           case Query.Where.HasSize( m : SeqMapping, v : Int ) ⇒ 
             withSelect( MappingSelect(m).primaryKey.havingRowsCount(v), o )
+          case Query.Where.Equals( m : ValueMapping, v ) ⇒ 
+            withCondition( 
+                Sql.Clause.Equals(
+                    Sql.Column( 
+                        m.columnName,
+                        Some( skeletonAliases(m.parentTableMapping.get) )
+                      ),
+                    Sql.Value(v)
+                  ),
+                o
+              )
         }
 
+    def withCondition
+      ( c : Sql.Clause.Condition,
+        o : (Sql.Clause, Sql.Clause) => Sql.Clause )
+      = copy(
+            where
+              = (where ++ Some(c)).reduceOption{ o }
+          )
 
   }
 

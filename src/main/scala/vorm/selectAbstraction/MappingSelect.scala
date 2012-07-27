@@ -21,16 +21,21 @@ import vorm.{sql => Sql}
 case class MappingSelect
   ( mapping : TableMapping,
     skeletonAliases : Map[TableMapping, String] = Map(),
+    what : Vector[Sql.SelectObject] = Vector(),
     joins : Vector[Sql.Join] = Vector(),
     where : Option[Sql.Clause] = None,
     groupBy : Vector[Sql.Column] = Vector(),
     having : Option[Sql.Clause] = None )
   {
-    lazy val resultSetSql
-      : Sql.Select
+    lazy val resultSet
+      : MappingSelect
       = ???
 
-    lazy val primaryKeySql
+    lazy val primaryKey
+      : MappingSelect
+      = ???
+
+    lazy val sql
       : Sql.Select
       = ???
 
@@ -77,7 +82,7 @@ case class MappingSelect
       = copy(
             joins
               = joins :+
-                Sql.Join( s.primaryKeySql, Some(newAlias),
+                Sql.Join( s.primaryKey.sql, Some(newAlias),
                           kind = Sql.JoinKind.Inner ),
             where
               = ( where ++

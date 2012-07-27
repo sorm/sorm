@@ -119,9 +119,15 @@ case class MappingSelect
       ( w : Query.Where.Filter, 
         o : (Sql.Clause, Sql.Clause) => Sql.Clause )
       : MappingSelect
+      = withSkeletonTo(w.mapping).withFilter1(w, o)
+
+    private def withFilter1
+      ( w : Query.Where.Filter, 
+        o : (Sql.Clause, Sql.Clause) => Sql.Clause )
+      : MappingSelect
       = w match {
           case Query.Where.Contains( m : SeqMapping, v ) ⇒ 
-            withFilter( Query.Where.Includes( m, Seq(v) ), o )
+            withFilter1( Query.Where.Includes( m, Seq(v) ), o )
           case Query.Where.Includes( m : SeqMapping, v : Seq[_] ) ⇒ 
             withSelect(
                 MappingSelect(m).primaryKey

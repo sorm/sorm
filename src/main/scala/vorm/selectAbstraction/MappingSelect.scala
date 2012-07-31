@@ -9,7 +9,7 @@ import vorm.{sql => Sql}
 
 /**
  *  Usage:
- *    assuming rock and metal are `Style` entities
+ *    assuming `rock` and `metal` are `Style` entities
  *    Query:
  *      artists.filter(
  *          ( "styles" includes Set(rock, metal) ) ||
@@ -228,6 +228,14 @@ case class MappingSelect
               .foldFrom(where){ _ withClause (_, o) }
           case f: Query.Where.Filter ⇒ 
             withFilter(f, o)
+        }
+
+    def withQuery
+      ( q : Query )
+      = q match {
+          case Query(kind, this.mapping, where, order, limit) =>
+            where.map(withWhere(_))
+            ???
         }
 
   }

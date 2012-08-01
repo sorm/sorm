@@ -7,6 +7,9 @@ package sql {
       from : From,
       join : Seq[Join] = Nil,
       where : Option[Clause] = None,
+      orderBy : Seq[OrderByClause] = Nil,
+      limit : Option[Int] = None,
+      offset : Option[Int] = None,
       groupBy : Seq[GroupByObject] = Nil,
       having : Option[Clause] = None )
     extends FromObject with JoinObject
@@ -72,7 +75,77 @@ package sql {
           withSubSelectsOptimized( f(this) ) 
          
         }
+
+      def intersectionWith
+        ( s : Select )
+        : Select
+        = if( s.what == what )  
+            if( s == this )
+              this
+            else if( s.from == from &&
+                     s.join == join &&
+                     s.orderBy == orderBy &&
+                     s.limit == limit &&
+                     s.offset == offset &&
+                     s.groupBy == groupBy &&
+                     ( having == None || s.having == None ) )
+              copy(
+                  where
+                    = (where ++ s.where) reduceOption Clause.And,
+                  having
+                    = (having ++ s.having) reduceOption Clause.And
+                )
+            else
+              copy(
+                  join
+                    = join :+
+                      Join(
+                          what = s,
+                          as = Some("t" + (join.length + 1)),
+                          on = (what zip s.what)
+                                .asInstanceOf[Seq[(Column, Column)]],
+                          kind = JoinKind.Inner
+                        )
+                )
+          else
+            throw new MatchError("Unmergeable selects")
+
+      def unionWith
+        ( s : Select )
+        : Select
+        = if( s.what == what )  
+            if( s == this )
+              this
+            else if( s.from == from &&
+                     s.join == join &&
+                     s.orderBy == orderBy &&
+                     s.limit == limit &&
+                     s.offset == offset &&
+                     s.groupBy == groupBy &&
+                     ( having == None || s.having == None ) )
+              copy(
+                  where
+                    = (where ++ s.where) reduceOption Clause.Or,
+                  having
+                    = (having ++ s.having) reduceOption Clause.Or
+                )
+            else
+              copy(
+                  join
+                    = join :+
+                      Join(
+                          what = s,
+                          as = Some("t" + (join.length + 1))
+                        )
+                )
+          else
+            throw new MatchError("Unmergeable selects")
     }
+
+
+  case class OrderByClause
+    ( what : Column,
+      desc : Boolean = false )
 
   trait SelectObject
   trait GroupByObject

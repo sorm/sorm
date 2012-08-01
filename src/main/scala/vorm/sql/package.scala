@@ -257,7 +257,7 @@ package sql {
               case JoinKind.Left ⇒ "LEFT JOIN "
               case JoinKind.Right ⇒ "RIGHT JOIN "
               case JoinKind.Inner ⇒ "INNER JOIN "
-            } ) +
+            } ) + "\n" +
           (
               ( what match {
                   case Table(name) ⇒ "`" + name + "`"
@@ -271,7 +271,7 @@ package sql {
                 .map{ "\nON " + _.indent("ON ".length).trim }
                 .getOrElse("")
             )
-            .indent(2).trim
+            .indent(2)
 
       def data 
         = what.data

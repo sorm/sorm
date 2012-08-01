@@ -4,12 +4,7 @@ import extensions._
 
 package sql {
 
-  case class Rendering
-    ( sql : String,
-      data : Seq[Any] )
-
   trait Renderable {
-    def rendering : Rendering = Rendering(sql, data)
     def sql : String
     def data : Seq[Any]
   }

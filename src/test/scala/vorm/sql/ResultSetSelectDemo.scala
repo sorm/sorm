@@ -73,7 +73,6 @@ object ResultSetSelectDemo extends App {
               Nil
         )
       
-  resultSetSelect
-    .sql
-    .println()
+  resultSetSelect.sql.println()
+  resultSetSelect.data.println()
 }

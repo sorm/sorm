@@ -1,18 +1,30 @@
 package vorm
 
+import extensions._
+
 package sql {
+
+  trait Renderable {
+    def sql : String
+    def data : Seq[Any]
+    protected def quote
+      ( s : String )
+      = s
+  }
 
   case class Select
     ( what : Seq[SelectObject],
       from : From,
       join : Seq[Join] = Nil,
       where : Option[Clause] = None,
+      groupBy : Seq[GroupByObject] = Nil,
+      having : Option[Clause] = None,
       orderBy : Seq[OrderByClause] = Nil,
       limit : Option[Int] = None,
-      offset : Option[Int] = None,
-      groupBy : Seq[GroupByObject] = Nil,
-      having : Option[Clause] = None )
-    extends FromObject with JoinObject
+      offset : Option[Int] = None )
+    extends FromObject 
+    with JoinObject
+    with Renderable
     {
       /**
        * Drops orphan joins
@@ -140,49 +152,166 @@ package sql {
                 )
           else
             throw new MatchError("Unmergeable selects")
+      
+      def sql 
+        = "SELECT\n" +
+          ( what.view.map{_.sql}.mkString(", ") + 
+            "\n" + from.sql +
+            join
+              .view
+              .map{ _.sql }
+              .mkString("\n")
+              .asSatisfying{ ! _.isEmpty }
+              .map{"\n" + _}
+              .getOrElse("") +
+            where
+              .map{ _.sql }
+              .map{ "\nWHERE " + _.indent("WHERE ".length).trim }
+              .getOrElse("") +
+            groupBy
+              .view
+              .map{ _.sql }
+              .mkString(", ")
+              .asSatisfying{ ! _.isEmpty }
+              .map{ "\nGROUP BY " + _ }
+              .getOrElse("") +
+            having
+              .map{ _.sql }
+              .map{ "\nHAVING " + _.indent("HAVING ".length).trim }
+              .getOrElse("") +
+            orderBy
+              .map{ _.sql }
+              .mkString(", ")
+              .asSatisfying{ ! _.isEmpty }
+              .map{ "\nORDER BY " + _ }
+              .getOrElse("") +
+            limit
+              .map{ "\nLIMIT " + _ }
+              .getOrElse("") +
+            offset
+              .map{ "\nOFFSET " + _ }
+              .getOrElse("") )
+            .indent(2)
+
+      def data
+        = ( what ++: from +: join ++: where ++: groupBy ++: having ++: 
+            orderBy ++: Nil )
+            .foldLeft(Vector[Any]()){_ ++ _.data}
     }
 
 
   case class OrderByClause
     ( what : Column,
       desc : Boolean = false )
+    extends Renderable
+    {
+      def sql 
+        = if( desc ) what.sql + " DESC"
+          else what.sql 
+      def data 
+        = what.data
+    }
 
-  trait SelectObject
-  trait GroupByObject
+  trait SelectObject extends Renderable
+  trait GroupByObject extends Renderable
 
   case class Table
     ( name : String )
-    extends FromObject with JoinObject
+    extends FromObject 
+    with JoinObject
+    {
+      def sql = quote(name)
+      def data = Nil
+    }
 
   case class From
     ( what : FromObject,
       as : Option[String] = None )
+    extends Renderable
+    {
+      def sql
+        = "FROM\n" +
+          (
+            ( what match {
+                case Table(name) ⇒ quote(name)
+                case r : Renderable ⇒ "(\n" + r.sql.indent(2) + "\n)"
+              } ) +
+            as.map{ "\nAS " + quote(_) }
+              .getOrElse("")
+            ) 
+            .indent(2)
+      def data 
+        = what.data
+    }
+  object From {
+    def apply ( what : FromObject, as : String ) : From
+      = apply( what, Some(as) )
+  }
 
-  trait FromObject
+  trait FromObject extends Renderable
 
   case class Join
     ( what : JoinObject,
-      as : Option[String],
+      as : Option[String] = None,
       on : Seq[(Column, Column)] = Nil,
       kind : JoinKind = JoinKind.Left )
+    extends Renderable
+    {
+      def sql
+        = ( kind match {
+              case JoinKind.Left ⇒ "LEFT JOIN "
+              case JoinKind.Right ⇒ "RIGHT JOIN "
+              case JoinKind.Inner ⇒ "INNER JOIN "
+            } ) + "\n" +
+          (
+              ( what match {
+                  case Table(name) ⇒ quote(name)
+                  case r : Renderable ⇒ "( " + r.sql.indent(2).trim + " )"
+                } ) +
+              as.map{ "\nAS " + quote(_) }
+                .getOrElse("") +
+              on.map{ case (l, r) ⇒ l.sql + " = " + r.sql }
+                .mkString(" AND\n")
+                .asSatisfying{ ! _.isEmpty }
+                .map{ "\nON " + _.indent("ON ".length).trim }
+                .getOrElse("")
+            )
+            .indent(2)
 
-  trait JoinObject
+      def data 
+        = what.data
+    }
+
+  trait JoinObject extends Renderable
+
 
   trait JoinKind
   object JoinKind {
     object Left  extends JoinKind
     object Right extends JoinKind
     object Inner extends JoinKind
-    object Outer extends JoinKind
   }
 
 
   case class Column
     ( name : String,
-      table : Option[String] )
+      table : Option[String] = None )
     extends SelectObject 
     with ConditionObject
     with GroupByObject
+    {
+      def sql 
+        = table
+            .map{ quote(_) + "." }
+            .getOrElse("") + 
+          quote(name)
+      def data
+        = Nil
+    }
+  object Column {
+    def apply ( name : String, table : String ) : Column
+      = apply( name, Some(table) )
+  }
 
   case class Count
     ( what : Seq[Column],
@@ -190,46 +319,90 @@ package sql {
     extends SelectObject 
     with ConditionObject
     with GroupByObject
+    {
+      def sql
+        = "COUNT(" +
+          ( if( distinct ) "DISTINCT " 
+            else "" ) +
+          what.view.map{ _.sql }.mkString(", ") + 
+          ")"
+      def data
+        = Nil
+    }
 
 
 
-  trait Clause
-  trait ConditionObject
+  trait Clause extends Renderable
+  trait ConditionObject extends Renderable
 
   object Clause {
     
-    trait Composite extends Clause {
-      def left : Clause
-      def right : Clause
-    }
+    abstract class Composite 
+      ( operator : String )
+      extends Clause 
+      {
+        def left : Clause
+        def right : Clause
+        private def subClauseSql
+          ( c : Clause )
+          : String
+          = c match {
+              case c : Composite ⇒ "( " + c.sql.indent("( ".length).trim + " )"
+              case c ⇒ c.sql
+            }
+        def sql
+          = subClauseSql(left) + " " + operator + "\n" + subClauseSql(right)
+        def data
+          = left.data ++ right.data
+      }
 
     case class And
       ( left : Clause,
         right : Clause )
-      extends Composite
+      extends Composite("AND")
 
     case class Or
       ( left : Clause,
         right : Clause )
-      extends Composite
+      extends Composite("OR")
 
-    trait Condition extends Clause
-
+    abstract class Condition 
+      ( operator : String )
+      extends Clause 
+      {
+        def left : ConditionObject
+        def right : ConditionObject
+        def sql
+          = left.sql + " " + operator + " " + right.sql
+        def data
+          = left.data ++ right.data
+      }
+    
     case class Equals
       ( left : ConditionObject,
         right : ConditionObject )
-      extends Condition
-
-    case class NotEquals
+      extends Condition("=")
+    
+    case class In
       ( left : ConditionObject,
         right : ConditionObject )
-      extends Condition
+      extends Condition("IN")
 
+    case class Larger
+      ( left : ConditionObject,
+        right : ConditionObject )
+      extends Condition(">")
   }
 
   case class Value
     ( value : Any )
     extends ConditionObject
+    {
+      def sql
+        = "?"
+      def data
+        = Vector(value)
+    }
 
 
 

@@ -16,9 +16,12 @@ class Reflected
     def propertyValue
       ( name: String )
       : Any
-      = reflection.javaClass.getMethods
-          .find(_.getName == name)
-          .get.invoke(instance)
+      = instance
+          .getClass
+          .getMethods
+          .find{ _.getName == name }
+          .get 
+          .invoke( instance )
 
     def methodResult
       ( name: String, 

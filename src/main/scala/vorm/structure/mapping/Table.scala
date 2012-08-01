@@ -43,7 +43,7 @@ trait Table
       = deepSubtableMappings.view
           .+:(this)
           .zipWithIndex
-          .map{ case (m, i) ⇒ m → "t" + i }
+          .map{ case (m, i) ⇒ m → ("t" + i) }
           .toMap
 
     lazy val skeletonSelect

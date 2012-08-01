@@ -1,4 +1,4 @@
-package vorm.selectAbstraction
+package vorm.select
 
 import vorm._
 import extensions._

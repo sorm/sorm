@@ -2,6 +2,10 @@ package vorm
 
 package sql {
 
+  case class Statement
+    ( sql : String,
+      data : Seq[Any] )
+
   case class Select
     ( what : Seq[SelectObject],
       from : From,
@@ -140,6 +144,9 @@ package sql {
                 )
           else
             throw new MatchError("Unmergeable selects")
+      def statement
+        : Statement
+        = ???
     }
 
 
@@ -157,12 +164,16 @@ package sql {
   case class From
     ( what : FromObject,
       as : Option[String] = None )
+  object From {
+    def apply ( what : FromObject, as : String ) : From
+      = apply( what, Some(as) )
+  }
 
   trait FromObject
 
   case class Join
     ( what : JoinObject,
-      as : Option[String],
+      as : Option[String] = None,
       on : Seq[(Column, Column)] = Nil,
       kind : JoinKind = JoinKind.Left )
 
@@ -179,10 +190,14 @@ package sql {
 
   case class Column
     ( name : String,
-      table : Option[String] )
+      table : Option[String] = None )
     extends SelectObject 
     with ConditionObject
     with GroupByObject
+  object Column {
+    def apply ( name : String, table : String ) : Column
+      = apply( name, Some(table) )
+  }
 
   case class Count
     ( what : Seq[Column],
@@ -219,7 +234,16 @@ package sql {
       ( left : ConditionObject,
         right : ConditionObject )
       extends Condition
+    
+    case class In
+      ( left : ConditionObject,
+        right : ConditionObject )
+      extends Condition
 
+    case class Larger
+      ( left : ConditionObject,
+        right : ConditionObject )
+      extends Condition
   }
 
   case class Value

@@ -7,7 +7,7 @@ package sql {
       from : From,
       join : Seq[Join] = Nil,
       where : Option[Clause] = None,
-      groupBy : Seq[Column] = Nil,
+      groupBy : Seq[GroupByObject] = Nil,
       having : Option[Clause] = None )
     extends FromObject with JoinObject
     {
@@ -75,6 +75,7 @@ package sql {
     }
 
   trait SelectObject
+  trait GroupByObject
 
   case class Table
     ( name : String )
@@ -106,12 +107,16 @@ package sql {
   case class Column
     ( name : String,
       table : Option[String] )
-    extends SelectObject with ConditionObject
+    extends SelectObject 
+    with ConditionObject
+    with GroupByObject
 
   case class Count
     ( what : Seq[Column],
       distinct : Boolean = false )
-    extends ConditionObject
+    extends SelectObject 
+    with ConditionObject
+    with GroupByObject
 
 
 
@@ -148,9 +153,6 @@ package sql {
     ( value : Any )
     extends ConditionObject
 
-
-  case class GroupBy
-    ( what : Seq[Column] )
 
 
 }

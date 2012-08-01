@@ -111,4 +111,19 @@ package object extensions {
     {
       def +: ( x : T ) = Option(x)
     }
+
+  implicit class StringExtensions
+    ( s : String )
+    {
+      def indent
+        ( i : Int )
+        = prependLines(" " * i) 
+      def prependLines
+        ( p : String )
+        = s.lines
+            .reduceOption{ _ + "\n" + p + _ }
+            .map{ p + _ }
+            .getOrElse( p )
+    }
+
 }

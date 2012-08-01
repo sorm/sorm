@@ -39,7 +39,7 @@ object ResultSetSelectDemo extends App {
         )
       
   resultSetSelect
-    .statement
+    .rendering
     .sql
     .println()
 }

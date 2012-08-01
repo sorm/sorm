@@ -49,7 +49,6 @@ object PrimaryKeySelectDemo extends App {
         )
       
   primaryKeySelect
-    .statement
     .sql
     .println()
 }

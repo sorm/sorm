@@ -7,6 +7,9 @@ package sql {
   trait Renderable {
     def sql : String
     def data : Seq[Any]
+    protected def quote
+      ( s : String )
+      = s
   }
 
   case class Select
@@ -217,7 +220,7 @@ package sql {
     extends FromObject 
     with JoinObject
     {
-      def sql = "`" + name + "`"
+      def sql = quote(name)
       def data = Nil
     }
 
@@ -230,10 +233,10 @@ package sql {
         = "FROM\n" +
           (
             ( what match {
-                case Table(name) ⇒ "`" + name + "`"
+                case Table(name) ⇒ quote(name)
                 case r : Renderable ⇒ "(\n" + r.sql.indent(2) + "\n)"
               } ) +
-            as.map{ "\nAS `" + _ + "`" }
+            as.map{ "\nAS " + quote(_) }
               .getOrElse("")
             ) 
             .indent(2)
@@ -262,10 +265,10 @@ package sql {
             } ) + "\n" +
           (
               ( what match {
-                  case Table(name) ⇒ "`" + name + "`"
+                  case Table(name) ⇒ quote(name)
                   case r : Renderable ⇒ "( " + r.sql.indent(2).trim + " )"
                 } ) +
-              as.map{ "\nAS `" + _ + "`" }
+              as.map{ "\nAS " + quote(_) }
                 .getOrElse("") +
               on.map{ case (l, r) ⇒ l.sql + " = " + r.sql }
                 .mkString(" AND\n")
@@ -299,9 +302,9 @@ package sql {
     {
       def sql 
         = table
-            .map{ "`" + _ + "`." }
+            .map{ quote(_) + "." }
             .getOrElse("") + 
-          "`" + name + "`"
+          quote(name)
       def data
         = Nil
     }

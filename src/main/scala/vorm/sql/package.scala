@@ -151,8 +151,9 @@ package sql {
             throw new MatchError("Unmergeable selects")
       
       def sql 
-        = "SELECT " + what.view.map{_.sql}.mkString(", ") + 
-          ( "\n" + from.sql +
+        = "SELECT\n" +
+          ( what.view.map{_.sql}.mkString(", ") + 
+            "\n" + from.sql +
             join
               .view
               .map{ _.sql }
@@ -226,12 +227,16 @@ package sql {
     extends Renderable
     {
       def sql
-        = "FROM " +
-          ( what match {
-              case Table(name) ⇒ "`" + name + "`"
-              case r : Renderable ⇒ "(\n" + r.sql.indent(2) + "\n)"
-            } )
-            .foldFrom(as){ _ + " AS `" + _ + "`" }
+        = "FROM\n" +
+          (
+            ( what match {
+                case Table(name) ⇒ "`" + name + "`"
+                case r : Renderable ⇒ "(\n" + r.sql.indent(2) + "\n)"
+              } ) +
+            as.map{ "\nAS `" + _ + "`" }
+              .getOrElse("")
+            ) 
+            .indent(2)
       def data 
         = what.data
     }

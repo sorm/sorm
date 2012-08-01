@@ -383,6 +383,11 @@ package sql {
         right : ConditionObject )
       extends Condition("=")
     
+    case class NotEquals
+      ( left : ConditionObject,
+        right : ConditionObject )
+      extends Condition("!=")
+    
     case class In
       ( left : ConditionObject,
         right : ConditionObject )
@@ -392,6 +397,21 @@ package sql {
       ( left : ConditionObject,
         right : ConditionObject )
       extends Condition(">")
+
+    case class LargerIncluding
+      ( left : ConditionObject,
+        right : ConditionObject )
+      extends Condition(">=")
+
+    case class Smaller
+      ( left : ConditionObject,
+        right : ConditionObject )
+      extends Condition("<")
+
+    case class SmallerIncluding
+      ( left : ConditionObject,
+        right : ConditionObject )
+      extends Condition("<=")
   }
 
   case class Value

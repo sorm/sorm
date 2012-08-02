@@ -15,6 +15,6 @@ object Demo extends App {
 
   new MappingSelect(artistMapping)
     .sql
-    .sql
+    .rendering
     .println()
 }

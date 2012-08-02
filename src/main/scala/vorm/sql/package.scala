@@ -5,7 +5,7 @@ import extensions._
 package sql {
 
   trait Renderable {
-    def sql : String
+    def rendering : String
     def data : Seq[Any]
     protected def quote
       ( s : String )
@@ -153,34 +153,34 @@ package sql {
           else
             throw new MatchError("Unmergeable selects")
       
-      def sql 
+      def rendering
         = "SELECT\n" +
-          ( what.view.map{_.sql}.mkString(", ") + 
-            "\n" + from.sql +
+          ( what.view.map{_.rendering}.mkString(", ") +
+            "\n" + from.rendering +
             join
               .view
-              .map{ _.sql }
+              .map{ _.rendering }
               .mkString("\n")
               .satisfying{ ! _.isEmpty }
               .map{"\n" + _}
               .getOrElse("") +
             where
-              .map{ _.sql }
+              .map{ _.rendering }
               .map{ "\nWHERE " + _.indent("WHERE ".length).trim }
               .getOrElse("") +
             groupBy
               .view
-              .map{ _.sql }
+              .map{ _.rendering }
               .mkString(", ")
               .satisfying{ ! _.isEmpty }
               .map{ "\nGROUP BY " + _ }
               .getOrElse("") +
             having
-              .map{ _.sql }
+              .map{ _.rendering }
               .map{ "\nHAVING " + _.indent("HAVING ".length).trim }
               .getOrElse("") +
             orderBy
-              .map{ _.sql }
+              .map{ _.rendering }
               .mkString(", ")
               .satisfying{ ! _.isEmpty }
               .map{ "\nORDER BY " + _ }
@@ -205,9 +205,9 @@ package sql {
       desc : Boolean = false )
     extends Renderable
     {
-      def sql 
-        = if( desc ) what.sql + " DESC"
-          else what.sql 
+      def rendering
+        = if( desc ) what.rendering + " DESC"
+          else what.rendering
       def data 
         = what.data
     }
@@ -220,7 +220,7 @@ package sql {
     extends FromObject 
     with JoinObject
     {
-      def sql = quote(name)
+      def rendering = quote(name)
       def data = Nil
     }
 
@@ -229,12 +229,12 @@ package sql {
       as : Option[String] = None )
     extends Renderable
     {
-      def sql
+      def rendering
         = "FROM\n" +
           (
             ( what match {
                 case Table(name) ⇒ quote(name)
-                case r : Renderable ⇒ "(\n" + r.sql.indent(2) + "\n)"
+                case r : Renderable ⇒ "(\n" + r.rendering.indent(2) + "\n)"
               } ) +
             as.map{ "\nAS " + quote(_) }
               .getOrElse("")
@@ -257,7 +257,7 @@ package sql {
       kind : JoinKind = JoinKind.Left )
     extends Renderable
     {
-      def sql
+      def rendering
         = ( kind match {
               case JoinKind.Left ⇒ "LEFT JOIN "
               case JoinKind.Right ⇒ "RIGHT JOIN "
@@ -266,11 +266,11 @@ package sql {
           (
               ( what match {
                   case Table(name) ⇒ quote(name)
-                  case r : Renderable ⇒ "( " + r.sql.indent(2).trim + " )"
+                  case r : Renderable ⇒ "( " + r.rendering.indent(2).trim + " )"
                 } ) +
               as.map{ "\nAS " + quote(_) }
                 .getOrElse("") +
-              on.map{ case (l, r) ⇒ l.sql + " = " + r.sql }
+              on.map{ case (l, r) ⇒ l.rendering + " = " + r.rendering }
                 .mkString(" AND\n")
                 .satisfying{ ! _.isEmpty }
                 .map{ "\nON " + _.indent("ON ".length).trim }
@@ -300,7 +300,7 @@ package sql {
     with ConditionObject
     with GroupByObject
     {
-      def sql 
+      def rendering
         = table
             .map{ quote(_) + "." }
             .getOrElse("") + 
@@ -320,11 +320,11 @@ package sql {
     with ConditionObject
     with GroupByObject
     {
-      def sql
+      def rendering
         = "COUNT(" +
           ( if( distinct ) "DISTINCT " 
             else "" ) +
-          what.view.map{ _.sql }.mkString(", ") + 
+          what.view.map{ _.rendering }.mkString(", ") +
           ")"
       def data
         = Nil
@@ -347,10 +347,10 @@ package sql {
           ( c : Clause )
           : String
           = c match {
-              case c : Composite ⇒ "( " + c.sql.indent("( ".length).trim + " )"
-              case c ⇒ c.sql
+              case c : Composite ⇒ "( " + c.rendering.indent("( ".length).trim + " )"
+              case c ⇒ c.rendering
             }
-        def sql
+        def rendering
           = subClauseSql(left) + " " + operator + "\n" + subClauseSql(right)
         def data
           = left.data ++ right.data
@@ -372,8 +372,8 @@ package sql {
       {
         def left : ConditionObject
         def right : ConditionObject
-        def sql
-          = left.sql + " " + operator + " " + right.sql
+        def rendering
+          = left.rendering + " " + operator + " " + right.rendering
         def data
           = left.data ++ right.data
       }
@@ -418,7 +418,7 @@ package sql {
     ( value : Any )
     extends ConditionObject
     {
-      def sql
+      def rendering
         = "?"
       def data
         = Vector(value)

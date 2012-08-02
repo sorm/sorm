@@ -1,4 +1,4 @@
-package vorm.demo
+package vorm.samples
 
 object ArtistModelWithIds {
 

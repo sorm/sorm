@@ -4,7 +4,7 @@ import ForeignKey._
 
 sealed case class ForeignKey
   ( table     : String,
-    bindings  : Set[(String, String)],
+    bindings  : Seq[(String, String)],
     onDelete  : ReferenceOption = ReferenceOption.NoAction,
     onUpdate  : ReferenceOption = ReferenceOption.NoAction )
 

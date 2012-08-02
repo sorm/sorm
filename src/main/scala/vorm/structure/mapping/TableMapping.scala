@@ -23,9 +23,23 @@ trait TableMapping
           case m : OptionMapping =>
             subColumns( m.item )
           case m : TableMapping =>
-            Nil
+            ??? // there should be pk columns
         }
 
     def primaryKeyColumns : Seq[Column]
+
+    def foreignKeyForOwnerTable : Option[ForeignKey]
+
+
+    // protected def subKeys
+    //   ( m : Mapping )
+    //   : Seq[ForeignKey]
+    //   = m match {
+
+    //     }
+
+    def ownerTableForeignKey : Option[ForeignKey]
+
+
 
   }

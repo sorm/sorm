@@ -64,12 +64,12 @@ case class MappingSelect
                       Sql.Join( 
                           Sql.Table(m.tableName),
                           Some(s.newAlias),
-                          m.primaryKeyColumns.view
-                            .map(_.name)
-                            .map{ n ⇒ 
-                              Sql.Column(n, Some(s.newAlias)) → 
-                              Sql.Column(n, Some(s.skeletonAliases(m.ownerTable.get)))
-                            }
+                          m.foreignKeyForOwnerTable
+                            .map{_.bindings.map{_.swap}}
+                            .getOrElse(m.ownerTableForeignKey.get.bindings)
+                            .view
+                            .map{b ⇒ Sql.Column(b._1, Some(s.newAlias)) → 
+                                     Sql.Column(b._2, Some(s.skeletonAliases(m.ownerTable.get)))}
                             .toList
                         )
                 )

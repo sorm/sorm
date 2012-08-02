@@ -32,6 +32,20 @@ sealed class EntityMapping
     lazy val primaryKeyColumns
       = settings.primaryKey.view.map{ properties }.flatMap{ subColumns }.toList
 
+
+    lazy val foreignKeyForOwnerTable
+      = membership map { _ =>
+          ForeignKey(
+            tableName,
+            primaryKeyColumns.map{c ⇒ (columnName + "_" + c.name) → c.name},
+            ForeignKey.ReferenceOption.Cascade
+          )
+        }
+
+
+    def ownerTableForeignKey = None
+
+
 //    override lazy val ownerTableColumns
 //      = primaryKeyColumns.view
 //          .map(_.column)
@@ -43,14 +57,7 @@ sealed class EntityMapping
 //          )
 //          // .map(MappedColumn.ForeignKeyPart)
 //
-//    override lazy val ownerTableForeignKeys
-//      = membership map {
-//          ForeignKey (
-//            tableName,
-//            primaryKey.map(c ⇒ columnName + "_" + c → c),
-//            ForeignKey.ReferenceOption.Cascade
-//          )
-//        } toList
+
 //
 //    lazy val generatedIdColumn
 //      : Option[Column]
@@ -80,4 +87,4 @@ sealed class EntityMapping
 //              ⇒ Nil
 //          }
 //          .toList
-  }
+}

@@ -1,7 +1,7 @@
 package vorm.structure
 
 sealed case class EntitySettings
-  ( primaryKey      : Option[Seq[String]],
-    uniqueKeys      : Set[Seq[String]],
-    indexes         : Set[Seq[String]],
-    autoIncrements  : Set[String] )
+  ( primaryKey    : Seq[String] = Seq.empty,
+    uniqueKeys    : Set[Seq[String]] = Set.empty,
+    indexes       : Set[Seq[String]] = Set.empty,
+    autoIncrement : Set[String] = Set.empty )

@@ -35,12 +35,15 @@ case class MappingSelect
       : MappingSelect
       = ???
 
+    private def from
+      = Sql.From(Sql.Table(mapping.tableName), Some("t0"))
+
     lazy val sql
       : Sql.Select
-      = ???
+      = Sql.Select(what, from, joins, where, groupBy, having)
 
     private lazy val newAlias
-      = "t" + joins.length
+      = "t" + ( joins.length + 1 ) 
 
     private def withSkeletonTo
       ( m : Mapping )

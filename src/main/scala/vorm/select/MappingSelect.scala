@@ -36,22 +36,22 @@ case class MappingSelect
       = ???
 
     private def from
-      = Sql.From(Sql.Table(mapping.tableName), Some("t0"))
+      = Sql.From(Sql.Table(mapping.tableName), Some("a"))
 
     lazy val sql
       : Sql.Select
       = Sql.Select(what, from, joins, where, groupBy, having)
 
     private lazy val newAlias
-      = "t" + ( joins.length + 1 ) 
+      = ( joins.length + 98 ).toChar.toString
 
-    private def withSkeletonTo
+    def withSkeletonTo
       ( m : Mapping )
       : MappingSelect
       = m match {
           case m : TableMapping ⇒ 
             if( m == mapping )
-              this
+              copy(skeletonAliases = skeletonAliases + (mapping -> "a"))
             else if( skeletonAliases contains m )
               this
             else { 

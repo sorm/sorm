@@ -1,11 +1,11 @@
 package vorm.structure.mapping
 
 import vorm._
-import extensions._
 import reflection._
 import ddl._
 import select._
 import structure._
+import extensions._
 
 sealed class EntityMapping
   ( val membership : Option[Membership],
@@ -15,14 +15,14 @@ sealed class EntityMapping
   {
     lazy val properties
       = reflection.properties
-          .map {
-            case (name, reflection)
-              ⇒ name →
-                Mapping (
-                  Membership.EntityProperty( name, this ),
-                  reflection,
-                  settingsMap
-                )
+          .map{
+            case (name, reflection) ⇒
+              name →
+              Mapping (
+                Membership.EntityProperty( name, this ),
+                reflection,
+                settingsMap
+              )
           }
 
     lazy val settings = settingsMap(reflection)

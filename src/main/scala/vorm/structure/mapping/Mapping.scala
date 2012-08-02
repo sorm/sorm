@@ -11,6 +11,11 @@ trait Mapping {
   def membership : Option[Membership]
   def reflection : Reflection
 
+  override def toString
+    : String
+    = membership.map(_.parent).map(_.toString + ".").getOrElse("") +
+      reflection.name
+
   lazy val columnName
     : String
     = membership
@@ -34,22 +39,27 @@ trait Mapping {
 
   lazy val tableName
     : String
-    = membership
-        .map {
-          case Membership.EntityProperty(name, entity)
-            ⇒ entity.tableName + "_" + name.asDdlName
-          case Membership.TupleItem(index, tuple)
-            ⇒ tuple.tableName + "_" + index
-          case Membership.SeqItem(seq)
-            ⇒ seq.tableName + "_v"
-          case Membership.SetItem(set)
-            ⇒ set.tableName + "_v"
-          case Membership.MapKey(map)
-            ⇒ map.tableName + "_k"
-          case Membership.MapValue(map)
-            ⇒ map.tableName + "_v"
-        }
-        .getOrElse( reflection.name.asDdlName )
+    = this match {
+        case _ : EntityMapping 
+          ⇒ reflection.name.asDdlName
+        case _
+          ⇒ membership
+              .map {
+                case Membership.EntityProperty(name, entity)
+                  ⇒ entity.tableName + "_" + name.asDdlName
+                case Membership.TupleItem(index, tuple)
+                  ⇒ tuple.tableName + "_" + index
+                case Membership.SeqItem(seq)
+                  ⇒ seq.tableName + "_v"
+                case Membership.SetItem(set)
+                  ⇒ set.tableName + "_v"
+                case Membership.MapKey(map)
+                  ⇒ map.tableName + "_k"
+                case Membership.MapValue(map)
+                  ⇒ map.tableName + "_v"
+              }
+              .getOrElse( reflection.name.asDdlName )
+      }
 
   lazy val ownerTable
     : Option[TableMapping]

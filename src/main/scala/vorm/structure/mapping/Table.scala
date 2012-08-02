@@ -8,6 +8,7 @@ import vorm.{sql => Sql}
 
 trait Table
   extends Mapping
+  with HasParent
   {
     lazy val primaryKeyColumns
       : scala.Seq[ddl.Column]
@@ -24,11 +25,6 @@ trait Table
     lazy val subTableMappings
       : scala.Seq[Table]
       = ???
-
-    lazy val tableName
-      : String
-      = ???
-
     lazy val ownerTableColumnMappings
       : scala.Seq[(String, String)]
       = ???

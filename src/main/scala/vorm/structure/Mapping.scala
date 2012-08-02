@@ -4,12 +4,20 @@ import vorm._
 import structure._
 import reflection._
 import mapping._
+import mapping.{
+  Table ⇒ TableMapping,
+  Value ⇒ ValueMapping,
+  Tuple ⇒ TupleMapping,
+  Seq ⇒ SeqMapping,
+  Set ⇒ SetMapping,
+  Map ⇒ MapMapping,
+  Entity ⇒ EntityMapping,
+  Option ⇒ OptionMapping
+}
 
 trait Mapping {
   def settings : Settings
-  lazy val parentTableMapping
-    : scala.Option[Table]
-    = ???
+  def parentTableMapping : scala.Option[Table]
 }
 object Mapping {
   /**
@@ -24,6 +32,20 @@ object Mapping {
       parent : Mapping,
       settings : Settings )
     : Mapping
-    = throw new NotImplementedError
-
+    = ReflectionKind (reflection) match {
+        case ReflectionKind.Value
+          ⇒ new ValueMapping (reflection, parent, settings)
+        case ReflectionKind.Tuple
+          ⇒ new TupleMapping (reflection, parent, settings)
+        case ReflectionKind.Seq
+          ⇒ new SeqMapping (reflection, parent, settings)
+        case ReflectionKind.Set
+          ⇒ new SetMapping (reflection, parent, settings)
+        case ReflectionKind.Map
+          ⇒ new MapMapping (reflection, parent, settings)
+        case ReflectionKind.Entity
+          ⇒ new EntityMapping (reflection, parent, settings)
+        case ReflectionKind.Option
+          ⇒ new OptionMapping (reflection, parent, settings)
+      }
 }

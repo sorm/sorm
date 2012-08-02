@@ -4,10 +4,11 @@ import reflect.mirror
 import vorm._
 import util.MurmurHash3
 
-sealed class Reflection 
-  ( val t: mirror.Type,
-    val javaClass: Class[_] )
+sealed class Reflection
+  ( val t : mirror.Type )
   {
+    lazy val javaClass
+      = mirrorQuirks.javaClass(t)
     lazy val fullName
       = mirrorQuirks.fullName(t.typeSymbol)
 
@@ -86,12 +87,12 @@ sealed class Reflection
   
 object Reflection {
 
-  private val cache 
-    = new collection.mutable.HashMap[( mirror.Type, Class[_] ), Reflection] {
+   val cache
+    = new collection.mutable.HashMap[mirror.Type, Reflection] {
         override def default
-          ( key : ( mirror.Type, Class[_] ) ) 
+          ( key : mirror.Type )
           = {
-            val value = new Reflection(key._1, key._2)
+            val value = new Reflection(key)
             update(key, value)
             value
           }
@@ -101,11 +102,11 @@ object Reflection {
     [ T ]
     ( implicit tag : TypeTag[T] )
     : Reflection
-    = cache( tag.tpe, tag.erasure )
+    = cache( tag.tpe )
 
   def apply
     ( mt : mirror.Type )
     : Reflection 
-    = cache( mt, mirrorQuirks.javaClass( mt ) )
+    = cache( mt )
 
 }

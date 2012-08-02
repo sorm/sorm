@@ -13,13 +13,13 @@ object Demo extends App {
   import structure.Sample._
 
 
-  val artistMapping
+  val mapping
     = mappings(Reflection[Artist])
 
-  new MappingSelect(artistMapping)
+  new MappingSelect(mapping)
     .withFilter(
       Query.Where.In(
-        artistMapping
+        mapping
           .properties("names").asInstanceOf[SeqMapping]
           .item.asInstanceOf[EntityMapping]
           .properties("value"),
@@ -28,11 +28,18 @@ object Demo extends App {
     )
     .withFilter(
       Query.Where.Equals(
-        artistMapping
+        mapping
           .properties("names").asInstanceOf[SeqMapping]
           .item.asInstanceOf[EntityMapping]
           .properties("value"),
         "Nirvana"
+      )
+    )
+    .withFilter(
+      Query.Where.Equals(
+        mapping
+          .properties("names").asInstanceOf[SeqMapping],
+        Seq()
       )
     )
     .sql

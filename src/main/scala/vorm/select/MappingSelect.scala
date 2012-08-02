@@ -27,13 +27,18 @@ case class MappingSelect
     groupBy : Vector[Sql.Column] = Vector(),
     having : Option[Sql.Clause] = None )
   {
-    lazy val resultSet
+    def resultSet
       : MappingSelect
       = ???
 
-    lazy val primaryKey
+    def primaryKey
       : MappingSelect
-      = ???
+      = copy(
+          what
+            = what ++
+              mapping.primaryKeyColumns
+                .map{c ⇒ Sql.Column(c.name, Some("a"))}
+        )
 
     private def from
       = Sql.From(Sql.Table(mapping.tableName), Some("a"))
@@ -45,7 +50,7 @@ case class MappingSelect
     private lazy val newAlias
       = ( joins.length + 98 ).toChar.toString
 
-    def withSkeletonTo
+    private def withSkeletonTo
       ( m : Mapping )
       : MappingSelect
       = m match {
@@ -106,7 +111,26 @@ case class MappingSelect
     def havingRowsCount
       ( r : Int )
       : MappingSelect
-      = ???
+      = copy(
+          having
+            = ( having ++ 
+                Some(
+                  Sql.Clause.Equals(
+                    Sql.Count(
+                      mapping.primaryKeyColumns
+                        .map{ c ⇒ Sql.Column(c.name, Some("a")) },
+                      true
+                    ),
+                    Sql.Value(r)
+                  )
+                )
+              ) reduceOption Sql.Clause.And,
+          groupBy
+            = groupBy ++
+              mapping.primaryKeyColumns
+                .map{ c ⇒ Sql.Column(c.name, Some("a")) }
+
+        )
 
     def andFilter
       ( w : Query.Where.Filter )
@@ -157,6 +181,7 @@ case class MappingSelect
                         )
                   }
                   .havingRowsCount(v.length)
+                  .withSkeletonTo(m)
                   .withSelect( 
                       MappingSelect(m).primaryKey.havingRowsCount(v.length), 
                       Sql.Clause.And 
@@ -184,9 +209,9 @@ case class MappingSelect
       ( f : Query.Where.Filter )
       : (Sql.ConditionObject, Sql.ConditionObject) => Sql.Clause.Condition
       = f match {
-          case f : Query.Where.Equals ⇒ Sql.Clause.Equals
-          case f : Query.Where.NotEquals ⇒ Sql.Clause.NotEquals
-          case f : Query.Where.In => Sql.Clause.In
+          case f : Query.Where.Equals     ⇒ Sql.Clause.Equals
+          case f : Query.Where.NotEquals  ⇒ Sql.Clause.NotEquals
+          case f : Query.Where.In         ⇒ Sql.Clause.In
         }
 
     private def withCondition

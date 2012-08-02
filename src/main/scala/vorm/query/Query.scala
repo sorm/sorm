@@ -3,10 +3,11 @@ package vorm.query
 import vorm._
 import reflection._
 import structure._
+import mapping._
 
 sealed case class Query
   ( kind    : Query.Kind,
-    mapping : structure.mapping.Table,
+    mapping : TableMapping,
     where   : Option[Query.Where] = None,
     order   : Seq[Query.Order] = Nil,
     limit   : Query.Limit = Query.Limit() )

@@ -46,17 +46,17 @@ trait Mapping {
           ⇒ membership
               .map {
                 case Membership.EntityProperty(name, entity)
-                  ⇒ entity.tableName + "_" + name.asDdlName
+                  ⇒ entity.tableName + "$" + name.asDdlName
                 case Membership.TupleItem(index, tuple)
-                  ⇒ tuple.tableName + "_" + index
+                  ⇒ tuple.tableName + "$" + index
                 case Membership.SeqItem(seq)
-                  ⇒ seq.tableName + "_v"
+                  ⇒ seq.tableName + "$v"
                 case Membership.SetItem(set)
-                  ⇒ set.tableName + "_v"
+                  ⇒ set.tableName + "$v"
                 case Membership.MapKey(map)
-                  ⇒ map.tableName + "_k"
+                  ⇒ map.tableName + "$k"
                 case Membership.MapValue(map)
-                  ⇒ map.tableName + "_v"
+                  ⇒ map.tableName + "$v"
               }
               .getOrElse( reflection.name.asDdlName )
       }

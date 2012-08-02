@@ -186,6 +186,7 @@ case class MappingSelect
       = f match {
           case f : Query.Where.Equals ⇒ Sql.Clause.Equals
           case f : Query.Where.NotEquals ⇒ Sql.Clause.NotEquals
+          case f : Query.Where.In => Sql.Clause.In
         }
 
     private def withCondition

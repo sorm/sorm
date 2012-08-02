@@ -161,7 +161,7 @@ package sql {
               .view
               .map{ _.sql }
               .mkString("\n")
-              .asSatisfying{ ! _.isEmpty }
+              .satisfying{ ! _.isEmpty }
               .map{"\n" + _}
               .getOrElse("") +
             where
@@ -172,7 +172,7 @@ package sql {
               .view
               .map{ _.sql }
               .mkString(", ")
-              .asSatisfying{ ! _.isEmpty }
+              .satisfying{ ! _.isEmpty }
               .map{ "\nGROUP BY " + _ }
               .getOrElse("") +
             having
@@ -182,7 +182,7 @@ package sql {
             orderBy
               .map{ _.sql }
               .mkString(", ")
-              .asSatisfying{ ! _.isEmpty }
+              .satisfying{ ! _.isEmpty }
               .map{ "\nORDER BY " + _ }
               .getOrElse("") +
             limit
@@ -272,7 +272,7 @@ package sql {
                 .getOrElse("") +
               on.map{ case (l, r) ⇒ l.sql + " = " + r.sql }
                 .mkString(" AND\n")
-                .asSatisfying{ ! _.isEmpty }
+                .satisfying{ ! _.isEmpty }
                 .map{ "\nON " + _.indent("ON ".length).trim }
                 .getOrElse("")
             )

@@ -45,14 +45,15 @@ package object extensions {
         case x: Long => x == 0l
         case x: Float => x == 0f
         case x: Double => x == 0d
+        case x: Product => x.productArity == 0
         case _ => false
       }
     }
 
-    def asNonEmpty =
-      if (isEmpty) None else Some(x)
+    def notEmpty =
+      if (x.isEmpty) None else Some(x)
 
-    def asSatisfying(p: A => Boolean): Option[A] =
+    def satisfying(p: A => Boolean): Option[A] =
       if (p(x)) Some(x) else None
 
     def println() {
@@ -101,6 +102,8 @@ package object extensions {
   implicit class StringExtensions
     ( s : String )
     {
+      def notEmpty
+        = if( s.isEmpty ) None else Some(s)
       def indent
         ( i : Int )
         = prependLines(" " * i) 

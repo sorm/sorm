@@ -2,6 +2,7 @@ package vorm.structure
 
 import vorm._
 import reflection._
+import mapping._
 
 object Sample {
 
@@ -21,8 +22,8 @@ object Sample {
           Reflection[Locale] → 
           EntitySettings( Seq("id"), autoIncrement = Set("id") )
         )
-  
-  val root
-    = new mapping.Root(settings)
+
+  val mappings
+    = settings.keys.map{ r => r -> new EntityMapping(None, r, settings) }.toMap
 
 }

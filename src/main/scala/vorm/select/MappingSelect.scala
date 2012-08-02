@@ -4,7 +4,7 @@ import vorm._
 import extensions._
 import structure._
 import query._
-import mapping.{Table => TableMapping, Seq => SeqMapping, Set => SetMapping, Value => ValueMapping}
+import mapping._
 import vorm.{sql => Sql}
 
 /**
@@ -55,7 +55,7 @@ case class MappingSelect
             else if( skeletonAliases contains m )
               this
             else { 
-              val s = withSkeletonTo( m.parentTableMapping.get )
+              val s = withSkeletonTo( m.ownerTable.get )
               s.copy(
                   skeletonAliases 
                     = s.skeletonAliases + (m → s.newAlias),
@@ -68,14 +68,14 @@ case class MappingSelect
                             .map(_.name)
                             .map{ n ⇒ 
                               Sql.Column(n, Some(s.newAlias)) → 
-                              Sql.Column(n, Some(s.skeletonAliases(m.parentTableMapping.get)))
+                              Sql.Column(n, Some(s.skeletonAliases(m.ownerTable.get)))
                             }
                             .toList
                         )
                 )
             }
           case _ ⇒
-            withSkeletonTo( m.parentTableMapping.get )
+            withSkeletonTo( m.ownerTable.get )
         }
 
     private def withSelect
@@ -135,7 +135,7 @@ case class MappingSelect
             withSelect(
                 MappingSelect(m).primaryKey
                   .foldFrom(v){ (s, v) ⇒ 
-                      s.withFilter( Query.Where.Equals(m.child.child, v),
+                      s.withFilter( Query.Where.Equals(m.item, v),
                                     Sql.Clause.Or )
                     }
                   .havingRowsCount(v.length),
@@ -152,7 +152,7 @@ case class MappingSelect
                           )
                       )
                       .withFilter(
-                          Query.Where.Equals(m.child.child, v),
+                          Query.Where.Equals(m.item, v),
                           Sql.Clause.Or
                         )
                   }
@@ -198,7 +198,7 @@ case class MappingSelect
             cf(
                 Sql.Column( 
                     m.columnName,
-                    Some( skeletonAliases(m.parentTableMapping.get) )
+                    Some( skeletonAliases(m.ownerTable.get) )
                   ),
                 Sql.Value(v)
               ),
@@ -248,21 +248,21 @@ object MappingSelect {
   /**
    * Has all the skeleton mappings applied. 
    */
-  def resultSetReady
-    ( m : TableMapping )
-    : MappingSelect
-    = {
-      def leaves
-        ( m : Mapping )
-        : Seq[Mapping]
-        = m match {
-            case m : mapping.HasChildren ⇒ m.children.flatMap(leaves)
-            case m : mapping.HasChild ⇒ leaves(m.child)
-            case _ ⇒ Vector(m)
-          }
-
-      leaves(m).foldLeft(MappingSelect(m)){ _ withSkeletonTo _ }
-    }
+//  def resultSetReady
+//    ( m : TableMapping )
+//    : MappingSelect
+//    = {
+//      def leaves
+//        ( m : Mapping )
+//        : Seq[Mapping]
+//        = m match {
+//            case m : mapping.HasChildren ⇒ m.children.flatMap(leaves)
+//            case m : mapping.HasChild ⇒ leaves(m.child)
+//            case _ ⇒ Vector(m)
+//          }
+//
+//      leaves(m).foldLeft(MappingSelect(m)){ _ withSkeletonTo _ }
+//    }
 
   def apply
     ( q : Query )

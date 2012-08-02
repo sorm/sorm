@@ -11,8 +11,7 @@ object Demo extends App {
   import structure.Sample._
 
   val artistMapping
-    = root.children.find{ _.reflection == Reflection[Artist] }.get.child
-        .asInstanceOf[mapping.Entity]
+    = mappings(Reflection[Artist])
 
   new MappingSelect(artistMapping)
     .sql

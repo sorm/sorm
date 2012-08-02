@@ -1,5 +1,7 @@
 package vorm.structure
 
+import mapping._
+
 /**
  * Just an id
  */

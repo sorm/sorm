@@ -10,7 +10,4 @@ import structure._
 abstract class CollectionTableMapping
   extends TableMapping
   {
-    def uniqueKeys: Set[Seq[String]] = Set.empty
-    def indexes: Set[Seq[String]] = Set.empty
-    def autoIncrement: Set[String] = Set.empty
   }

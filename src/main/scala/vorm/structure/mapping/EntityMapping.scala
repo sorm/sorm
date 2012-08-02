@@ -27,13 +27,11 @@ sealed class EntityMapping
 
     lazy val settings = settingsMap(reflection)
 
-    def primaryKey = settings.primaryKey
-    def uniqueKeys = settings.uniqueKeys
-    def indexes = settings.indexes
-    def autoIncrement = settings.autoIncrement
-
     lazy val columns = properties.values flatMap subColumns
-    
+
+    lazy val primaryKeyColumns
+      = settings.primaryKey.view.map{ properties }.flatMap{ subColumns }.toList
+
 //    override lazy val ownerTableColumns
 //      = primaryKeyColumns.view
 //          .map(_.column)

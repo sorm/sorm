@@ -18,8 +18,10 @@ sealed class MapMapping
     lazy val value
       = Mapping( Membership.MapValue(this), reflection.generics(1), settingsMap )
 
-    lazy val primaryKey
-      = ownerTable.get.primaryKey.view.map("p_" + _) :+ "h" toList
+    lazy val primaryKeyColumns
+      = ownerTable.get.primaryKeyColumns
+          .map{ c => c.copy(name = "p_" + c.name, autoIncremented = false) } :+
+        Column("h", Column.Type.Integer)
 //
 //    lazy val keyForeignKeys
 //      = key.ownerTableForeignKeys

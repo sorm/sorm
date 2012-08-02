@@ -16,8 +16,10 @@ sealed class SeqMapping
     lazy val item
       = Mapping( Membership.SeqItem(this), reflection.generics(0), settingsMap )
 
-    lazy val primaryKey
-      = ownerTable.get.primaryKey.view.map("p_" + _) :+ "i" toList
+    lazy val primaryKeyColumns
+      = ownerTable.get.primaryKeyColumns
+          .map{ c => c.copy(name = "p_" + c.name, autoIncremented = false) } :+
+        Column("i", Column.Type.SmallInt)
 
 //
 //    lazy val indexColumn

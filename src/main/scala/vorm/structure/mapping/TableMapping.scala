@@ -10,11 +10,6 @@ import structure._
 trait TableMapping
   extends Mapping
   {
-    def primaryKey    : Seq[String]
-    def uniqueKeys    : Set[Seq[String]]
-    def indexes       : Set[Seq[String]]
-    def autoIncrement : Set[String]
-
 //    def columns : Seq[Column]
 
     protected def subColumns
@@ -30,5 +25,7 @@ trait TableMapping
           case m : TableMapping =>
             Nil
         }
+
+    def primaryKeyColumns : Seq[Column]
 
   }

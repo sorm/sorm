@@ -15,33 +15,32 @@ sealed class ValueMapping
   {
 
     lazy val isKeyPart
-      = ownerTable match {
-        case Some(ownerTable)
-          ⇒ ownerTable.primaryKey.contains(columnName) ||
-            ownerTable.uniqueKeys.exists(_ contains columnName) ||
-            ownerTable.indexes.exists(_ contains columnName)
-      }
+      = ownerTable.get.primaryKeyColumns.exists{_.name == columnName} ||
+        ???
+//          ⇒ ownerTable.primaryKey.contains(columnName) ||
+//            ownerTable.uniqueKeys.exists(_ contains columnName) ||
+//            ownerTable.indexes.exists(_ contains columnName)
 
     lazy val columnType
       = reflection match {
-          case Reflection[String]
+          case _ if reflection inheritsFrom Reflection.apply[String]
             ⇒ if (isKeyPart)
                 Column.Type.VarChar
               else
                 Column.Type.Text
-          case Reflection[Boolean]
+          case _ if reflection inheritsFrom Reflection[Boolean]
             ⇒ Column.Type.Boolean
-          case Reflection[Short]
+          case _ if reflection inheritsFrom Reflection[Short]
             ⇒ Column.Type.SmallInt
-          case Reflection[Int]
+          case _ if reflection inheritsFrom Reflection[Int]
             ⇒ Column.Type.Integer
-          case Reflection[Long]
+          case _ if reflection inheritsFrom Reflection[Long]
             ⇒ Column.Type.BigInt
-          case Reflection[Float]
+          case _ if reflection inheritsFrom Reflection[Float]
             ⇒ Column.Type.Float
-          case Reflection[Double]
+          case _ if reflection inheritsFrom Reflection[Double]
             ⇒ Column.Type.Double
-          case Reflection[BigDecimal]
+          case _ if reflection inheritsFrom Reflection[BigDecimal]
             ⇒ Column.Type.Decimal
         }
     lazy val autoIncremented

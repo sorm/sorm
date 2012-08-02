@@ -1,5 +1,7 @@
 package vorm.structure
 
+import mapping._
+
 sealed trait ColumnRole {
   def mapping : Mapping
   def jdbcType : Int

@@ -44,7 +44,7 @@ package object structure {
     }
 
 
-  type Settings = collection.Map[Reflection, EntitySettings]
+  type SettingsMap = collection.Map[Reflection, EntitySettings]
 
 
 }

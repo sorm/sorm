@@ -2,6 +2,7 @@ package vorm.reflection
 
 import reflect.mirror
 import vorm._
+import util.MurmurHash3
 
 sealed class Reflection 
   ( val t: mirror.Type,
@@ -71,7 +72,16 @@ sealed class Reflection
         javaClass.getConstructors.head
           .newInstance( args.asInstanceOf[Seq[Object]] : _* )
       }
-
+    override def equals(x: Any) =
+      x match {
+        case x: Reflection =>
+          eq(x) ||
+          t.typeSymbol == x.t.typeSymbol &&
+          generics == x.generics
+        case _ => super.equals(x)
+      }
+    override def hashCode =
+      MurmurHash3.finalizeHash(t.typeSymbol.hashCode, generics.hashCode)
   }
   
 object Reflection {

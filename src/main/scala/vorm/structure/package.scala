@@ -9,7 +9,7 @@ package object structure {
     ( string : String )
     {
       import com.google.common.base.CaseFormat._
-      def ddlName
+      def asDdlName
         : String
         = UPPER_CAMEL.to( LOWER_UNDERSCORE, string )
     }

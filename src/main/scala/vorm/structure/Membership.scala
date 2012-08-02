@@ -1,36 +1,33 @@
 package vorm.structure
 
-sealed trait Membership[ParentT] {
-  def parent: ParentT
+import mapping._
+
+sealed trait Membership {
+  def parent: Mapping
 }
 
 object Membership {
+  
   sealed case class EntityProperty
-    [ ParentT ]
-    ( name : String, parent : ParentT )
-    extends Membership[ParentT]
+    ( name : String, parent : EntityMapping )
+    extends Membership
   sealed case class TupleItem
-    [ ParentT ]
-    ( index : Int, parent : ParentT )
-    extends Membership[ParentT]
+    ( index : Int, parent : TupleMapping )
+    extends Membership
   sealed case class OptionItem
-    [ ParentT ]
-    ( parent : ParentT )
-    extends Membership[ParentT]
+    ( parent : OptionMapping )
+    extends Membership
   sealed case class SeqItem
-    [ ParentT ]
-    ( parent : ParentT )
-    extends Membership[ParentT]
+    ( parent : SeqMapping )
+    extends Membership
   sealed case class SetItem
-    [ ParentT ]
-    ( parent : ParentT )
-    extends Membership[ParentT]
+    ( parent : SetMapping )
+    extends Membership
   sealed case class MapKey
-    [ ParentT ]
-    ( parent : ParentT )
-    extends Membership[ParentT]
+    ( parent : MapMapping )
+    extends Membership
   sealed case class MapValue
-    [ ParentT ]
-    ( parent : ParentT )
-    extends Membership[ParentT]
+    ( parent : MapMapping )
+    extends Membership
+
 }

@@ -11,15 +11,6 @@ trait TableMapping
   extends Mapping
   {
 
-    protected def subColumns
-      ( m : Mapping )
-      : Seq[Column]
-      = m match {
-          case m : ValueMapping ⇒ m.column :: Nil
-          case m : TupleMapping ⇒ m.items flatMap subColumns
-          case m : OptionMapping ⇒ subColumns( m.item )
-          case m : TableMapping ⇒ ??? // there should be pk columns
-        }
 
 //    def columns : Seq[Column]
 
@@ -28,7 +19,6 @@ trait TableMapping
     def foreignKeyForOwnerTable : Option[ForeignKey]
 
     def ownerTableForeignKey : Option[ForeignKey]
-
 
 
     def children : Iterable[Mapping]
@@ -46,7 +36,17 @@ trait TableMapping
           }
         children flatMap nestedTableMappings
       }
-    
+
+    protected def subColumns
+      ( m : Mapping )
+      : Seq[Column]
+      = m match {
+          case m : ValueMapping ⇒ m.column :: Nil
+          case m : TupleMapping ⇒ m.items flatMap subColumns
+          case m : OptionMapping ⇒ subColumns( m.item )
+          case m : TableMapping ⇒ ??? // there should be pk columns
+        }
+
     lazy val valueColumns : Iterable[Column] 
       = children flatMap subColumns
 

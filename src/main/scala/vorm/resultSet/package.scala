@@ -86,10 +86,7 @@ package object resultSet {
                           )
                         )
                   }
-                  
-
                 }
-
 
               var rows : Map[PrimaryKey, Row] = Map()
 

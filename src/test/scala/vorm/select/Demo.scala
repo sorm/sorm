@@ -16,40 +16,42 @@ object Demo extends App {
   val mapping
     = mappings(Reflection[Artist])
 
-//  new MappingSelect(mapping)
-//    .withFilter(
-//      Query.Where.In(
-//        mapping
-//          .properties("names").asInstanceOf[SeqMapping]
-//          .item.asInstanceOf[EntityMapping]
-//          .properties("value"),
-//        "Nirvana"
-//      )
-//    )
-//    .withFilter(
-//      Query.Where.Equals(
-//        mapping
-//          .properties("names").asInstanceOf[SeqMapping]
-//          .item.asInstanceOf[EntityMapping]
-//          .properties("value"),
-//        "Nirvana"
-//      )
-//    )
-//    .withFilter(
-//      Query.Where.Equals(
-//        mapping
-//          .properties("names").asInstanceOf[SeqMapping],
-//        Seq()
-//      )
-//    )
-//    .sql
-//    .rendering
-//    .println()
+  val pkSelect
+    = MappingSelect(mapping)
+      .primaryKey
+      .withFilter(
+        Query.Where.In(
+          mapping
+            .properties("names").asInstanceOf[SeqMapping]
+            .item.asInstanceOf[EntityMapping]
+            .properties("value"),
+          "Nirvana"
+        )
+      )
+      .withFilter(
+        Query.Where.Equals(
+          mapping
+            .properties("names").asInstanceOf[SeqMapping]
+            .item.asInstanceOf[EntityMapping]
+            .properties("value"),
+          "Nirvana"
+        )
+      )
+      .withFilter(
+        Query.Where.Equals(
+          mapping
+            .properties("names").asInstanceOf[SeqMapping],
+          Seq()
+        )
+      )
 
-  MappingSelect(mapping)
-    .resultSet
-//    .withSelect()
-    .sql.rendering.println()
+  val rsSelect
+    = MappingSelect(mapping)
+        .resultSet
+
+  rsSelect.sql.narrow(pkSelect.sql).rendering.println()
+
+//  MappingSelect(mapping).resultSet.resultSetBindings.foreach{println}
 
 //  val query = Query(
 //    Query.Kind.Select,

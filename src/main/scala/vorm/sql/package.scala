@@ -2,7 +2,9 @@ package vorm
 
 import extensions._
 
-package sql {
+package object sql {
+
+  def alias ( x : Int ) = (97 + x).toChar.toString
 
   trait Renderable {
     def rendering : String
@@ -88,6 +90,75 @@ package sql {
          
         }
 
+      /**
+       * Filter results of current select ...
+       */
+      def narrow
+        ( s : Select )
+        : Select
+        // = s match {
+        //     case Select(what1 : Seq[Column], _, _, _, _, _, _, _, _)
+        //       if s.from == from
+        //       ⇒ copy(
+        //           join
+        //             = join :+
+        //               Join(
+        //                 what = s,
+        //                 as = Some( alias(join.length + 1) ),
+        //                 on = what1.view.map{_.name}
+        //                       .map{ n ⇒ Column(n, alias(join.length + 1).some) → 
+        //                                 Column(n, alias(0).some) }
+        //                       .toList,
+        //                 kind = JoinKind.Right
+        //               )
+        //         )
+        //   }
+        = s match { 
+            case s 
+              if s.from == from
+              ⇒ s.what match { 
+                  case w : Seq[Column] 
+                    if w.groupBy{_.table}.size == 1
+                    ⇒ copy(
+                        join
+                          = join :+
+                            Join(
+                              what = s,
+                              as = Some( alias(join.length + 1) ),
+                              on = w.view.map{_.name}
+                                    .map{ n ⇒ Column(n, alias(join.length + 1).some) → 
+                                              Column(n, alias(0).some) }
+                                    .toList,
+                              kind = JoinKind.Right
+                            )
+                      )
+
+                }
+          }
+        
+        // = if( s.from == from &&
+        //       s.what.groupBy{ case c : Column ⇒ c.table ; case c => c }.size == 1 )
+        //     copy(
+        //       join
+        //         = join :+
+        //           Join(
+        //             what = s,
+        //             as = Some( alias(join.length + 1) ),
+        //             on = s.what.asInstanceOf[Seq[Column]]
+        //                   .view
+        //                   .map{_.name}
+        //                   .map{ n ⇒ Column(n, alias(join.length + 1).some) →
+        //                             Column(n, alias(0).some) },
+        //             kind = JoinKind.Right
+        //           )
+        //     )
+        //   else
+        //     throw new MatchError("Unmergeable selects")
+
+
+      /**
+       * !! Not tested at all
+       */
       def intersectionWith
         ( s : Select )
         : Select
@@ -122,6 +193,9 @@ package sql {
           else
             throw new MatchError("Unmergeable selects")
 
+      /**
+       * !! Not tested at all
+       */
       def unionWith
         ( s : Select )
         : Select

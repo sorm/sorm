@@ -16,63 +16,19 @@ object Demo extends App {
   val mapping
     = mappings(Reflection[Artist])
 
-  val pkSelect
-    = MappingSelect(mapping)
-      .primaryKey
-      .withFilter(
-        Query.Where.In(
-          mapping
-            .properties("names").asInstanceOf[SeqMapping]
-            .item.asInstanceOf[EntityMapping]
-            .properties("value"),
-          "Nirvana"
-        )
-      )
-      .withFilter(
-        Query.Where.Equals(
-          mapping
-            .properties("names").asInstanceOf[SeqMapping]
-            .item.asInstanceOf[EntityMapping]
-            .properties("value"),
-          "Nirvana"
-        )
-      )
-      .withFilter(
-        Query.Where.Equals(
-          mapping
-            .properties("names").asInstanceOf[SeqMapping],
-          Seq()
-        )
-      )
-
-  val rsSelect
-    = MappingSelect(mapping)
-        .resultSet
-        .withOrders(
-          Query.Order(mapping.properties("names"))::
-          Query.Order(
-            mapping
-              .properties("names").asInstanceOf[SeqMapping]
-              .item.asInstanceOf[EntityMapping]
-              .properties("value")
-          ) ::
-          Nil
-        )
-
-  rsSelect.sql.narrow(pkSelect.sql).rendering.println()
-
-//  MappingSelect(mapping).resultSet.resultSetBindings.foreach{println}
-
-//  val query = Query(
-//    Query.Kind.Select,
-//    mapping,
-//    Some(
-//      Query.Where.Or(
-//        Query.Where.Equals(
+//  val pkSelect
+//    = MappingSelect(mapping)
+//      .primaryKey
+//      .withFilter(
+//        Query.Where.In(
 //          mapping
-//            .properties("names").asInstanceOf[SeqMapping],
-//          Seq()
-//        ),
+//            .properties("names").asInstanceOf[SeqMapping]
+//            .item.asInstanceOf[EntityMapping]
+//            .properties("value"),
+//          "Nirvana"
+//        )
+//      )
+//      .withFilter(
 //        Query.Where.Equals(
 //          mapping
 //            .properties("names").asInstanceOf[SeqMapping]
@@ -81,7 +37,50 @@ object Demo extends App {
 //          "Nirvana"
 //        )
 //      )
-//    )
-//  )
-//  MappingSelect(query).sql.rendering.println()
+//      .withFilter(
+//        Query.Where.Equals(
+//          mapping
+//            .properties("names").asInstanceOf[SeqMapping],
+//          Seq()
+//        )
+//      )
+//
+//  val rsSelect
+//    = MappingSelect(mapping)
+//        .resultSet
+//        .withOrders(
+//          Query.Order(mapping.properties("names"))::
+//          Query.Order(
+//            mapping
+//              .properties("names").asInstanceOf[SeqMapping]
+//              .item.asInstanceOf[EntityMapping]
+//              .properties("value")
+//          ) ::
+//          Nil
+//        )
+
+
+  val query = Query(
+    Query.Kind.Select,
+    mapping,
+    Some(
+      Query.Where.Or(
+        Query.Where.Equals(
+          mapping
+            .properties("names").asInstanceOf[SeqMapping],
+          Seq()
+        ),
+        Query.Where.Equals(
+          mapping
+            .properties("names").asInstanceOf[SeqMapping]
+            .item.asInstanceOf[EntityMapping]
+            .properties("value"),
+          "Nirvana"
+        )
+      )
+    )
+  )
+
+  query.sql.rendering.println()
+  query.sql.data.println()
 }

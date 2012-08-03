@@ -1,11 +1,11 @@
 package vorm
 
 import vorm._
-import extensions._
 import reflection._
 import structure._
+import mapping._
 import jdbc._
-import ddl._
+import extensions._
 import java.sql.ResultSet
 
 package object resultSet {
@@ -15,8 +15,8 @@ package object resultSet {
     {
 
       def fetchInstancesAndClose
-        ( m : mapping.Table,
-          indexes : Map[(mapping.Table, Column), Int] )
+        ( m : TableMapping,
+          indexes : Map[(TableMapping, Column), Int] )
         : Seq[_]
         = {
 
@@ -32,7 +32,7 @@ package object resultSet {
 
           case class Row
             ( data : Map[Column, Any],
-              rowsOfSubTables : Map[mapping.Table, Map[PrimaryKey, Row]] )
+              rowsOfSubTables : Map[TableMapping, Map[PrimaryKey, Row]] )
 
           type PrimaryKey = Seq[Any]
 
@@ -42,7 +42,7 @@ package object resultSet {
             = {
 
               def updatedRows
-                ( m : mapping.Table,
+                ( m : TableMapping,
                   rows : Map[PrimaryKey, Row] )
                 : Map[PrimaryKey, Row]
                 = {
@@ -72,17 +72,17 @@ package object resultSet {
                       ⇒ rows +
                         ( primaryKey → 
                           Row(
-                              data
-                                = m.resultSetColumns
-                                    .view
-                                    .zipBy(value)
-                                    .toMap,
-                              rowsOfSubTables
-                                = m.subTableMappings
-                                    .view
-                                    .zipBy( updatedRows(_, Map()) )
-                                    .toMap
-                            )
+                            data
+                              = m.resultSetColumns
+                                  .view
+                                  .zipBy(value)
+                                  .toMap,
+                            rowsOfSubTables
+                              = m.subTableMappings
+                                  .view
+                                  .zipBy( updatedRows(_, Map()) )
+                                  .toMap
+                          )
                         )
                   }
                   
@@ -107,33 +107,33 @@ package object resultSet {
               row : Row )
             : Any
             = m match {
-                case m : mapping.Value
+                case m : ValueMapping
                   ⇒ row.data(m.column)
-                case m : mapping.Option
+                case m : OptionMapping
                   ⇒ Option( value( m.child.child, row ) )
-                case m : mapping.Tuple
+                case m : TupleMapping
                   ⇒ m.reflection.instantiate(
                       m.children
                         .view
                         .map( _.child )
                         .map( value(_, row) )
                     )
-                case m : mapping.Entity
+                case m : EntityMapping
                   ⇒ m.reflection.instantiate(
                       m.children
                         .view
                         .map( p ⇒ p.name → value(p.child, row) )
                         .toMap
                     )
-                case m : mapping.Seq
+                case m : SeqMapping
                   ⇒ m.reflection.instantiate().asInstanceOf[Seq[_]] ++
                     row.rowsOfSubTables(m).values
                       .map( row ⇒ value( m.child.child, row) )
-                case m : mapping.Set
+                case m : SetMapping
                   ⇒ m.reflection.instantiate().asInstanceOf[Set[_]] ++
                     row.rowsOfSubTables(m).values
                       .map( row ⇒ value( m.child.child, row) )
-                case m : mapping.Map
+                case m : MapMapping
                   ⇒ m.reflection.instantiate().asInstanceOf[Map[_, _]] ++
                     row.rowsOfSubTables(m).values
                       .map( row ⇒ value( m.key.child, row ) → 
@@ -141,7 +141,7 @@ package object resultSet {
               }
 
           def values
-            ( m : mapping.Table,
+            ( m : TableMapping,
               rows : Map[PrimaryKey, Row] )
             = rows.values.map(value(m, _)).toList
           

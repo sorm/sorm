@@ -4,7 +4,7 @@ import extensions._
 
 package object sql {
 
-  def alias ( x : Int ) = (97 + x).toChar.toString
+  def alias ( x : Int ) = ( 97 + x ).toChar.toString
 
   trait Renderable {
     def rendering : String
@@ -232,9 +232,9 @@ package object sql {
             .indent(2)
 
       def data
-        = ( what ++: from +: join ++: where ++: groupBy ++: having ++: 
+        = ( what ++: from +: join ++: where ++: groupBy ++: having ++:
             orderBy ++: Nil )
-            .foldLeft(Vector[Any]()){_ ++ _.data}
+            .flatMap{_.data}
     }
 
 

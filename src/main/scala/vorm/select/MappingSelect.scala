@@ -21,30 +21,98 @@ import extensions._
  */
 case class MappingSelect
   ( mapping : TableMapping,
-    results : Seq[(TableMapping, Column)] = Seq(),
+    resultMappings : Seq[(TableMapping, Column)] = Seq(),
     joinsAliases : Map[TableMapping, String] = Map(),
     joins : Vector[Sql.Join] = Vector(),
     where : Option[Sql.Clause] = None,
     groupBy : Vector[Sql.Column] = Vector(),
-    having : Option[Sql.Clause] = None )
+    having : Option[Sql.Clause] = None,
+    orderBy : Vector[Sql.OrderByClause] = Vector(),
+    limit : Option[Int] = None,
+    offset : Option[Int] = None )
   {
+    // def withQuery
+    //   ( q : Query )
+    //   = {
+
+    //     val s1 = q.order.foldLeft(this){_ withOrder _}
+    //     s1.copy(
+    //       joins
+    //         = s1.joins :+
+    //           Sql.Join( s.sql, Some(newAlias),
+    //                     kind = Sql.JoinKind.Inner ),
+    //       where
+    //         = ( where ++
+    //             s.mapping.primaryKeyColumns.view
+    //               .map{ _.name }
+    //               .map{ n ⇒ 
+    //                   Sql.Clause.Equals(
+    //                       Sql.Column(n, Some(newAlias)),
+    //                       //  TODO: optimize to bind to parent
+    //                       Sql.Column(n, Some(joinsAliases(s.mapping)))
+    //                     )
+    //                 } 
+    //               .reduceOption{ Sql.Clause.And } )
+    //             .reduceOption{ o }
+    //     )
+
+    //     // copy(
+    //     //   orderBy 
+    //     //     = q.order.flatMap {
+    //     //         case Query.Order( m, r ) ⇒ 
+    //     //           valueMappings(m)
+    //     //             .view
+    //     //             .map{ m ⇒ Sql.Column(m.columnName, 
+    //     //                                  alias(m.ownerTable).some) }
+    //     //             .map{ Sql.OrderByClause(_, r) }
+    //     //             .toIndexedSeq
+    //     //       }
+    //     //   joins
+    //     //     = 
+    //     // )
+    //   }
+    def withOrders
+      ( orders : Seq[Query.Order] )
+      : MappingSelect
+      = {
+        def columns
+          ( m : Mapping )
+          : IndexedSeq[Sql.Column]
+          = m match {
+              case m : ValueMapping ⇒ 
+                Vector() :+
+                Sql.Column(m.columnName, alias(m.ownerTable.get).some)
+              case m : TableMapping ⇒ 
+                m.primaryKeyColumns
+                  .view
+                  .map{ c ⇒ Sql.Column(c.name, alias(m).some) }
+                  .toIndexedSeq
+              case m : HasChildren ⇒ 
+                m.nestedValueMappings flatMap columns toIndexedSeq
+            }
+        copy(
+          orderBy
+            = orderBy ++
+              orders.flatMap{ order ⇒ 
+                columns(order.mapping)
+                  .map{ Sql.OrderByClause(_, order.reverse) }
+              }
+        )
+      }
+
     private def from
-      = Sql.From(Sql.Table(mapping.tableName), Some("a"))
+      = Sql.From(Sql.Table(mapping.tableName), Some(Sql.alias(0)))
     private def what
-      = results.map{ case (m, c) ⇒ Sql.Column(c.name, alias(m).some) }
+      = resultMappings.map{ case (m, c) ⇒ Sql.Column(c.name, alias(m).some) }
 
     private def alias
       ( m : TableMapping )
-      = if( m == mapping ) "a"
+      = if( m == mapping ) Sql.alias(0)
         else joinsAliases(m)
 
     def sql
       : Sql.Select
-      = Sql.Select(what, from, joins, where, groupBy, having)
-
-    def resultSetBindings
-      : Map[(TableMapping, Column), Int]
-      = results.view.zipWithIndex.toMap
+      = Sql.Select(what, from, joins, where, groupBy, having, orderBy, limit, offset)
 
     def resultSet
       : MappingSelect
@@ -62,14 +130,14 @@ case class MappingSelect
         allTables
           .foldLeft(this){_ withSkeletonTo _}
           .copy(
-            results = allTables.flatMap{ m ⇒ m.valueColumns.map{m → _} }
+            resultMappings = allTables.flatMap{ m ⇒ m.valueColumns.map{m → _} }
           )
       }
 
     def primaryKey
       : MappingSelect
       = copy(
-          results
+          resultMappings
             = mapping.primaryKeyColumns
                 .view
                 .map{mapping → _}
@@ -77,8 +145,7 @@ case class MappingSelect
         )
 
 
-    private lazy val newAlias
-      = ( joins.length + 98 ).toChar.toString
+    private lazy val newAlias = Sql.alias( joins.length + 1 )
 
     private def withSkeletonTo
       ( m : Mapping )
@@ -86,7 +153,7 @@ case class MappingSelect
       = m match {
           case m : TableMapping ⇒ 
             if( m == mapping )
-              copy(joinsAliases = joinsAliases + (mapping -> "a"))
+              copy(joinsAliases = joinsAliases + (mapping -> Sql.alias(0)))
             else if( joinsAliases contains m )
               this
             else { 
@@ -148,7 +215,7 @@ case class MappingSelect
                   Sql.Clause.Equals(
                     Sql.Count(
                       mapping.primaryKeyColumns
-                        .map{ c ⇒ Sql.Column(c.name, Some("a")) },
+                        .map{ c ⇒ Sql.Column(c.name, Some(Sql.alias(0))) },
                       true
                     ),
                     Sql.Value(r)
@@ -158,7 +225,7 @@ case class MappingSelect
           groupBy
             = groupBy ++
               mapping.primaryKeyColumns
-                .map{ c ⇒ Sql.Column(c.name, Some("a")) }
+                .map{ c ⇒ Sql.Column(c.name, Some(Sql.alias(0))) }
 
         )
 

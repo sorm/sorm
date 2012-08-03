@@ -12,7 +12,9 @@ sealed class TupleMapping
     val reflection : Reflection,
     settingsMap : SettingsMap )
   extends Mapping
+  with HasChildren
   {
+    def children = items
     lazy val items
       = reflection.generics.view.zipWithIndex
           .map {

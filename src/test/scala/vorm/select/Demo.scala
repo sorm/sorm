@@ -78,9 +78,17 @@ object Demo extends App {
           "Nirvana"
         )
       )
-    )
+    ),
+    Query.Order(
+      mapping
+        .properties("names").asInstanceOf[SeqMapping]
+        .item.asInstanceOf[EntityMapping]
+        .properties("value"),
+      true
+    ) :: Nil,
+    Some(4),
+    5
   )
 
-  query.sql.rendering.println()
-  query.sql.data.println()
+  query.statement.println()
 }

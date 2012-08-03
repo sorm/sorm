@@ -15,8 +15,7 @@ sealed class ValueMapping
   {
 
     lazy val isKeyPart
-      = ownerTable.get.primaryKeyColumns.exists{_.name == columnName} ||
-        ???
+      = ownerTable.get.primaryKeyColumns.exists{_.name == columnName}
 //          ⇒ ownerTable.primaryKey.contains(columnName) ||
 //            ownerTable.uniqueKeys.exists(_ contains columnName) ||
 //            ownerTable.indexes.exists(_ contains columnName)

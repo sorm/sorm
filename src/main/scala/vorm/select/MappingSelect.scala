@@ -1,11 +1,12 @@
 package vorm.select
 
 import vorm._
-import extensions._
 import structure._
 import query._
 import mapping._
 import vorm.{sql => Sql}
+import ddl._
+import extensions._
 
 /**
  *  Usage:
@@ -20,32 +21,61 @@ import vorm.{sql => Sql}
  */
 case class MappingSelect
   ( mapping : TableMapping,
-    skeletonAliases : Map[TableMapping, String] = Map(),
-    what : Vector[Sql.SelectObject] = Vector(),
+    results : Seq[(TableMapping, Column)] = Seq(),
+    joinsAliases : Map[TableMapping, String] = Map(),
     joins : Vector[Sql.Join] = Vector(),
     where : Option[Sql.Clause] = None,
     groupBy : Vector[Sql.Column] = Vector(),
     having : Option[Sql.Clause] = None )
   {
+    private def from
+      = Sql.From(Sql.Table(mapping.tableName), Some("a"))
+    private def what
+      = results.map{ case (m, c) ⇒ Sql.Column(c.name, alias(m).some) }
+
+    private def alias
+      ( m : TableMapping )
+      = if( m == mapping ) "a"
+        else joinsAliases(m)
+
+    def sql
+      : Sql.Select
+      = Sql.Select(what, from, joins, where, groupBy, having)
+
+    def resultSetBindings
+      : Map[(TableMapping, Column), Int]
+      = results.view.zipWithIndex.toMap
+
     def resultSet
       : MappingSelect
-      = ???
+      = {
+
+        val allTables = {
+          def subTables
+            ( m : TableMapping )
+            : Seq[TableMapping]
+            = m.subTableMappings.flatMap{ m ⇒ m +: subTables(m) }.toSeq
+
+          mapping +: subTables( mapping )
+        }
+
+        allTables
+          .foldLeft(this){_ withSkeletonTo _}
+          .copy(
+            results = allTables.flatMap{ m ⇒ m.valueColumns.map{m → _} }
+          )
+      }
 
     def primaryKey
       : MappingSelect
       = copy(
-          what
-            = what ++
-              mapping.primaryKeyColumns
-                .map{c ⇒ Sql.Column(c.name, Some("a"))}
+          results
+            = mapping.primaryKeyColumns
+                .view
+                .map{mapping → _}
+                .toSeq
         )
 
-    private def from
-      = Sql.From(Sql.Table(mapping.tableName), Some("a"))
-
-    lazy val sql
-      : Sql.Select
-      = Sql.Select(what, from, joins, where, groupBy, having)
 
     private lazy val newAlias
       = ( joins.length + 98 ).toChar.toString
@@ -56,14 +86,14 @@ case class MappingSelect
       = m match {
           case m : TableMapping ⇒ 
             if( m == mapping )
-              copy(skeletonAliases = skeletonAliases + (mapping -> "a"))
-            else if( skeletonAliases contains m )
+              copy(joinsAliases = joinsAliases + (mapping -> "a"))
+            else if( joinsAliases contains m )
               this
             else { 
               val s = withSkeletonTo( m.ownerTable.get )
               s.copy(
-                  skeletonAliases 
-                    = s.skeletonAliases + (m → s.newAlias),
+                  joinsAliases 
+                    = s.joinsAliases + (m → s.newAlias),
                   joins 
                     = s.joins :+ 
                       Sql.Join( 
@@ -74,7 +104,7 @@ case class MappingSelect
                             .getOrElse(m.ownerTableForeignKey.get.bindings)
                             .view
                             .map{b ⇒ Sql.Column(b._1, Some(s.newAlias)) → 
-                                     Sql.Column(b._2, Some(s.skeletonAliases(m.ownerTable.get)))}
+                                     Sql.Column(b._2, Some(s.joinsAliases(m.ownerTable.get)))}
                             .toList
                         )
                 )
@@ -83,7 +113,7 @@ case class MappingSelect
             withSkeletonTo( m.ownerTable.get )
         }
 
-    private def withSelect
+    def withSelect
       ( s : MappingSelect, 
         o : (Sql.Clause, Sql.Clause) => Sql.Clause )
       : MappingSelect
@@ -100,7 +130,7 @@ case class MappingSelect
                         Sql.Clause.Equals(
                             Sql.Column(n, Some(newAlias)),
                             //  TODO: optimize to bind to parent
-                            Sql.Column(n, Some(skeletonAliases(s.mapping)))
+                            Sql.Column(n, Some(joinsAliases(s.mapping)))
                           )
                       } 
                     .reduceOption{ Sql.Clause.And } )
@@ -171,7 +201,7 @@ case class MappingSelect
                   .foldLeft( MappingSelect(m).primaryKey ){ case (s, (v, i)) ⇒
                     s.withClause( 
                         Sql.Clause.Equals(
-                            Sql.Column("i", s.skeletonAliases(m).some),
+                            Sql.Column("i", s.joinsAliases(m).some),
                             Sql.Value(i)
                           )
                       )
@@ -224,7 +254,7 @@ case class MappingSelect
             cf(
                 Sql.Column( 
                     m.columnName,
-                    Some( skeletonAliases(m.ownerTable.get) )
+                    Some( joinsAliases(m.ownerTable.get) )
                   ),
                 Sql.Value(v)
               ),
@@ -258,12 +288,6 @@ case class MappingSelect
           case f: Query.Where.Filter ⇒ 
             withFilter(f, o)
         }
-
-    def withLimit
-      ( limit : Option[Int] = None,
-        offset : Int = 0 )
-      : MappingSelect
-      = ???
   }
 
 object MappingSelect {
@@ -287,9 +311,13 @@ object MappingSelect {
 //      leaves(m).foldLeft(MappingSelect(m)){ _ withSkeletonTo _ }
 //    }
 
-  def apply
-    ( q : Query )
-    : MappingSelect
-    = ???
+//  def apply
+//    ( q : Query )
+//    : MappingSelect
+//    = ???
+
+  // def sqlAndResultSetBindings
+  //   ( q : Query )
+
 }
 

@@ -44,7 +44,13 @@ trait TableMapping
           case m : ValueMapping ⇒ m.column :: Nil
           case m : TupleMapping ⇒ m.items flatMap subColumns
           case m : OptionMapping ⇒ subColumns( m.item )
-          case m : TableMapping ⇒ ??? // there should be pk columns
+          case m : TableMapping ⇒ 
+            m.primaryKeyColumns.map{ c ⇒ 
+              c.copy(
+                name = m.columnName + "$" + c.name,
+                autoIncremented = false
+              ) 
+            }
         }
 
     lazy val valueColumns : Iterable[Column] 

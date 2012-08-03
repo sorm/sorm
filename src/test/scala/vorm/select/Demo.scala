@@ -48,14 +48,15 @@ object Demo extends App {
   val rsSelect
     = MappingSelect(mapping)
         .resultSet
-        .withOrder(Query.Order(mapping.properties("names")))
-        .withOrder(
+        .withOrders(
+          Query.Order(mapping.properties("names"))::
           Query.Order(
             mapping
               .properties("names").asInstanceOf[SeqMapping]
               .item.asInstanceOf[EntityMapping]
               .properties("value")
-          )
+          ) ::
+          Nil
         )
 
   rsSelect.sql.narrow(pkSelect.sql).rendering.println()

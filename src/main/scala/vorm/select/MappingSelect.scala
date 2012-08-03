@@ -71,8 +71,8 @@ case class MappingSelect
     //     //     = 
     //     // )
     //   }
-    def withOrder
-      ( order : Query.Order )
+    def withOrders
+      ( orders : Seq[Query.Order] )
       : MappingSelect
       = {
         def columns
@@ -93,8 +93,10 @@ case class MappingSelect
         copy(
           orderBy
             = orderBy ++
-              columns(order.mapping)
-                .map{ Sql.OrderByClause(_, order.reverse) }
+              orders.flatMap{ order ⇒ 
+                columns(order.mapping)
+                  .map{ Sql.OrderByClause(_, order.reverse) }
+              }
         )
       }
 

@@ -12,7 +12,9 @@ sealed class OptionMapping
     val reflection : Reflection,
     settingsMap : SettingsMap )
   extends Mapping
+  with HasChildren
   {
+    def children = item :: Nil
     lazy val item
       = Mapping( Membership.OptionItem(this), reflection.generics(0), settingsMap )
 

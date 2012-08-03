@@ -9,6 +9,7 @@ import extensions._
 
 trait TableMapping
   extends Mapping
+  with HasChildren
   {
 
 

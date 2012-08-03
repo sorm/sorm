@@ -114,7 +114,7 @@ case class MappingSelect
 
     def sql
       : Sql.Select
-      = Sql.Select(what, from, joins, where, groupBy, having)
+      = Sql.Select(what, from, joins, where, groupBy, having, orderBy, limit, offset)
 
     def resultSet
       : MappingSelect

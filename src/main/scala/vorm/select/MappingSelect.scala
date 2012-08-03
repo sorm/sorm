@@ -75,31 +75,27 @@ case class MappingSelect
       ( order : Query.Order )
       : MappingSelect
       = {
-        def valueMappings
+        def columns
           ( m : Mapping )
-          : Iterable[ValueMapping]
+          : IndexedSeq[Sql.Column]
           = m match {
-              case m : HasChildren ⇒ 
-                // m.leaves flatMap valueMappings
-                m.nestedValueMappings
               case m : ValueMapping ⇒ 
-                m :: Nil
+                Vector() :+
+                Sql.Column(m.columnName, alias(m.ownerTable.get).some)
+              case m : TableMapping ⇒ 
+                m.primaryKeyColumns
+                  .view
+                  .map{ c ⇒ Sql.Column(c.name, alias(m).some) }
+                  .toIndexedSeq
+              case m : HasChildren ⇒ 
+                m.nestedValueMappings flatMap columns toIndexedSeq
             }
-
-        valueMappings( order.mapping )
-          .foldLeft(this){
-            case (s, m) ⇒ 
-              val s1 = s.withSkeletonTo(m)
-              s1.copy(
-                orderBy
-                  = s1.orderBy :+
-                    Sql.OrderByClause(
-                      Sql.Column(m.columnName, alias(m.ownerTable.get).some),
-                      order.reverse
-                    )
-              )
-          }
-
+        copy(
+          orderBy
+            = orderBy ++
+              columns(order.mapping)
+                .map{ Sql.OrderByClause(_, order.reverse) }
+        )
       }
 
     private def from

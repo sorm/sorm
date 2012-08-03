@@ -232,9 +232,9 @@ package object sql {
             .indent(2)
 
       def data
-        = ( what ++: from +: join ++: where ++: groupBy ++: having ++: 
+        = ( what ++: from +: join ++: where ++: groupBy ++: having ++:
             orderBy ++: Nil )
-            .foldLeft(Vector[Any]()){_ ++ _.data}
+            .flatMap{_.data}
     }
 
 

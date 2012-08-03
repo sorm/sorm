@@ -77,4 +77,5 @@ sealed class ValueMapping
 
     lazy val selectNodes 
       = Nil
+
   }

@@ -8,4 +8,4 @@ import mapping._
 sealed case class ResultSetColumn
   ( name : String, 
     jdbcType : Int, 
-    mapping : Mapping )
+    mapping : TableMapping )

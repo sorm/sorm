@@ -4,7 +4,7 @@ import extensions._
 
 package object sql {
 
-  def alias ( x : Int ) = (97 + x).toChar.toString
+  def alias ( x : Int ) = ( 97 + x ).toChar.toString
 
   trait Renderable {
     def rendering : String

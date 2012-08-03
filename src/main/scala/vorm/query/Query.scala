@@ -10,7 +10,8 @@ sealed case class Query
     mapping : TableMapping,
     where   : Option[Query.Where] = None,
     order   : Seq[Query.Order] = Nil,
-    limit   : Query.Limit = Query.Limit() )
+    limit   : Option[Int] = None,
+    offset  : Int = 0 )
 object Query {
 
   trait Kind
@@ -125,7 +126,4 @@ object Query {
     ( mapping : Mapping,
       reverse : Boolean = false )
 
-  case class Limit
-    ( offset : Int = 0,
-      amount : Option[Int] = None )
 }

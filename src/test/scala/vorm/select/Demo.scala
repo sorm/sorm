@@ -45,4 +45,26 @@ object Demo extends App {
     .sql
     .rendering
     .println()
+
+//  val query = Query(
+//    Query.Kind.Select,
+//    mapping,
+//    Some(
+//      Query.Where.Or(
+//        Query.Where.Equals(
+//          mapping
+//            .properties("names").asInstanceOf[SeqMapping],
+//          Seq()
+//        ),
+//        Query.Where.Equals(
+//          mapping
+//            .properties("names").asInstanceOf[SeqMapping]
+//            .item.asInstanceOf[EntityMapping]
+//            .properties("value"),
+//          "Nirvana"
+//        )
+//      )
+//    )
+//  )
+//  MappingSelect(query).sql.rendering.println()
 }

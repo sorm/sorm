@@ -259,21 +259,18 @@ case class MappingSelect
             withFilter(f, o)
         }
 
-    def withQuery
-      ( q : Query )
-      = q match {
-          case Query(kind, this.mapping, where, order, limit) =>
-            where.map(withWhere(_))
-            ???
-        }
-
+    def withLimit
+      ( limit : Option[Int] = None,
+        offset : Int = 0 )
+      : MappingSelect
+      = ???
   }
 
 object MappingSelect {
 
-  /**
-   * Has all the skeleton mappings applied. 
-   */
+//  /**
+//   * Has all the skeleton mappings applied.
+//   */
 //  def resultSetReady
 //    ( m : TableMapping )
 //    : MappingSelect
@@ -292,6 +289,7 @@ object MappingSelect {
 
   def apply
     ( q : Query )
+    : MappingSelect
     = ???
 }
 

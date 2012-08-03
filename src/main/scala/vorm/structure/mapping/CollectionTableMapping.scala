@@ -16,7 +16,7 @@ abstract class CollectionTableMapping
       = ownerTable map { t ⇒ 
           ForeignKey(
             t.tableName,
-            t.primaryKeyColumns.map{ c ⇒ ("p_" + c.name) → c.name },
+            t.primaryKeyColumns.map{ c ⇒ ("p$" + c.name) → c.name },
             ForeignKey.ReferenceOption.Cascade
           )
         }

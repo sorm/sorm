@@ -20,7 +20,7 @@ sealed class SeqMapping
 
     lazy val primaryKeyColumns
       = ownerTable.get.primaryKeyColumns
-          .map{ c => c.copy(name = "p_" + c.name, autoIncremented = false) } :+
+          .map{ c => c.copy(name = "p$" + c.name, autoIncremented = false) } :+
         Column("i", Column.Type.SmallInt)
 
 //

@@ -38,7 +38,7 @@ sealed class EntityMapping
       = membership map { _ =>
           ForeignKey(
             tableName,
-            primaryKeyColumns.map{c ⇒ (columnName + "_" + c.name) → c.name},
+            primaryKeyColumns.map{c ⇒ (columnName + "$" + c.name) → c.name},
             ForeignKey.ReferenceOption.Cascade
           )
         }

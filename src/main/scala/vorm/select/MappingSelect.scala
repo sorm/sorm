@@ -113,7 +113,7 @@ case class MappingSelect
             withSkeletonTo( m.ownerTable.get )
         }
 
-    def withSelect
+    private def withSelect
       ( s : MappingSelect, 
         o : (Sql.Clause, Sql.Clause) => Sql.Clause )
       : MappingSelect

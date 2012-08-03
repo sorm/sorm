@@ -23,7 +23,7 @@ trait Mapping {
           case Membership.EntityProperty(name, _)
             ⇒ name.asDdlName
           case Membership.TupleItem(index, tuple)
-            ⇒ tuple.columnName + "_" + index
+            ⇒ tuple.columnName + "$" + index
           case Membership.OptionItem(option)
             ⇒ option.columnName
           case Membership.SeqItem(_)

@@ -99,13 +99,13 @@ case class MappingSelect
       }
 
     private def from
-      = Sql.From(Sql.Table(mapping.tableName), Some("a"))
+      = Sql.From(Sql.Table(mapping.tableName), Some(Sql.alias(0)))
     private def what
       = resultMappings.map{ case (m, c) ⇒ Sql.Column(c.name, alias(m).some) }
 
     private def alias
       ( m : TableMapping )
-      = if( m == mapping ) "a"
+      = if( m == mapping ) Sql.alias(0)
         else joinsAliases(m)
 
     def sql
@@ -143,8 +143,7 @@ case class MappingSelect
         )
 
 
-    private lazy val newAlias
-      = ( joins.length + 98 ).toChar.toString
+    private lazy val newAlias = Sql.alias( joins.length + 1 )
 
     private def withSkeletonTo
       ( m : Mapping )
@@ -152,7 +151,7 @@ case class MappingSelect
       = m match {
           case m : TableMapping ⇒ 
             if( m == mapping )
-              copy(joinsAliases = joinsAliases + (mapping -> "a"))
+              copy(joinsAliases = joinsAliases + (mapping -> Sql.alias(0)))
             else if( joinsAliases contains m )
               this
             else { 
@@ -214,7 +213,7 @@ case class MappingSelect
                   Sql.Clause.Equals(
                     Sql.Count(
                       mapping.primaryKeyColumns
-                        .map{ c ⇒ Sql.Column(c.name, Some("a")) },
+                        .map{ c ⇒ Sql.Column(c.name, Some(Sql.alias(0))) },
                       true
                     ),
                     Sql.Value(r)
@@ -224,7 +223,7 @@ case class MappingSelect
           groupBy
             = groupBy ++
               mapping.primaryKeyColumns
-                .map{ c ⇒ Sql.Column(c.name, Some("a")) }
+                .map{ c ⇒ Sql.Column(c.name, Some(Sql.alias(0))) }
 
         )
 

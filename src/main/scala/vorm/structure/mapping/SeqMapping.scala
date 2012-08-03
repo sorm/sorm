@@ -13,6 +13,8 @@ sealed class SeqMapping
     settingsMap : SettingsMap )
   extends CollectionTableMapping
   { 
+    lazy val children
+      = item :: Nil
     lazy val item
       = Mapping( Membership.SeqItem(this), reflection.generics(0), settingsMap )
 

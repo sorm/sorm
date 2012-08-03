@@ -6,6 +6,7 @@ import structure._
 import mapping._
 import jdbc._
 import extensions._
+import ddl._
 import java.sql.ResultSet
 
 package object resultSet {
@@ -49,9 +50,9 @@ package object resultSet {
                   def value
                     ( column : Column )
                     = rs.value(
-                          indexes(m → column),
-                          column.t.jdbcType
-                        )
+                        indexes(m → column),
+                        column.t.jdbcType
+                      )
 
                   val primaryKey
                     = m.primaryKeyColumns map value
@@ -73,7 +74,7 @@ package object resultSet {
                         ( primaryKey → 
                           Row(
                             data
-                              = m.resultSetColumns
+                              = m.valueColumns
                                   .view
                                   .zipBy(value)
                                   .toMap,
@@ -108,36 +109,30 @@ package object resultSet {
             : Any
             = m match {
                 case m : ValueMapping
-                  ⇒ row.data(m.column)
+                  ⇒ row.data( m.column )
                 case m : OptionMapping
-                  ⇒ Option( value( m.child.child, row ) )
+                  ⇒ Option( value( m.item, row ) )
                 case m : TupleMapping
                   ⇒ m.reflection.instantiate(
-                      m.children
-                        .view
-                        .map( _.child )
-                        .map( value(_, row) )
+                      m.items.map{ value( _, row ) }
                     )
                 case m : EntityMapping
                   ⇒ m.reflection.instantiate(
-                      m.children
-                        .view
-                        .map( p ⇒ p.name → value(p.child, row) )
-                        .toMap
+                      m.properties.mapValues{ value( _, row ) }
                     )
                 case m : SeqMapping
                   ⇒ m.reflection.instantiate().asInstanceOf[Seq[_]] ++
                     row.rowsOfSubTables(m).values
-                      .map( row ⇒ value( m.child.child, row) )
+                      .map{ value( m.item, _ ) }
                 case m : SetMapping
                   ⇒ m.reflection.instantiate().asInstanceOf[Set[_]] ++
                     row.rowsOfSubTables(m).values
-                      .map( row ⇒ value( m.child.child, row) )
+                      .map{ value( m.item, _ ) }
                 case m : MapMapping
                   ⇒ m.reflection.instantiate().asInstanceOf[Map[_, _]] ++
                     row.rowsOfSubTables(m).values
-                      .map( row ⇒ value( m.key.child, row ) → 
-                                  value( m.value.child, row ) )
+                      .map{ row ⇒ value( m.key, row ) → 
+                                  value( m.value, row ) }
               }
 
           def values

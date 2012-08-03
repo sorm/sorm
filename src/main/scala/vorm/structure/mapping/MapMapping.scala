@@ -13,6 +13,8 @@ sealed class MapMapping
     settingsMap : SettingsMap )
   extends CollectionTableMapping
   {
+    lazy val children
+      = key :: value :: Nil
     lazy val key
       = Mapping( Membership.MapKey(this), reflection.generics(0), settingsMap )
     lazy val value
@@ -22,6 +24,7 @@ sealed class MapMapping
       = ownerTable.get.primaryKeyColumns
           .map{ c => c.copy(name = "p_" + c.name, autoIncremented = false) } :+
         Column("h", Column.Type.Integer)
+
 //
 //    lazy val keyForeignKeys
 //      = key.ownerTableForeignKeys

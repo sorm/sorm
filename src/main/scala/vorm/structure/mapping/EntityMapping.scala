@@ -13,6 +13,8 @@ sealed class EntityMapping
     settingsMap : SettingsMap )
   extends TableMapping
   {
+    lazy val children
+      = properties.values
     lazy val properties
       = reflection.properties
           .map{
@@ -27,11 +29,10 @@ sealed class EntityMapping
 
     lazy val settings = settingsMap(reflection)
 
-    lazy val columns = properties.values flatMap subColumns
+    lazy val columns = valueColumns
 
     lazy val primaryKeyColumns
       = settings.primaryKey.view.map{ properties }.flatMap{ subColumns }.toList
-
 
     lazy val foreignKeyForOwnerTable
       = membership map { _ =>
@@ -44,19 +45,6 @@ sealed class EntityMapping
 
 
     def ownerTableForeignKey = None
-
-
-//    override lazy val ownerTableColumns
-//      = primaryKeyColumns.view
-//          .map(_.column)
-//          .map(
-//            c ⇒ c copy (
-//                  name = columnName + "_" + c.name,
-//                  autoIncremented = false
-//                )
-//          )
-//          // .map(MappedColumn.ForeignKeyPart)
-//
 
 //
 //    lazy val generatedIdColumn

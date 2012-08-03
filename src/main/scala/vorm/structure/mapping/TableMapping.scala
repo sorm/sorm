@@ -37,23 +37,24 @@ trait TableMapping
         children flatMap nestedTableMappings
       }
 
-    protected def subColumns
+    protected def columnsForOwner
       ( m : Mapping )
       : Seq[Column]
       = m match {
           case m : ValueMapping ⇒ m.column :: Nil
-          case m : TupleMapping ⇒ m.items flatMap subColumns
-          case m : OptionMapping ⇒ subColumns( m.item )
-          case m : TableMapping ⇒ 
+          case m : TupleMapping ⇒ m.items flatMap columnsForOwner
+          case m : OptionMapping ⇒ columnsForOwner( m.item )
+          case m : EntityMapping ⇒ 
             m.primaryKeyColumns.map{ c ⇒ 
               c.copy(
                 name = m.columnName + "$" + c.name,
                 autoIncremented = false
               ) 
             }
+          case m : TableMapping ⇒ Nil
         }
 
     lazy val valueColumns : Iterable[Column] 
-      = children flatMap subColumns
+      = children flatMap columnsForOwner
 
   }

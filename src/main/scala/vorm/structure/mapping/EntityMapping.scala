@@ -32,7 +32,7 @@ sealed class EntityMapping
     lazy val columns = valueColumns
 
     lazy val primaryKeyColumns
-      = settings.primaryKey.view.map{ properties }.flatMap{ subColumns }.toList
+      = settings.primaryKey.view.map{ properties }.flatMap{ columnsForOwner }.toList
 
     lazy val foreignKeyForOwnerTable
       = membership map { _ =>

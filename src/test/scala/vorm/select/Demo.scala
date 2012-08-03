@@ -46,7 +46,7 @@ object Demo extends App {
 //    .rendering
 //    .println()
 
-  new MappingSelect(mapping)
+  MappingSelect(mapping)
     .resultSet
 //    .withSelect()
     .sql.rendering.println()

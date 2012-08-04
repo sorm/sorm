@@ -16,6 +16,6 @@ object Demo extends App {
   val mapping
     = mappings(Reflection[Artist])
 
-//  mapping.table.ddl.println()
+  mapping.properties("names").asInstanceOf[TableMapping].table.ddl.println()
 
 }

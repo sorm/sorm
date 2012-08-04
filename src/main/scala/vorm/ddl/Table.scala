@@ -25,8 +25,8 @@ sealed case class Table
           = "UNIQUE (" + key.view.map{quote}.mkString(", ") + ")"
         "CREATE TABLE `" + name + "`\n" +
         ( "( " + 
-          ( ( columns.view.map{_.ddl} :+
-              primaryKeyDdl ++
+          ( ( columns.view.map{_.ddl} ++
+              primaryKeyDdl.some ++
               indexes.view.map{indexDdl} ++
               uniqueKeys.view.map{uniqueKeyDdl} ++
               foreignKeys.view.map{_.ddl}

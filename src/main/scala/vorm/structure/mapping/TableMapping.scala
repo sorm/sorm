@@ -58,4 +58,37 @@ trait TableMapping
     lazy val valueColumns : Iterable[Column] 
       = children flatMap columnsForOwner
 
+
+
+    lazy val subTableMappingsForeignKeys
+      : Map[Mapping, ForeignKey]
+      = subTableMappings.view collect {
+          case e : EntityMapping ⇒ 
+            e → 
+            ForeignKey(
+              e.tableName,
+              e.primaryKeyColumns.map{ c ⇒ (e.columnName + "$" + c.name) →
+                                           c.name },
+              ForeignKey.ReferenceOption.Cascade
+            )
+        } toMap
+    
+    lazy val foreignKeys
+      = subTableMappingsForeignKeys ++
+        ownerTableForeignKey.map{ ownerTable.get → _ }
+
+    def specialColumns : Iterable[Column] = Nil
+    def uniqueKeys : Set[Seq[String]] = Set.empty
+    def indexes : Set[Seq[String]] = Set.empty
+
+    lazy val table
+      = Table(
+          tableName,
+          valueColumns ++ specialColumns toList,
+          primaryKeyColumns.map{_.name},
+          uniqueKeys,
+          indexes,
+          foreignKeys.values.toSet
+        )
+
   }

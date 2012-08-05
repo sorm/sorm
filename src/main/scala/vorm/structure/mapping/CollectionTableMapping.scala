@@ -14,7 +14,7 @@ abstract class CollectionTableMapping
     def indexColumns : Set[Seq[Column]] = Set.empty
 
     lazy val containerTableMappingForeignKey : Option[ForeignKey]
-      = containerTableMapping map { t ⇒ 
+      = containerTableMapping map { t ⇒
           ForeignKey(
             t.tableName,
             t.primaryKeyColumns.map{ c ⇒ ("p$" + c.name) → c.name },

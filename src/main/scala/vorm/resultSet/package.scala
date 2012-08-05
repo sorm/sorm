@@ -74,12 +74,12 @@ package object resultSet {
                         ( primaryKey → 
                           Row(
                             data
-                              = m.valueColumns
+                              = m.childrenColumns
                                   .view
                                   .zipBy(value)
                                   .toMap,
                             rowsOfSubTables
-                              = m.subTableMappings
+                              = m.nestedTableMappings
                                   .view
                                   .zipBy( updatedRows(_, Map()) )
                                   .toMap

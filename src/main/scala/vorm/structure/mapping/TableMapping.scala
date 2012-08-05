@@ -14,7 +14,7 @@ trait TableMapping
     /**
      * First descendant table mappings
      */
-    lazy val nestedTableMappings : Set[TableMapping] 
+    lazy val nestedTableMappings : Set[TableMapping]
       = {
         def nestedTableMappings
           ( m : Mapping )

@@ -46,7 +46,7 @@ sealed class EntityMapping
             _.view
               .map{ properties }
               .flatMap{ columnsForContainerTable }
-              .toList
+              .toSeq
           }
           .toSet
 
@@ -57,11 +57,11 @@ sealed class EntityMapping
             _.view
               .map{ properties }
               .flatMap{ columnsForContainerTable }
-              .toList
+              .toSeq
           }
           .toSet
 
-    def foreignKeys : Map[TableMapping, ForeignKey]
+    def foreignKeys
       = nestedTableMappingsForeignKeys
 
 //    lazy val generatedIdColumn

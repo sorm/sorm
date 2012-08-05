@@ -61,7 +61,7 @@ trait TableMapping
 
     def indexColumns : Set[Seq[Column]]
 
-    def foreignKeys : Map[Mapping, ForeignKey]
+    def foreignKeys : Map[TableMapping, ForeignKey]
 
     lazy val table
       = Table(

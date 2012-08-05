@@ -10,10 +10,11 @@ import structure._
 abstract class CollectionTableMapping
   extends TableMapping
   {
-    def foreignKeyForOwnerTable = None
+    def uniqueKeyColumns : Set[Seq[Column]] = Set.empty
+    def indexColumns : Set[Seq[Column]] = Set.empty
 
-    lazy val ownerTableForeignKey
-      = ownerTable map { t ⇒ 
+    lazy val containerTableMappingForeignKey : Option[ForeignKey]
+      = containerTableMapping map { t ⇒
           ForeignKey(
             t.tableName,
             t.primaryKeyColumns.map{ c ⇒ ("p$" + c.name) → c.name },
@@ -21,12 +22,15 @@ abstract class CollectionTableMapping
           )
         }
 
-//    lazy val parentKeyColumns
-//      = ownerTable.flatMap {
-//          _.primaryKeyColumns.view
-//            .map(_.column)
-//            .map(c => c copy (name = "p_" + c.name, autoIncremented = false))
-//            .zipWithIndex
-//            .map(MappedColumn.ParentKeyPart(_, _, this))
-//        }
+    lazy val containerTableColumns : IndexedSeq[Column]
+      = containerTableMapping
+          .view
+          .flatMap{_.primaryKeyColumns}
+          .map{ c => c.copy(name = "p$" + c.name, autoIncrement = false) }
+          .toIndexedSeq
+
+    lazy val foreignKeys : Map[TableMapping, ForeignKey]
+      = nestedTableMappingsForeignKeys ++
+        containerTableMappingForeignKey.map{ containerTableMapping.get → _ }
+
   }

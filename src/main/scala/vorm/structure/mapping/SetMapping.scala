@@ -13,13 +13,19 @@ sealed class SetMapping
     settingsMap : SettingsMap )
   extends CollectionTableMapping
   {
-    lazy val children
-      = item :: Nil
-    lazy val item
+    lazy val item : Mapping
       = Mapping( Membership.SetItem(this), reflection.generics(0), settingsMap )
 
-    lazy val primaryKeyColumns
-      = ownerTable.get.primaryKeyColumns
-          .map{ c => c.copy(name = "p$" + c.name, autoIncremented = false) } :+
-        Column("h", Column.Type.Integer)
+    lazy val children : Set[Mapping]
+      = Set( item )
+
+    lazy val primaryKeyColumns : IndexedSeq[Column]
+      = containerTableColumns :+ hashColumn
+
+    lazy val hashColumn : Column
+      = Column( "h", Column.Type.SmallInt )
+
+    lazy val columns : Set[Column]
+      = primaryKeyColumns.view ++ childrenColumns.view toSet
+
   }

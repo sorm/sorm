@@ -11,84 +11,72 @@ trait TableMapping
   extends Mapping
   with HasChildren
   {
-
-
-//    def columns : Seq[Column]
-
-    def primaryKeyColumns : Seq[Column]
-
-    def foreignKeyForOwnerTable : Option[ForeignKey]
-
-    def ownerTableForeignKey : Option[ForeignKey]
-
-
-    def children : Iterable[Mapping]
-
-    lazy val subTableMappings : Iterable[TableMapping] 
+    /**
+     * First descendant table mappings
+     */
+    lazy val nestedTableMappings : Set[TableMapping]
       = {
         def nestedTableMappings
           ( m : Mapping )
-          : Seq[TableMapping]
+          : Iterable[TableMapping]
           = m match {
             case m : ValueMapping ⇒ Nil
-            case m : TupleMapping ⇒ m.items flatMap nestedTableMappings
+            case m : TupleMapping ⇒ m.items.view flatMap nestedTableMappings
             case m : OptionMapping ⇒ m.item as nestedTableMappings
             case m : TableMapping ⇒ m :: Nil
           }
-        children flatMap nestedTableMappings
+        children.view flatMap nestedTableMappings toSet
       }
 
-    protected def columnsForOwner
-      ( m : Mapping )
-      : Seq[Column]
-      = m match {
-          case m : ValueMapping ⇒ m.column :: Nil
-          case m : TupleMapping ⇒ m.items flatMap columnsForOwner
-          case m : OptionMapping ⇒ columnsForOwner( m.item )
-          case m : EntityMapping ⇒ 
-            m.primaryKeyColumns.map{ c ⇒ 
-              c.copy(
-                name = m.columnName + "$" + c.name,
-                autoIncremented = false
-              ) 
-            }
-          case m : TableMapping ⇒ Nil
-        }
+    lazy val nestedTableMappingsForeignKeys : Map[TableMapping, ForeignKey]
+      = nestedTableMappings
+          .view
+          .collect{
+            case e : EntityMapping ⇒ 
+              e → 
+              ForeignKey(
+                e.tableName,
+                e.primaryKeyColumns
+                  .view
+                  .map{_.name}
+                  .map{ n ⇒ (e.columnName + "$" + n) → n }
+                  .toList,
+                ForeignKey.ReferenceOption.Cascade
+              )
+          }
+          .toMap
 
-    lazy val valueColumns : Iterable[Column] 
-      = children flatMap columnsForOwner
+    lazy val childrenColumns : Set[Column]
+      = children.view flatMap columnsForContainerTable toSet
 
+    // lazy val deepNestedTableMappings : Iterable[TableMapping]
+    //   = nestedTableMappings.view ++ 
+    //     nestedTableMappings.view.map{_.deepNestedTableMappings}
 
+    def columns : Set[Column]
 
-    lazy val subTableMappingsForeignKeys
-      : Map[Mapping, ForeignKey]
-      = subTableMappings.view collect {
-          case e : EntityMapping ⇒ 
-            e → 
-            ForeignKey(
-              e.tableName,
-              e.primaryKeyColumns.map{ c ⇒ (e.columnName + "$" + c.name) →
-                                           c.name },
-              ForeignKey.ReferenceOption.Cascade
-            )
-        } toMap
-    
-    lazy val foreignKeys
-      = subTableMappingsForeignKeys ++
-        ownerTableForeignKey.map{ ownerTable.get → _ }
+    def primaryKeyColumns : Seq[Column]    
 
-    def specialColumns : Iterable[Column] = Nil
-    def uniqueKeys : Set[Seq[String]] = Set.empty
-    def indexes : Set[Seq[String]] = Set.empty
+    def uniqueKeyColumns : Set[Seq[Column]]
+
+    def indexColumns : Set[Seq[Column]]
+
+    def foreignKeys : Map[TableMapping, ForeignKey]
 
     lazy val table
       = Table(
-          tableName,
-          valueColumns ++ specialColumns toList,
-          primaryKeyColumns.map{_.name},
-          uniqueKeys,
-          indexes,
-          foreignKeys.values.toSet
+          name
+            = tableName,
+          columns
+            = columns.toList,
+          primaryKey
+            = primaryKeyColumns.map{_.name},
+          uniqueKeys
+            = uniqueKeyColumns.map{_.map{_.name}},
+          indexes
+            = indexColumns.map{_.map{_.name}},
+          foreignKeys
+            = foreignKeys.values.toSet
         )
 
   }

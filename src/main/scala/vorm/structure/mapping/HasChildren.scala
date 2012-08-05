@@ -12,13 +12,15 @@ trait HasChildren
   {
     def children : Iterable[Mapping]
 
-    lazy val leaves
-      : Iterable[Mapping]
-      = children.flatMap {
-          case c : HasChildren ⇒ c.leaves
-          case c ⇒ c :: Nil
-        }
+    lazy val leaves : Set[Mapping]
+      = children
+          .view
+          .flatMap{
+            case c : HasChildren ⇒ c.leaves
+            case c ⇒ c :: Nil
+          }
+          .toSet
 
-    lazy val nestedValueMappings
-      = leaves.asInstanceOf[Iterable[ValueMapping]]
+    lazy val nestedValueMappings : Set[ValueMapping]
+      = leaves.asInstanceOf[Set[ValueMapping]]
   }

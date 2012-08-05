@@ -23,19 +23,19 @@ sealed case class Table
         def uniqueKeyDdl
           ( key : Seq[String] )
           = "UNIQUE (" + key.view.map{quote}.mkString(", ") + ")"
-        "CREATE TABLE `" + name + "`\n" +
-        ( "( " + 
-          ( ( columns.view.map{_.ddl} ++
-              primaryKeyDdl.some ++
-              indexes.view.map{indexDdl} ++
-              uniqueKeys.view.map{uniqueKeyDdl} ++
-              foreignKeys.view.map{_.ddl}
+            "CREATE TABLE `" + name + "`\n" +
+            ( "( " + 
+              ( ( columns.view.map{_.ddl} ++
+                  primaryKeyDdl.some ++
+                  indexes.view.map{indexDdl} ++
+                  uniqueKeys.view.map{uniqueKeyDdl} ++
+                  foreignKeys.view.map{_.ddl}
+                  )
+                  .mkString(",\n") +
+                  " )"
+                )
+                .indent(2).trim
               )
-              .mkString(",\n") +
-              " )"
-            )
-            .indent(2).trim
-          )
-          .indent(2)
+              .indent(2)
       }
   }

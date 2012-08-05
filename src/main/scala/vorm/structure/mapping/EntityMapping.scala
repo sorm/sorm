@@ -15,7 +15,8 @@ sealed class EntityMapping
   {
     lazy val children
       = properties.values
-    lazy val properties
+
+    lazy val properties : Map[String, Mapping]
       = reflection.properties
           .map{
             case (name, reflection) ⇒
@@ -29,24 +30,40 @@ sealed class EntityMapping
 
     lazy val settings = settingsMap(reflection)
 
-    lazy val columns = valueColumns
+    def columns = childrenColumns
 
     lazy val primaryKeyColumns
-      = settings.primaryKey.view.map{ properties }.flatMap{ columnsForOwner }.toList
+      = settings.primaryKey
+          .view
+          .map{ properties }
+          .flatMap{ columnsForContainerTable }
+          .toList
 
-    lazy val foreignKeyForOwnerTable
-      = membership map { _ =>
-          ForeignKey(
-            tableName,
-            primaryKeyColumns.map{c ⇒ (columnName + "$" + c.name) → c.name},
-            ForeignKey.ReferenceOption.Cascade
-          )
-        }
+    lazy val uniqueKeyColumns
+      = settings.uniqueKeys
+          .view
+          .map{ 
+            _.view
+              .map{ properties }
+              .flatMap{ columnsForContainerTable }
+              .toSeq
+          }
+          .toSet
 
+    lazy val indexColumns
+      = settings.indexes
+          .view
+          .map{
+            _.view
+              .map{ properties }
+              .flatMap{ columnsForContainerTable }
+              .toSeq
+          }
+          .toSet
 
-    def ownerTableForeignKey = None
+    def foreignKeys
+      = nestedTableMappingsForeignKeys
 
-//
 //    lazy val generatedIdColumn
 //      : Option[Column]
 //      = if (settingsMap.primaryKey contains reflection)
@@ -60,19 +77,4 @@ sealed class EntityMapping
 //              nullable = false
 //            )
 //          )
-//    private def keyColumns
-//      ( propertyNames : Seq[String] )
-//      = propertyNames.view
-//          .map(properties)
-//          .flatMap {
-//            case property : ValueMapping
-//              ⇒ property.columnName :: Nil
-//            case property : TupleMapping
-//              ⇒ property.items.map(_.columnName)
-//            case property : OptionMapping
-//              ⇒ property.item.columnName :: Nil
-//            case _
-//              ⇒ Nil
-//          }
-//          .toList
 }

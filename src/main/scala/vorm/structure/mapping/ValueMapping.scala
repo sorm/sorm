@@ -15,10 +15,13 @@ sealed class ValueMapping
   {
 
     lazy val isKeyPart
-      = ownerTable.get.primaryKeyColumns.exists{_.name == columnName}
-//          ⇒ ownerTable.primaryKey.contains(columnName) ||
-//            ownerTable.uniqueKeys.exists(_ contains columnName) ||
-//            ownerTable.indexes.exists(_ contains columnName)
+      = containerTableMapping
+          .map{ m =>
+            m.primaryKeyColumns.exists{_.name == columnName} ||
+            m.uniqueKeyColumns.view.flatten.exists{_.name == columnName} ||
+            m.indexColumns.view.flatten.exists{_.name == columnName}
+          }
+          .getOrElse(false)
 
     lazy val columnType
       = reflection match {

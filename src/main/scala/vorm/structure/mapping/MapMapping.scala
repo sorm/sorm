@@ -14,23 +14,22 @@ sealed class MapMapping
   extends CollectionTableMapping
   {
     lazy val children
-      = key :: value :: Nil
+      = Set() + key + value
+
     lazy val key
       = Mapping( Membership.MapKey(this), reflection.generics(0), settingsMap )
+
     lazy val value
       = Mapping( Membership.MapValue(this), reflection.generics(1), settingsMap )
 
-    lazy val primaryKeyColumns
-      = ownerTable.get.primaryKeyColumns
-          .map{ c => c.copy(name = "p$" + c.name, autoIncremented = false) } :+
-        Column("h", Column.Type.Integer)
+    lazy val primaryKeyColumns : IndexedSeq[Column]
+      = containerTableColumns :+ hashColumn
 
-//
-//    lazy val keyForeignKeys
-//      = key.ownerTableForeignKeys
-//    lazy val valueForeignKeys
-//      = value.ownerTableForeignKeys
-//    lazy val foreignKeys
-//      = parentForeignKey ++: keyForeignKeys ::: valueForeignKeys
+    lazy val hashColumn : Column
+      = Column( "h", Column.Type.SmallInt )
+
+    lazy val columns : Set[Column]
+      = primaryKeyColumns.view ++ childrenColumns.view toSet
+
 
   }

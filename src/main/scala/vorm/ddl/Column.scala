@@ -1,10 +1,19 @@
 package vorm.ddl
 
-sealed case class Column 
+import vorm._
+import extensions._
+
+sealed case class Column
   ( name : String,
     t : Column.Type,
-    autoIncremented : Boolean = false,
+    autoIncrement : Boolean = false,
     nullable : Boolean = false )
+  {
+    def ddl
+      = quote(name) + " " + t.ddl + 
+        ( if( nullable ) "" else " NOT NULL" ) +
+        ( if( autoIncrement ) " AUTO_INCREMENT" else "" )
+  }
 
 object Column {
 

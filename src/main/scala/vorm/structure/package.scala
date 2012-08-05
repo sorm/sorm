@@ -12,6 +12,9 @@ package object structure {
       def asDdlName
         : String
         = UPPER_CAMEL.to( LOWER_UNDERSCORE, string )
+      def addDdlNamePart
+        ( x : String )
+        = string + "$" + x
     }
 
 

@@ -15,6 +15,7 @@ sealed class TupleMapping
   with HasChildren
   {
     def children = items
+
     lazy val items
       = reflection.generics.view.zipWithIndex
           .map {
@@ -22,8 +23,5 @@ sealed class TupleMapping
               ⇒ Mapping(Membership.TupleItem(i, this), r, settingsMap)
           }
           .toList
-
-//    override lazy val ownerTableForeignKeys
-//      = items.flatMap(_.ownerTableForeignKeys)
 
   }

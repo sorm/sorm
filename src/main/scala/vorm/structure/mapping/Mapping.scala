@@ -11,13 +11,11 @@ trait Mapping {
   def membership : Option[Membership]
   def reflection : Reflection
 
-  override def toString
-    : String
+  override def toString : String
     = membership.map(_.parent).map(_.toString + ".").getOrElse("") +
       reflection.name
 
-  lazy val columnName
-    : String
+  lazy val columnName : String
     = membership
         .map{
           case Membership.EntityProperty(name, _)
@@ -37,8 +35,7 @@ trait Mapping {
         }
         .getOrElse("")
 
-  lazy val tableName
-    : String
+  lazy val tableName : String
     = this match {
         case _ : EntityMapping 
           ⇒ reflection.name.asDdlName
@@ -61,63 +58,46 @@ trait Mapping {
               .getOrElse( reflection.name.asDdlName )
       }
 
-  lazy val ownerTable
-    : Option[TableMapping]
+  lazy val containerTableMapping : Option[TableMapping]
     = membership
-        .map(_.parent)
-        .flatMap {
+        .map{ _.parent }
+        .flatMap{
           case parent : TableMapping
             ⇒ Some(parent)
           case parent : Mapping
-            ⇒ parent.ownerTable
+            ⇒ parent.containerTableMapping
         }
-
-//  lazy val ownerTableForeignKeys
-//    : List[ForeignKey]
-//    = Nil
-//
-//  lazy val parentForeignKey
-//    = ownerTable map {
-//        ownerTable
-//          ⇒ ForeignKey (
-//              ownerTable.tableName,
-//              ownerTable.primaryKey.map(n => "p_" + n -> n).toSet,
-//              ForeignKey.ReferenceOption.Cascade
-//            )
-//      }
 
 }
-object Mapping 
-  {
-    def apply
-      ( membership : Membership,
-        reflection : Reflection,
-        settings : SettingsMap )
-      : Mapping
-      = apply(Some(membership), reflection, settings)
-      
-    def apply
-      ( membership : Option[Membership],
-        reflection : Reflection,
-        settings : SettingsMap )
-      : Mapping
-      = ReflectionKind( reflection ) match {
-          case ReflectionKind.Value
-            ⇒ new ValueMapping (membership, reflection, settings)
-          case ReflectionKind.Tuple
-            ⇒ new TupleMapping (membership, reflection, settings)
-          case ReflectionKind.Seq
-            ⇒ new SeqMapping (membership, reflection, settings)
-          case ReflectionKind.Set
-            ⇒ new SetMapping (membership, reflection, settings)
-          case ReflectionKind.Map
-            ⇒ new MapMapping (membership, reflection, settings)
-          case ReflectionKind.Entity
-            ⇒ new EntityMapping (membership, reflection, settings)
-          case ReflectionKind.Option
-            ⇒ new OptionMapping (membership, reflection, settings)
-          case ReflectionKind.Entity
-            ⇒ new EntityMapping (membership, reflection, settings)
-        }
-
-  }
+object Mapping {
+  def apply
+    ( membership : Membership,
+      reflection : Reflection,
+      settings : SettingsMap )
+    : Mapping
+    = apply(Some(membership), reflection, settings)
+    
+  def apply
+    ( membership : Option[Membership],
+      reflection : Reflection,
+      settings : SettingsMap )
+    : Mapping
+    = ReflectionKind( reflection ) match {
+        case ReflectionKind.Value
+          ⇒ new ValueMapping (membership, reflection, settings)
+        case ReflectionKind.Tuple
+          ⇒ new TupleMapping (membership, reflection, settings)
+        case ReflectionKind.Seq
+          ⇒ new SeqMapping (membership, reflection, settings)
+        case ReflectionKind.Set
+          ⇒ new SetMapping (membership, reflection, settings)
+        case ReflectionKind.Map
+          ⇒ new MapMapping (membership, reflection, settings)
+        case ReflectionKind.Entity
+          ⇒ new EntityMapping (membership, reflection, settings)
+        case ReflectionKind.Option
+          ⇒ new OptionMapping (membership, reflection, settings)
+        case ReflectionKind.Entity
+          ⇒ new EntityMapping (membership, reflection, settings)
+      }
+}

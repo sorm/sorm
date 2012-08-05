@@ -81,7 +81,7 @@ case class MappingSelect
           = m match {
               case m : ValueMapping ⇒ 
                 Vector() :+
-                Sql.Column(m.columnName, alias(m.ownerTable.get).some)
+                Sql.Column(m.columnName, alias(m.containerTableMapping.get).some)
               case m : TableMapping ⇒ 
                 m.primaryKeyColumns
                   .view
@@ -122,7 +122,7 @@ case class MappingSelect
           def subTables
             ( m : TableMapping )
             : Seq[TableMapping]
-            = m.subTableMappings.flatMap{ m ⇒ m +: subTables(m) }.toSeq
+            = m.nestedTableMappings.flatMap{ m ⇒ m +: subTables(m) }.toSeq
 
           mapping +: subTables( mapping )
         }
@@ -130,7 +130,7 @@ case class MappingSelect
         allTables
           .foldLeft(this){_ withSkeletonTo _}
           .copy(
-            resultMappings = allTables.flatMap{ m ⇒ m.valueColumns.map{m → _} }
+            resultMappings = allTables.flatMap{ m ⇒ m.childrenColumns.map{m → _} }
           )
       }
 
@@ -151,33 +151,60 @@ case class MappingSelect
       ( m : Mapping )
       : MappingSelect
       = m match {
+          // case m if m == mapping ⇒ 
+          //   copy( joinsAliases = joinsAliases + (mapping → Sql.alias(0)) )
+          // case m : TableMapping if joinsAliases contains m ⇒ 
+          //   this
+          // case m : CollectionMapping ⇒ 
+          //   val s = withSkeletonTo( m.containerTableMapping.get )
+          //   s.copy(
+          //     joinsAliases
+          //       = s.joinsAliases + (m → s.newAlias),
+          //     joins
+          //       = s.joins :+
+          //         Sql.Join(
+          //           Sql.Table(m.tableName),
+          //           Some(s.newAlias),
+
+          //         )
+          //   )
+
           case m : TableMapping ⇒ 
+            def bindingsToContainer
+              ( m : TableMapping )
+              = m match {
+                  case m : CollectionTableMapping ⇒ 
+                    m.containerTableMappingForeignKey.get.bindings.view
+                  case m ⇒ 
+                    m.containerTableMapping.get.foreignKeys(m)
+                      .bindings.view.map{_.swap}
+                }
+
             if( m == mapping )
-              copy(joinsAliases = joinsAliases + (mapping -> Sql.alias(0)))
+              copy( joinsAliases = joinsAliases + (mapping → Sql.alias(0)) )
             else if( joinsAliases contains m )
               this
             else { 
-              val s = withSkeletonTo( m.ownerTable.get )
+              val s = withSkeletonTo( m.containerTableMapping.get )
               s.copy(
-                  joinsAliases 
-                    = s.joinsAliases + (m → s.newAlias),
-                  joins 
-                    = s.joins :+ 
-                      Sql.Join( 
-                          Sql.Table(m.tableName),
-                          Some(s.newAlias),
-                          m.foreignKeyForOwnerTable
-                            .map{_.bindings.map{_.swap}}
-                            .getOrElse(m.ownerTableForeignKey.get.bindings)
-                            .view
-                            .map{b ⇒ Sql.Column(b._1, Some(s.newAlias)) → 
-                                     Sql.Column(b._2, Some(s.joinsAliases(m.ownerTable.get)))}
-                            .toList
-                        )
-                )
+                joinsAliases
+                  = s.joinsAliases + (m → s.newAlias),
+                joins
+                  = s.joins :+
+                    Sql.Join(
+                      Sql.Table(m.tableName),
+                      Some(s.newAlias),
+                      bindingsToContainer(m)
+                        .map{ b =>
+                          Sql.Column(b._1, Some(s.newAlias)) →
+                          Sql.Column(b._2, Some(s.joinsAliases(m.containerTableMapping.get)))
+                        }
+                        .toList
+                    )
+              )
             }
           case _ ⇒
-            withSkeletonTo( m.ownerTable.get )
+            withSkeletonTo( m.containerTableMapping.get )
         }
 
     private def withSelect
@@ -321,7 +348,7 @@ case class MappingSelect
             cf(
                 Sql.Column( 
                     m.columnName,
-                    Some( joinsAliases(m.ownerTable.get) )
+                    Some( joinsAliases(m.containerTableMapping.get) )
                   ),
                 Sql.Value(v)
               ),

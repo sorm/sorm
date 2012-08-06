@@ -3,6 +3,7 @@ package vorm
 import vorm._
 import structure._
 import mapping._
+import jdbc._
 import sql._
 import extensions._
 
@@ -36,20 +37,16 @@ package object save {
 
 
   /**
-   * This implementation is based on strict rules on how statements are resolved to whether be Update or Insert. These are:
+   * This implementation is based on strict rules about how statements are resolved to whether be Update or Insert. These are:
    * 1. All entities must have an autoincremented id property
    * 2. Whether this property is defined determines which method to use
    * 3. This may result in updates being called on inexisting rows - these situations should be considered caused by improper use and as such should result in a runtime exception being thrown
    * 4. All rows of collection tables are deleted before update and thus should result in no such conflicts
    */
 
-  case class JdbcValue
-    ( value : Any, 
-      t : Int )
-  
-  def deepStatements
+  def statements
     ( v : Any,
-      m : TableMapping )
+      m : EntityMapping )
     = {
       // def columnValues
       //   ( m : Mapping )
@@ -57,6 +54,8 @@ package object save {
       // val rows 
       //   : Map[TableMapping, Seq[Map[String, JdbcValue]]]
       //   = 
+      lazy val isPersisted : Boolean
+        = ???
 
       val values
         : Map[TableMapping, AnyRef]
@@ -79,8 +78,6 @@ package object save {
 
     }
 
-
-    def statements
 
 
 

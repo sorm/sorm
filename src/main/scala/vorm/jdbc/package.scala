@@ -13,4 +13,12 @@ package object jdbc {
 
   type JdbcType = Int
 
+  case class JdbcValue
+    ( value : Any, 
+      t : Int )
+  
+  case class Statement
+    ( sql: String,
+      data: Seq[JdbcValue] = Nil ) 
+
 }

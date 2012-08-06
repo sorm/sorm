@@ -35,7 +35,7 @@ object Column {
     case object VarChar  
       extends Type
       {
-        val ddl = "VARCHAR"
+        val ddl = "VARCHAR(255)"
         val jdbcType = Types.VARCHAR
       }
     case object Double   

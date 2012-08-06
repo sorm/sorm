@@ -74,6 +74,7 @@ sealed class ValueMapping
           case _ if reflection inheritsFrom Reflection[BigDecimal]
             ⇒ Column.Type.Decimal
         }
+
     lazy val autoIncremented
       : Boolean
       = {
@@ -95,18 +96,14 @@ sealed class ValueMapping
 
         autoIncremented( this )
       }
+
     lazy val nullable
       = membership match {
           case Some(Membership.OptionItem(_)) ⇒ true
           case _ ⇒ false
         }
+
     lazy val column
       = Column(columnName, columnType, autoIncremented, nullable)
-
-    lazy val ownerTableColumns
-      = column :: Nil
-
-    lazy val selectNodes 
-      = Nil
 
   }

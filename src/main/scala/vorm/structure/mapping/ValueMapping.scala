@@ -14,6 +14,7 @@ sealed class ValueMapping
   extends Mapping
   {
 
+    // autoIncremented seems to be implemented much smarter
     lazy val isKeyPart
       = {
         val ancestors
@@ -73,6 +74,8 @@ sealed class ValueMapping
             ⇒ Column.Type.Double
           case _ if reflection inheritsFrom Reflection[BigDecimal]
             ⇒ Column.Type.Decimal
+          case _
+            ⇒ ???
         }
 
     lazy val autoIncremented

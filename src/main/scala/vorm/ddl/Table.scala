@@ -23,7 +23,7 @@ sealed case class Table
         def uniqueKeyDdl
           ( key : Seq[String] )
           = "UNIQUE (" + key.view.map{quote}.mkString(", ") + ")"
-            "CREATE TABLE `" + name + "`\n" +
+            "CREATE TABLE " + quote(name) + "\n" +
             ( "( " + 
               ( ( columns.view.map{_.ddl} ++
                   primaryKeyDdl.some ++

@@ -42,7 +42,7 @@ sealed class EntityMapping
     lazy val uniqueKeyColumns
       = settings.uniqueKeys
           .view
-          .map{ 
+          .map{
             _.view
               .map{ properties }
               .flatMap{ columnsForContainerTable }

@@ -15,13 +15,42 @@ sealed class ValueMapping
   {
 
     lazy val isKeyPart
-      = containerTableMapping
-          .map{ m =>
-            m.primaryKeyColumns.exists{_.name == columnName} ||
-            m.uniqueKeyColumns.view.flatten.exists{_.name == columnName} ||
-            m.indexColumns.view.flatten.exists{_.name == columnName}
+      = {
+        val ancestors
+          = {
+            def ancestors
+              ( m : Mapping )
+              : Stream[Mapping]
+              = m.membership
+                  .map{_.parent}
+                  .map{
+                    case p : EntityMapping ⇒ p #:: Stream.empty
+                    case p ⇒ p #:: ancestors(p)
+                  }
+                  .getOrElse(Stream.empty)
+            ancestors(this)
+          }
+
+        val containerEntity
+          = ancestors.collectFirst{ case m : EntityMapping ⇒ m }
+
+        containerEntity
+          .map{ containerEntity ⇒ 
+
+            val containerEntitySettings
+              = settingsMap( containerEntity.reflection )
+
+            val keyProperties 
+              = ( Set() ++ 
+                  containerEntitySettings.primaryKey.view ++
+                  containerEntitySettings.uniqueKeys.view.flatten ++
+                  containerEntitySettings.indexes.view.flatten )
+                  .map{ containerEntity.properties }
+
+            (this #:: ancestors).exists(keyProperties)
           }
           .getOrElse(false)
+      }
 
     lazy val columnType
       = reflection match {

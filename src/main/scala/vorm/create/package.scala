@@ -11,8 +11,7 @@ package object create {
   def ddl
     ( ms : Iterable[TableMapping] )
     : String
-    = ms.view
-        .foldLeft( Vector.empty[TableMapping] ){ (q, m) ⇒
+    = ms.foldLeft( Vector.empty[TableMapping] ){ (q, m) ⇒
           def queue
             ( m : TableMapping )
             : Vector[TableMapping]
@@ -30,5 +29,5 @@ package object create {
         .distinct
         .map{_.ddl + ";"}
         .mkString("\n\n")
-  
+
 }

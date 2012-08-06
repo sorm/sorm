@@ -11,23 +11,17 @@ package object create {
   def ddl
     ( ms : Iterable[TableMapping] )
     : String
-    = {
-      val masters
-        : Map[TableMapping, Set[EntityMapping]]
-        = ms.zipBy{
-              def nestedEntityMappings
-                ( m : Mapping )
-                : Set[EntityMapping]
-                = m match {
-                    case m : ValueMapping ⇒ Set.empty
-                    case m : EntityMapping ⇒ Set(m)
-                    case m : HasChildren ⇒
-                      m.children.view flatMap nestedEntityMappings toSet
-                  }
-              nestedEntityMappings(_)
-            }
-            .toMap
-      ???
-    }
-
+    = ms.view
+        .foldLeft( Vector.empty[Table] ){ case (ts, m) ⇒
+          def nestedTablesQueue
+            ( m : TableMapping )
+            : Seq[Table]
+            = m.nestedTableMappings.toSeq.view
+                .flatMap{ nestedTablesQueue } :+
+                m.table
+          ts ++ nestedTablesQueue( m )
+        }
+        .distinct
+        .map{_.ddl}
+        .mkString("\n")
 }

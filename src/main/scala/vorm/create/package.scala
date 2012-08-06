@@ -12,16 +12,23 @@ package object create {
     ( ms : Iterable[TableMapping] )
     : String
     = ms.view
-        .foldLeft( Vector.empty[Table] ){ case (ts, m) ⇒
-          def nestedTablesQueue
+        .foldLeft( Vector.empty[TableMapping] ){ (q, m) ⇒
+          def queue
             ( m : TableMapping )
-            : Seq[Table]
-            = m.nestedTableMappings.toSeq.view
-                .flatMap{ nestedTablesQueue } :+
-                m.table
-          ts ++ nestedTablesQueue( m )
+            : Vector[TableMapping]
+            = m.nestedTableMappings.foldLeft( Vector(m) ){ (q, m) ⇒
+                m match {
+                  case m : CollectionTableMapping ⇒
+                    q ++ queue(m)
+                  case m ⇒
+                    queue(m) ++ q
+                }
+              }
+          q ++ queue( m )
         }
+        .map{ _.table }
         .distinct
-        .map{_.ddl}
-        .mkString("\n")
+        .map{_.ddl + ";"}
+        .mkString("\n\n")
+  
 }

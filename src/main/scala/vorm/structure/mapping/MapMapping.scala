@@ -26,7 +26,7 @@ sealed class MapMapping
       = containerTableColumns :+ hashColumn
 
     lazy val hashColumn : Column
-      = Column( "h", Column.Type.SmallInt )
+      = Column( "h", Column.Type.Integer )
 
     lazy val columns : Set[Column]
       = primaryKeyColumns.view ++ childrenColumns.view toSet

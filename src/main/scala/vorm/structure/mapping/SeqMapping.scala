@@ -23,7 +23,7 @@ sealed class SeqMapping
       = containerTableColumns :+ indexColumn
 
     lazy val indexColumn : Column
-      = Column( "i", Column.Type.SmallInt )
+      = Column( "i", Column.Type.Integer )
 
     lazy val columns : Set[Column]
       = primaryKeyColumns.view ++ childrenColumns.view toSet

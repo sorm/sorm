@@ -15,6 +15,11 @@ object Sandbox extends App {
 
   val artist = api.all[Artist].filterEquals("name", "Metallica").offset(0).limit(1).head
 
+  val style
+    = db.one[Style].where(
+        ("names.value" === "pop") and 
+        ("names.locale.code" === "en")
+      )
 
   //  ideas:::
   // object DB extends Instance(

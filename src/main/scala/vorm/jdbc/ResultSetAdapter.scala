@@ -60,21 +60,38 @@ class ResultSetAdapter
         b.toList
       }
 
+    /**
+     * @see <a href=http://docstore.mik.ua/orelly/java-ent/servlet/ch09_02.htm#ch09-22421>jdbc table
+     */
     def value
-      ( i : Int, t : Int ) 
+      ( i : Int, 
+        t : JdbcType ) 
       : Any 
       = {
-        import Types._
+        import java.sql.Types._
         t match {
-          case INTEGER => rs.getInt(i)
-          case BIGINT => rs.getLong(i)
-          case CHAR | VARCHAR => rs.getString(i)
-          case _ => ???
+          case CHAR | VARCHAR     => rs.getString(i)
+          case LONGVARCHAR        => rs.getCharacterStream(i)
+          case NUMERIC | DECIMAL  => rs.getBigDecimal(i)
+          case BIT                => rs.getBoolean(i)
+          case TINYINT            => rs.getByte(i)
+          case SMALLINT           => rs.getShort(i)
+          case INTEGER            => rs.getInt(i)
+          case BIGINT             => rs.getLong(i)
+          case REAL               => rs.getFloat(i)
+          case FLOAT | DOUBLE     => rs.getDouble(i)
+          case BINARY | VARBINARY => rs.getBytes(i)
+          case LONGVARBINARY      => rs.getBinaryStream(i)
+          case DATE               => rs.getDate(i)
+          case TIME               => rs.getTime(i)
+          case TIMESTAMP          => rs.getTimestamp(i)
+          case BLOB               => rs.getBlob(i)
+          case _                  => ???
         }
       }
 
     def value
-      ( name : String, t : Int )
+      ( name : String, t : JdbcType )
       : Any 
       = {
         import Types._

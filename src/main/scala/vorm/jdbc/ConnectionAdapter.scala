@@ -5,7 +5,7 @@ import java.sql.{Connection, Statement => JStatement}
 
 class ConnectionAdapter(connection: Connection) extends Logging {
 
-  def executeUpdateAndGetGeneratedKeys(stmt: Statement): Seq[Seq[Any]] = {
+  def executeUpdateAndGetGeneratedKeys(stmt: Statement): List[IndexedSeq[Any]] = {
     if (stmt.data.isEmpty) {
       val js = connection.createStatement()
       js.executeUpdate(stmt.sql)

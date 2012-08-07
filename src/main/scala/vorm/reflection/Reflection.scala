@@ -1,8 +1,10 @@
 package vorm.reflection
 
 import reflect.mirror
-import vorm._
 import util.MurmurHash3
+
+import vorm._
+import extensions._
 
 sealed class Reflection
   ( val t : mirror.Type )
@@ -82,6 +84,11 @@ sealed class Reflection
         instance : AnyRef )
       : Any
       = javaMethodsByName(name).head.invoke( instance )
+
+    def propertyValues
+      ( instance : AnyRef )
+      : Map[String, Any]
+      = properties.keys.view.zipBy{ propertyValue(_, instance) }.toMap
 
     override def equals(x: Any) =
       x match {

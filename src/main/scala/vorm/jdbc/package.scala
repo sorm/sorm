@@ -15,7 +15,7 @@ package object jdbc {
 
   case class JdbcValue
     ( value : Any, 
-      t : Int )
+      t : JdbcType )
   
   case class Statement
     ( sql: String,

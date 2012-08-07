@@ -5,6 +5,8 @@ import structure._
 import mapping._
 import jdbc._
 import sql._
+import save._
+import mapped._
 import extensions._
 
 /**
@@ -16,12 +18,42 @@ import extensions._
  */
 package object save {
 
-  trait Saver {
-    def connection : Connection 
+  trait SaveAdapter extends ConnectionAdapter {
     def saveEntityAndGetIt
       ( e : MappedEntity )
       : AnyRef
-      = ???
+      = {
+        // val values
+        //   = 
+
+        // e.mapping.reflection.properties.keys.view
+
+        if( e.isPersisted ){
+          ???
+        } else {
+          val stmt : Statement
+            = ???
+
+          val id : Long
+            = executeUpdateAndGetGeneratedKeys( stmt )
+                .head.head.asInstanceOf[Long]
+          
+          // var primaryKey = IndexedSeq[Any]()
+
+          // executeUpdateAndGetGeneratedKeys(stmt)
+          //   .tap{ primaryKey = _.head }
+
+        }
+      }
   }
+
+  // implicit class MappingResultSetParsingAdapter
+  //   ( m : Mapping )
+  //   {
+  //     def propertyValues 
+  //       ( rs : ResultSet, 
+  //         columns : Seq[Column] ) 
+  //       : Seq[Map[String, Any]]
+  //   }
   
 }

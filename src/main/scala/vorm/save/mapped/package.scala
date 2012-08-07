@@ -31,6 +31,8 @@ package object mapped {
             .map{ case (n, m) ⇒ 
               n → Mapped(mapping.reflection.propertyValue(n, value), m) 
             }
+      lazy val isPersisted : Boolean
+        = ???
     }
   
   class MappedTuple

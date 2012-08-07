@@ -11,5 +11,6 @@ package object jdbc {
   implicit def resultSetAPI(x: ResultSet) = new ResultSetAPI(x)
 
 
+  type JdbcType = Int
 
 }

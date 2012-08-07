@@ -5,43 +5,46 @@ import java.sql._
 
 
 class ResultSetAPI(rs: ResultSet) {
-  private def parseIndexTypeList(indexTypeList: List[(Int, Int)]): List[List[Any]] = {
-    val b = ListBuffer[List[Any]]()
+  type JdbcType = Int
 
-    while (rs.next())
-      b += indexTypeList.map {case (i, t) => value(i, t)}
+  private def parseIndexTypeSeq(indexTypeSeq: Seq[(Int, JdbcType)]): Seq[Seq[Any]] = {
+    val b = ListBuffer[Seq[Any]]()
+
+    while( rs.next() ){
+      b += indexTypeSeq.map{ case (i, t) => value(i, t) }
+    }
 
     rs.close()
     b.toList
   }
 
-  def parseAndClose(types: List[Int]): List[List[Any]] =
-    parseIndexTypeList((1 to types.length).toList zip types)
+  def parseAndClose(types: Seq[JdbcType]) =
+    parseIndexTypeSeq( (1 to types.size) zip types )
 
 
   def parseAndClose() = {
     val md = rs.getMetaData
 
-    val indexTypeList =
+    val indexTypeSeq =
       (1 to md.getColumnCount)
         .map(i => i -> md.getColumnType(i))
-        .toList
 
-    parseIndexTypeList(indexTypeList)
+    parseIndexTypeSeq(indexTypeSeq)
   }
 
   @deprecated("use parseAndClose()")
   def parseToListsAndClose() = {
-    val b = ListBuffer[List[Any]]()
+    val b = ListBuffer[Seq[Any]]()
 
     val md = rs.getMetaData
 
-    val indexTypeList =
+    val indexTypeSeq =
       (1 to md.getColumnCount)
         .map(i => i -> md.getColumnType(i))
-        .toList
 
-    while (rs.next()) b += indexTypeList.map {case (i, t) => value(i, t)}
+    while( rs.next() ){
+      b += indexTypeSeq.map{ case (i, t) => value(i, t) }
+    }
 
     rs.close()
     b.toList
@@ -58,7 +61,9 @@ class ResultSetAPI(rs: ResultSet) {
         .map(i => md.getColumnName(i) -> (i -> md.getColumnType(i)))
         .toMap
 
-    while (rs.next()) b += indexTypeByNameMap.mapValues {case (i, t) => value(i, t)}
+    while( rs.next() ){
+      b += indexTypeByNameMap.mapValues{ case (i, t) => value(i, t) }
+    }
 
     rs.close()
     b.toList

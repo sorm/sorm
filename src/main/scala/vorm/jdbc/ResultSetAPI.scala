@@ -5,31 +5,13 @@ import java.sql._
 
 
 class ResultSetAPI(rs: ResultSet) {
-  type JdbcType = Int
 
-  private def parseIndexTypeSeq(indexTypeSeq: Seq[(Int, JdbcType)]): Seq[Seq[Any]] = {
-    val b = ListBuffer[Seq[Any]]()
-
-    while( rs.next() ){
-      b += indexTypeSeq.map{ case (i, t) => value(i, t) }
-    }
-
-    rs.close()
-    b.toList
-  }
-
-  def parseAndClose(types: Seq[JdbcType]) =
-    parseIndexTypeSeq( (1 to types.size) zip types )
-
+  def indexedRowsIterable = new ResultSetIndexedRowsIterable(rs)
 
   def parseAndClose() = {
-    val md = rs.getMetaData
-
-    val indexTypeSeq =
-      (1 to md.getColumnCount)
-        .map(i => i -> md.getColumnType(i))
-
-    parseIndexTypeSeq(indexTypeSeq)
+    val r = indexedRowsIterable.toList
+    rs.close()
+    r
   }
 
   @deprecated("use parseAndClose()")
@@ -75,7 +57,7 @@ class ResultSetAPI(rs: ResultSet) {
       case INTEGER => rs.getInt(i)
       case BIGINT => rs.getLong(i)
       case CHAR | VARCHAR => rs.getString(i)
-      case _ => throw new NotImplementedError
+      case _ => ???
     }
   }
 
@@ -85,7 +67,7 @@ class ResultSetAPI(rs: ResultSet) {
       case INTEGER => rs.getInt(name)
       case BIGINT => rs.getLong(name)
       case CHAR | VARCHAR => rs.getString(name)
-      case _ => throw new NotImplementedError
+      case _ => ???
     }
   }
 

@@ -9,11 +9,11 @@ class ConnectionAPI(connection: Connection) extends Logging {
     if (stmt.data.isEmpty) {
       val js = connection.createStatement()
       js.executeUpdate(stmt.sql)
-      js.getGeneratedKeys.parseToListsAndClose()
+      js.getGeneratedKeys.parseAndClose()
     } else {
       val js = preparedStatement(stmt, true)
       js.executeUpdate()
-      js.getGeneratedKeys.parseToListsAndClose()
+      js.getGeneratedKeys.parseAndClose()
     }
   }
 

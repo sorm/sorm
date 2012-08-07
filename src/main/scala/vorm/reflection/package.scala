@@ -20,45 +20,17 @@ package object reflection {
     tag[T] match { case t => tpe(t.tpe, Some(t.erasure)) }
 
 
-  implicit class AnyExtensions[T: TypeTag](x: T) {
-    def tpe = vorm.reflection.tpe[T]
-    def reflection = vorm.reflection.reflectionOf[T]
-  }
 
-  implicit class AnyRefExtensions[T <: AnyRef : TypeTag](x: T) {
-    private lazy val t = tpe[T]
-    def propertyValueByName =
-      t.propertyByNameMap.keys.view
-        .map(n => n -> t.propertyValue(n, x))
-        .toMap
-    def propertyValue(name: String) =
-      t.propertyValue(name, x)
-  }
-
-
-  private val reflectionCache =
-    new collection.mutable.HashMap[(mirror.Type, Class[_]), Reflection]() {
-      override def default(key: (mirror.Type, Class[_])) = {
-        val value = new Reflection(key._1, key._2)
-        update(key, value)
-        value
-      }
-    }
-
-  def reflectionOf(mt: mirror.Type): Reflection =
-    reflectionCache(mt, mirrorQuirks.javaClass(mt))
-
-  // todo : to move to apply of Reflection
-  def reflectionOf[T](implicit t: TypeTag[T]): Reflection =
-    reflectionCache(t.tpe, t.erasure)
-
-
-  implicit class AnyReflectedSupport
+  implicit class AnyExtensions
     [ T : TypeTag ]
     ( any : T )
     {
       def reflected
         = new Reflected( any, Reflection( typeTag[T] ) )
+      def isInstanceOf
+        ( r : Reflection )
+        : Boolean
+        = reflected.reflection inheritsFrom r
     }
 
 

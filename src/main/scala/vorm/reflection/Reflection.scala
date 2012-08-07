@@ -2,11 +2,13 @@ package vorm.reflection
 
 import reflect.mirror
 import vorm._
+import util.MurmurHash3
 
-sealed class Reflection 
-  ( val t: mirror.Type,
-    val javaClass: Class[_] )
+sealed class Reflection
+  ( val t : mirror.Type )
   {
+    lazy val javaClass
+      = mirrorQuirks.javaClass(t)
     lazy val fullName
       = mirrorQuirks.fullName(t.typeSymbol)
 
@@ -18,14 +20,14 @@ sealed class Reflection
       = mirrorQuirks.properties(t).view
           .map {
             s ⇒ mirrorQuirks.name(s) → 
-                reflectionOf(s.typeSignature) 
+                Reflection(s.typeSignature)
           }
           .toMap
 
     lazy val generics
       : IndexedSeq[Reflection]
       = mirrorQuirks.generics(t).view
-          .map(reflectionOf)
+          .map(Reflection(_))
           .toIndexedSeq
 
     def inheritsFrom
@@ -43,39 +45,78 @@ sealed class Reflection
                 .forall {case (a, b) => a.inheritsFrom(b)}
         }
 
-
-    // lazy val methods
-    //   = mirrorQuirks.methods(t).map { 
-    //       s ⇒ 
-    //         type MethodType = {
-    //           def params: List[mirror.Symbol]
-    //           def resultType: mirror.Type
-    //         }
-
-    //         val t = s.typeSignature.asInstanceOf[MethodType]
-    //         val name = s.name.decoded.trim
-    //         val arguments =
-    //           t.params.map(
-    //             p ⇒ Argument(mirrorQuirks.name(p), reflectionOf(p.typeSignature))
-    //           )
-    //         val result = reflectionOf(t.resultType)
-    //         Method(name, arguments, result)
-    //     }
-
-    // lazy val methodNames
-    // lazy val methodResults
+    lazy val constructorArguments
+      : Map[String, Reflection]
+      = mirrorQuirks.constructors(t)
+          .head
+          .typeSignature
+          .asInstanceOf[{def params: List[mirror.Symbol]}]
+          .params
+          .map(s ⇒ mirrorQuirks.name(s) → Reflection(s.typeSignature) )
+          .toMap
 
 
+    def instantiate
+      ( params : Map[String, Any] )
+      : Any
+      = instantiate( constructorArguments.keys.map(params) )
+
+    def instantiate
+      ( args : Traversable[Any] = Nil )
+      : Any
+      = {
+        if ( mirrorQuirks.isInner(t.typeSymbol) )
+          throw new UnsupportedOperationException(
+              "Dynamic instantiation of inner classes is not supported"
+            )
+        
+        javaClass.getConstructors.head
+          .newInstance( args.asInstanceOf[Seq[Object]] : _* )
+      }
+
+    lazy val javaMethodsByName
+      = javaClass.getMethods.groupBy{_.getName}
+
+    def propertyValue
+      ( name : String,
+        instance : AnyRef )
+      : Any
+      = javaMethodsByName(name).head.invoke( instance )
+
+    override def equals(x: Any) =
+      x match {
+        case x: Reflection =>
+          eq(x) ||
+          t.typeSymbol == x.t.typeSymbol &&
+          generics == x.generics
+        case _ => super.equals(x)
+      }
+    override def hashCode =
+      MurmurHash3.finalizeHash(t.typeSymbol.hashCode, generics.hashCode)
   }
+  
 object Reflection {
-  def apply
-    ( implicit tag : TypeTag[_] )
-    : Reflection
-    = reflectionOf( tag )
 
-  // sealed case class Argument(name: String, reflection: Reflection)
-  // sealed case class Property(name: String, reflection: Reflection)
-  // sealed case class Generic(index: Int, reflection: Reflection)
-  // sealed case class Method(name: String, arguments: List[Argument], reflection: Reflection)
-  // sealed case class Constructor(arguments: List[Argument])
+   val cache
+    = new collection.mutable.HashMap[mirror.Type, Reflection] {
+        override def default
+          ( key : mirror.Type )
+          = {
+            val value = new Reflection(key)
+            update(key, value)
+            value
+          }
+      }
+
+  def apply
+    [ T ]
+    ( implicit tag : TypeTag[T] )
+    : Reflection
+    = cache( tag.tpe )
+
+  def apply
+    ( mt : mirror.Type )
+    : Reflection 
+    = cache( mt )
+
 }

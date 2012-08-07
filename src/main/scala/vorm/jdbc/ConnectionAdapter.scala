@@ -3,21 +3,21 @@ package vorm.jdbc
 import com.weiglewilczek.slf4s.Logging
 import java.sql.{Connection, Statement => JStatement}
 
-class ConnectionAPI(connection: Connection) extends Logging {
+class ConnectionAdapter(connection: Connection) extends Logging {
 
-  def executeUpdateAndGetGeneratedKeys(stmt: Statement) = {
+  def executeUpdateAndGetGeneratedKeys(stmt: Statement): List[IndexedSeq[Any]] = {
     if (stmt.data.isEmpty) {
       val js = connection.createStatement()
       js.executeUpdate(stmt.sql)
-      js.getGeneratedKeys.parseToListsAndClose()
+      js.getGeneratedKeys.parseAndClose()
     } else {
       val js = preparedStatement(stmt, true)
       js.executeUpdate()
-      js.getGeneratedKeys.parseToListsAndClose()
+      js.getGeneratedKeys.parseAndClose()
     }
   }
 
-  def executeUpdate(stmt: Statement) = {
+  def executeUpdate(stmt: Statement): Int = {
     if (stmt.data.isEmpty)
       connection.createStatement().executeUpdate(stmt.sql)
     else

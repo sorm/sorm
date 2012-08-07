@@ -18,35 +18,6 @@ import extensions._
  */
 package object save {
 
-  trait SaveAdapter extends ConnectionAdapter {
-    def saveEntityAndGetIt
-      ( e : MappedEntity )
-      : AnyRef
-      = {
-        // val values
-        //   = 
-
-        // e.mapping.reflection.properties.keys.view
-
-        if( e.isPersisted ){
-          ???
-        } else {
-          val stmt : Statement
-            = ???
-
-          val id : Long
-            = executeUpdateAndGetGeneratedKeys( stmt )
-                .head.head.asInstanceOf[Long]
-          
-          // var primaryKey = IndexedSeq[Any]()
-
-          // executeUpdateAndGetGeneratedKeys(stmt)
-          //   .tap{ primaryKey = _.head }
-
-        }
-      }
-  }
-
   // implicit class MappingResultSetParsingAdapter
   //   ( m : Mapping )
   //   {
@@ -55,5 +26,27 @@ package object save {
   //         columns : Seq[Column] ) 
   //       : Seq[Map[String, Any]]
   //   }
+  // class MappedResultSet
+  //   ( val resultSet : ResultSet,
+  //     val columns : Seq[(Column, TableMapping)] )
   
+  def rowValuesForContainerTable
+    ( v : Any,
+      m : Mapping )
+    : Map[String, JdbcValue]
+    = (m, v) match {
+        case (m : CollectionTableMapping, _) => 
+          Map.empty
+        case (m : EntityMapping, v : Persisted) =>
+          Map( m.columnName + "$id" -> v.id )
+        case (m : TupleMapping, v : Product) =>
+          (v.productIterator.toStream zip m.items)
+            .flatMap{ case (v, m) => rowValuesForContainerTable(v, m) }
+            .toMap
+        // case (m : OptionMapping, v : Option[_]) =>
+        case (m : ValueMapping, v) =>
+          Map( m.columnName -> JdbcValue(v, m.column.t.jdbcType) )
+
+      }
+
 }

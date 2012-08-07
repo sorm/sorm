@@ -3,7 +3,7 @@ package vorm.jdbc
 import java.sql.PreparedStatement
 import org.joda.time.DateTime
 
-class PreparedStatementAPI (s: PreparedStatement) {
+class PreparedStatementAdapter (s: PreparedStatement) {
   /**
    * @see <a href=http://docstore.mik.ua/orelly/java-ent/servlet/ch09_02.htm#ch09-22421>jdbc table
    */

@@ -20,10 +20,14 @@ package object mapped {
       : Mapped
       = ???
   }
+  trait MappedTableValue {
+    def primaryKeyColumnValues : Seq[(String, JdbcValue)]
+  }
 
   class MappedEntity
     ( val value : AnyRef,
       val mapping : EntityMapping )
+    extends MappedTableValue
     {
       lazy val properties
         : Map[String, Mapped]
@@ -33,6 +37,7 @@ package object mapped {
             }
       lazy val isPersisted : Boolean
         = ???
+
     }
   
   class MappedTuple

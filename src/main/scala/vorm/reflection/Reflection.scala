@@ -73,6 +73,16 @@ sealed class Reflection
         javaClass.getConstructors.head
           .newInstance( args.asInstanceOf[Seq[Object]] : _* )
       }
+
+    lazy val javaMethodsByName
+      = javaClass.getMethods.groupBy{_.getName}
+
+    def propertyValue
+      ( name : String,
+        instance : AnyRef )
+      : Any
+      = javaMethodsByName(name).head.invoke( instance )
+
     override def equals(x: Any) =
       x match {
         case x: Reflection =>

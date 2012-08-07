@@ -3,7 +3,7 @@ package vorm.jdbc
 import com.weiglewilczek.slf4s.Logging
 import java.sql.{Connection, Statement => JStatement}
 
-class ConnectionAPI(connection: Connection) extends Logging {
+class ConnectionAdapter(connection: Connection) extends Logging {
 
   def executeUpdateAndGetGeneratedKeys(stmt: Statement): Seq[Seq[Any]] = {
     if (stmt.data.isEmpty) {

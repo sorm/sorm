@@ -6,7 +6,7 @@ import java.sql._
 import vorm._
 import extensions._
 
-class ResultSetAPI
+class ResultSetAdapter
   ( rs : ResultSet ) 
   {
 

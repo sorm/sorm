@@ -6,7 +6,6 @@ import mapping._
 import jdbc._
 import sql._
 import save._
-import mapped._
 import persisted._
 import extensions._
 
@@ -22,6 +21,7 @@ trait SaveAdapter extends ConnectionAdapter {
           // m.properties.view
           //   .collect{ case p: CollectionTableMapping => p }
           //   .foreach{ deleteAllRows(_, key) }
+          ???
         case v =>
 
           val properties1
@@ -45,8 +45,9 @@ trait SaveAdapter extends ConnectionAdapter {
                                Seq( JdbcValue(id, java.sql.Types.BIGINT) ) )
               }
 
-          m.persistedReflection
-            .instantiate( properties2 + ("id" → id) )
+          Persisted( properties2, id, m.reflection )
+          // m.persistedReflection
+          //   .instantiate( properties2 + ("id" → id) )
       }
 
 

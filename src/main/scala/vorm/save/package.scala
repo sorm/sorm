@@ -6,7 +6,7 @@ import mapping._
 import jdbc._
 import sql._
 import save._
-import mapped._
+import persisted._
 import extensions._
 
 /**
@@ -38,7 +38,7 @@ package object save {
         case (m : CollectionTableMapping, _) => 
           Map.empty
         case (m : EntityMapping, v : Persisted) =>
-          Map( m.columnName + "$id" -> v.id )
+          Map( m.columnName + "$id" -> JdbcValue(v.id, java.sql.Types.BIGINT) )
         case (m : TupleMapping, v : Product) =>
           (v.productIterator.toStream zip m.items)
             .flatMap{ case (v, m) => rowValuesForContainerTable(v, m) }

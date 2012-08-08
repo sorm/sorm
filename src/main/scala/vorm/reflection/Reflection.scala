@@ -112,6 +112,8 @@ sealed class Reflection
       }
     override def hashCode =
       MurmurHash3.finalizeHash(t.typeSymbol.hashCode, generics.hashCode)
+
+    override def toString = t.toString
   }
   
 object Reflection {

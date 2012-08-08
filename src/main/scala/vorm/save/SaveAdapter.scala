@@ -31,7 +31,7 @@ trait SaveAdapter extends ConnectionAdapter {
               }
 
           val id : Long
-            = insertAndGetGeneratedKeys( 
+            = insertAndGetGeneratedKeys(
                 m.tableName, 
                 properties1
                   .flatMap{ case (p, v) => rowValuesForContainerTable(v, p) }
@@ -100,8 +100,7 @@ trait SaveAdapter extends ConnectionAdapter {
             }
 
 
-      m.reflection.instantiate(values)
-
+      values.toIndexedSeq
     }
 
   def saveMapAndGetIt
@@ -133,8 +132,7 @@ trait SaveAdapter extends ConnectionAdapter {
             }
 
 
-      m.reflection.instantiate(values)
-
+      values.toMap
     }
 
   def saveSetAndGetIt
@@ -162,9 +160,7 @@ trait SaveAdapter extends ConnectionAdapter {
               v2
             }
 
-
-      m.reflection.instantiate(values)
-
+      values.toSet
     }
 
   // def saveOptionAndGetIt

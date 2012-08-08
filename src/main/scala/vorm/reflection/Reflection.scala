@@ -6,20 +6,24 @@ import util.MurmurHash3
 import vorm._
 import extensions._
 
+/**
+ * Java class is required for dynamically generated classes, because it seems impossible
+ * to find them based on mirror's Type
+ */
 sealed class Reflection
-  ( val t : mirror.Type )
+  ( val t : mirror.Type,
+    val javaClass : Class[_] )
   {
-
 
     lazy val mixinBasis =
       Reflection(mirrorQuirks.mixinBasis(t))
+
     lazy val signature: String =
       generics match {
         case IndexedSeq() => fullName
         case _ => fullName + "[" + generics.map(_.signature).mkString(", ") + "]"
       }
-    lazy val javaClass
-      = mirrorQuirks.javaClass(t)
+
     lazy val fullName
       = mirrorQuirks.fullName(t.typeSymbol)
 
@@ -112,12 +116,12 @@ sealed class Reflection
   
 object Reflection {
 
-   private val cache
-    = new collection.mutable.HashMap[mirror.Type, Reflection] {
+   val cache
+    = new collection.mutable.HashMap[(mirror.Type, Class[_]), Reflection] {
         override def default
-          ( key : mirror.Type )
+          ( key : (mirror.Type, Class[_]) )
           = {
-            val value = new Reflection(key)
+            val value = new Reflection(key._1, key._2)
             update(key, value)
             value
           }
@@ -127,11 +131,11 @@ object Reflection {
     [ T ]
     ( implicit tag : TypeTag[T] )
     : Reflection
-    = cache( tag.tpe )
+    = cache( tag.tpe, tag.erasure )
 
   def apply
     ( mt : mirror.Type )
     : Reflection 
-    = cache( mt )
+    = cache( mt, mirrorQuirks.javaClass(mt) )
 
 }

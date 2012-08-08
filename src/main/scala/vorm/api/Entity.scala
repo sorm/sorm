@@ -2,6 +2,7 @@ package vorm.api
 
 import vorm._
 import reflection._
+import structure._
 
 sealed case class Entity
   [ T : TypeTag ]
@@ -10,8 +11,11 @@ sealed case class Entity
     indexes       : Set[Seq[String]] = Set(),
     autoIncrement : Set[String] = Set() )
   {
-    def reflection = Reflection[T]
     // here should be tests on validity of provided data
+    def reflection
+      = Reflection[T]
+    def settings
+      = EntitySettings(primaryKey, uniqueKeys, indexes, autoIncrement)
   }
 object Entity {
 //  def apply

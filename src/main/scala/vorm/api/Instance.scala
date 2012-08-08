@@ -25,13 +25,7 @@ class Instance
     private val mappings
       = {
         val settings
-          = {
-            def settings
-              ( e : Entity[_] )
-              = EntitySettings(e.primaryKey, e.uniqueKeys, e.indexes, e.autoIncrement)
-
-            entities.view.map{ e => e.reflection -> settings(e) }.toMap
-          }
+          = entities.view.map{ e => e.reflection -> e.settings }.toMap
 
         settings.keys
           .zipBy{ new EntityMapping(None, _, settings) }

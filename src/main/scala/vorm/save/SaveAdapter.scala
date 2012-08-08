@@ -7,6 +7,7 @@ import jdbc._
 import sql._
 import save._
 import mapped._
+import persisted._
 import extensions._
 
 trait SaveAdapter extends ConnectionAdapter {
@@ -26,7 +27,7 @@ trait SaveAdapter extends ConnectionAdapter {
           val properties1
             = m.properties.map{ case (n, p) => 
                 p -> 
-                saveAndGetIt1( m.propertyValue(n, v), p ) 
+                saveAndGetIt1( m.reflection.propertyValue(n, v), p ) 
               }
 
           val id : Long

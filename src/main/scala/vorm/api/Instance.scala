@@ -18,7 +18,7 @@ class Instance
     user : String,
     password : String,
     entities : Traversable[Entity[_]],
-    mode : InitializationMode = InitializationMode.DropCreate )
+    mode : Mode = Mode.Create )
   {
     protected val api
       = new ConnectionAdapter(DriverManager.getConnection(url, user, password))
@@ -35,16 +35,22 @@ class Instance
       }
 
     mode match {
-      case InitializationMode.DropCreate =>
-        for( m <- mappings.values ){
-          try {
-            api.executeUpdate(
-              Statement("DROP TABLE `" + m.tableName + "`")
-            )
-          } catch {
-            case _ : Throwable =>
-          }
-        }
+      case Mode.DropCreate =>
+        ???
+//        doesn't work because dropping requires dropping slave tables first
+//        for( m <- mappings.values ){
+//          try {
+//            api.executeUpdate(
+//              Statement("DROP TABLE `" + m.tableName + "`")
+//            )
+//          } catch {
+//            case _ : Throwable =>
+//          }
+//        }
+//        for( s <- statements(mappings.values) ){
+//          api.executeUpdate(s)
+//        }
+      case Mode.Create =>
         for( s <- statements(mappings.values) ){
           api.executeUpdate(s)
         }

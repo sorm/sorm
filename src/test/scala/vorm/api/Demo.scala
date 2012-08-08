@@ -12,13 +12,16 @@ object Demo extends App {
   val db
     = new Instance(
         url
-          = "jdbc:h2:mem:test",
+//          = "jdbc:h2:mem:test",
+          = "jdbc:mysql://localhost/test",
         user
           = "",
         password
           = "",
         entities
-          = Seq( Entity[Artist](), Entity[Style](), Entity[Name](), Entity[Locale]() )
+          = Seq( Entity[Artist](), Entity[Style](), Entity[Name](), Entity[Locale]() ),
+        mode
+          = Mode.DropCreate
       )
 
   val ru = db.save(Locale("ru"))

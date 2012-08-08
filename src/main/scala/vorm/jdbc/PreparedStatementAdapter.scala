@@ -50,10 +50,14 @@ class PreparedStatementAdapter
                                        i, 
                                        v.asInstanceOf[String]
                                      )
-          case LONGVARCHAR        => s.setCharacterStream(
+          case LONGVARCHAR        => s.setString(
                                        i, 
-                                       v.asInstanceOf[java.io.Reader]
+                                       v.asInstanceOf[String]
                                      )
+//          case LONGVARCHAR        => s.setCharacterStream(
+//                                       i,
+//                                       v.asInstanceOf[java.io.Reader]
+//                                     )
           case NUMERIC | DECIMAL  => s.setBigDecimal(
                                        i, 
                                        v.asInstanceOf[java.math.BigDecimal]

@@ -55,9 +55,6 @@ package object persisted {
 
   def persistedClass
     ( r : Reflection )
-    = {
-      println(r, r.mixinBasis)
-      persistedClass0(r.mixinBasis)
-    }
+    = persistedClass0(r.mixinBasis)
 
 }

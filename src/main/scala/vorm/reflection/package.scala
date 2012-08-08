@@ -21,7 +21,7 @@ package object reflection {
 
 
 
-  implicit class AnyExtensions
+  implicit class AnyAdapter
     [ T : TypeTag ]
     ( any : T )
     {
@@ -31,6 +31,18 @@ package object reflection {
         ( r : Reflection )
         : Boolean
         = reflected.reflection inheritsFrom r
+    }
+
+
+
+  implicit class ClassAdapter
+    [ T ]
+    ( c : Class[T] )
+    {
+      def instantiate
+        ( args : Seq[Any] )
+        : T
+        = ???
     }
 
 

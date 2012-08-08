@@ -7,6 +7,13 @@ class ConnectionAdapterSimulator
   extends ConnectionAdapter(null)
   with Logging
   {
+    override def executeQuery
+      ( s : Statement )
+      : ResultSet
+      = {
+        println(s.toString)
+        ???
+      }
 
     override def executeUpdateAndGetGeneratedKeys
       ( stmt : Statement )

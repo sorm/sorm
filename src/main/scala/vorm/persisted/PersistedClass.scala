@@ -7,7 +7,7 @@ import vorm._
 import reflection._
 import extensions._
 
-object ClassCreator {
+object PersistedClass {
 
   private lazy val interpreter 
     = {
@@ -23,7 +23,7 @@ object ClassCreator {
       "PersistedAnonymous" + generateNameCounter
     }
 
-  def code
+  private[persisted] def code
     ( r : Reflection,
       name : String )
     = {
@@ -67,7 +67,7 @@ object ClassCreator {
         .indent(2)
     }
 
-  def createClass
+  private[persisted] def createClass
     [ T ]
     ( r : Reflection )
     : Class[T with Persisted]
@@ -82,5 +82,19 @@ object ClassCreator {
 
       c
     }
+
+  private val cache
+    = new collection.mutable.HashMap[Reflection, Class[_ <: Persisted]] {
+        override def default
+          ( k : Reflection )
+          = {
+            val v = createClass(k)
+            update(k, v)
+            v
+          }
+      }
+  def apply
+    ( r : Reflection )
+    = cache(r.mixinBasis)
 
 }

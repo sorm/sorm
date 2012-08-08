@@ -8,21 +8,21 @@ import extensions._
 
 object Demo extends App {
 
-  import samples.ArtistModelWithIds._
+  import samples.ArtistModel._
 
   val settings
     = Map(
         Reflection[Artist] →
-        EntitySettings( Seq("id"), autoIncrement = Set("id") ),
+        EntitySettings(),
 
         Reflection[Style] →
-        EntitySettings( Seq("id"), autoIncrement = Set("id") ),
+        EntitySettings(),
 
         Reflection[Name] →
-        EntitySettings( Seq("id"), autoIncrement = Set("id"), indexes = Set(Seq("value")) ),
+        EntitySettings( indexes = Set(Seq("value")) ),
 
         Reflection[Locale] →
-        EntitySettings( Seq("id"), autoIncrement = Set("id"), indexes = Set(Seq("code")) )
+        EntitySettings( indexes = Set(Seq("code")) )
       )
 
   val mappings

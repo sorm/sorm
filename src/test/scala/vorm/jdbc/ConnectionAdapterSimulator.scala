@@ -1,7 +1,7 @@
 package vorm.jdbc
 
 import com.weiglewilczek.slf4s.Logging
-import java.sql.{Connection, Statement => JStatement}
+import java.sql.{ResultSet, Connection, Statement => JStatement}
 
 class ConnectionAdapterSimulator
   extends ConnectionAdapter(null)

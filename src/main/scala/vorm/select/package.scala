@@ -36,7 +36,7 @@ package object select {
  
       def statementAndResultMappings
         : ( Statement, Seq[(TableMapping, Column)] )
-        = Statement( sql.rendering, sql.data ) ->
+        = Statement( sql.rendering, sql.data.map{JdbcValue.apply} ) ->
           resultMappings
  
     }

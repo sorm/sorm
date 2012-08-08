@@ -26,7 +26,7 @@ class PreparedStatementAdapter
           case v: DateTime             => s.setDate(i, new java.sql.Date(v.getMillis))
           case Some(v)                 => set(i, v)
           case None                    => s.setNull(i, java.sql.Types.NULL)
-          case _                       => throw new NotImplementedError
+          case _                       => ???
         }
       }
     def set 

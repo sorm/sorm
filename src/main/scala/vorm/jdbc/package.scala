@@ -3,6 +3,9 @@ package vorm
 import com.weiglewilczek.slf4s.Logger
 import java.sql.{ResultSet, PreparedStatement, Connection, Statement => JStatement}
 
+import vorm._
+import extensions._
+
 package object jdbc {
   private lazy val logger = Logger(this.getClass)
 
@@ -20,5 +23,12 @@ package object jdbc {
   case class Statement
     ( sql: String,
       data: Seq[JdbcValue] = Nil ) 
+    {
+      override def toString
+        = "Statement:\n" + 
+          ( "Sql:\n" + sql.indent(2) + "\n" +
+            "Data:\n" + data.view.map{_.value}.mkString(", ") )
+            .indent(2)
+    }
 
 }

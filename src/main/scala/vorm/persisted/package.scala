@@ -19,37 +19,26 @@ package object persisted {
     ( reflected : Reflected,
       id : Long )
     : T with Persisted
-    = {
-      val args
-        = id ::
-          reflected.reflection.constructorArguments
-            .view
-            .unzip._1
-            .map{ reflected.propertyValue }
-            .toList
-
-      persistedClass(reflected.reflection)
-        .getConstructors.head
-        .newInstance(args.asInstanceOf[List[Object]]: _*)
+    = persisted( reflected.propertyValues, id, reflected.reflection)
         .asInstanceOf[T with Persisted]
 
-    }
-
   def persisted
-    [ T ]
+    [ T : TypeTag ]
     ( args : Map[String, Any],
       id : Long )
     : T with Persisted
-    = {
-      val r = Reflection[T]
-      persistedClass(r).instantiate(
-        r.constructorArguments.keysIterator
-          .map{args}
-          .toStream
-          .+:(id)
-      ).asInstanceOf[T with Persisted]
-    }
+    = persisted( args, id, Reflection[T] )
+        .asInstanceOf[T with Persisted]
 
+  def persisted
+    ( args : Map[String, Any],
+      id : Long,
+      r : Reflection )
+    : Persisted
+    = persistedClass(r)
+        .instantiate(
+          id +: r.constructorArguments.keysIterator.toStream.map{args}
+        )
 
 
 
@@ -66,6 +55,9 @@ package object persisted {
 
   def persistedClass
     ( r : Reflection )
-    = persistedClass0(r.mixinBasis)
+    = {
+      println(r, r.mixinBasis)
+      persistedClass0(r.mixinBasis)
+    }
 
 }

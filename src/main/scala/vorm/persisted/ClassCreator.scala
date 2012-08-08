@@ -44,16 +44,27 @@ object ClassCreator {
           }
 
       val copyMethodInstantiationArgs
-        = sourceArgs.map{ _._1 }
+        = "id" +: sourceArgs.map{ _._1 }.toList
 
-      """
-      class """ + name + """(""" + newArgSignatures.mkString(", ") + """)
-        extends """ + r.signature + """(""" + sourceArgSignatures.mkString(", ") + """)
-        with """ + tpe[Persisted].signature + """ {
-          override def copy(""" + copyMethodArgSignatures.mkString(", ") + """) =
-            new """ + name + """(""" + copyMethodInstantiationArgs.mkString(", ") + """)
-        }
-      """
+
+      "class " + name + "\n" +
+      ( "( " + newArgSignatures.mkString(",\n").indent(2).trim + " )\n" +
+        "extends " + r.signature + "( " + 
+        sourceArgs.map{_._1}.mkString(", ") + 
+        " )\n" +
+        "with " + Reflection[Persisted].signature + "\n" + 
+        "{\n" +
+        ( "override def copy\n" +
+          ( "( " + 
+            copyMethodArgSignatures.mkString(",\n").indent(2).trim + 
+            " )\n" +
+            "= " + "new " + name + "( " + 
+            copyMethodInstantiationArgs.mkString(", ") + 
+            " )\n"
+            ).indent(2) 
+          ).indent(2) + "\n" +
+        "}" )
+        .indent(2)
     }
 
   def createClass

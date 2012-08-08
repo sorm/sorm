@@ -11,31 +11,48 @@ class ConnectionAdapter
       ( s : Statement )
       : ResultSet
       = {
-        preparedStatement(s).executeQuery()
+        logger.info("Executing statement:\n" + s.toString)
+        val js = preparedStatement(s)
+        val rs = js.executeQuery()
+        js.close()
+        rs
       }
 
     def executeUpdateAndGetGeneratedKeys
-      ( stmt : Statement )
+      ( s : Statement )
       : List[IndexedSeq[Any]] 
       = {
-        if( stmt.data.isEmpty ) {
+        logger.info("Executing statement:\n" + s.toString)
+        if( s.data.isEmpty ) {
           val js = connection.createStatement()
-          js.executeUpdate(stmt.sql)
-          js.getGeneratedKeys.parseAndClose()
+          js.executeUpdate(s.sql)
+          val r = js.getGeneratedKeys.parseAndClose()
+          js.close()
+          r
         } else {
-          val js = preparedStatement(stmt, true)
+          val js = preparedStatement(s, true)
           js.executeUpdate()
-          js.getGeneratedKeys.parseAndClose()
+          val r = js.getGeneratedKeys.parseAndClose()
+          js.close()
+          r
         }
       }
 
     def executeUpdate
-      ( stmt : Statement )
+      ( s : Statement )
       : Int = {
-        if( stmt.data.isEmpty )
-          connection.createStatement().executeUpdate(stmt.sql)
-        else
-          preparedStatement(stmt).executeUpdate()
+        logger.info("Executing statement:\n" + s.toString)
+        if( s.data.isEmpty ){
+          val js = connection.createStatement()
+          val r = js.executeUpdate(s.sql)
+          js.close()
+          r
+        } else {
+          val js = preparedStatement(s)
+          val r = js.executeUpdate()
+          js.close()
+          r
+        }
       }
 
     private def preparedStatement

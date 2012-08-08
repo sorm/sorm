@@ -10,19 +10,21 @@ import save._
 import structure._
 import mapping._
 import jdbc._
+import create._
 import extensions._
 
 class Instance
   ( url : String,
     user : String,
     password : String,
-    entities : Traversable[Entity[_]] )
+    entities : Traversable[Entity[_]],
+    mode : InitializationMode = InitializationMode.DropCreate )
   {
-    private val api
+    protected val api
       = new ConnectionAdapter(DriverManager.getConnection(url, user, password))
           with SaveAdapter
 
-    private val mappings
+    protected val mappings
       = {
         val settings
           = entities.view.map{ e => e.reflection -> e.settings }.toMap
@@ -31,6 +33,22 @@ class Instance
           .zipBy{ new EntityMapping(None, _, settings) }
           .toMap
       }
+
+    mode match {
+      case InitializationMode.DropCreate =>
+        for( m <- mappings.values ){
+          try {
+            api.executeUpdate(
+              Statement("DROP TABLE `" + m.tableName + "`")
+            )
+          } catch {
+            case _ : Throwable =>
+          }
+        }
+        for( s <- statements(mappings.values) ){
+          api.executeUpdate(s)
+        }
+    }
 
     private def mapping
       [ T : TypeTag ]

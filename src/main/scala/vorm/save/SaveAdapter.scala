@@ -265,7 +265,7 @@ trait SaveAdapter extends ConnectionAdapter {
     ( table : String,
       what : Map[String, JdbcValue] )
     {
-      ???
+      executeUpdate(insertStatement(table, what.toSeq))
     }
 
   private def insertAndGetGeneratedKeys
@@ -273,8 +273,21 @@ trait SaveAdapter extends ConnectionAdapter {
       what : Map[String, JdbcValue] )
     : Seq[Any]
     = {
-      ???
+      executeUpdateAndGetGeneratedKeys(insertStatement(table, what.toSeq)).head
     }
+
+  private def insertStatement
+    ( table : String,
+      what : Seq[(String, JdbcValue)] )
+    : Statement
+    = Statement(
+        "INSERT INTO " + quote(table) + "\n" +
+        ( "( " + what.view.unzip._1.map{quote}.mkString(", ") + " )\n" + 
+          "VALUES\n" +
+          "( " + Iterable.fill(what.size)("?").mkString(", ") + " )" )
+          .indent(2),
+        what.view.unzip._2.toSeq
+      )
 
 
 }

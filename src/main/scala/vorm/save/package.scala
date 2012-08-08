@@ -48,5 +48,9 @@ package object save {
           Map( m.columnName -> JdbcValue(v, m.column.t.jdbcType) )
 
       }
+      
+  def quote
+    ( s : String )
+    = s
 
 }

@@ -16,12 +16,7 @@ class Reflected
     def propertyValue
       ( name: String )
       : Any
-      = instance
-          .getClass
-          .getMethods
-          .find{ _.getName == name }
-          .get 
-          .invoke( instance )
+      = reflection.propertyValue(name, instance.asInstanceOf[AnyRef])
 
     def methodResult
       ( name: String, 

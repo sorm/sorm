@@ -9,6 +9,15 @@ import extensions._
 sealed class Reflection
   ( val t : mirror.Type )
   {
+
+
+    lazy val mixinBasis =
+      Reflection(mirrorQuirks.mixinBasis(t))
+    lazy val signature: String =
+      generics match {
+        case IndexedSeq() => fullName
+        case _ => fullName + "[" + generics.map(_.signature).mkString(", ") + "]"
+      }
     lazy val javaClass
       = mirrorQuirks.javaClass(t)
     lazy val fullName

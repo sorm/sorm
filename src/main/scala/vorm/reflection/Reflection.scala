@@ -48,14 +48,13 @@ sealed class Reflection
         }
 
     lazy val constructorArguments
-      : Map[String, Reflection]
-      = mirrorQuirks.constructors(t)
+      = collection.immutable.ListMap[String, Reflection]() ++
+        mirrorQuirks.constructors(t)
           .head
           .typeSignature
           .asInstanceOf[{def params: List[mirror.Symbol]}]
           .params
           .map(s ⇒ mirrorQuirks.name(s) → Reflection(s.typeSignature) )
-          .toMap
 
 
     def instantiate

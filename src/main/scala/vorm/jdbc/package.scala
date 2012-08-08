@@ -27,7 +27,7 @@ package object jdbc {
       override def toString
         = "Statement:\n" + 
           ( "Sql:\n" + sql.indent(2) + "\n" +
-            "Data:\n" + data.view.map{_.value}.mkString(", ") )
+            "Data:\n" + data.view.map{_.value}.mkString(", ").indent(2) )
             .indent(2)
     }
 

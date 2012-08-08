@@ -1,12 +1,18 @@
 package vorm.jdbc
 
 import com.weiglewilczek.slf4s.Logging
-import java.sql.{Connection, Statement => JdbcStatement}
+import java.sql.{Connection, ResultSet, Statement => JdbcStatement}
 
 class ConnectionAdapter
   ( connection : Connection ) 
   extends Logging 
   {
+    def executeQuery
+      ( s : Statement )
+      : ResultSet
+      = {
+        preparedStatement(s).executeQuery()
+      }
 
     def executeUpdateAndGetGeneratedKeys
       ( stmt : Statement )

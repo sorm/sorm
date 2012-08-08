@@ -6,15 +6,11 @@ import query._
 import mapping._
 import vorm.{sql => Sql}
 import ddl._
+import jdbc._
 import extensions._
 
 package object select {
 
-  sealed case class Statement
-    ( template : String,
-      data : Seq[Any],
-      resultMappings : Seq[(TableMapping, Column)] )
- 
   implicit class QueryExtensions
     ( q : Query )
     {
@@ -38,8 +34,10 @@ package object select {
         : Seq[(TableMapping, Column)]
         = resultSetSelect.resultMappings
  
-      def statement
-        = Statement( sql.rendering, sql.data, resultMappings )
+      def statementAndResultMappings
+        : ( Statement, Seq[(TableMapping, Column)] )
+        = Statement( sql.rendering, sql.data ) ->
+          resultMappings
  
     }
 

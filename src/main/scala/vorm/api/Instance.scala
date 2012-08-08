@@ -26,16 +26,11 @@ class Instance
       = {
         val settings
           = {
-            def reflection
-              [ T : TypeTag ]
-              ( e : Entity[T] )
-              = Reflection[T]
-
             def settings
               ( e : Entity[_] )
               = EntitySettings(e.primaryKey, e.uniqueKeys, e.indexes, e.autoIncrement)
 
-            entities.view.map{ e => reflection(e) -> settings(e) }.toMap
+            entities.view.map{ e => e.reflection -> settings(e) }.toMap
           }
 
         settings.keys

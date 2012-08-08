@@ -33,11 +33,7 @@ sealed class EntityMapping
     def columns = childrenColumns
 
     lazy val primaryKeyColumns
-      = settings.primaryKey
-          .view
-          .map{ properties }
-          .flatMap{ columnsForContainerTable }
-          .toList
+      = generatedIdColumn :: Nil
 
     lazy val uniqueKeyColumns
       = settings.uniqueKeys
@@ -64,17 +60,6 @@ sealed class EntityMapping
     def foreignKeys
       = nestedTableMappingsForeignKeys
 
-//    lazy val generatedIdColumn
-//      : Option[Column]
-//      = if (settingsMap.primaryKey contains reflection)
-//          None
-//        else
-//          Some (
-//            Column (
-//              "id",
-//              ColumnType.BigInt,
-//              autoIncremented = true,
-//              nullable = false
-//            )
-//          )
+    lazy val generatedIdColumn
+      = Column("id", Column.Type.BigInt, autoIncrement = true)
 }

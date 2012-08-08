@@ -73,7 +73,7 @@ sealed class Reflection
     def instantiate
       ( params : Map[String, Any] )
       : Any
-      = instantiate( constructorArguments.keys.map(params) )
+      = instantiate( constructorArguments.view.unzip._1.map{params} )
 
     def instantiate
       ( args : Traversable[Any] = Nil )

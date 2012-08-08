@@ -112,7 +112,7 @@ sealed class Reflection
   
 object Reflection {
 
-   val cache
+   private val cache
     = new collection.mutable.HashMap[mirror.Type, Reflection] {
         override def default
           ( key : mirror.Type )

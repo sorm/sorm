@@ -42,7 +42,10 @@ package object reflection {
       def instantiate
         ( args : Seq[Any] )
         : T
-        = ???
+        = c 
+          .getConstructors.head
+          .newInstance(args.asInstanceOf[Seq[Object]]: _*)
+          .asInstanceOf[T]
     }
 
 

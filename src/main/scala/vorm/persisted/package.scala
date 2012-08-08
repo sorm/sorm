@@ -41,7 +41,13 @@ package object persisted {
       id : Long )
     : T with Persisted
     = {
-      persistedClass(reflected.reflection)
+      val r = Reflection[T]
+      persistedClass(r).instantiate(
+        r.constructorArguments.keysIterator
+          .map{args}
+          .toStream
+          .+:(id)
+      ).asInstanceOf[T with Persisted]
     }
 
 

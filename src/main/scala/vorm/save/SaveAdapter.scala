@@ -17,11 +17,35 @@ trait SaveAdapter extends ConnectionAdapter {
     = {
       v match {
         case v : Persisted =>
-          // //  delete slaves
-          // m.properties.view
-          //   .collect{ case p: CollectionTableMapping => p }
-          //   .foreach{ deleteAllRows(_, key) }
-          ???
+
+          val id = v.id
+
+          //  delete slaves
+          m.properties.view.unzip._2.foreach{
+            killSlaves(_, Seq( JdbcValue(id, java.sql.Types.BIGINT) ))
+          }
+
+          val properties1
+            = m.properties.map{ case (n, p) => 
+                p -> 
+                saveAndGetIt1( m.reflection.propertyValue(n, v), p ) 
+              }
+
+          update(
+            m.tableName, 
+            properties1
+              .flatMap{ case (p, v) => rowValuesForContainerTable(v, p) },
+            Map("id" -> JdbcValue(id, java.sql.Types.BIGINT))
+          )
+
+          val properties2
+            = m.properties.map{ case (n, p) =>
+                n ->
+                saveAndGetIt2( properties1(p), p,
+                               Seq( JdbcValue(id, java.sql.Types.BIGINT) ) )
+              }
+
+          Persisted( properties2, id, m.reflection )
         case v =>
 
           val properties1
@@ -46,32 +70,7 @@ trait SaveAdapter extends ConnectionAdapter {
               }
 
           Persisted( properties2, id, m.reflection )
-          // m.persistedReflection
-          //   .instantiate( properties2 + ("id" → id) )
       }
-
-
-      // val values
-      //   = 
-
-      // e.mapping.reflection.properties.keys.view
-
-
-      // val nestedMasterTableMappings
-      //   = {
-      //     def nestedMasterTableMappings
-      //       ( m : Mapping )
-      //       : Stream[EntityMapping]
-      //       = m match {
-      //           case m : EntityMapping => Stream(m)
-      //           case m : TableMapping => Stream.empty
-      //           case m : HasChildren => m.children flatMap nestedMasterTableMappings
-      //           case _ => Stream.empty
-      //         }
-      //     nestedMasterTableMappings(m)
-      //   }
-
-
     }
 
   def saveSeqAndGetIt
@@ -230,38 +229,52 @@ trait SaveAdapter extends ConnectionAdapter {
       }
 
 
-  def deleteAllRows 
-    ( m : CollectionTableMapping,
+  def killSlaves 
+    ( m : Mapping,
       containerKey : Iterable[JdbcValue] ) 
     {
       def nestedSlaveTableMappings
         ( m : Mapping )
         : Stream[CollectionTableMapping]
         = m match {
-            case m : CollectionTableMapping => Stream(m)
-            case m : TableMapping => Stream.empty
+            case m : CollectionTableMapping => 
+              Stream(m) ++ m.children.toStream.flatMap{nestedSlaveTableMappings}
+            case m : TableMapping => 
+              Stream.empty
             case m : HasChildren => 
               m.children.toStream flatMap nestedSlaveTableMappings
-            case _ => Stream.empty
+            case _ => 
+              Stream.empty
           }
 
-      nestedSlaveTableMappings(m).foreach{ deleteAllRows(_, containerKey) }
-      delete( m.tableName, 
-              m.containerTableColumns.view.map(_.name) zip containerKey toMap )
+      nestedSlaveTableMappings(m).foreach{ m =>
+        delete( 
+          m.tableName, 
+          m.containerTableColumns.view.map(_.name) zip containerKey toMap 
+        )
+      }
     }
 
   private def delete
     ( table : String,
       where : Map[String, JdbcValue] )
     {
-      ???
+      executeUpdate(deleteStatement(table, where.toStream))
+    }
+
+  private def update
+    ( table : String,
+      values : Map[String, JdbcValue],
+      where : Map[String, JdbcValue] )
+    {
+      executeUpdate(updateStatement(table, values.toStream, where.toStream))
     }
 
   private def insert
     ( table : String,
       what : Map[String, JdbcValue] )
     {
-      executeUpdate(insertStatement(table, what.toSeq))
+      executeUpdate(insertStatement(table, what.toStream))
     }
 
   private def insertAndGetGeneratedKeys
@@ -269,7 +282,7 @@ trait SaveAdapter extends ConnectionAdapter {
       what : Map[String, JdbcValue] )
     : Seq[Any]
     = {
-      executeUpdateAndGetGeneratedKeys(insertStatement(table, what.toSeq)).head
+      executeUpdateAndGetGeneratedKeys(insertStatement(table, what.toStream)).head
     }
 
   private def insertStatement
@@ -282,7 +295,34 @@ trait SaveAdapter extends ConnectionAdapter {
           "VALUES\n" +
           "( " + Iterable.fill(what.size)("?").mkString(", ") + " )" )
           .indent(2),
-        what.view.unzip._2.toSeq
+        what.view.unzip._2.toStream
+      )
+
+  private def updateStatement
+    ( table : String,
+      values : Seq[(String, JdbcValue)],
+      where : Seq[(String, JdbcValue)] )
+    : Statement
+    = Statement(
+        "UPDATE " + quote(table) + "\n" +
+        ( "SET " + 
+          values.view.unzip._1.map{ quote(_) + " = ?" }.mkString(", ") + "\n" +
+          "WHERE " + 
+          where.view.unzip._1.map{ quote(_) + " = ?" }.mkString(" AND ") )
+          .indent(2),
+        Stream() ++ values.view.unzip._2 ++ where.view.unzip._2
+      )
+
+  private def deleteStatement
+    ( table : String,
+      where : Seq[(String, JdbcValue)] )
+    : Statement
+    = Statement(
+        "DELETE FROM " + quote(table) + "\n" +
+        ( "WHERE " + 
+          where.view.unzip._1.map{ quote(_) + " = ?" }.mkString(" AND ") )
+          .indent(2),
+        Stream() ++ where.view.unzip._2
       )
 
 

@@ -90,5 +90,5 @@ object Demo extends App {
     5
   )
 
-  query.statement.println()
+  query.statementAndResultMappings.println()
 }

@@ -130,7 +130,7 @@ case class MappingSelect
         allTables
           .foldLeft(this){_ withSkeletonTo _}
           .copy(
-            resultMappings = allTables.flatMap{ m ⇒ m.childrenColumns.map{m → _} }
+            resultMappings = allTables.flatMap{ m ⇒ m.columns.map{m → _} }
           )
       }
 

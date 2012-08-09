@@ -1,0 +1,78 @@
+package vorm.api
+
+import org.joda.time.DateTime
+import java.sql.DriverManager
+
+import vorm._
+import persisted._
+import reflection._
+import save._
+import structure._
+import mapping._
+import jdbc._
+import create._
+import drop._
+import extensions._
+
+class Instance
+  ( url : String,
+    user : String,
+    password : String,
+    entities : Traversable[Entity[_]],
+    mode : Mode = Mode.None )
+  {
+    protected val api
+      = new ConnectionAdapter(DriverManager.getConnection(url, user, password))
+          with SaveAdapter
+
+    protected val mappings
+      = {
+        val settings
+          = entities.view.map{ e => e.reflection -> e.settings }.toMap
+
+        settings.keys
+          .zipBy{ new EntityMapping(None, _, settings) }
+          .toMap
+      }
+
+    mode match {
+      case Mode.DropCreate =>
+        for( s <- Drop.statements(mappings.values) ){
+          try {
+            api.executeUpdate(s)
+          } catch {
+            case e : Throwable =>
+          }
+        }
+        for( s <- Create.statements(mappings.values) ){
+          api.executeUpdate(s)
+        }
+      case Mode.Create =>
+        for( s <- Create.statements(mappings.values) ){
+          api.executeUpdate(s)
+        }
+      case Mode.None =>
+    }
+
+    private def mapping
+      [ T : TypeTag ]
+      = mappings.get(Reflection[T]) match {
+          case Some(m) => m
+          case None => 
+            throw new RuntimeException( "Entity `" + Reflection[T].name + "` is not registered" )
+        }
+
+    /**
+     * Current time at DB server
+     */
+    def date : DateTime
+      = ???
+
+    def save
+      [ T <: AnyRef : TypeTag ]
+      ( value : T )
+      : T with Persisted
+      = api.saveEntityAndGetIt( value, mapping[T] )
+          .asInstanceOf[T with Persisted]
+
+  }

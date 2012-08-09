@@ -267,7 +267,9 @@ trait SaveAdapter extends ConnectionAdapter {
       values : Map[String, JdbcValue],
       where : Map[String, JdbcValue] )
     {
-      executeUpdate(updateStatement(table, values.toStream, where.toStream))
+      if( !values.isEmpty ) {
+        executeUpdate(updateStatement(table, values.toStream, where.toStream))
+      }
     }
 
   private def insert

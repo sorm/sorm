@@ -1,16 +1,22 @@
-package vorm
+package vorm.create
 
 import vorm._
 import structure._
 import mapping._
-import ddl._
+import jdbc._
 import extensions._
 
-package object create {
+object Create {
 
   def ddl
     ( ms : Iterable[TableMapping] )
     : String
+    = statements(ms)
+        .map{_.sql + ";"}
+        .mkString("\n\n")
+
+  def statements
+    ( ms : Iterable[TableMapping] )
     = ms.foldLeft( Vector.empty[TableMapping] ){ (q, m) ⇒
           def queue
             ( m : TableMapping )
@@ -25,9 +31,9 @@ package object create {
               }
           q ++ queue( m )
         }
+        .toStream
         .map{ _.table }
         .distinct
-        .map{_.ddl + ";"}
-        .mkString("\n\n")
-
+        .map{_.ddl}
+        .map{Statement(_)}
 }

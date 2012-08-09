@@ -19,7 +19,7 @@ class Instance
     user : String,
     password : String,
     entities : Traversable[Entity[_]],
-    mode : Mode = Mode.Create )
+    mode : Mode = Mode.None )
   {
     protected val api
       = new ConnectionAdapter(DriverManager.getConnection(url, user, password))
@@ -51,6 +51,7 @@ class Instance
         for( s <- Create.statements(mappings.values) ){
           api.executeUpdate(s)
         }
+      case Mode.None =>
     }
 
     private def mapping

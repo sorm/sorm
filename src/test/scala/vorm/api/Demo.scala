@@ -26,10 +26,14 @@ object Demo extends App {
 
   val ru = db.save(Locale("ru"))
   val en = db.save(Locale("en"))
-  val rock = db.save(Style(Name(en, "rock") :: Nil))
-  val metallica = db.save( Artist( Seq(Name(en, "Metallica")), Set(rock) ) )
+  val rock = db.save(Style(Name(en, "Rock") :: Nil))
+  val hardRock = db.save(Style(Name(en, "Hard Rock") :: Name(ru, "Тяжёлый рок") :: Nil))
+  val metallica = db.save( Artist( Seq(Name(en, "Metallica")), Set(rock, hardRock) ) )
+  val nirvana = db.save( Artist( Seq(Name(en, "Nirvana")), Set(rock, hardRock) ) )
+  val kino = db.save( Artist( Seq(Name(ru, "Кино"), Name(en, "Kino")), Set(rock) ) )
 
-  metallica.id.println()
+  kino.id.println()
+  kino.println()
 //  val artist = api.all[Artist].filterEquals("name", "Metallica").offset(0).limit(1).head
 //
 //  val style

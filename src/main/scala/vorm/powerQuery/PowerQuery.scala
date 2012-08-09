@@ -42,20 +42,20 @@ class PowerQuery
           queryWhere = (queryWhere ++: List(w)) reduceOption Where.And
         )
     def order ( p : String, r : Boolean = false )
-      = copy( queryOrder = queryOrder enqueue Order(resolveMapping(p), r) )
+      = copy( queryOrder = queryOrder enqueue Order(pathMapping(p), r) )
     def limit ( x : Int )
       = copy( queryLimit = Some(x) )
     def offset ( x : Int )
       = copy( queryOffset = x )
 
 
-    private def resolveMapping ( p : String ) : Mapping
+    private def pathMapping ( p : String ) : Mapping
       = p.satisfying{ !_.contains(".") }
           .map{ queryMapping.properties }
           .getOrElse{ throw new Exception("Complex paths are not supported yet") }
 
     def filterEquals ( p : String, v : Any )
-      = filter( Where.Equals( resolveMapping(p), v ) )
+      = filter( Where.Equals( pathMapping(p), v ) )
 
   // def order(prop: String, reverse: Boolean = false) =
   //   new QueryStream[T](

@@ -13,6 +13,8 @@ sealed case class Column
       = quote(name) + " " + t.ddl + 
         ( if( nullable ) "" else " NOT NULL" ) +
         ( if( autoIncrement ) " AUTO_INCREMENT" else "" )
+    override def toString
+      = name
   }
 
 object Column {

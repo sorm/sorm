@@ -13,6 +13,7 @@ import mapping._
 import jdbc._
 import create._
 import drop._
+import powerQuery._
 import extensions._
 
 trait Api {
@@ -45,5 +46,10 @@ trait Api {
     : T with Persisted
     = connection.saveEntityAndGetIt( value, mapping[T] )
         .asInstanceOf[T with Persisted]
-  
+
+  def query
+    [ T <: AnyRef : TypeTag ]
+    : PowerQuery[T]
+    = new PowerQuery[T](connection, mapping[T])
+
 }

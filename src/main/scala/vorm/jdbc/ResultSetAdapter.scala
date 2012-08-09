@@ -70,14 +70,14 @@ class ResultSetAdapter
      * @see <a href=http://docstore.mik.ua/orelly/java-ent/servlet/ch09_02.htm#ch09-22421>jdbc table
      */
     def value
-      ( i : Int, 
+      ( i : Int,
         t : JdbcType ) 
       : Any 
       = {
         import java.sql.Types._
         t match {
           case CHAR | VARCHAR     => rs.getString(i)
-          case LONGVARCHAR        => rs.getCharacterStream(i)
+          case LONGVARCHAR        => rs.getString(i)
           case NUMERIC | DECIMAL  => rs.getBigDecimal(i)
           case BIT                => rs.getBoolean(i)
           case TINYINT            => rs.getByte(i)

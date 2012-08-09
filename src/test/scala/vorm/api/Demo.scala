@@ -47,6 +47,10 @@ object Demo extends App {
 
   kino.id.println()
   kino.println()
+
+
+  Db.query[Name].filterEquals("value", "Rock").all.println()
+
 //  val artist = api.all[Artist].filterEquals("name", "Metallica").offset(0).limit(1).head
 //
 //  val style

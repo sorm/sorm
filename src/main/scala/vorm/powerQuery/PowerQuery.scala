@@ -51,7 +51,12 @@ class PowerQuery
 
     private def pathMapping ( p : String ) : Mapping
       = p.satisfying{ !_.contains(".") }
-          .map{ queryMapping.properties }
+          .map{
+            queryMapping.properties.get(_)
+              .getOrElse{
+                throw new Exception("Incorrect property path: `" + p + "`")
+              }
+          }
           .getOrElse{ throw new Exception("Complex paths are not supported yet") }
 
     def filterEquals ( p : String, v : Any )

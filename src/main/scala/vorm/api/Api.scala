@@ -13,6 +13,7 @@ import mapping._
 import jdbc._
 import create._
 import drop._
+import powerQuery._
 import extensions._
 
 trait Api {

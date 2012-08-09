@@ -1,4 +1,4 @@
-package vorm.api
+package vorm.powerQuery
 
 import vorm._
 import persisted._
@@ -12,19 +12,22 @@ import select._
 import resultSet._
 import extensions._
 
+import Query._
+
 case class PowerQuery
   [ T ]
   ( connection : ConnectionAdapter,
     mapping    : EntityMapping,
-    where      : Option[Query.Where] = None,
-    order      : Seq[Query.Order] = Nil,
+    where      : Option[Where] = None,
+    order      : Seq[Order] = Nil,
     limit      : Option[Int] = None,
     offset     : Int = 0 )
   extends Iterable[T]
   {
-    def filter ( w : Query.Where )
+
+    def filter ( w : Where )
       = copy(
-          where = (where ++: List(w)) reduceOption Query.Where.And
+          where = (where ++: List(w)) reduceOption Where.And
         )
 
     private def resolveMapping ( p : String ) : Mapping
@@ -33,7 +36,7 @@ case class PowerQuery
           .getOrElse{ throw new Exception("Complex paths are not supported yet") }
 
     def filterEquals ( p : String, v : Any )
-      = filter( Query.Where.Equals( resolveMapping(p), v ) )
+      = filter( Where.Equals( resolveMapping(p), v ) )
 
   // def order(prop: String, reverse: Boolean = false) =
   //   new QueryStream[T](
@@ -52,39 +55,36 @@ case class PowerQuery
   //     connection,
   //     query.copy(limit = query.limit.copy(amount = Some(amount)))
   //   )
-  
 
-    private def query( kind : Query.Kind )
+
+    private def query( kind : Kind )
       = Query(kind, mapping, where, order, limit, offset)
 
-    override def toSeq
+    protected def select()
       = {
-        val (stmt, resultSetMappings) 
-          = query(Query.Kind.Select).statementAndResultMappings
+        val (stmt, resultSetMappings)
+          = query(Kind.Select).statementAndResultMappings
 
         connection.executeQuery(stmt)
-          .fetchInstancesAndClose( 
-            mapping, 
+          .fetchInstancesAndClose(
+            mapping,
             resultSetMappings.view.zipWithIndex.toMap
           )
           .asInstanceOf[Seq[T]]
       }
-    override def toList 
-      = toSeq.toList
-    def iterator 
-      = toSeq.iterator
 
-    /**
-     * Emits a count query every time it's called
-     */
-    override def size : Int 
+    protected def count() : Int
       = {
-        val (stmt, _) 
-          = query(Query.Kind.Count).statementAndResultMappings
+        val (stmt, _)
+          = query(Kind.Count).statementAndResultMappings
 
         connection.executeQuery(stmt)
           .parseAndClose()
           .head.head
           .asInstanceOf[Int]
       }
+
+    override def toSeq = select()
+    override def toList = toSeq.toList
+    def iterator = toSeq.iterator
   }

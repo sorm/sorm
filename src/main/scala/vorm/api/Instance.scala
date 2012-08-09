@@ -21,7 +21,7 @@ class Instance
     entities : Traversable[Entity[_]],
     mode : Mode = Mode.None )
   {
-    protected val api
+    protected val connection
       = new ConnectionAdapter(DriverManager.getConnection(url, user, password))
           with SaveAdapter
 
@@ -39,17 +39,17 @@ class Instance
       case Mode.DropCreate =>
         for( s <- Drop.statements(mappings.values) ){
           try {
-            api.executeUpdate(s)
+            connection.executeUpdate(s)
           } catch {
             case e : Throwable =>
           }
         }
         for( s <- Create.statements(mappings.values) ){
-          api.executeUpdate(s)
+          connection.executeUpdate(s)
         }
       case Mode.Create =>
         for( s <- Create.statements(mappings.values) ){
-          api.executeUpdate(s)
+          connection.executeUpdate(s)
         }
       case Mode.None =>
     }
@@ -72,7 +72,7 @@ class Instance
       [ T <: AnyRef : TypeTag ]
       ( value : T )
       : T with Persisted
-      = api.saveEntityAndGetIt( value, mapping[T] )
+      = connection.saveEntityAndGetIt( value, mapping[T] )
           .asInstanceOf[T with Persisted]
 
   }

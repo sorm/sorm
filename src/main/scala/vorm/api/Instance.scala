@@ -16,10 +16,10 @@ import drop._
 import extensions._
 
 class Instance
-  ( url : String,
-    user : String,
-    password : String,
-    entities : Traversable[Entity[_]],
+  ( entities : Traversable[Entity[_]],
+    url : String,
+    user : String = "",
+    password : String = "",
     mode : Mode = Mode.None )
   extends Api
   with LogulaLogging

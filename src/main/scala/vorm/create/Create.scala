@@ -1,13 +1,12 @@
-package vorm
+package vorm.create
 
 import vorm._
 import structure._
 import mapping._
-import ddl._
 import jdbc._
 import extensions._
 
-package object create {
+object Create {
 
   def ddl
     ( ms : Iterable[TableMapping] )

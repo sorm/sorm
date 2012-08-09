@@ -4,10 +4,16 @@ import org.joda.time._
 
 import vorm._
 import extensions._
+import com.codahale.logula.Logging
+import org.apache.log4j.Level
 
 object Demo extends App {
 
   import samples.ArtistModel._
+
+  Logging.configure { log =>
+    log.level = Level.TRACE
+  }
 
   val db
     = new Instance(

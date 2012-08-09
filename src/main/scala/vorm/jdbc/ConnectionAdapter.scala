@@ -1,17 +1,17 @@
 package vorm.jdbc
 
-import com.weiglewilczek.slf4s.Logging
 import java.sql.{Connection, ResultSet, Statement => JdbcStatement}
+import vorm.extensions.LogulaLogging
 
 class ConnectionAdapter
-  ( connection : Connection ) 
-  extends Logging 
+  ( connection : Connection )
+  extends LogulaLogging
   {
     def executeQuery
       ( s : Statement )
       : ResultSet
       = {
-        logger.info("Executing statement:\n" + s.toString)
+        log.trace("Executing statement:\n" + s.toString)
         val js = preparedStatement(s)
         val rs = js.executeQuery()
         js.close()
@@ -22,7 +22,7 @@ class ConnectionAdapter
       ( s : Statement )
       : List[IndexedSeq[Any]] 
       = {
-        logger.info("Executing statement:\n" + s.toString)
+        log.trace("Executing statement:\n" + s.toString)
         if( s.data.isEmpty ) {
           val js = connection.createStatement()
           js.executeUpdate(s.sql, JdbcStatement.RETURN_GENERATED_KEYS)
@@ -41,7 +41,7 @@ class ConnectionAdapter
     def executeUpdate
       ( s : Statement )
       : Int = {
-        logger.info("Executing statement:\n" + s.toString)
+        log.trace("Executing statement:\n" + s.toString)
         if( s.data.isEmpty ){
           val js = connection.createStatement()
           val r = js.executeUpdate(s.sql)

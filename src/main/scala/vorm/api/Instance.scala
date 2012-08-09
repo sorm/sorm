@@ -44,9 +44,9 @@ class Instance
             case e : Throwable =>
           }
         }
-//        for( s <- Create.statements(mappings.values) ){
-//          api.executeUpdate(s)
-//        }
+        for( s <- Create.statements(mappings.values) ){
+          api.executeUpdate(s)
+        }
       case Mode.Create =>
         for( s <- Create.statements(mappings.values) ){
           api.executeUpdate(s)

@@ -4,6 +4,7 @@ import org.joda.time.DateTime
 import java.sql.DriverManager
 
 import vorm._
+import dropAll._
 import persisted._
 import reflection._
 import save._
@@ -25,6 +26,7 @@ class Instance
     protected val connection
       = new ConnectionAdapter(DriverManager.getConnection(url, user, password))
           with SaveAdapter
+          with DropAllTablesAdapter
 
     protected val mappings
       = {
@@ -37,6 +39,11 @@ class Instance
       }
 
     mode match {
+      case Mode.DropAllCreate =>
+        connection.dropAllTables()
+        for( s <- Create.statements(mappings.values) ){
+          connection.executeUpdate(s)
+        }
       case Mode.DropCreate =>
         for( s <- Drop.statements(mappings.values) ){
           try {

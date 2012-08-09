@@ -27,7 +27,7 @@ object Demo extends App {
         entities
           = Seq( Entity[Artist](), Entity[Style](), Entity[Name](), Entity[Locale]() ),
         mode
-          = Mode.DropCreate
+          = Mode.DropAllCreate
       )
 
   val ru

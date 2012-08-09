@@ -12,10 +12,7 @@ class ConnectionAdapter
       : ResultSet
       = {
         log.trace("Executing statement:\n" + s.toString)
-        val js = preparedStatement(s)
-        val rs = js.executeQuery()
-        js.close()
-        rs
+        preparedStatement(s).executeQuery()
       }
 
     def executeUpdateAndGetGeneratedKeys
@@ -26,15 +23,11 @@ class ConnectionAdapter
         if( s.data.isEmpty ) {
           val js = connection.createStatement()
           js.executeUpdate(s.sql, JdbcStatement.RETURN_GENERATED_KEYS)
-          val r = js.getGeneratedKeys.parseAndClose()
-          js.close()
-          r
+          js.getGeneratedKeys.parseAndClose()
         } else {
           val js = preparedStatement(s, true)
           js.executeUpdate()
-          val r = js.getGeneratedKeys.parseAndClose()
-          js.close()
-          r
+          js.getGeneratedKeys.parseAndClose()
         }
       }
 
@@ -43,15 +36,9 @@ class ConnectionAdapter
       : Int = {
         log.trace("Executing statement:\n" + s.toString)
         if( s.data.isEmpty ){
-          val js = connection.createStatement()
-          val r = js.executeUpdate(s.sql)
-          js.close()
-          r
+          connection.createStatement().executeUpdate(s.sql)
         } else {
-          val js = preparedStatement(s)
-          val r = js.executeUpdate()
-          js.close()
-          r
+          preparedStatement(s).executeUpdate()
         }
       }
 

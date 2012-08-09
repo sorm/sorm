@@ -48,6 +48,9 @@ class PowerQuery
     def offset ( x : Int )
       = copy( queryOffset = x )
 
+    def filterEquals ( p : String, v : Any )
+      = filter( Where.Equals( pathMapping(p), v ) )
+
 
     private def pathMapping ( p : String ) : Mapping
       = p.satisfying{ !_.contains(".") }
@@ -59,30 +62,11 @@ class PowerQuery
           }
           .getOrElse{ throw new Exception("Complex paths are not supported yet") }
 
-    def filterEquals ( p : String, v : Any )
-      = filter( Where.Equals( pathMapping(p), v ) )
 
-  // def order(prop: String, reverse: Boolean = false) =
-  //   new QueryStream[T](
-  //     connection,
-  //     query.copy(orderings = Ordering(prop, reverse) :: query.orderings)
-  //   )
-
-  // def offset(offset: Int) =
-  //   new QueryStream[T](
-  //     connection,
-  //     query.copy(limit = query.limit.copy(offset = offset))
-  //   )
-
-  // def limit(amount: Int) =
-  //   new QueryStream[T](
-  //     connection,
-  //     query.copy(limit = query.limit.copy(amount = Some(amount)))
-  //   )
-    
     def all = select()
     def size = count()
     def one = limit(1).all.headOption
+
 
     private def query( kind : Kind )
       = Query(kind, queryMapping, queryWhere, queryOrder, queryLimit, queryOffset)

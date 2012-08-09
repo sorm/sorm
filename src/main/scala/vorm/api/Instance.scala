@@ -20,6 +20,7 @@ class Instance
     password : String,
     entities : Traversable[Entity[_]],
     mode : Mode = Mode.None )
+  extends LogulaLogging
   {
     protected val connection
       = new ConnectionAdapter(DriverManager.getConnection(url, user, password))
@@ -42,6 +43,7 @@ class Instance
             connection.executeUpdate(s)
           } catch {
             case e : Throwable =>
+              log.warn("Couldn't drop table. " + e.getMessage)
           }
         }
         for( s <- Create.statements(mappings.values) ){

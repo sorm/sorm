@@ -44,15 +44,5 @@ package object jdbc {
     def apply ( v : Any ) : JdbcValue = apply(v, JdbcType(v))
   }
   
-  case class Statement
-    ( sql: String,
-      data: Seq[JdbcValue] = Nil ) 
-    {
-      override def toString
-        = "Statement:\n" + 
-          ( "Sql:\n" + sql.indent(2) + "\n" +
-            "Data:\n" + data.view.map{_.value}.mkString(", ").indent(2) )
-            .indent(2)
-    }
 
 }

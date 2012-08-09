@@ -15,35 +15,35 @@ object Demo extends App {
     log.level = Level.TRACE
   }
 
-  val db
-    = new Instance(
-        url
-//          = "jdbc:h2:mem:test",
-          = "jdbc:mysql://localhost/test",
-        user
-          = "",
-        password
-          = "",
-        entities
-          = Seq( Entity[Artist](), Entity[Style](), Entity[Name](), Entity[Locale]() ),
-        mode
-          = Mode.DropAllCreate
-      )
+  object Db
+    extends Instance(
+      url
+//        = "jdbc:h2:mem:test",
+        = "jdbc:mysql://localhost/test",
+      user
+        = "",
+      password
+        = "",
+      entities
+        = Seq( Entity[Artist](), Entity[Style](), Entity[Name](), Entity[Locale]() ),
+      mode
+        = Mode.DropAllCreate
+    )
 
   val ru
-    = db.save( Locale("ru") )
+    = Db.save( Locale("ru") )
   val en
-    = db.save( Locale("en") )
+    = Db.save( Locale("en") )
   val rock
-    = db.save( Style(Name(en, "Rock") :: Nil) )
+    = Db.save( Style(Name(en, "Rock") :: Nil) )
   val hardRock
-    = db.save( Style(Name(en, "Hard Rock") :: Name(ru, "Тяжёлый рок") :: Nil) )
+    = Db.save( Style(Name(en, "Hard Rock") :: Name(ru, "Тяжёлый рок") :: Nil) )
   val metallica
-    = db.save( Artist( Seq(Name(en, "Metallica")), Set(rock, hardRock) ) )
+    = Db.save( Artist( Seq(Name(en, "Metallica")), Set(rock, hardRock) ) )
   val nirvana
-    = db.save( Artist( Seq(Name(en, "Nirvana")), Set(rock, hardRock) ) )
+    = Db.save( Artist( Seq(Name(en, "Nirvana")), Set(rock, hardRock) ) )
   val kino
-    = db.save( Artist( Seq(Name(ru, "Кино"), Name(en, "Kino")), Set(rock) ) )
+    = Db.save( Artist( Seq(Name(ru, "Кино"), Name(en, "Kino")), Set(rock) ) )
 
   kino.id.println()
   kino.println()

@@ -9,10 +9,12 @@ import extensions._
 class ResultSetAdapter
   ( rs : ResultSet ) 
   {
-
-    def indexedRowsIterator 
-      = new Iterator[IndexedSeq[Any]] {
-          rs.beforeFirst()
+    /**
+     * Is preferred to Iterator since not all adapters support the `isLast` test
+     * required for its implementation.
+     */
+    private def indexedRowsTraversable
+      = new Traversable[IndexedSeq[Any]] {
 
           val md 
             = rs.getMetaData
@@ -20,18 +22,22 @@ class ResultSetAdapter
           val indexTypeSeq : IndexedSeq[(Int, JdbcType)]
             = ( 1 to md.getColumnCount ) zipBy md.getColumnType
 
-          def hasNext 
-            = !rs.isLast
-
-          def next = {
-            rs.next()
-            indexTypeSeq.map{ case (i, t) ⇒ rs.value(i, t) }
-          }
+          def foreach
+            [ U ]
+            ( f : IndexedSeq[Any] => U )
+            {
+              rs.beforeFirst()
+              while( rs.next() ){
+                f(
+                  indexTypeSeq.map{ case (i, t) ⇒ rs.value(i, t) }
+                )
+              }
+            }
         }
 
     def parseAndClose() 
       = {
-        val r = indexedRowsIterator.toList
+        val r = indexedRowsTraversable.toList
         rs.close()
         r
       }

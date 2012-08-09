@@ -56,7 +56,7 @@ package object extensions {
     def satisfying(p: A => Boolean): Option[A] =
       if (p(x)) Some(x) else None
 
-    def println() {
+    def trace() {
       Console.println(x)
     }
 

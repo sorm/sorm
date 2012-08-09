@@ -50,5 +50,5 @@ object PrimaryKeySelectDemo extends App {
       
   primaryKeySelect
     .rendering
-    .println()
+    .trace()
 }

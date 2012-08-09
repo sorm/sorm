@@ -90,5 +90,5 @@ object Demo extends App {
     5
   )
 
-  query.statementAndResultMappings.println()
+  query.statementAndResultMappings.trace()
 }

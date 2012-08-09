@@ -36,5 +36,5 @@ object Demo extends App {
   val rock = db.save(Style(Name(en, "rock") :: Nil))
   val metallica = db.save( Artist( Seq(Name(en, "Metallica")), Set(rock) ) )
 
-  metallica.id.println()
+  metallica.id.trace()
 }

@@ -30,6 +30,6 @@ object Demo extends App {
   val mappings
     = settings.keys.map{ r => r -> new EntityMapping(None, r, settings) }.toMap
 
-  ddl(mappings.values).println()
+  ddl(mappings.values).trace()
 
 }

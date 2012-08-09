@@ -25,7 +25,7 @@ class ConnectionAdapter
         logger.info("Executing statement:\n" + s.toString)
         if( s.data.isEmpty ) {
           val js = connection.createStatement()
-          js.executeUpdate(s.sql)
+          js.executeUpdate(s.sql, JdbcStatement.RETURN_GENERATED_KEYS)
           val r = js.getGeneratedKeys.parseAndClose()
           js.close()
           r

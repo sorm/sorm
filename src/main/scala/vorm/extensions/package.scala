@@ -60,6 +60,32 @@ package object extensions {
       Console.println(x)
     }
 
+    def prettyString
+      : String
+      = x match {
+          case x : Traversable[_] =>
+            x.getClass.getSimpleName + "(\n" +
+            x.view
+              .map{ _.prettyString }
+              .mkString(",\n")
+              .indent(2) + "\n" +
+            ")"
+          case x : Tuple2[_, _] =>
+            "( " +
+            ( x._1.prettyString + " ->\n" +
+              x._2.prettyString )
+              .indent(2).trim + " )"
+          case x : Product =>
+            x.getClass.getName + "(\n" +
+            x.productIterator
+              .map{ _.prettyString }
+              .mkString(",\n")
+              .indent(2) + "\n" +
+            ")"
+          case x => 
+            x.toString
+        }
+
     def trying
       [ ResultT ]
       ( f : A => ResultT )

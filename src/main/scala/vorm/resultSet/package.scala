@@ -13,6 +13,7 @@ package object resultSet {
 
   implicit class ResultSetExtensions
     ( rs : ResultSet )
+    extends LogulaLogging
     {
 
       def fetchInstancesAndClose
@@ -20,7 +21,6 @@ package object resultSet {
           indexes : Map[(TableMapping, Column), Int] )
         : Seq[_]
         = {
-
           //  ideas
           // type PrimaryKey 
           //   = Seq[Any]
@@ -50,7 +50,7 @@ package object resultSet {
                   def value
                     ( column : Column )
                     = rs.value(
-                        indexes(m → column),
+                        indexes(m → column) + 1,
                         column.t.jdbcType
                       )
 
@@ -105,37 +105,42 @@ package object resultSet {
               row : Row )
             : Any
             = m match {
-                case m : ValueMapping
-                  ⇒ row.data( m.column )
-                case m : OptionMapping
-                  ⇒ Option( value( m.item, row ) )
-                case m : TupleMapping
-                  ⇒ m.reflection.instantiate(
-                      m.items.map{ value( _, row ) }
-                    )
-                case m : EntityMapping
-                  ⇒ m.reflection.instantiate(
-                      m.properties.mapValues{ value( _, row ) }
-                    )
-                case m : SeqMapping
-                  ⇒ m.reflection.instantiate().asInstanceOf[Seq[_]] ++
-                    row.rowsOfSubTables(m).values
-                      .map{ value( m.item, _ ) }
-                case m : SetMapping
-                  ⇒ m.reflection.instantiate().asInstanceOf[Set[_]] ++
-                    row.rowsOfSubTables(m).values
-                      .map{ value( m.item, _ ) }
-                case m : MapMapping
-                  ⇒ m.reflection.instantiate().asInstanceOf[Map[_, _]] ++
-                    row.rowsOfSubTables(m).values
-                      .map{ row ⇒ value( m.key, row ) → 
-                                  value( m.value, row ) }
+                case m : ValueMapping =>
+                  row.data( m.column )
+                case m : OptionMapping =>
+                  Option( value( m.item, row ) )
+                case m : TupleMapping =>
+                  m.reflection.instantiate(
+                    m.items.map{ value( _, row ) }
+                  )
+                case m : EntityMapping =>
+                  m.reflection.instantiate(
+                    m.properties.mapValues{
+                      case p : EntityMapping =>
+                        values(p, row.rowsOfSubTables(p)).head
+                      case p =>
+                        value( p, row )
+                    }
+                  )
+                case m : SeqMapping =>
+                  row.rowsOfSubTables(m).values
+                    .map{ value( m.item, _ ) }
+                    .toIndexedSeq
+                case m : SetMapping =>
+                  row.rowsOfSubTables(m).values
+                    .map{ value( m.item, _ ) }
+                    .toSet
+                case m : MapMapping =>
+                  row.rowsOfSubTables(m).values
+                    .map{ row ⇒ value( m.key, row ) ->
+                                value( m.value, row ) }
+                    .toMap
               }
 
           def values
             ( m : TableMapping,
               rows : Map[PrimaryKey, Row] )
-            = rows.values.map(value(m, _)).toList
+            = rows.values.map{ value(m, _) }.toList
           
 
           values( m, fetchRowsAndClose() )

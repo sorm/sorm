@@ -48,7 +48,7 @@ class Instance
 //          api.executeUpdate(s)
 //        }
       case Mode.Create =>
-        for( s <- statements(mappings.values) ){
+        for( s <- Create.statements(mappings.values) ){
           api.executeUpdate(s)
         }
     }

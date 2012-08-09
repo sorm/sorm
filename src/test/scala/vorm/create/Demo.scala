@@ -10,6 +10,8 @@ object Demo extends App {
 
   import samples.ArtistModel._
 
+  import Create._
+
   val settings
     = Map(
         Reflection[Artist] →

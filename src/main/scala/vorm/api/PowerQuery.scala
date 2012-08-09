@@ -12,7 +12,7 @@ import select._
 import resultSet._
 import extensions._
 
-case class QueryAdapter
+case class PowerQuery
   [ T ]
   ( connection : ConnectionAdapter,
     mapping    : EntityMapping,

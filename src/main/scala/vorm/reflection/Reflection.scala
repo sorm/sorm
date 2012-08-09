@@ -75,6 +75,7 @@ sealed class Reflection
       : Any
       = instantiate( constructorArguments.view.unzip._1.map{params} )
 
+    //  TODO: to change input subtype to AnyRef
     def instantiate
       ( args : Traversable[Any] = Nil )
       : Any
@@ -85,7 +86,7 @@ sealed class Reflection
             )
         
         javaClass.getConstructors.head
-          .newInstance( args.asInstanceOf[Seq[Object]] : _* )
+          .newInstance( args.toSeq.asInstanceOf[Seq[AnyRef]] : _* )
       }
 
     lazy val javaMethodsByName

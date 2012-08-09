@@ -112,14 +112,14 @@ class ResultSetParsingAdapter
                   m.items.map{ value( _, row ) }
                 )
               case m : EntityMapping =>
-                m.reflection.instantiate(
-                  m.membership match {
-                    case Some(mm) =>
-                      val row1 = row.rowsOfSubTables(m).head._2
-                      m.properties.mapValues{ value(_, row1) }
-                    case None =>
-                      m.properties.mapValues{ value(_, row) }
-                  }
+                val row1
+                  = if( m.membership.isEmpty ) row
+                    else row.rowsOfSubTables(m).head._2
+
+                Persisted(
+                  m.properties.mapValues{ value(_, row1) },
+                  row1.data(m.generatedIdColumn).asInstanceOf[Long],
+                  m.reflection
                 )
               case m : SeqMapping =>
                 row.rowsOfSubTables(m).values

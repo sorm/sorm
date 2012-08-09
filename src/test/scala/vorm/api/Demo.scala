@@ -46,12 +46,11 @@ object Demo extends App {
   val kino
     = Db.save( Artist( Seq(Name(ru, "Кино"), Name(en, "Kino")), Set(rock) ) )
 
-  kino.id.println()
-  kino.println()
-
-
-  Db.query[Name].filterEquals("value", "Rock").all.println()
-  Db.query[Artist].all.map{_.names.head}.println()
+//  kino.id.println()
+//  kino.println()
+//  Db.query[Name].filterEquals("value", "Rock").all.println()
+  Db.query[Artist].all.map{_.names.head.value}.println()
+  Db.query[Artist].all.map{_.id}.println()
 //  val artist = api.all[Artist].filterEquals("name", "Metallica").offset(0).limit(1).head
 //
 //  val style

@@ -88,7 +88,7 @@ class PowerQuery
       = Query(kind, queryMapping, queryWhere, queryOrder, queryLimit, queryOffset)
 
     private def select()
-      : Seq[T]
+      : Seq[T with Persisted]
       = {
         val (stmt, resultSetMappings)
           = query(Kind.Select).statementAndResultMappings
@@ -98,7 +98,7 @@ class PowerQuery
             queryMapping,
             resultSetMappings.view.zipWithIndex.toMap
           )
-          .asInstanceOf[Seq[T]]
+          .asInstanceOf[Seq[T with Persisted]]
       }
 
     private def count()

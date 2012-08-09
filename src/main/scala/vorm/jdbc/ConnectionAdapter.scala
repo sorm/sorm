@@ -2,11 +2,13 @@ package vorm.jdbc
 
 import java.sql.{Connection, ResultSet, Statement => JdbcStatement}
 import vorm.extensions.LogulaLogging
+import com.codahale.logula.Log
 
 class ConnectionAdapter
   ( connection : Connection )
-  extends LogulaLogging
   {
+    private lazy val log = Log.forName("vorm.jdbc.ConnectionAdapter")
+
     def executeQuery
       ( s : Statement )
       : ResultSet

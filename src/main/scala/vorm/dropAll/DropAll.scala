@@ -1,10 +1,10 @@
-package vorm.clearDb
+package vorm.dropAll
 
 import vorm._
 import jdbc._
 import extensions._
 
-object ClearDb {
+object DropAll {
   def clear
     ( connection : ConnectionAdapter )
     {

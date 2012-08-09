@@ -4,7 +4,7 @@ import org.joda.time.DateTime
 import java.sql.DriverManager
 
 import vorm._
-import clearDb.ClearDb
+import dropAll.DropAll
 import persisted._
 import reflection._
 import save._
@@ -39,7 +39,7 @@ class Instance
 
     mode match {
       case Mode.DropAllCreate =>
-        ClearDb.clear(connection)
+        DropAll.clear(connection)
         for( s <- Create.statements(mappings.values) ){
           connection.executeUpdate(s)
         }

@@ -12,8 +12,25 @@ trait Mapping {
   def reflection : Reflection
 
   override def toString : String
-    = membership.map(_.parent).map(_.toString + ".").getOrElse("") +
-      reflection.name
+    = membership
+        .map{
+          case Membership.EntityProperty(name, _)
+            ⇒ name
+          case Membership.TupleItem(index, tuple)
+            ⇒ "_" + index
+          case Membership.OptionItem(option)
+            ⇒ "optionItem"
+          case Membership.SeqItem(_)
+            ⇒ "seqItem"
+          case Membership.SetItem(_)
+            ⇒ "setItem"
+          case Membership.MapKey(_)
+            ⇒ "mapKey"
+          case Membership.MapValue(_)
+            ⇒ "mapValue"
+        }
+        .map{ membership.get.parent.toString + "." + _ }
+        .getOrElse( reflection.name )
 
   lazy val columnName : String
     = membership

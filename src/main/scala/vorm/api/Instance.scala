@@ -11,6 +11,7 @@ import structure._
 import mapping._
 import jdbc._
 import create._
+import drop._
 import extensions._
 
 class Instance
@@ -36,18 +37,14 @@ class Instance
 
     mode match {
       case Mode.DropCreate =>
-        ???
-//        doesn't work because dropping requires dropping slave tables first
-//        for( m <- mappings.values ){
-//          try {
-//            api.executeUpdate(
-//              Statement("DROP TABLE `" + m.tableName + "`")
-//            )
-//          } catch {
-//            case _ : Throwable =>
-//          }
-//        }
-//        for( s <- statements(mappings.values) ){
+        for( s <- Drop.statements(mappings.values) ){
+          try {
+            api.executeUpdate(s)
+          } catch {
+            case e : Throwable =>
+          }
+        }
+//        for( s <- Create.statements(mappings.values) ){
 //          api.executeUpdate(s)
 //        }
       case Mode.Create =>

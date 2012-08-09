@@ -21,7 +21,8 @@ class Instance
     password : String,
     entities : Traversable[Entity[_]],
     mode : Mode = Mode.None )
-  extends LogulaLogging
+  extends Api
+  with LogulaLogging
   {
     protected val connection
       = new ConnectionAdapter(DriverManager.getConnection(url, user, password))
@@ -62,26 +63,5 @@ class Instance
         }
       case Mode.None =>
     }
-
-    private def mapping
-      [ T : TypeTag ]
-      = mappings.get(Reflection[T]) match {
-          case Some(m) => m
-          case None => 
-            throw new RuntimeException( "Entity `" + Reflection[T].name + "` is not registered" )
-        }
-
-    /**
-     * Current time at DB server
-     */
-    def date : DateTime
-      = ???
-
-    def save
-      [ T <: AnyRef : TypeTag ]
-      ( value : T )
-      : T with Persisted
-      = connection.saveEntityAndGetIt( value, mapping[T] )
-          .asInstanceOf[T with Persisted]
 
   }

@@ -17,8 +17,8 @@ object Demo extends App {
   import SampleDb._
   populateDb()
 
-  Db.query[Artist].all.map{_.names.values.head.head}.println()
-  Db.query[Artist].all.map{_.id}.println()
-
+  Db.query[Artist].fetchAll().map{_.names.values.head.head}.println()
+  Db.query[Artist].fetchAll().map{_.id}.println()
+  Db.query[Artist].fetchOne().println()
 
 }

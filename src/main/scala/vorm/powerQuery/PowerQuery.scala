@@ -63,15 +63,10 @@ class PowerQuery
           .getOrElse{ throw new Exception("Complex paths are not supported yet") }
 
 
-    def all = select()
-    def size = count()
-    def one = limit(1).all.headOption
-
-
     private def query( kind : Kind )
       = Query(kind, queryMapping, queryWhere, queryOrder, queryLimit, queryOffset)
 
-    private def select()
+    def fetchAll()
       : Seq[T with Persisted]
       = {
         val (stmt, resultSetMappings)
@@ -85,7 +80,10 @@ class PowerQuery
           .asInstanceOf[Seq[T with Persisted]]
       }
 
-    private def count()
+    def fetchOne()
+      = limit(1).fetchAll().headOption
+
+    def fetchSize()
       : Int
       = {
         val (stmt, _)

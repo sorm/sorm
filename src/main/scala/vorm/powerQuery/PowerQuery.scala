@@ -14,25 +14,44 @@ import extensions._
 
 import Query._
 
-case class PowerQuery
+import collection.immutable.Queue
+
+class PowerQuery
   [ T ]
-  ( connection : ConnectionAdapter,
-    mapping    : EntityMapping,
-    where      : Option[Where] = None,
-    order      : Seq[Order] = Nil,
-    limit      : Option[Int] = None,
-    offset     : Int = 0 )
-  extends Iterable[T]
+  ( connection      : ConnectionAdapter,
+    queryMapping    : EntityMapping,
+    queryWhere      : Option[Where] = None,
+    queryOrder      : Queue[Order] = Queue.empty,
+    queryLimit      : Option[Int] = None,
+    queryOffset     : Int = 0 )
   {
+    private def copy
+      ( connection      : ConnectionAdapter = connection,
+        queryMapping    : EntityMapping = queryMapping,
+        queryWhere      : Option[Where] = queryWhere,
+        queryOrder      : Queue[Order] = queryOrder,
+        queryLimit      : Option[Int] = queryLimit,
+        queryOffset     : Int = queryOffset )
+      : PowerQuery[T]
+      = new PowerQuery[T](
+          connection, queryMapping, queryWhere, queryOrder, queryLimit, queryOffset
+        )
 
     def filter ( w : Where )
       = copy(
-          where = (where ++: List(w)) reduceOption Where.And
+          queryWhere = (queryWhere ++: List(w)) reduceOption Where.And
         )
+    def order ( p : String, r : Boolean = false )
+      = copy( queryOrder = queryOrder enqueue Order(resolveMapping(p), r) )
+    def limit ( x : Int )
+      = copy( queryLimit = Some(x) )
+    def offset ( x : Int )
+      = copy( queryOffset = x )
+
 
     private def resolveMapping ( p : String ) : Mapping
       = p.satisfying{ !_.contains(".") }
-          .map{ mapping.properties }
+          .map{ queryMapping.properties }
           .getOrElse{ throw new Exception("Complex paths are not supported yet") }
 
     def filterEquals ( p : String, v : Any )
@@ -55,25 +74,30 @@ case class PowerQuery
   //     connection,
   //     query.copy(limit = query.limit.copy(amount = Some(amount)))
   //   )
-
+    
+    def all = select()
+    def size = count()
+    def one = limit(1).all.headOption
 
     private def query( kind : Kind )
-      = Query(kind, mapping, where, order, limit, offset)
+      = Query(kind, queryMapping, queryWhere, queryOrder, queryLimit, queryOffset)
 
-    protected def select()
+    private def select()
+      : Seq[T]
       = {
         val (stmt, resultSetMappings)
           = query(Kind.Select).statementAndResultMappings
 
         connection.executeQuery(stmt)
           .fetchInstancesAndClose(
-            mapping,
+            queryMapping,
             resultSetMappings.view.zipWithIndex.toMap
           )
           .asInstanceOf[Seq[T]]
       }
 
-    protected def count() : Int
+    private def count()
+      : Int
       = {
         val (stmt, _)
           = query(Kind.Count).statementAndResultMappings
@@ -84,7 +108,4 @@ case class PowerQuery
           .asInstanceOf[Int]
       }
 
-    override def toSeq = select()
-    override def toList = toSeq.toList
-    def iterator = toSeq.iterator
   }

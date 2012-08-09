@@ -47,7 +47,7 @@ trait Api {
     = connection.saveEntityAndGetIt( value, mapping[T] )
         .asInstanceOf[T with Persisted]
 
-  def all
+  def query
     [ T <: AnyRef : TypeTag ]
     : PowerQuery[T]
     = new PowerQuery[T](connection, mapping[T])

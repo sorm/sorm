@@ -44,11 +44,10 @@ object Drop {
             xs.head #::
             sort( xs.tail.filterNot{isSlave(_, xs.head)} )
 
-      // ts.sortWith{isSlave}
       sort(ts)
     }
 
-  def statements
+  def allTables
     ( ms : Iterable[TableMapping] )
     = ms.flatMap{ m ⇒
           def queue
@@ -60,6 +59,10 @@ object Drop {
         .toStream
         .map{ _.table }
         .distinct
+
+  def statements
+    ( ms : Iterable[TableMapping] )
+    = allTables(ms)
         .as{sort}
         .map{ "DROP TABLE " + _.name }
         .map{ Statement(_) }

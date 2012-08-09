@@ -5,6 +5,7 @@ import reflection._
 import structure._
 import mapping._
 import extensions._
+import util.Random
 
 object Demo extends App {
 
@@ -12,23 +13,24 @@ object Demo extends App {
   import Drop._
 
   val settings
-  = Map(
-    Reflection[Artist] →
-    EntitySettings(),
+    = Map(
+      Reflection[Artist] →
+      EntitySettings(),
 
-    Reflection[Style] →
-    EntitySettings(),
+      Reflection[Style] →
+      EntitySettings(),
 
-    Reflection[Name] →
-    EntitySettings(indexes = Set(Seq("value"))),
+      Reflection[Name] →
+      EntitySettings(indexes = Set(Seq("value"))),
 
-    Reflection[Locale] →
-    EntitySettings(indexes = Set(Seq("code")))
-  )
+      Reflection[Locale] →
+      EntitySettings(indexes = Set(Seq("code")))
+    )
 
   val mappings
-  = settings.keys.map {r => r -> new EntityMapping(None, r, settings)}.toMap
+    = settings.keys.map {r => r -> new EntityMapping(None, r, settings)}.toMap
 
   ddl(mappings.values).println()
+
 
 }

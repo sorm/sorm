@@ -13,13 +13,14 @@ object Demo extends App {
 
   Logging.configure { log =>
     log.level = Level.TRACE
+    log.loggers("vorm.jdbc.ConnectionAdapter") = Level.WARN
   }
 
   object Db
     extends Instance(
       url
-//        = "jdbc:h2:mem:test",
-        = "jdbc:mysql://localhost/test",
+        = "jdbc:h2:mem:test",
+//        = "jdbc:mysql://localhost/test",
       user
         = "",
       password
@@ -50,7 +51,7 @@ object Demo extends App {
 
 
   Db.query[Name].filterEquals("value", "Rock").all.println()
-
+  Db.query[Artist].all.map{_.names.head}.println()
 //  val artist = api.all[Artist].filterEquals("name", "Metallica").offset(0).limit(1).head
 //
 //  val style

@@ -56,9 +56,11 @@ package object extensions {
     def satisfying(p: A => Boolean): Option[A] =
       if (p(x)) Some(x) else None
 
-    def trace() {
-      Console.println(x)
-    }
+    def trace()
+      = {
+        Console.println(x)
+        x
+      }
 
     def prettyString
       : String

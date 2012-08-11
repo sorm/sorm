@@ -103,6 +103,9 @@ object SampleDb {
               = Set( rock )
           )
         )
+        Db.save( Artist( Map( en -> Seq("Godsmack"),
+                              ru -> Seq("Годсмэк") ),
+                         Set( metal, hardRock, rock ) ) )
       }
     }
 

@@ -11,13 +11,14 @@ object Demo extends App {
 
   Logging.configure { log =>
     log.level = Level.TRACE
-    log.loggers("vorm.jdbc.ConnectionAdapter") = Level.WARN
+    log.loggers("vorm.jdbc.ConnectionAdapter") = Level.TRACE
   }
 
   import SampleDb._
 
-  Db.query[Artist].fetchAll().map{_.names.values.head.head}.trace()
-  Db.query[Artist].fetchAll().map{_.id}.trace()
-  Db.query[Artist].fetchOne().trace()
+  Db.query[Artist]
+    .filterEquals("styles.item.names.value.item", "Hard Rock")
+    .fetchAll
+    .trace()
 
 }

@@ -22,10 +22,9 @@ object Path {
     ( parent : Mapping,
       path : String )
     : Mapping
-    = ( parent, path ) match {
-        case (_, "") =>
-          parent
-        case (parent : EntityMapping, _) =>
+    = if( path == "" ) parent
+      else parent match {
+        case parent : EntityMapping =>
           path.splitBy(".") match {
             case ("id", remainder) =>
               remainder match {
@@ -35,7 +34,7 @@ object Path {
             case (property, remainder) =>
               mapping(parent.properties(property), remainder)
           }
-        case (parent : TupleMapping, _) =>
+        case parent : TupleMapping =>
           path.splitBy(".") match {
             case (item, remainder) =>
               "(?<=^_)\\d+(?=$)".r.findFirstIn(item) match {
@@ -43,13 +42,13 @@ object Path {
                   mapping( parent.items(index.toInt - 1), remainder )
               }
           }
-        case (parent : OptionMapping, _) =>
+        case parent : OptionMapping =>
           mapping( parent.item, path )
-        case (parent : SeqMapping, _) =>
+        case parent : SeqMapping =>
           mapping( parent.item, path )
-        case (parent : SetMapping, _) =>
+        case parent : SetMapping =>
           mapping( parent.item, path )
-        case (parent : MapMapping, _ ) =>
+        case parent : MapMapping =>
           path.splitBy(".") match {
             case ("key", remainder) =>
               mapping( parent.key, remainder )

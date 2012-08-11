@@ -35,6 +35,8 @@ trait Mapping {
   lazy val columnName : String
     = membership
         .map{
+          case Membership.EntityId(_)
+            ⇒ "id"
           case Membership.EntityProperty(name, _)
             ⇒ name.asDdlName
           case Membership.TupleItem(index, tuple)

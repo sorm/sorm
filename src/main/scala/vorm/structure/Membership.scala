@@ -7,7 +7,10 @@ sealed trait Membership {
 }
 
 object Membership {
-  
+
+  sealed case class EntityId
+    ( parent : EntityMapping )
+    extends Membership
   sealed case class EntityProperty
     ( name : String, parent : EntityMapping )
     extends Membership

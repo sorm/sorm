@@ -6,6 +6,7 @@ import java.sql.DriverManager
 import vorm._
 import dropAll._
 import persisted._
+import query._
 import reflection._
 import save._
 import structure._
@@ -13,7 +14,6 @@ import mapping._
 import jdbc._
 import create._
 import drop._
-import powerQuery._
 import extensions._
 
 trait Api {
@@ -49,7 +49,13 @@ trait Api {
 
   def query
     [ T <: AnyRef : TypeTag ]
-    : PowerQuery[T]
-    = new PowerQuery[T](connection, mapping[T])
+    : Fetcher[T]
+    = new Fetcher[T](connection, mapping[T])
+
+  def fetchById
+    [ T <: AnyRef : TypeTag ]
+    ( id : Long )
+    : Option[T with Persisted]
+    = new Fetcher[T](connection, mapping[T]).filterEquals("id", id).fetchOne()
 
 }

@@ -21,12 +21,14 @@ sealed class EntityMapping
           .map{
             case (name, reflection) ⇒
               name →
-              Mapping (
+              Mapping(
                 Membership.EntityProperty( name, this ),
                 reflection,
                 settingsMap
               )
           }
+    lazy val id
+      = new ValueMapping(Some(Membership.EntityId(this)), Reflection[Long], settingsMap)
 
     lazy val settings = settingsMap(reflection)
 

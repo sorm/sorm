@@ -1,4 +1,4 @@
-package vorm.powerQuery
+package vorm.api
 
 import vorm._
 import persisted._
@@ -16,7 +16,7 @@ import Query._
 
 import collection.immutable.Queue
 
-class PowerQuery
+class Fetcher
   [ T ]
   ( connection      : ConnectionAdapter,
     queryMapping    : EntityMapping,
@@ -32,8 +32,8 @@ class PowerQuery
         queryOrder      : Queue[Order] = queryOrder,
         queryLimit      : Option[Int] = queryLimit,
         queryOffset     : Int = queryOffset )
-      : PowerQuery[T]
-      = new PowerQuery[T](
+      : Fetcher[T]
+      = new Fetcher[T](
           connection, queryMapping, queryWhere, queryOrder, queryLimit, queryOffset
         )
 
@@ -42,26 +42,14 @@ class PowerQuery
           queryWhere = (queryWhere ++: List(w)) reduceOption Where.And
         )
     def order ( p : String, r : Boolean = false )
-      = copy( queryOrder = queryOrder enqueue Order(pathMapping(p), r) )
+      = copy( queryOrder = queryOrder enqueue Order(Path.mapping(queryMapping, p), r) )
     def limit ( x : Int )
       = copy( queryLimit = Some(x) )
     def offset ( x : Int )
       = copy( queryOffset = x )
 
     def filterEquals ( p : String, v : Any )
-      = filter( Where.Equals( pathMapping(p), v ) )
-
-
-    private def pathMapping ( p : String ) : Mapping
-      = p.satisfying{ !_.contains(".") }
-          .map{
-            queryMapping.properties.get(_)
-              .getOrElse{
-                throw new Exception("Incorrect property path: `" + p + "`")
-              }
-          }
-          .getOrElse{ throw new Exception("Complex paths are not supported yet") }
-
+      = filter( Where.Equals( Path.mapping(queryMapping, p), v ) )
 
     private def query( kind : Kind )
       = Query(kind, queryMapping, queryWhere, queryOrder, queryLimit, queryOffset)

@@ -137,6 +137,15 @@ package object extensions {
             .reduceOption{ _ + "\n" + p + _ }
             .map{ p + _ }
             .getOrElse( p )
+      def splitBy
+        ( splitter : String )
+        : (String, String)
+        = s.indexOf(splitter) match {
+            case -1 => (s, "")
+            case i =>
+              val (a, b) = s.splitAt(i)
+              (a, b.drop(splitter.size))
+          }
     }
 
 }

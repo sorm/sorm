@@ -22,6 +22,6 @@ sealed class TupleMapping
             case (r, i)
               ⇒ Mapping(Membership.TupleItem(i, this), r, settingsMap)
           }
-          .toList
+          .toIndexedSeq
 
   }

@@ -23,12 +23,12 @@ object WherePath {
       operator : Operator )
     : Where
     = ( host, path ) match {
-        case ( host : MapMapping, Part.Key( key ) +: Seq() ) =>
+        case ( host : MapMapping, Part.Key( key ) +: _ ) =>
           And(
             Filter(Operator.Equals, host.key, key),
             apply(host.value, path.tail, value, operator)
           )
-        case ( host : SeqMapping, Part.Index( index ) +: Seq() ) =>
+        case ( host : SeqMapping, Part.Index( index ) +: _ ) =>
           And(
             Filter(Operator.Equals, host.index, index),
             apply(host.value, path.tail, value, operator)

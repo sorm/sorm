@@ -5,14 +5,15 @@ import reflection._
 import structure._
 import mapping._
 
-sealed case class Query
-  ( kind    : Query.Kind,
-    mapping : TableMapping,
-    where   : Option[Query.Where] = None,
-    order   : Seq[Query.Order] = Nil,
-    limit   : Option[Int] = None,
-    offset  : Int = 0 )
 object Query {
+
+  sealed case class Query
+    ( kind    : Kind,
+      mapping : TableMapping,
+      where   : Option[Where] = None,
+      order   : Seq[Order] = Nil,
+      limit   : Option[Int] = None,
+      offset  : Int = 0 )
 
   trait Kind
   object Kind {
@@ -21,105 +22,53 @@ object Query {
   }
 
   sealed trait Where
-  object Where {
+  sealed trait Composite extends Where {
+    def left : Where
+    def right : Where
+  }
+  sealed case class And
+    ( left : Where,
+      right : Where )
+    extends Composite
+  sealed case class Or
+    ( left : Where,
+      right : Where )
+      extends Composite
+
+  sealed case class Filter
+    ( mapping : Mapping,
+      value : Any,
+      operator : Operator )
+    extends Where
 
 
-    sealed trait Filter extends Where {
-      def mapping : Mapping
-      def value : Any
-    }
 
-    sealed case class Equals
-      ( mapping : Mapping,
-        value : Any )
-      extends Filter
-
-    sealed case class NotEquals
-      ( mapping : Mapping,
-        value : Any )
-      extends Filter
-
-    sealed case class Bigger
-      ( mapping : Mapping,
-        value : Any )
-      extends Filter
-
-    sealed case class BiggerIncluding
-      ( mapping : Mapping,
-        value : Any )
-      extends Filter
-
-    sealed case class Smaller
-      ( mapping : Mapping,
-        value : Any )
-      extends Filter
-
-    sealed case class SmallerIncluding
-      ( mapping : Mapping,
-        value : Any )
-      extends Filter
-
-    sealed case class Like
-      ( mapping : Mapping,
-        value : Any )
-      extends Filter
-
-    sealed case class Regex
-      ( mapping : Mapping,
-        value : Any )
-      extends Filter
-
-    sealed case class In
-      ( mapping : Mapping,
-        value : Any )
-      extends Filter
-
-    sealed case class Contains
-      ( mapping : Mapping,
-        value : Any )
-      extends Filter
-
+  sealed trait Operator
+  object Operator {
+    case object Equals extends Operator
+    case object NotEquals extends Operator
+    case object Bigger extends Operator
+    case object BiggerIncluding extends Operator
+    case object Smaller extends Operator
+    case object SmallerIncluding extends Operator
+    case object Like extends Operator
+    case object Regex extends Operator
+    case object In extends Operator
+    case object Contains extends Operator
     /**
      * Makes part of a collection
      */
-    sealed case class Constitutes
-      ( mapping : Mapping,
-        value : Any )
-      extends Filter
-
+    case object Constitutes extends Operator
     /**
      * Includes a collection
      */
-    sealed case class Includes
-      ( mapping : Mapping,
-        value : Any )
-      extends Filter
-
+    case object Includes extends Operator
     /**
      * For collections. Could be replaced by reference to `size` pseudo-
      * property, as well as there could be introduced such common properties as
      * `keys` and `values` for maps.
      */
-    sealed case class HasSize
-      ( mapping : Mapping,
-        value : Any )
-      extends Filter
-
-
-    sealed trait Composite extends Where {
-      def left : Where
-      def right : Where
-    }
-
-    sealed case class And
-      ( left : Where,
-        right : Where )
-      extends Composite
-
-    sealed case class Or
-      ( left : Where,
-        right : Where )
-      extends Composite
+    case object HasSize extends Operator
   }
 
   case class Order

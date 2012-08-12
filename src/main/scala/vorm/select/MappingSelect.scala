@@ -279,7 +279,9 @@ case class MappingSelect
       = w match {
           case Query.Where.Contains( m : SeqMapping, v ) ⇒ 
             withFilter1( Query.Where.Includes( m, Seq(v) ), o )
-          case Query.Where.Includes( m : SeqMapping, v : Seq[_] ) ⇒ 
+          case Query.Where.Contains( m : SetMapping, v ) ⇒
+            withFilter1( Query.Where.Includes( m, Set(v) ), o )
+          case Query.Where.Includes( m : SeqMapping, v : Seq[_] ) ⇒
             withSelect(
                 MappingSelect(m).primaryKey
                   .foldFrom(v){ (s, v) ⇒ 

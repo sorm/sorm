@@ -4,6 +4,7 @@ import vorm._
 import reflection._
 import structure._
 import mapping._
+import extensions._
 
 object Query {
 
@@ -36,9 +37,9 @@ object Query {
       extends Composite
 
   sealed case class Filter
-    ( mapping : Mapping,
-      value : Any,
-      operator : Operator )
+    ( operator : Operator,
+      mapping : Mapping,
+      value : Any )
     extends Where
 
 

@@ -66,18 +66,18 @@ object Demo extends App {
     Some(
       Or(
         Filter(
+          Operator.Equals,
           mapping
             .properties("names").asInstanceOf[SeqMapping],
-          Seq(),
-          Operator.Equals
+          Seq()
         ),
         Filter(
+          Operator.Equals,
           mapping
             .properties("names").asInstanceOf[SeqMapping]
             .item.asInstanceOf[EntityMapping]
             .properties("value"),
-          "Nirvana",
-          Operator.Equals
+          "Nirvana"
         )
       )
     ),

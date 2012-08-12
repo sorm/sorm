@@ -271,19 +271,19 @@ case class MappingSelect
         import Operator._
 
         f match {
-          case Filter( m : SeqMapping, v, Contains ) ⇒ 
-            withFilter1( Filter( m, Seq(v), Includes ), o )
-          case Filter( m : SeqMapping, v : Seq[_], Includes ) ⇒
+          case Filter( Contains, m : SeqMapping, v ) ⇒ 
+            withFilter1( Filter( Includes, m, Seq(v) ), o )
+          case Filter( Includes, m : SeqMapping, v : Seq[_] ) ⇒
             withSelect(
                 MappingSelect(m).primaryKey
                   .foldFrom(v){ (s, v) ⇒ 
-                      s.withFilter( Filter(m.item, v, Equals),
+                      s.withFilter( Filter( Equals, m.item, v ),
                                     Sql.Clause.Or )
                     }
                   .havingRowsCount(v.length),
                 o
               )
-          case Filter( m : SeqMapping, v : Seq[_], Equals ) ⇒ 
+          case Filter( Equals, m : SeqMapping, v : Seq[_] ) ⇒ 
             withSelect(
               v.view.zipWithIndex
                 .foldLeft( MappingSelect(m).primaryKey ){ case (s, (v, i)) ⇒
@@ -294,7 +294,7 @@ case class MappingSelect
                         )
                     )
                     .withFilter(
-                        Filter(m.item, v, Equals),
+                        Filter( Equals,m.item, v),
                         Sql.Clause.Or
                       )
                 }
@@ -306,24 +306,24 @@ case class MappingSelect
                   ),
               o
             )
-          case Filter( m : CollectionTableMapping, v : Int, HasSize ) ⇒ 
+          case Filter( HasSize, m : CollectionTableMapping, v : Int ) ⇒ 
             withSelect( MappingSelect(m).primaryKey.havingRowsCount(v), o )
-          case Filter( m : SetMapping, v, Contains ) ⇒
-            withFilter1( Filter( m, Set(v), Includes ), o )
-          case Filter( m : SetMapping, v : Set[_], Equals ) ⇒ 
+          case Filter( Contains, m : SetMapping, v ) ⇒
+            withFilter1( Filter( Includes, m, Set(v) ), o )
+          case Filter( Equals, m : SetMapping, v : Set[_] ) ⇒ 
             withWhere(
                 And(
-                    Filter(m, v, Includes),
-                    Filter(m, v, HasSize)
+                    Filter( Includes, m, v ),
+                    Filter( HasSize, m, v )
                   ),
                 o
               )
-          case Filter( m : ValueMapping, v, op ) =>
+          case Filter( op, m : ValueMapping, v ) =>
             withCondition( m, v, conditionOperator(op), o )
-          case Filter( m : EntityMapping, v : Persisted, op ) =>
+          case Filter( op, m : EntityMapping, v : Persisted ) =>
             withSkeletonTo(m)
               .withCondition( m.id, v.id, conditionOperator(op), o )
-          case Filter( m : EntityMapping, _, _ ) =>
+          case Filter( _, m : EntityMapping, _ ) =>
             throw new Exception("Only persisted entities can be used in filters")
         }
     }

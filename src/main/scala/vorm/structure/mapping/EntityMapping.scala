@@ -65,6 +65,6 @@ sealed class EntityMapping
     def foreignKeys
       = nestedTableMappingsForeignKeys
 
-    lazy val generatedIdColumn
-      = Column("id", Column.Type.BigInt, autoIncrement = true)
+    def generatedIdColumn : Column
+      = id.column
 }

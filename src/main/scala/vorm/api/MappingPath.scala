@@ -43,7 +43,10 @@ object MappingPath {
               }
           }
         case host : OptionMapping =>
-          apply( host.item, path )
+          path.splitBy(".") match {
+            case ("item", remainder) =>
+              apply( host.item, remainder )
+          }
         case host : SeqMapping =>
           path.splitBy(".") match {
             case ("item", remainder) =>

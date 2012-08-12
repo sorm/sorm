@@ -6,17 +6,29 @@ import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 
 import vorm._
-import samples._
 import extensions._
 
-import com.codahale.logula.Logging
-import org.apache.log4j.Level
+import samples.SampleDb._
 
 @RunWith(classOf[JUnitRunner])
-class ApiSampleDbTest extends FunSuite with ShouldMatchers {
+class ApiSampleDbSuite extends FunSuite with ShouldMatchers {
 
-  import SampleDb._
-
+  test("Ordering"){
+    pending
+  }
+  test("Contains"){
+    pending
+  }
+  test("Equality to unpersisted entity"){
+    pending
+  }
+  test("Equality to persisted entity"){
+    Db.query[Artist]
+      .filterEquals("styles.item", Db.metal)
+      .fetchAll
+      .flatMap{_.names.values.head.head}
+      .toSet === Set("Metallica", "Godsmack")
+  }
   test("Map, Set, Seq deep path"){
     Db.query[Artist]
       .filterEquals("styles.item.names.value.item", "Hard Rock")

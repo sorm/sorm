@@ -19,6 +19,7 @@ object Demo extends App {
   Db.query[Artist]
     .filterEquals("styles.item.names.value.item", "Hard Rock")
     .fetchAll
+    .map{_.names(Db.en).head}
     .trace()
 
 }

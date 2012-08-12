@@ -20,9 +20,9 @@ object Path {
 
   trait Part
 
-  case class DotName ( name : String ) extends Part
-  case class RoundBracesName ( name : String ) extends Part
-  case class RoundBracesIndex ( index : Int ) extends Part
+  case class Property ( name : String ) extends Part
+  case class Key ( name : String ) extends Part
+  case class Index ( index : Int ) extends Part
 
   def apply
     ( p : String )

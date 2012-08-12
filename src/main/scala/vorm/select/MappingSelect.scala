@@ -1,6 +1,7 @@
 package vorm.select
 
 import vorm._
+import persisted._
 import structure._
 import query._
 import mapping._
@@ -328,6 +329,13 @@ case class MappingSelect
             f.mapping match {
               case m : ValueMapping ⇒ 
                 withCondition( m, f.value, conditionOperator(f), o )
+              case m : EntityMapping ⇒ 
+                f.value match {
+                  case v : Persisted =>
+                    withCondition( m.id, v.id, conditionOperator(f), o )
+                  case v =>
+                    throw new Exception("Only persisted entities can be used in filters")
+                }
             }
         }
 

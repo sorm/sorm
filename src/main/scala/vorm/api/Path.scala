@@ -148,50 +148,30 @@ object Path {
       path : String )
     : Mapping
     = if( path == "" ) host
-      else try host match {
-        case host : EntityMapping =>
-          path.splitBy(".") match {
-            case ("id", remainder) =>
-              remainder match {
-                case "" =>
-                  host.id
-              }
-            case (property, remainder) =>
-              mapping(host.properties(property), remainder)
+      else ( host, path.splitBy(".") ) match {
+        case (host : EntityMapping, ("id", r)) =>
+          mapping( host.id, r )
+        case (host : EntityMapping, (id, r)) =>
+          mapping( host.properties(id), r )
+        case (host : TupleMapping, (id, remainder)) =>
+          "(?<=^_)\\d+(?=$)".r.findFirstIn(id) match {
+            case Some(index) =>
+              mapping( host.items(index.toInt - 1), remainder )
+            case None =>
+              throw new Exception("Unparseable tuple item id `" + id + "` in path `" + path + "` of `" + host + "`")
           }
-        case host : TupleMapping =>
-          path.splitBy(".") match {
-            case (item, remainder) =>
-              "(?<=^_)\\d+(?=$)".r.findFirstIn(item) match {
-                case Some(index) =>
-                  mapping( host.items(index.toInt - 1), remainder )
-              }
-          }
-        case host : OptionMapping =>
-          path.splitBy(".") match {
-            case ("item", remainder) =>
-              mapping( host.item, remainder )
-          }
-        case host : SeqMapping =>
-          path.splitBy(".") match {
-            case ("item", remainder) =>
-              mapping( host.item, remainder )
-          }
-        case host : SetMapping =>
-          path.splitBy(".") match {
-            case ("item", remainder) =>
-              mapping( host.item, remainder )
-          }
-        case host : MapMapping =>
-          path.splitBy(".") match {
-            case ("key", remainder) =>
-              mapping( host.key, remainder )
-            case ("value", remainder) =>
-              mapping( host.value, remainder )
-          }
-      } catch {
-        case e : MatchError =>
-          throw new Exception("Unparseable path `" + path + "` of `" + host + "`", e)
+        case (host : OptionMapping, ("item", remainder)) =>
+          mapping( host.item, remainder )
+        case (host : SeqMapping, ("item", remainder)) =>
+          mapping( host.item, remainder )
+        case (host : SetMapping, ("item", remainder)) =>
+          mapping( host.item, remainder )
+        case (host : MapMapping, ("key", remainder)) =>
+          mapping( host.key, remainder )
+        case (host : MapMapping, ("value", remainder)) =>
+          mapping( host.value, remainder )
+        case (_, (id, _)) =>
+          throw new Exception("Unparseable id `" + id + "` in path `" + path + "` of `" + host + "`")
       }
 
 }

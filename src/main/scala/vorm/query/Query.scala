@@ -4,6 +4,7 @@ import vorm._
 import reflection._
 import structure._
 import mapping._
+import extensions._
 
 object Query {
 

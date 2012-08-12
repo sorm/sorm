@@ -10,6 +10,34 @@ import Query._
 
 object Path {
 
+  trait Part
+  object Part {
+    case class Property ( name : String ) extends Part
+    case class Key ( name : String ) extends Part
+    case class Index ( index : Int ) extends Part
+  }
+
+  def parts
+    ( p : String )
+    : Stream[Part]
+    = p.unfold{ _.notEmpty.map{partAndRemainder} }
+
+  def partAndRemainder
+    ( p : String )
+    : (Part, String)
+    = """^(?:\.?(\w+)|\((\d+)\)|\((\w+)\))(.*)$""".r.findFirstMatchIn(p)
+        .getOrElse {
+          throw new Exception("Unparsable path: `" + p + "`")
+        }
+        .subgroups match {
+          case List(property, null, null, remainder) =>
+            ( Part.Property(property), remainder )
+          case List(null, index, null, remainder) =>
+            ( Part.Index(index.toInt), remainder )
+          case List(null, null, key, remainder) =>
+            ( Part.Key(key), remainder )
+        }
+
   def mapping
     ( host : Mapping,
       path : String )
@@ -89,18 +117,6 @@ object Path {
           where(host.properties(p), tail, value, operator)
       }
 
-
-  private trait Part
-  private object Part {
-    case class Property ( name : String ) extends Part
-    case class Key ( name : String ) extends Part
-    case class Index ( index : Int ) extends Part
-  }
-
-  private def parts
-    ( p : String )
-    : Stream[Part]
-    = ???
 
 
 

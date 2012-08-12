@@ -46,6 +46,18 @@ object Path {
       operator : Operator )
     : Where
     = where( host, parts(path), value, operator )
+    // = ( host, partAndRemainder(path) ) match {
+    //     case (host : MapMapping, (Part.Key(k), p)) =>
+    //       And(
+    //         Filter(Operator.Equals, host.key, k),
+    //         where(host.value, p, value, operator)
+    //       )
+    //     case (host : SeqMapping, (Part.Index(i), p)) =>
+    //       And(
+    //         Filter(Operator.Equals, host.index, i),
+    //         where(host.item, p, value, operator)
+    //       )
+    //   }
 
   private def where
     ( host : Mapping,
@@ -54,6 +66,8 @@ object Path {
       operator : Operator )
     : Where
     = ( host, path ) match {
+        case ( _, Seq() ) =>
+          Filter(operator, host, value)
         case ( host : MapMapping, Part.Key( key ) +: tail ) =>
           And(
             Filter(Operator.Equals, host.key, key),
@@ -64,13 +78,20 @@ object Path {
             Filter(Operator.Equals, host.index, index),
             where(host.item, tail, value, operator)
           )
-        case ( host : EntityMapping, Part.Property( "id" ) +: Seq() ) =>
+        case ( host : EntityMapping, Part.Property("id") +: Seq() ) =>
           Filter( operator, host.id, value )
         case ( host : EntityMapping, Part.Property(p) +: tail ) =>
           where(host.properties(p), tail, value, operator)
+        case ( host : TupleMapping, Part.Property(p) ) =>
+          ???
       }
 
-
+  private def mappingAndRemainder
+    ( host : Mapping,
+      path : String )
+    : (Mapping, String)
+    = if( path == "" ) ( host, "" )
+      else ???
 
 
   // def apply

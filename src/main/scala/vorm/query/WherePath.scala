@@ -14,49 +14,64 @@ object WherePath {
       value : Any,
       operator : Operator )
     : Where
-    = apply( host, PathParts(path), value, operator )
+    = apply( host, parts(path), value, operator )
 
-  def apply
+  private def apply
     ( host : Mapping,
-      path : Seq[PathParts.Part],
+      path : Seq[Part],
       value : Any,
       operator : Operator )
     : Where
     = ( host, path ) match {
-        case ( host : MapMapping, PathParts.Key( key ) +: Seq() ) =>
+        case ( host : MapMapping, Part.Key( key ) +: Seq() ) =>
           And(
             Filter(Operator.Equals, host.key, key),
             apply(host.value, path.tail, value, operator)
           )
-        case ( host : SeqMapping, PathParts.Index( index ) +: Seq() ) =>
+        case ( host : SeqMapping, Part.Index( index ) +: Seq() ) =>
           And(
             Filter(Operator.Equals, host.index, index),
             apply(host.value, path.tail, value, operator)
           )
         case ( host, path ) =>
           Filter( operator, MappingPath(host, path), value )
+      }
+
+
+  private trait Part
+  private object Part {
+    case class Property ( name : String ) extends Part
+    case class Key ( name : String ) extends Part
+    case class Index ( index : Int ) extends Part
+  }
+
+  private def parts
+    ( p : String )
+    : Stream[Part]
+    = ???
+
 
 
   // def apply
   //   ( host : Mapping,
-  //     path : Seq[PathParts.Part],
+  //     path : Seq[Part.Part],
   //     value : Any,
   //     operator : Operator )
   //   : Where
   //   = ( host, path ) match {
   //       case ( _, Seq() ) =>
   //         Filter(operator, host, value)
-  //       case ( host : MapMapping, PathParts.Key( key ) +: Seq() ) =>
+  //       case ( host : MapMapping, Part.Key( key ) +: Seq() ) =>
   //         And(
   //           Filter(Operator.Equals, host.key, key),
   //           apply(host.value, path.tail, value, operator)
   //         )
   //       case ( host : MapMapping, 
-  //              PathParts.Property("size") +: Seq() |
-  //              PathParts.Property("keys") +: PathParts.Property("size") +: Seq() |
-  //              PathParts.Property("values") +: PathParts.Property("size") +: Seq() ) =>
+  //              Part.Property("size") +: Seq() |
+  //              Part.Property("keys") +: Part.Property("size") +: Seq() |
+  //              Part.Property("values") +: Part.Property("size") +: Seq() ) =>
   //         Filter(Operator.HasSize, host, value)
-  //       case ( host : MapMapping, PathParts.Property("keys") +: Seq() ) =>
+  //       case ( host : MapMapping, Part.Property("keys") +: Seq() ) =>
   //         ( operator, value ) match {
   //           case (Operator.Equals, value : Traversable[_]) => 
   //             value.view

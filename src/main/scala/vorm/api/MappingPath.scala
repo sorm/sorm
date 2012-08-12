@@ -16,9 +16,9 @@ import Query._
 
 import collection.immutable.Queue
 
-object Path {
+object MappingPath {
 
-  def mapping
+  def apply
     ( host : Mapping,
       path : String )
     : Mapping
@@ -32,34 +32,37 @@ object Path {
                   host.id
               }
             case (property, remainder) =>
-              mapping(host.properties(property), remainder)
+              apply(host.properties(property), remainder)
           }
         case host : TupleMapping =>
           path.splitBy(".") match {
             case (item, remainder) =>
               "(?<=^_)\\d+(?=$)".r.findFirstIn(item) match {
                 case Some(index) =>
-                  mapping( host.items(index.toInt - 1), remainder )
+                  apply( host.items(index.toInt - 1), remainder )
               }
           }
         case host : OptionMapping =>
-          mapping( host.item, path )
+          path.splitBy(".") match {
+            case ("item", remainder) =>
+              apply( host.item, remainder )
+          }
         case host : SeqMapping =>
           path.splitBy(".") match {
             case ("item", remainder) =>
-              mapping( host.item, remainder )
+              apply( host.item, remainder )
           }
         case host : SetMapping =>
           path.splitBy(".") match {
             case ("item", remainder) =>
-              mapping( host.item, remainder )
+              apply( host.item, remainder )
           }
         case host : MapMapping =>
           path.splitBy(".") match {
             case ("key", remainder) =>
-              mapping( host.key, remainder )
+              apply( host.key, remainder )
             case ("value", remainder) =>
-              mapping( host.value, remainder )
+              apply( host.value, remainder )
           }
       } catch {
         case e : MatchError =>

@@ -35,6 +35,8 @@ trait Mapping {
   lazy val columnName : String
     = membership
         .map{
+          case Membership.SeqIndex(_)
+            ⇒ "i"
           case Membership.EntityId(_)
             ⇒ "id"
           case Membership.EntityProperty(name, _)

@@ -8,6 +8,9 @@ sealed trait Membership {
 
 object Membership {
 
+  sealed case class SeqIndex
+    ( parent : SeqMapping )
+    extends Membership
   sealed case class EntityId
     ( parent : EntityMapping )
     extends Membership

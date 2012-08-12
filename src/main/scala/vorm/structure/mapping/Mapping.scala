@@ -14,6 +14,10 @@ trait Mapping {
   override def toString : String
     = membership
         .map{
+          case Membership.SeqIndex(_)
+            ⇒ "seqIndex"
+          case Membership.EntityId(_)
+            ⇒ "id"
           case Membership.EntityProperty(name, _)
             ⇒ name
           case Membership.TupleItem(index, tuple)

@@ -51,5 +51,20 @@ object Where {
             case (Operator.Contains, value : Any) =>
               Filter(Operator.Equals, host.key, value)
           }
+
+        case ( host : SeqMapping, Seq() ) =>
+          ( operator, value ) match {
+            case (Operator.Equals, value : Seq[_]) =>
+              value.view
+                .zipWithIndex
+                .map{ case (v, i) => 
+                  And(
+                    Filter(Operator.Equals, host.item, v), 
+                    Filter(Operator.Equals, host.index, i) 
+                  )
+                }
+                .reduceOption{ Or }
+                .foldLeft( Filter(Operator.HasSize, host, value.size) ){ And }
+          }
       }
 }

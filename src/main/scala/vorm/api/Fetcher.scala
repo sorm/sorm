@@ -42,14 +42,14 @@ class Fetcher
           queryWhere = (queryWhere ++: List(w)) reduceOption Where.And
         )
     def order ( p : String, r : Boolean = false )
-      = copy( queryOrder = queryOrder enqueue Order(Path.mapping(queryMapping, p), r) )
+      = copy( queryOrder = queryOrder enqueue Order(MappingPath(queryMapping, p), r) )
     def limit ( x : Int )
       = copy( queryLimit = Some(x) )
     def offset ( x : Int )
       = copy( queryOffset = x )
 
     def filterEquals ( p : String, v : Any )
-      = filter( Where.Equals( Path.mapping(queryMapping, p), v ) )
+      = filter( Where.Equals( MappingPath(queryMapping, p), v ) )
 
     private def query( kind : Kind )
       = Query(kind, queryMapping, queryWhere, queryOrder, queryLimit, queryOffset)

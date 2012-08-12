@@ -47,8 +47,8 @@ object Query {
   object Operator {
     case object Equals extends Operator
     case object NotEquals extends Operator
-    case object Bigger extends Operator
-    case object BiggerIncluding extends Operator
+    case object Larger extends Operator
+    case object LargerIncluding extends Operator
     case object Smaller extends Operator
     case object SmallerIncluding extends Operator
     case object Like extends Operator

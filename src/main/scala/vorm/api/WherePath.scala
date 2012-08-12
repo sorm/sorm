@@ -1,4 +1,4 @@
-package vorm.query
+package vorm.api
 
 import vorm._
 import query._

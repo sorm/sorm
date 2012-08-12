@@ -23,18 +23,20 @@ object WherePath {
       operator : Operator )
     : Where
     = ( host, path ) match {
-        case ( host : MapMapping, Part.Key( key ) +: _ ) =>
+        case ( host : MapMapping, Part.Key( key ) +: tail ) =>
           And(
             Filter(Operator.Equals, host.key, key),
-            apply(host.value, path.tail, value, operator)
+            apply(host.value, tail, value, operator)
           )
-        case ( host : SeqMapping, Part.Index( index ) +: _ ) =>
+        case ( host : SeqMapping, Part.Index( index ) +: tail ) =>
           And(
             Filter(Operator.Equals, host.index, index),
-            apply(host.value, path.tail, value, operator)
+            apply(host.value, tail, value, operator)
           )
-        case ( host, path ) =>
-          Filter( operator, MappingPath(host, path), value )
+        case ( host : EntityMapping, Part.Property( "id" ) +: Seq() ) =>
+          Filter( operator, host.id, value )
+        case ( host : EntityMapping, Part.Property(p) +: tail ) =>
+          apply(host.properties(p), tail, value, operator)
       }
 
 

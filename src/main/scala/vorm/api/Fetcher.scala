@@ -39,7 +39,7 @@ class Fetcher
 
     def filter ( w : Where )
       = copy(
-          queryWhere = (queryWhere ++: List(w)) reduceOption Where.And
+          queryWhere = (queryWhere ++: List(w)) reduceOption And
         )
     def order ( p : String, r : Boolean = false )
       = copy( queryOrder = queryOrder enqueue Order(MappingPath(queryMapping, p), r) )
@@ -49,7 +49,13 @@ class Fetcher
       = copy( queryOffset = x )
 
     def filterEquals ( p : String, v : Any )
-      = filter( Where.Equals( MappingPath(queryMapping, p), v ) )
+      = filter( WherePath.where( queryMapping, p, v, Operator.Equals ) )
+    def filterNotEquals ( p : String, v : Any )
+      = filter( WherePath.where( queryMapping, p, v, Operator.NotEquals ) )
+    def filterContains ( p : String, v : Any )
+      = filter( WherePath.where( queryMapping, p, v, Operator.Contains ) )
+    def filterIn ( p : String, v : Any )
+      = filter( WherePath.where( queryMapping, p, v, Operator.In ) )
 
     private def query( kind : Kind )
       = Query(kind, queryMapping, queryWhere, queryOrder, queryLimit, queryOffset)

@@ -8,15 +8,15 @@ import api._
 import Query._
 
 object WherePath {
-  def apply
+  def where
     ( host : Mapping,
       path : String,
       value : Any,
       operator : Operator )
     : Where
-    = apply( host, parts(path), value, operator )
+    = where( host, parts(path), value, operator )
 
-  private def apply
+  private def where
     ( host : Mapping,
       path : Seq[Part],
       value : Any,
@@ -26,17 +26,17 @@ object WherePath {
         case ( host : MapMapping, Part.Key( key ) +: tail ) =>
           And(
             Filter(Operator.Equals, host.key, key),
-            apply(host.value, tail, value, operator)
+            where(host.value, tail, value, operator)
           )
         case ( host : SeqMapping, Part.Index( index ) +: tail ) =>
           And(
             Filter(Operator.Equals, host.index, index),
-            apply(host.item, tail, value, operator)
+            where(host.item, tail, value, operator)
           )
         case ( host : EntityMapping, Part.Property( "id" ) +: Seq() ) =>
           Filter( operator, host.id, value )
         case ( host : EntityMapping, Part.Property(p) +: tail ) =>
-          apply(host.properties(p), tail, value, operator)
+          where(host.properties(p), tail, value, operator)
       }
 
 

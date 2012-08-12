@@ -10,17 +10,10 @@ object Sample {
 
   val settings
     = Map(
-          Reflection[Artist] → 
-          EntitySettings( Seq("id"), autoIncrement = Set("id") ),
-
-          Reflection[Style] → 
-          EntitySettings( Seq("id"), autoIncrement = Set("id") ),
-
-          Reflection[Name] → 
-          EntitySettings( Seq("id"), autoIncrement = Set("id") ),
-
-          Reflection[Locale] → 
-          EntitySettings( Seq("id"), autoIncrement = Set("id") )
+          Reflection[Artist] → EntitySettings(),
+          Reflection[Style] → EntitySettings(),
+          Reflection[Name] → EntitySettings(),
+          Reflection[Locale] → EntitySettings()
         )
 
   val mappings

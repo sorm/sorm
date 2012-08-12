@@ -14,43 +14,28 @@ sealed class ValueMapping
   extends Mapping
   {
 
-    // autoIncremented seems to be implemented much smarter
     lazy val isKeyPart
       = {
-        val ancestors
-          = {
-            def ancestors
-              ( m : Mapping )
-              : Stream[Mapping]
-              = m.membership
-                  .map{_.parent}
-                  .map{
-                    case p : EntityMapping ⇒ p #:: Stream.empty
-                    case p ⇒ p #:: ancestors(p)
-                  }
-                  .getOrElse(Stream.empty)
-            ancestors(this)
-          }
+        def isKeyPart
+          ( m : Mapping )
+          : Boolean
+          = m.membership
+              .map{
+                case Membership.EntityId(_) =>
+                  true
+                case Membership.EntityProperty(n, e) =>
+                  e.settings.uniqueKeys.view.flatten.exists(_ == n) ||
+                  e.settings.indexes.view.flatten.exists(_ == n)
+                case Membership.TupleItem(_, m) =>
+                  isKeyPart(m)
+                case Membership.OptionItem(m) =>
+                  isKeyPart(m)
+                case _ =>
+                  false
+              }
+              .getOrElse(false)
 
-        val containerEntity
-          = ancestors.collectFirst{ case m : EntityMapping ⇒ m }
-
-        containerEntity
-          .map{ containerEntity ⇒ 
-
-            val containerEntitySettings
-              = settingsMap( containerEntity.reflection )
-
-            val keyProperties 
-              = ( Set() ++ 
-                  containerEntitySettings.primaryKey.view ++
-                  containerEntitySettings.uniqueKeys.view.flatten ++
-                  containerEntitySettings.indexes.view.flatten )
-                  .map{ containerEntity.properties }
-
-            (this #:: ancestors).exists(keyProperties)
-          }
-          .getOrElse(false)
+        isKeyPart(this)
       }
 
     lazy val columnType

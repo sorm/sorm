@@ -16,7 +16,7 @@ import Query._
 
 import collection.immutable.Queue
 
-object Path {
+object PathParts {
 
   trait Part
 

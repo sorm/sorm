@@ -1,11 +1,14 @@
 package vorm.api
 
 import vorm._
+import reflection.Reflection
 import samples._
 import extensions._
+import query.Query._
 
 import com.codahale.logula.Logging
 import org.apache.log4j.Level
+import structure.mapping.{EntityMapping, Mapping}
 
 object Demo extends App {
 
@@ -17,9 +20,8 @@ object Demo extends App {
   import SampleDb._
 
   Db.query[Artist]
-    .filterEquals("styles.item.names.value.item", "Hard Rock")
-    .fetchAll
-    .map{_.names(Db.en).head}
+    .filterEquals("names.value(1)", "Rolling Stones")
+    .fetchAll()
     .trace()
 
 }

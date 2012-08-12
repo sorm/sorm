@@ -5,11 +5,14 @@ import org.scalatest.matchers.ShouldMatchers
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 
+import vorm._
+import samples._
+
 @RunWith(classOf[JUnitRunner])
 class PathSuite extends FunSuite with ShouldMatchers {
   
   import Path._
-
+  
   test("pathAndRemainder failure"){
     pending
   }

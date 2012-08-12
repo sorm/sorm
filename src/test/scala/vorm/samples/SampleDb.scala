@@ -2,6 +2,7 @@ package vorm.samples
 
 import vorm._
 import api._
+import reflection._
 import extensions._
 
 object SampleDb {
@@ -83,8 +84,8 @@ object SampleDb {
         = Db.save( Artist( Map( en -> Seq("Godsmack"),
                                 ru -> Seq("Годсмэк") ),
                            Set( metal, hardRock, rock ) ) )
-    }
 
+    }
 
 
 }

@@ -22,22 +22,34 @@ object Where {
       operator : Operator )
     : Where
     = ( host, path ) match {
-        case ( _, Seq() ) => 
+        case ( _, Seq() ) 
+          =>
           Filter(operator, host, value)
-        case ( host : MapMapping, Path.Key( key ) +: Seq() ) =>
+        case ( host : MapMapping, Path.Key( key ) +: Seq() ) 
+          =>
           And(
             Filter(Operator.Equals, host.key, key),
             apply(host.value, path.tail, value, operator)
           )
-        case ( host : MapMapping, Path.Property("size") +: Seq() ) =>
+        case ( host : MapMapping, 
+               Path.Property("size") +: Seq() | 
+               Path.Property("keys") +: Path.Property("size") +: Seq() |
+               Path.Property("values") +: Path.Property("size") +: Seq() ) => 
           Filter(Operator.HasSize, host, value)
         case ( host : MapMapping, Path.Property("keys") +: Seq() ) =>
           ( operator, value ) match {
-            case (Operator.Equals, value : Traversable[_]) =>
+            case (Operator.Equals, value : Traversable[_]) => 
               value.view
                 .map{ Filter(Operator.Equals, host.key, _) }
                 .reduceOption{ Or }
                 .foldLeft( Filter(Operator.HasSize, host, value.size) ){ And }
+            case (Operator.Includes, value : Traversable[_]) 
+              if value.size > 0 =>
+              value.view
+                .map{ Filter(Operator.Equals, host.key, _) }
+                .reduce{ Or }
+            case (Operator.Contains, value : Any) =>
+              Filter(Operator.Equals, host.key, value)
           }
       }
 }

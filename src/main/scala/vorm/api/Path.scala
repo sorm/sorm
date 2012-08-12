@@ -43,20 +43,6 @@ object Path {
       operator : Operator )
     : Where
     = where( host, parts(path), value, operator )
-    // = ( host, partAndRemainder(path) ) match {
-    //     case (host : MapMapping, (Part.Braced(k), p)) =>
-    //       And(
-    //         Filter(Operator.Equals, host.key, k),
-    //         where(host.value, p, value, operator)
-    //       )
-    //     case (host : SeqMapping, (Part.Index(i), p)) =>
-    //       And(
-    //         Filter(Operator.Equals, host.index, i),
-    //         where(host.item, p, value, operator)
-    //       )
-    //     case (_ , (p, r)) =>
-    //       ???
-    //   }
 
   private def where
     ( host : Mapping,
@@ -77,61 +63,30 @@ object Path {
             Filter(Operator.Equals, host.index, index.toInt),
             where(host.item, tail, value, operator)
           )
+        //  virtual properties should not be supported until a general api is developed
+        // case (host : CollectionTableMapping, Part.Dotted("size") +: Seq()) =>
+        //   ( operator, value ) match {
+        //     case (Operator.Equals, _) =>
+        //       Filter(Operator.HasSize, host, value)
+        //   }
+        // case (host : MapMapping, Part.Dotted("keys") +: Seq()) =>
+        //   ( operator, value ) match {
+        //     case (Operator.Equals, value : Traversable[_]) => 
+        //       value.view
+        //         .map{ Filter(Operator.Equals, host.key, _) }
+        //         .reduceOption{ Or }
+        //         .foldLeft( Filter(Operator.HasSize, host, value.size) ){ And }
+        //     case (Operator.Includes, value : Traversable[_]) 
+        //       if value.size > 0 =>
+        //       value.view
+        //         .map{ Filter(Operator.Equals, host.key, _) }
+        //         .reduce{ Or }
+        //     case (Operator.Contains, value : Any) =>
+        //       Filter(Operator.Equals, host.key, value)
+        //   }         
         case (_, Part.Dotted(id) +: tail) =>
           where( mapping(host, id), tail, value, operator )
       }
-
-
-  // def apply
-  //   ( host : Mapping,
-  //     path : Seq[Part.Part],
-  //     value : Any,
-  //     operator : Operator )
-  //   : Where
-  //   = ( host, path ) match {
-  //       case ( _, Seq() ) =>
-  //         Filter(operator, host, value)
-  //       case ( host : MapMapping, Part.Braced( key ) +: Seq() ) =>
-  //         And(
-  //           Filter(Operator.Equals, host.key, key),
-  //           apply(host.value, path.tail, value, operator)
-  //         )
-  //       case ( host : MapMapping, 
-  //              Part.Dotted("size") +: Seq() |
-  //              Part.Dotted("keys") +: Part.Dotted("size") +: Seq() |
-  //              Part.Dotted("values") +: Part.Dotted("size") +: Seq() ) =>
-  //         Filter(Operator.HasSize, host, value)
-  //       case ( host : MapMapping, Part.Dotted("keys") +: Seq() ) =>
-  //         ( operator, value ) match {
-  //           case (Operator.Equals, value : Traversable[_]) => 
-  //             value.view
-  //               .map{ Filter(Operator.Equals, host.key, _) }
-  //               .reduceOption{ Or }
-  //               .foldLeft( Filter(Operator.HasSize, host, value.size) ){ And }
-  //           case (Operator.Includes, value : Traversable[_]) 
-  //             if value.size > 0 =>
-  //             value.view
-  //               .map{ Filter(Operator.Equals, host.key, _) }
-  //               .reduce{ Or }
-  //           case (Operator.Contains, value : Any) =>
-  //             Filter(Operator.Equals, host.key, value)
-  //         }
-
-  //       case ( host : SeqMapping, Seq() ) =>
-  //         ( operator, value ) match {
-  //           case (Operator.Equals, value : Seq[_]) =>
-  //             value.view
-  //               .zipWithIndex
-  //               .map{ case (v, i) => 
-  //                 And(
-  //                   Filter(Operator.Equals, host.item, v), 
-  //                   Filter(Operator.Equals, host.index, i) 
-  //                 )
-  //               }
-  //               .reduceOption{ Or }
-  //               .foldLeft( Filter(Operator.HasSize, host, value.size) ){ And }
-  //         }
-  //     }
 
 
   def mapping

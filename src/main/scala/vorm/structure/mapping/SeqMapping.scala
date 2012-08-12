@@ -19,11 +19,14 @@ sealed class SeqMapping
     lazy val children : Set[Mapping]
       = Set( item )
 
+    lazy val index
+      = new ValueMapping(Some(Membership.SeqIndex(this)), Reflection[Int], settingsMap)
+
     lazy val primaryKeyColumns : IndexedSeq[Column]
       = containerTableColumns :+ indexColumn
 
-    lazy val indexColumn : Column
-      = Column( "i", Column.Type.Integer )
+    def indexColumn : Column
+      = index.column
 
     lazy val columns : Set[Column]
       = primaryKeyColumns.view ++ childrenColumns.view toSet

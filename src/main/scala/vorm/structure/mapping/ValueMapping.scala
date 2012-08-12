@@ -79,26 +79,10 @@ sealed class ValueMapping
         }
 
     lazy val autoIncremented
-      : Boolean
-      = {
-        def autoIncremented
-          ( m : Mapping )
-          : Boolean
-          = m.membership
-              .map{
-                case Membership.EntityProperty(name, entity) 
-                  ⇒ entity.settings.autoIncrement(name)
-                case Membership.TupleItem(_, tuple)
-                  ⇒ autoIncremented(tuple)
-                case Membership.OptionItem(option)
-                  ⇒ autoIncremented(option)
-                case _
-                  ⇒ false
-              }
-              .getOrElse( false )
-
-        autoIncremented( this )
-      }
+      = membership match {
+          case Some(Membership.EntityId(_)) => true
+          case _ => false
+        }
 
     lazy val nullable
       = membership match {

@@ -1,6 +1,7 @@
 package vorm.select
 
 import vorm._
+import persisted._
 import structure._
 import query._
 import mapping._
@@ -8,17 +9,6 @@ import vorm.{sql => Sql}
 import ddl._
 import extensions._
 
-/**
- *  Usage:
- *    assuming `rock` and `metal` are `Style` entities
- *    Query:
- *      artists.filter(
- *          ( "styles" includes Set(rock, metal) ) ||
- *          ( "styles" is Set(pop) )
- *        )
- *    MappingSelect:
- *      ???
- */
 case class MappingSelect
   ( mapping : TableMapping,
     resultMappings : Seq[(TableMapping, Column)] = Seq(),
@@ -257,87 +247,100 @@ case class MappingSelect
         )
 
     def andFilter
-      ( w : Query.Where.Filter )
+      ( w : Query.Filter )
       = withSkeletonTo( w.mapping )
           .withFilter( w, Sql.Clause.And )
 
     def orFilter
-      ( w : Query.Where.Filter )
+      ( w : Query.Filter )
       = withSkeletonTo( w.mapping )
           .withFilter( w, Sql.Clause.Or )
 
     def withFilter
-      ( w : Query.Where.Filter, 
+      ( w : Query.Filter, 
         o : (Sql.Clause, Sql.Clause) => Sql.Clause = Sql.Clause.And )
       : MappingSelect
       = withSkeletonTo(w.mapping).withFilter1(w, o)
 
     private def withFilter1
-      ( w : Query.Where.Filter, 
+      ( f : Query.Filter, 
         o : (Sql.Clause, Sql.Clause) => Sql.Clause )
       : MappingSelect
-      = w match {
-          case Query.Where.Contains( m : SeqMapping, v ) ⇒ 
-            withFilter1( Query.Where.Includes( m, Seq(v) ), o )
-          case Query.Where.Contains( m : SetMapping, v ) ⇒
-            withFilter1( Query.Where.Includes( m, Set(v) ), o )
-          case Query.Where.Includes( m : SeqMapping, v : Seq[_] ) ⇒
+      = {
+        import Query._
+        import Operator._
+
+        f match {
+          case Filter( Contains, m : SeqMapping, v ) ⇒ 
+            withFilter1( Filter( Includes, m, Seq(v) ), o )
+          case Filter( Includes, m : SeqMapping, v : Seq[_] ) ⇒
             withSelect(
                 MappingSelect(m).primaryKey
                   .foldFrom(v){ (s, v) ⇒ 
-                      s.withFilter( Query.Where.Equals(m.item, v),
+                      s.withFilter( Filter( Equals, m.item, v ),
                                     Sql.Clause.Or )
                     }
                   .havingRowsCount(v.length),
                 o
               )
-          case Query.Where.Equals( m : SeqMapping, v : Seq[_] ) ⇒ 
+          case Filter( Equals, m : SeqMapping, v : Seq[_] ) ⇒ 
             withSelect(
-                v.view.zipWithIndex
-                  .foldLeft( MappingSelect(m).primaryKey ){ case (s, (v, i)) ⇒
-                    s.withClause( 
-                        Sql.Clause.Equals(
-                            Sql.Column("i", s.joinsAliases(m).some),
-                            Sql.Value(i)
-                          )
-                      )
-                      .withFilter(
-                          Query.Where.Equals(m.item, v),
-                          Sql.Clause.Or
+              v.view.zipWithIndex
+                .foldLeft( MappingSelect(m).primaryKey ){ case (s, (v, i)) ⇒
+                  s.withClause( 
+                      Sql.Clause.Equals(
+                          Sql.Column("i", s.joinsAliases(m).some),
+                          Sql.Value(i)
                         )
-                  }
-                  .havingRowsCount(v.length)
-                  .withSkeletonTo(m)
-                  .withSelect( 
-                      MappingSelect(m).primaryKey.havingRowsCount(v.length), 
-                      Sql.Clause.And 
-                    ),
-                o
-              )
-          case Query.Where.HasSize( m : SeqMapping, v : Int ) ⇒ 
+                    )
+                    .withFilter(
+                        Filter( Equals,m.item, v),
+                        Sql.Clause.Or
+                      )
+                }
+                .havingRowsCount(v.length)
+                .withSkeletonTo(m)
+                .withSelect( 
+                    MappingSelect(m).primaryKey.havingRowsCount(v.length), 
+                    Sql.Clause.And 
+                  ),
+              o
+            )
+          case Filter( HasSize, m : CollectionTableMapping, v : Int ) ⇒ 
             withSelect( MappingSelect(m).primaryKey.havingRowsCount(v), o )
-          case Query.Where.Equals( m : SetMapping, v : Seq[_] ) ⇒ 
+          case Filter( Contains, m : SetMapping, v ) ⇒
+            withFilter1( Filter( Includes, m, Set(v) ), o )
+          case Filter( Equals, m : SetMapping, v : Set[_] ) ⇒ 
             withWhere(
-                Query.Where.And(
-                    Query.Where.Includes(m, v),
-                    Query.Where.HasSize(m, v)
+                And(
+                    Filter( Includes, m, v ),
+                    Filter( HasSize, m, v )
                   ),
                 o
               )
-          case f : Query.Where.Filter ⇒ 
-            f.mapping match {
-              case m : ValueMapping ⇒ 
-                withCondition( m, f.value, conditionOperator(f), o )
-            }
+          case Filter( op, m : ValueMapping, v ) =>
+            withCondition( m, v, conditionOperator(op), o )
+          case Filter( op, m : EntityMapping, v : Persisted ) =>
+            withSkeletonTo(m)
+              .withCondition( m.id, v.id, conditionOperator(op), o )
+          case Filter( _, m : EntityMapping, _ ) =>
+            throw new Exception("Only persisted entities can be used in filters")
         }
+    }
 
     private def conditionOperator
-      ( f : Query.Where.Filter )
+      ( f : Query.Operator )
       : (Sql.ConditionObject, Sql.ConditionObject) => Sql.Clause.Condition
       = f match {
-          case f : Query.Where.Equals     ⇒ Sql.Clause.Equals
-          case f : Query.Where.NotEquals  ⇒ Sql.Clause.NotEquals
-          case f : Query.Where.In         ⇒ Sql.Clause.In
+          case Query.Operator.Equals           ⇒ Sql.Clause.Equals
+          case Query.Operator.NotEquals        ⇒ Sql.Clause.NotEquals
+          case Query.Operator.Larger           ⇒ Sql.Clause.Larger
+          case Query.Operator.LargerIncluding  ⇒ Sql.Clause.LargerIncluding
+          case Query.Operator.Smaller          ⇒ Sql.Clause.Smaller
+          case Query.Operator.SmallerIncluding ⇒ Sql.Clause.SmallerIncluding
+          case Query.Operator.Like             ⇒ Sql.Clause.Like
+          case Query.Operator.Regex            ⇒ Sql.Clause.Regex
+          case Query.Operator.In               ⇒ Sql.Clause.In
         }
 
     private def withCondition
@@ -370,18 +373,18 @@ case class MappingSelect
         o : (Sql.Clause, Sql.Clause) => Sql.Clause = Sql.Clause.And )
       : MappingSelect
       = w match {
-          case Query.Where.Or(l, r) ⇒ 
+          case Query.Or(l, r) ⇒
             copy( where = None )
               .withWhere(l)
               .withWhere(r, Sql.Clause.Or)
               .foldFrom(where){ _ withClause (_, o) }
               // .foldFrom(where){ (s, c) ⇒ s withClause (c, o) }
-          case Query.Where.And(l, r) ⇒ 
+          case Query.And(l, r) ⇒
             copy( where = None )
               .withWhere(l)
               .withWhere(r, Sql.Clause.And)
               .foldFrom(where){ _ withClause (_, o) }
-          case f: Query.Where.Filter ⇒ 
+          case f: Query.Filter ⇒ 
             withFilter(f, o)
         }
   }

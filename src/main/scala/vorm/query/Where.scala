@@ -23,21 +23,21 @@ object Where {
     : Where
     = ( host, path ) match {
         case ( _, Seq() ) => 
-          Filter(host, value, operator)
+          Filter(operator, host, value)
         case ( host : MapMapping, Path.Key( key ) +: Seq() ) =>
           And(
-            Filter(host.key, key, Operator.Equals),
+            Filter(Operator.Equals, host.key, key),
             apply(host.value, path.tail, value, operator)
           )
         case ( host : MapMapping, Path.Property("size") +: Seq() ) =>
-          Filter(host, value, Operator.HasSize)
+          Filter(Operator.HasSize, host, value)
         case ( host : MapMapping, Path.Property("keys") +: Seq() ) =>
           ( operator, value ) match {
             case (Operator.Equals, value : Traversable[_]) =>
               value.view
-                .map{ Filter(host.key, _, Operator.Equals) }
+                .map{ Filter(Operator.Equals, host.key, _) }
                 .reduceOption{ Or }
-                .foldLeft( Filter(host, value.size, Operator.HasSize) ){ And }
+                .foldLeft( Filter(Operator.HasSize, host, value.size) ){ And }
           }
       }
 }

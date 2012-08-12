@@ -36,9 +36,9 @@ object Query {
       extends Composite
 
   sealed case class Filter
-    ( mapping : Mapping,
-      value : Any,
-      operator : Operator )
+    ( operator : Operator,
+      mapping : Mapping,
+      value : Any )
     extends Where
 
 

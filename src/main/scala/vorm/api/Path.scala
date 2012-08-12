@@ -19,51 +19,51 @@ import collection.immutable.Queue
 object Path {
 
   def mapping
-    ( parent : Mapping,
+    ( host : Mapping,
       path : String )
     : Mapping
-    = if( path == "" ) parent
-      else try parent match {
-        case parent : EntityMapping =>
+    = if( path == "" ) host
+      else try host match {
+        case host : EntityMapping =>
           path.splitBy(".") match {
             case ("id", remainder) =>
               remainder match {
                 case "" =>
-                  parent.id
+                  host.id
               }
             case (property, remainder) =>
-              mapping(parent.properties(property), remainder)
+              mapping(host.properties(property), remainder)
           }
-        case parent : TupleMapping =>
+        case host : TupleMapping =>
           path.splitBy(".") match {
             case (item, remainder) =>
               "(?<=^_)\\d+(?=$)".r.findFirstIn(item) match {
                 case Some(index) =>
-                  mapping( parent.items(index.toInt - 1), remainder )
+                  mapping( host.items(index.toInt - 1), remainder )
               }
           }
-        case parent : OptionMapping =>
-          mapping( parent.item, path )
-        case parent : SeqMapping =>
+        case host : OptionMapping =>
+          mapping( host.item, path )
+        case host : SeqMapping =>
           path.splitBy(".") match {
             case ("item", remainder) =>
-              mapping( parent.item, remainder )
+              mapping( host.item, remainder )
           }
-        case parent : SetMapping =>
+        case host : SetMapping =>
           path.splitBy(".") match {
             case ("item", remainder) =>
-              mapping( parent.item, remainder )
+              mapping( host.item, remainder )
           }
-        case parent : MapMapping =>
+        case host : MapMapping =>
           path.splitBy(".") match {
             case ("key", remainder) =>
-              mapping( parent.key, remainder )
+              mapping( host.key, remainder )
             case ("value", remainder) =>
-              mapping( parent.value, remainder )
+              mapping( host.value, remainder )
           }
       } catch {
         case e : MatchError =>
-          throw new Exception("Unparseable path `" + path + "` of `" + parent + "`", e)
+          throw new Exception("Unparseable path `" + path + "` of `" + host + "`", e)
       }
 
 }

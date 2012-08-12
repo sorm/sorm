@@ -12,9 +12,8 @@ object Path {
 
   trait Part
   object Part {
-    case class Property ( name : String ) extends Part
-    case class Key ( name : String ) extends Part
-    case class Index ( index : Int ) extends Part
+    case class Dotted ( name : String ) extends Part
+    case class Braced ( name : String ) extends Part
   }
 
   def parts
@@ -25,18 +24,16 @@ object Path {
   def partAndRemainder
     ( p : String )
     : (Part, String)
-    = """^(?:\.?(\w+)|\((\d+)\)|\((\w+)\))(.*)$""".r
+    = """^(?:\.?(\w+)|\((\w+)\))(.*)$""".r
         .findFirstMatchIn(p)
         .getOrElse {
           throw new Exception("Unparsable path: `" + p + "`")
         }
         .subgroups match {
-          case List(property, null, null, remainder) =>
-            ( Part.Property(property), remainder )
-          case List(null, index, null, remainder) =>
-            ( Part.Index(index.toInt), remainder )
-          case List(null, null, key, remainder) =>
-            ( Part.Key(key), remainder )
+          case List(name, null, remainder) =>
+            ( Part.Dotted(name), remainder )
+          case List(null, name, remainder) =>
+            ( Part.Braced(name), remainder )
         }
 
   def where
@@ -47,7 +44,7 @@ object Path {
     : Where
     = where( host, parts(path), value, operator )
     // = ( host, partAndRemainder(path) ) match {
-    //     case (host : MapMapping, (Part.Key(k), p)) =>
+    //     case (host : MapMapping, (Part.Braced(k), p)) =>
     //       And(
     //         Filter(Operator.Equals, host.key, k),
     //         where(host.value, p, value, operator)
@@ -68,21 +65,21 @@ object Path {
     = ( host, path ) match {
         case ( _, Seq() ) =>
           Filter(operator, host, value)
-        case ( host : MapMapping, Part.Key( key ) +: tail ) =>
+        case ( host : MapMapping, Part.Braced(key) +: tail ) =>
           And(
             Filter(Operator.Equals, host.key, key),
             where(host.value, tail, value, operator)
           )
-        case ( host : SeqMapping, Part.Index( index ) +: tail ) =>
+        case ( host : SeqMapping, Part.Braced(index) +: tail ) =>
           And(
-            Filter(Operator.Equals, host.index, index),
+            Filter(Operator.Equals, host.index, index.toInt),
             where(host.item, tail, value, operator)
           )
-        case ( host : EntityMapping, Part.Property("id") +: Seq() ) =>
+        case ( host : EntityMapping, Part.Dotted("id") +: Seq() ) =>
           Filter( operator, host.id, value )
-        case ( host : EntityMapping, Part.Property(p) +: tail ) =>
+        case ( host : EntityMapping, Part.Dotted(p) +: tail ) =>
           where(host.properties(p), tail, value, operator)
-        case ( host : TupleMapping, Part.Property(p) ) =>
+        case ( host : TupleMapping, Part.Dotted(p) ) =>
           ???
       }
 
@@ -103,17 +100,17 @@ object Path {
   //   = ( host, path ) match {
   //       case ( _, Seq() ) =>
   //         Filter(operator, host, value)
-  //       case ( host : MapMapping, Part.Key( key ) +: Seq() ) =>
+  //       case ( host : MapMapping, Part.Braced( key ) +: Seq() ) =>
   //         And(
   //           Filter(Operator.Equals, host.key, key),
   //           apply(host.value, path.tail, value, operator)
   //         )
   //       case ( host : MapMapping, 
-  //              Part.Property("size") +: Seq() |
-  //              Part.Property("keys") +: Part.Property("size") +: Seq() |
-  //              Part.Property("values") +: Part.Property("size") +: Seq() ) =>
+  //              Part.Dotted("size") +: Seq() |
+  //              Part.Dotted("keys") +: Part.Dotted("size") +: Seq() |
+  //              Part.Dotted("values") +: Part.Dotted("size") +: Seq() ) =>
   //         Filter(Operator.HasSize, host, value)
-  //       case ( host : MapMapping, Part.Property("keys") +: Seq() ) =>
+  //       case ( host : MapMapping, Part.Dotted("keys") +: Seq() ) =>
   //         ( operator, value ) match {
   //           case (Operator.Equals, value : Traversable[_]) => 
   //             value.view

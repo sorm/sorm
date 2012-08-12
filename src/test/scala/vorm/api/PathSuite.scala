@@ -13,17 +13,14 @@ class PathSuite extends FunSuite with ShouldMatchers {
   test("pathAndRemainder failure"){
     pending
   }
-  test("pathAndRemainder key parsing"){
-    partAndRemainder("(asdf)") === (Part.Key("asdf"), "")
-    partAndRemainder("(asdf).sdf") === (Part.Key("asdf"), ".sdf")
+  test("pathAndRemainder braced parsing"){
+    partAndRemainder("(asdf)") === (Part.Braced("asdf"), "")
+    partAndRemainder("(asdf).sdf") === (Part.Braced("asdf"), ".sdf")
+    partAndRemainder("(342).sdf") === (Part.Braced("342"), ".sdf")
   }
-  test("pathAndRemainder index parsing"){
-    partAndRemainder("(23)") === (Part.Index(23), "")
-    partAndRemainder("(23).sdf") === (Part.Index(23), ".sdf")
-  }
-  test("pathAndRemainder property parsing"){
-    partAndRemainder("sdf") === (Part.Property("sdf"), "")
-    partAndRemainder("sdf.dksfje") === (Part.Property("sdf"), ".dksfje")
-    partAndRemainder(".sdf.dksfje") === (Part.Property("sdf"), _)
+  test("pathAndRemainder dotted parsing"){
+    partAndRemainder("sdf") === (Part.Dotted("sdf"), "")
+    partAndRemainder("sdf.dksfje") === (Part.Dotted("sdf"), ".dksfje")
+    partAndRemainder(".sdf.dksfje") === (Part.Dotted("sdf"), _)
   }
 }

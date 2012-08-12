@@ -31,7 +31,7 @@ object WherePath {
         case ( host : SeqMapping, Part.Index( index ) +: tail ) =>
           And(
             Filter(Operator.Equals, host.index, index),
-            apply(host.value, tail, value, operator)
+            apply(host.item, tail, value, operator)
           )
         case ( host : EntityMapping, Part.Property( "id" ) +: Seq() ) =>
           Filter( operator, host.id, value )

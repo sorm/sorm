@@ -7,12 +7,11 @@ import save._
 import structure._
 import mapping._
 import jdbc._
-import query._
 import select._
 import resultSet._
 import extensions._
 
-import Query._
+import query.Query._
 
 import collection.immutable.Queue
 
@@ -39,7 +38,7 @@ class Fetcher
 
     def filter ( w : Where )
       = copy(
-          queryWhere = (queryWhere ++: List(w)) reduceOption Where.And
+          queryWhere = (queryWhere ++: List(w)) reduceOption And
         )
     def order ( p : String, r : Boolean = false )
       = copy( queryOrder = queryOrder enqueue Order(MappingPath(queryMapping, p), r) )
@@ -49,7 +48,7 @@ class Fetcher
       = copy( queryOffset = x )
 
     def filterEquals ( p : String, v : Any )
-      = filter( Where.Equals( MappingPath(queryMapping, p), v ) )
+      = filter( Filter( MappingPath(queryMapping, p), v, Operator.Equals ) )
 
     private def query( kind : Kind )
       = Query(kind, queryMapping, queryWhere, queryOrder, queryLimit, queryOffset)

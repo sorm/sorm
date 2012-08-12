@@ -7,12 +7,11 @@ import save._
 import structure._
 import mapping._
 import jdbc._
-import query._
 import select._
 import resultSet._
 import extensions._
 
-import Query._
+import query.Query._
 
 import collection.immutable.Queue
 

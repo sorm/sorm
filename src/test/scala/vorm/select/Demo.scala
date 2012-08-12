@@ -5,7 +5,7 @@ import reflection._
 import structure._
 import mapping._
 import extensions._
-import query._
+import query.Query._
 
 object Demo extends App {
 
@@ -20,7 +20,7 @@ object Demo extends App {
 //    = MappingSelect(mapping)
 //      .primaryKey
 //      .withFilter(
-//        Query.Where.In(
+//        Where.In(
 //          mapping
 //            .properties("names").asInstanceOf[SeqMapping]
 //            .item.asInstanceOf[EntityMapping]
@@ -29,7 +29,7 @@ object Demo extends App {
 //        )
 //      )
 //      .withFilter(
-//        Query.Where.Equals(
+//        Where.Equals(
 //          mapping
 //            .properties("names").asInstanceOf[SeqMapping]
 //            .item.asInstanceOf[EntityMapping]
@@ -38,7 +38,7 @@ object Demo extends App {
 //        )
 //      )
 //      .withFilter(
-//        Query.Where.Equals(
+//        Where.Equals(
 //          mapping
 //            .properties("names").asInstanceOf[SeqMapping],
 //          Seq()
@@ -49,8 +49,8 @@ object Demo extends App {
 //    = MappingSelect(mapping)
 //        .resultSet
 //        .withOrders(
-//          Query.Order(mapping.properties("names"))::
-//          Query.Order(
+//          Order(mapping.properties("names"))::
+//          Order(
 //            mapping
 //              .properties("names").asInstanceOf[SeqMapping]
 //              .item.asInstanceOf[EntityMapping]
@@ -61,25 +61,27 @@ object Demo extends App {
 
 
   val query = Query(
-    Query.Kind.Select,
+    Kind.Select,
     mapping,
     Some(
-      Query.Where.Or(
-        Query.Where.Equals(
+      Or(
+        Filter(
           mapping
             .properties("names").asInstanceOf[SeqMapping],
-          Seq()
+          Seq(),
+          Operator.Equals
         ),
-        Query.Where.Equals(
+        Filter(
           mapping
             .properties("names").asInstanceOf[SeqMapping]
             .item.asInstanceOf[EntityMapping]
             .properties("value"),
-          "Nirvana"
+          "Nirvana",
+          Operator.Equals
         )
       )
     ),
-    Query.Order(
+    Order(
       mapping
         .properties("names").asInstanceOf[SeqMapping]
         .item.asInstanceOf[EntityMapping]

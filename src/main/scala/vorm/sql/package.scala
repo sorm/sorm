@@ -416,7 +416,7 @@ package object sql {
           = left.data ++ right.data
       }
     
-    case class Equals
+    case class Equals 
       ( left : ConditionObject,
         right : ConditionObject )
       extends Condition("=")
@@ -425,11 +425,6 @@ package object sql {
       ( left : ConditionObject,
         right : ConditionObject )
       extends Condition("!=")
-    
-    case class In
-      ( left : ConditionObject,
-        right : ConditionObject )
-      extends Condition("IN")
 
     case class Larger
       ( left : ConditionObject,
@@ -450,6 +445,21 @@ package object sql {
       ( left : ConditionObject,
         right : ConditionObject )
       extends Condition("<=")
+
+    case class Like
+      ( left : ConditionObject,
+        right : ConditionObject )
+      extends Condition("LIKE")
+
+    case class Regex
+      ( left : ConditionObject,
+        right : ConditionObject )
+      extends Condition("REGEXP")
+    
+    case class In
+      ( left : ConditionObject,
+        right : ConditionObject )
+      extends Condition("IN")
   }
 
   case class Value

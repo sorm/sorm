@@ -20,15 +20,6 @@ class ResultSetParsingAdapter
         indexes : Map[(TableMapping, Column), Int] )
       : Seq[_]
       = {
-        //  ideas
-        // type PrimaryKey
-        //   = Seq[Any]
-        // type Rows
-        //   = Map[PrimaryKey, Row]
-        // type Row
-        //   = Map[String, Either[Any, Rows]]
-        // class Rows
-        //   extends collection.immutable.HashMap[PrimaryKey, Map[String, Either[Any, Rows]]]
 
         case class Row
           ( data : Map[Column, Any],

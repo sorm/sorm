@@ -21,6 +21,6 @@ class PathSuite extends FunSuite with ShouldMatchers {
   test("pathAndRemainder dotted parsing"){
     partAndRemainder("sdf") === (Part.Dotted("sdf"), "")
     partAndRemainder("sdf.dksfje") === (Part.Dotted("sdf"), ".dksfje")
-    partAndRemainder(".sdf.dksfje") === (Part.Dotted("sdf"), _)
+    partAndRemainder(".sdf.dksfje") === (Part.Dotted("sdf"), ".dksfje")
   }
 }

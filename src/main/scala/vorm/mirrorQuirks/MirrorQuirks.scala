@@ -53,12 +53,14 @@ object MirrorQuirks {
   def javaClass(mt: Type): Class[_] =
     try typeToClass(mt)
     catch {
-      case e: ClassNotFoundException =>
+      case _ : ClassNotFoundException =>
         mt.typeSymbol match {
           case s if s.fullName == "scala.Any" => classOf[Any]
           case s =>
             classByName(javaClassName(s))
         }
+      case _ : NoClassDefFoundError =>
+        ???
     }
 
   def classByName(n: String) =

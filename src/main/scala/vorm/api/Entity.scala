@@ -11,6 +11,22 @@ sealed case class Entity
   {
     //  Test validity of provided data:
     {
+      {
+        def allDescendants
+          ( r : Reflection )
+          : Stream[Reflection]
+          = ( r.properties.values.view ++ r.generics.view )
+              .flatMap{r => r +: allDescendants(r)}
+              .toStream
+
+        allDescendants(reflection)
+          .filter{_ inheritsFrom Reflection[Option[_]]}
+          .foreach{ r =>
+            require( !r.generics(0).inheritsFrom(Reflection[Option[_]]),
+                     "Type signatures with `Option` being directly nested in another `Option`, i.e. `Option[Option[_]]` are not allowed" )
+          }
+      }
+
       ( indexes.view ++ uniqueKeys.view )
         .flatten
         .foreach{ p =>

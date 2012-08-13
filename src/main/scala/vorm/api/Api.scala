@@ -37,7 +37,7 @@ trait Api {
   /**
    * Current time at DB server
    */
-  def date : DateTime
+  def fetchDate() : DateTime
     = ???
 
   def save

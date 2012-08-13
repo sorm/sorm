@@ -16,24 +16,19 @@ object Demo extends App {
 
 
   case class A
-    ( seq : Seq[Option[B]] )
-  case class B
-    ( z : String )
+    ( a : Option[(Int, Option[String])] )
 
   val db
-    = new Instance( Entity[A]() :: Entity[B]() :: Nil,
+    = new Instance( Entity[A]() :: Nil,
                     "jdbc:h2:mem:test",
                     mode = Mode.DropAllCreate )
 
-  val b1 = db.save(B("abc"))
-  val b2 = db.save(B("cba"))
+  db.save(A( None ))
+  db.save(A( Some(2 -> None) ))
+  db.save(A( Some(56 -> Some("asdf")) ))
 
-  db.save(A( Seq() ))
-  db.save(A( Seq(Some(b1), None, Some(b2)) ))
-  db.save(A( Seq(None, Some(b2)) ))
-
-  db.fetchById[A](1).get.seq.trace()
-  db.fetchById[A](2).get.seq.trace()
-  db.fetchById[A](3).get.seq.trace()
+  db.fetchById[A](1).get.a.trace()
+  db.fetchById[A](2).get.a.trace()
+  db.fetchById[A](3).get.a.trace()
 
 }

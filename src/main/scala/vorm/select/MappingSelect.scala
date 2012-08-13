@@ -35,7 +35,7 @@ case class MappingSelect
     //         = ( where ++
     //             s.mapping.primaryKeyColumns.view
     //               .map{ _.name }
-    //               .map{ n ⇒ 
+    //               .map{ n => 
     //                   Sql.Clause.Equals(
     //                       Sql.Column(n, Some(newAlias)),
     //                       //  TODO: optimize to bind to parent
@@ -49,10 +49,10 @@ case class MappingSelect
     //     // copy(
     //     //   orderBy 
     //     //     = q.order.flatMap {
-    //     //         case Query.Order( m, r ) ⇒ 
+    //     //         case Query.Order( m, r ) => 
     //     //           valueMappings(m)
     //     //             .view
-    //     //             .map{ m ⇒ Sql.Column(m.columnName, 
+    //     //             .map{ m => Sql.Column(m.columnName, 
     //     //                                  alias(m.ownerTable).some) }
     //     //             .map{ Sql.OrderByClause(_, r) }
     //     //             .toIndexedSeq
@@ -69,21 +69,21 @@ case class MappingSelect
           ( m : Mapping )
           : IndexedSeq[Sql.Column]
           = m match {
-              case m : ValueMapping ⇒ 
+              case m : ValueMapping => 
                 Vector() :+
                 Sql.Column(m.columnName, alias(m.containerTableMapping.get).some)
-              case m : TableMapping ⇒ 
+              case m : TableMapping => 
                 m.primaryKeyColumns
                   .view
-                  .map{ c ⇒ Sql.Column(c.name, alias(m).some) }
+                  .map{ c => Sql.Column(c.name, alias(m).some) }
                   .toIndexedSeq
-              case m : HasChildren ⇒ 
+              case m : HasChildren => 
                 m.nestedValueMappings flatMap columns toIndexedSeq
             }
         copy(
           orderBy
             = orderBy ++
-              orders.flatMap{ order ⇒ 
+              orders.flatMap{ order => 
                 columns(order.mapping)
                   .map{ Sql.OrderByClause(_, order.reverse) }
               }
@@ -93,7 +93,7 @@ case class MappingSelect
     private def from
       = Sql.From(Sql.Table(mapping.tableName), Some(Sql.alias(0)))
     private def what
-      = resultMappings.map{ case (m, c) ⇒ Sql.Column(c.name, alias(m).some) }
+      = resultMappings.map{ case (m, c) => Sql.Column(c.name, alias(m).some) }
 
     private def alias
       ( m : TableMapping )
@@ -112,7 +112,7 @@ case class MappingSelect
           def subTables
             ( m : TableMapping )
             : Seq[TableMapping]
-            = m.nestedTableMappings.flatMap{ m ⇒ m +: subTables(m) }.toSeq
+            = m.nestedTableMappings.flatMap{ m => m +: subTables(m) }.toSeq
 
           mapping +: subTables( mapping )
         }
@@ -120,7 +120,7 @@ case class MappingSelect
         allTables
           .foldLeft(this){_ withSkeletonTo _}
           .copy(
-            resultMappings = allTables.flatMap{ m ⇒ m.columns.map{m → _} }
+            resultMappings = allTables.flatMap{ m => m.columns.map{m → _} }
           )
       }
 
@@ -141,11 +141,11 @@ case class MappingSelect
       ( m : Mapping )
       : MappingSelect
       = m match {
-          // case m if m == mapping ⇒ 
+          // case m if m == mapping => 
           //   copy( joinsAliases = joinsAliases + (mapping → Sql.alias(0)) )
-          // case m : TableMapping if joinsAliases contains m ⇒ 
+          // case m : TableMapping if joinsAliases contains m => 
           //   this
-          // case m : CollectionMapping ⇒ 
+          // case m : CollectionMapping => 
           //   val s = withSkeletonTo( m.containerTableMapping.get )
           //   s.copy(
           //     joinsAliases
@@ -159,13 +159,13 @@ case class MappingSelect
           //         )
           //   )
 
-          case m : TableMapping ⇒ 
+          case m : TableMapping => 
             def bindingsToContainer
               ( m : TableMapping )
               = m match {
-                  case m : CollectionTableMapping ⇒ 
+                  case m : CollectionTableMapping => 
                     m.containerTableMappingForeignKey.get.bindings.view
-                  case m ⇒ 
+                  case m => 
                     m.containerTableMapping.get.foreignKeys(m)
                       .bindings.view.map{_.swap}
                 }
@@ -193,7 +193,7 @@ case class MappingSelect
                     )
               )
             }
-          case _ ⇒
+          case _ =>
             withSkeletonTo( m.containerTableMapping.get )
         }
 
@@ -210,7 +210,7 @@ case class MappingSelect
               = ( where ++
                   s.mapping.primaryKeyColumns.view
                     .map{ _.name }
-                    .map{ n ⇒ 
+                    .map{ n => 
                         Sql.Clause.Equals(
                             Sql.Column(n, Some(newAlias)),
                             //  TODO: optimize to bind to parent
@@ -232,7 +232,7 @@ case class MappingSelect
                   Sql.Clause.Equals(
                     Sql.Count(
                       mapping.primaryKeyColumns
-                        .map{ c ⇒ Sql.Column(c.name, Some(Sql.alias(0))) },
+                        .map{ c => Sql.Column(c.name, Some(Sql.alias(0))) },
                       true
                     ),
                     Sql.Value(r)
@@ -242,7 +242,7 @@ case class MappingSelect
           groupBy
             = groupBy ++
               mapping.primaryKeyColumns
-                .map{ c ⇒ Sql.Column(c.name, Some(Sql.alias(0))) }
+                .map{ c => Sql.Column(c.name, Some(Sql.alias(0))) }
 
         )
 
@@ -271,24 +271,24 @@ case class MappingSelect
         import Operator._
 
         f match {
-          case Filter( HasSize, m : CollectionTableMapping, v : Int ) ⇒ 
+          case Filter( HasSize, m : CollectionTableMapping, v : Int ) => 
             withSelect( MappingSelect(m).primaryKey.havingRowsCount(v), o )
-          case Filter( Contains, m : SeqMapping, v ) ⇒ 
+          case Filter( Contains, m : SeqMapping, v ) => 
             withFilter1( Filter( Includes, m, Seq(v) ), o )
-          case Filter( Includes, m : SeqMapping, v : Seq[_] ) ⇒
+          case Filter( Includes, m : SeqMapping, v : Seq[_] ) =>
             withSelect(
                 MappingSelect(m).primaryKey
-                  .foldFrom(v){ (s, v) ⇒ 
+                  .foldFrom(v){ (s, v) => 
                       s.withFilter( Filter( Equals, m.item, v ),
                                     Sql.Clause.Or )
                     }
                   .havingRowsCount(v.length),
                 o
               )
-          case Filter( Equals, m : SeqMapping, v : Seq[_] ) ⇒ 
+          case Filter( Equals, m : SeqMapping, v : Seq[_] ) => 
             withSelect(
               v.view.zipWithIndex
-                .foldLeft( MappingSelect(m).primaryKey ){ case (s, (v, i)) ⇒
+                .foldLeft( MappingSelect(m).primaryKey ){ case (s, (v, i)) =>
                   s.withClause( 
                       Sql.Clause.Equals(
                           Sql.Column("i", s.joinsAliases(m).some),
@@ -308,9 +308,9 @@ case class MappingSelect
                   ),
               o
             )
-          case Filter( Contains, m : SetMapping, v ) ⇒
+          case Filter( Contains, m : SetMapping, v ) =>
             withFilter1( Filter( Includes, m, Set(v) ), o )
-          case Filter( Equals, m : SetMapping, v : Set[_] ) ⇒ 
+          case Filter( Equals, m : SetMapping, v : Set[_] ) => 
             withWhere( And( Filter( Includes, m, v ),
                             Filter( HasSize, m, v ) ),
                        o )
@@ -332,15 +332,15 @@ case class MappingSelect
       ( f : Query.Operator )
       : (Sql.ConditionObject, Sql.ConditionObject) => Sql.Clause.Condition
       = f match {
-          case Query.Operator.Equals           ⇒ Sql.Clause.Equals
-          case Query.Operator.NotEquals        ⇒ Sql.Clause.NotEquals
-          case Query.Operator.Larger           ⇒ Sql.Clause.Larger
-          case Query.Operator.LargerIncluding  ⇒ Sql.Clause.LargerIncluding
-          case Query.Operator.Smaller          ⇒ Sql.Clause.Smaller
-          case Query.Operator.SmallerIncluding ⇒ Sql.Clause.SmallerIncluding
-          case Query.Operator.Like             ⇒ Sql.Clause.Like
-          case Query.Operator.Regex            ⇒ Sql.Clause.Regex
-          case Query.Operator.In               ⇒ Sql.Clause.In
+          case Query.Operator.Equals           => Sql.Clause.Equals
+          case Query.Operator.NotEquals        => Sql.Clause.NotEquals
+          case Query.Operator.Larger           => Sql.Clause.Larger
+          case Query.Operator.LargerIncluding  => Sql.Clause.LargerIncluding
+          case Query.Operator.Smaller          => Sql.Clause.Smaller
+          case Query.Operator.SmallerIncluding => Sql.Clause.SmallerIncluding
+          case Query.Operator.Like             => Sql.Clause.Like
+          case Query.Operator.Regex            => Sql.Clause.Regex
+          case Query.Operator.In               => Sql.Clause.In
         }
 
     private def withCondition
@@ -373,18 +373,18 @@ case class MappingSelect
         o : (Sql.Clause, Sql.Clause) => Sql.Clause = Sql.Clause.And )
       : MappingSelect
       = w match {
-          case Query.Or(l, r) ⇒
+          case Query.Or(l, r) =>
             copy( where = None )
               .withWhere(l)
               .withWhere(r, Sql.Clause.Or)
               .foldFrom(where){ _ withClause (_, o) }
-              // .foldFrom(where){ (s, c) ⇒ s withClause (c, o) }
-          case Query.And(l, r) ⇒
+              // .foldFrom(where){ (s, c) => s withClause (c, o) }
+          case Query.And(l, r) =>
             copy( where = None )
               .withWhere(l)
               .withWhere(r, Sql.Clause.And)
               .foldFrom(where){ _ withClause (_, o) }
-          case f: Query.Filter ⇒ 
+          case f: Query.Filter => 
             withFilter(f, o)
         }
   }

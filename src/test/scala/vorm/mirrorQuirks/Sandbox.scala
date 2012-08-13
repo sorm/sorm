@@ -1,5 +1,6 @@
 package vorm.mirrorQuirks
 
+import MirrorQuirks._
 
 object Sandbox extends App {
   case class Genre(name: String)

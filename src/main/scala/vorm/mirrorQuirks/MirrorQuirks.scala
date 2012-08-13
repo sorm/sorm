@@ -1,11 +1,11 @@
-package vorm
+package vorm.mirrorQuirks
 
 import reflect.mirror._
 
 /**
  * Trickery and black magic around Scala's Mirror API
  */
-package object mirrorQuirks {
+object MirrorQuirks {
 
   def isMixedIn(t: Type) =
     t.kind == "RefinedType"

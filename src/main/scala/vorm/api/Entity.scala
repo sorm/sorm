@@ -23,10 +23,11 @@ sealed case class Entity
         def allDescendantGenerics
           ( r : Reflection )
           : Stream[Reflection]
-          = r.generics.view
-              .flatMap{r => r +: allDescendantGenerics(r)}
+          = r +:
+            r.generics.view
+              .flatMap{allDescendantGenerics}
               .toStream
-
+        
         reflection.properties.values
           .flatMap{ allDescendantGenerics }
           .filter{ _ inheritsFrom Reflection[Option[_]] }

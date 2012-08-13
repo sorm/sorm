@@ -271,6 +271,8 @@ case class MappingSelect
         import Operator._
 
         f match {
+          case Filter( HasSize, m : CollectionTableMapping, v : Int ) ⇒ 
+            withSelect( MappingSelect(m).primaryKey.havingRowsCount(v), o )
           case Filter( Contains, m : SeqMapping, v ) ⇒ 
             withFilter1( Filter( Includes, m, Seq(v) ), o )
           case Filter( Includes, m : SeqMapping, v : Seq[_] ) ⇒
@@ -306,18 +308,16 @@ case class MappingSelect
                   ),
               o
             )
-          case Filter( HasSize, m : CollectionTableMapping, v : Int ) ⇒ 
-            withSelect( MappingSelect(m).primaryKey.havingRowsCount(v), o )
           case Filter( Contains, m : SetMapping, v ) ⇒
             withFilter1( Filter( Includes, m, Set(v) ), o )
           case Filter( Equals, m : SetMapping, v : Set[_] ) ⇒ 
-            withWhere(
-                And(
-                    Filter( Includes, m, v ),
-                    Filter( HasSize, m, v )
-                  ),
-                o
-              )
+            withWhere( And( Filter( Includes, m, v ),
+                            Filter( HasSize, m, v ) ),
+                       o )
+          case Filter( op, m : OptionMapping, Some(v) ) =>
+            withFilter1( f.copy(mapping = m.item, value = v), o )
+          case Filter( op, m : OptionMapping, None ) =>
+            withFilter1( f.copy(mapping = m.item, value = null), o )
           case Filter( op, m : ValueMapping, v ) =>
             withCondition( m, v, conditionOperator(op), o )
           case Filter( op, m : EntityMapping, v : Persisted ) =>
@@ -388,35 +388,3 @@ case class MappingSelect
             withFilter(f, o)
         }
   }
-
-object MappingSelect {
-
-//  /**
-//   * Has all the skeleton mappings applied.
-//   */
-//  def resultSetReady
-//    ( m : TableMapping )
-//    : MappingSelect
-//    = {
-//      def leaves
-//        ( m : Mapping )
-//        : Seq[Mapping]
-//        = m match {
-//            case m : mapping.HasChildren ⇒ m.children.flatMap(leaves)
-//            case m : mapping.HasChild ⇒ leaves(m.child)
-//            case _ ⇒ Vector(m)
-//          }
-//
-//      leaves(m).foldLeft(MappingSelect(m)){ _ withSkeletonTo _ }
-//    }
-
-//  def apply
-//    ( q : Query )
-//    : MappingSelect
-//    = ???
-
-  // def sqlAndResultSetBindings
-  //   ( q : Query )
-
-}
-

@@ -70,10 +70,18 @@ sealed class ValueMapping
         }
 
     lazy val nullable
-      = membership match {
-          case Some(Membership.OptionItem(_)) ⇒ true
-          case _ ⇒ false
-        }
+      = {
+        def ancestorsToTable
+          ( m : Mapping )
+          : Stream[Mapping]
+          = m.parent.toStream flatMap {
+              case p : TableMapping => Stream(p)
+              case p => p #:: ancestorsToTable(p)
+            }
+
+        ancestorsToTable(this)
+          .exists{_.isInstanceOf[OptionMapping]}
+      }
 
     lazy val column
       = Column(columnName, columnType, autoIncremented, nullable)

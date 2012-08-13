@@ -24,13 +24,33 @@ class OptionSupportSuite extends FunSuite with ShouldMatchers {
 
   case class EntityWithOptionInOption
     ( optionInOption : Option[Option[Int]] )
-
-  test("Value property in Option")(pending)
   test("Option in Option fails on initialization"){
     evaluating {
         Entity[EntityWithOptionInOption]()
       } should produce [IllegalArgumentException]
   }
+
+  case class EntityWithValuePropertyInOption
+    ( a : Option[Int] )
+  test("Value property in Option"){
+    val db
+      = new Instance( Entity[EntityWithValuePropertyInOption]() :: Nil,
+                      "jdbc:h2:mem:test",
+                      mode = Mode.DropAllCreate
+                      )
+    db.save(EntityWithValuePropertyInOption(None))
+    db.save(EntityWithValuePropertyInOption(Some(3)))
+    db.save(EntityWithValuePropertyInOption(Some(7)))
+
+    db.fetchById[EntityWithValuePropertyInOption](1).get.a === None
+    db.fetchById[EntityWithValuePropertyInOption](2).get.a === Some(3)
+
+    db.query[EntityWithValuePropertyInOption]
+      .filterEquals("a", None).fetchOne().get.id === 1
+    db.query[EntityWithValuePropertyInOption]
+      .filterEquals("a", Some(3)).fetchOne().get.id === 2
+  }
+
   test("Seq in Option")(pending)
   test("Map key in Option")(pending)
   test("Map value in Option")(pending)

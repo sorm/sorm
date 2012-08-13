@@ -43,7 +43,13 @@ package object save {
           (v.productIterator.toStream zip m.items)
             .flatMap{ case (v, m) => rowValuesForContainerTable(v, m) }
             .toMap
-        // case (m : OptionMapping, v : Option[_]) =>
+        case (m : OptionMapping, Some(v)) =>
+          rowValuesForContainerTable(v, m.item)
+        case (m : OptionMapping, None) =>
+          columnsForContainerTable(m.item)
+            .view
+            .map{ c => c.name -> JdbcValue(null, c.t.jdbcType) }
+            .toMap
         case (m : ValueMapping, v) =>
           Map( m.columnName -> JdbcValue(v, m.column.t.jdbcType) )
 

@@ -111,6 +111,7 @@ class PreparedStatementAdapter
                                        v.asInstanceOf[java.sql.Timestamp]
                                      )
           case BLOB               => s.setBlob(i, v.asInstanceOf[java.sql.Blob])
+          case NULL               => s.setNull(i, NULL)
           case _                  => ???
         }
       }

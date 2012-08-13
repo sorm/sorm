@@ -35,7 +35,9 @@ class ResultSetAdapter
             }
         }
 
-    def parseAndClose() 
+    def parse()
+      = indexedRowsTraversable.toList
+    def parseAndClose()
       = {
         val r = indexedRowsTraversable.toList
         rs.close()
@@ -93,6 +95,7 @@ class ResultSetAdapter
               case TIME               => rs.getTime(i)
               case TIMESTAMP          => rs.getTimestamp(i)
               case BLOB               => rs.getBlob(i)
+              case CLOB               => rs.getClob(i)
               case _                  => ???
             }
         if( rs.wasNull() ) null

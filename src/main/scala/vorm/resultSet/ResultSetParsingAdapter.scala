@@ -97,7 +97,10 @@ class ResultSetParsingAdapter
               case m : ValueMapping =>
                 row.data( m.column )
               case m : OptionMapping =>
-                Option( value( m.item, row ) )
+                if( m.columns.view.forall{row.data(_) == null} )
+                  None
+                else
+                  Option( value( m.item, row ) )
               case m : TupleMapping =>
                 m.reflection.instantiate(
                   m.items.map{ value( _, row ) }

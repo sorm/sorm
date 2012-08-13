@@ -14,32 +14,26 @@ object Demo extends App {
     log.loggers("vorm.jdbc.ConnectionAdapter") = Level.TRACE
   }
 
-//  import SampleDb._
-//
-//  Db.query[Artist]
-//    .filterEquals("names.value(1)", "Rolling Stones")
-//    .fetchAll()
-//    .map{_.names(Db.en).head}
-//    .trace()
 
-  case class EntityWithValuePropertyInOption
-    ( a : Option[Int] )
+  case class A
+    ( seq : Seq[Option[B]] )
+  case class B
+    ( z : String )
+
   val db
-    = new Instance( Entity[EntityWithValuePropertyInOption]() :: Nil,
-                    "jdbc:mysql://localhost/test",
-//                    "jdbc:h2:mem:test",
-                    mode = Mode.DropAllCreate
-                    )
-  db.save(EntityWithValuePropertyInOption(None))
-  db.save(EntityWithValuePropertyInOption(Some(3)))
+    = new Instance( Entity[A]() :: Entity[B]() :: Nil,
+                    "jdbc:h2:mem:test",
+                    mode = Mode.DropAllCreate )
 
-  db.fetchById[EntityWithValuePropertyInOption](1).trace()
-  db.fetchById[EntityWithValuePropertyInOption](2).trace()
+  val b1 = db.save(B("abc"))
+  val b2 = db.save(B("cba"))
 
+  db.save(A( Seq() ))
+  db.save(A( Seq(Some(b1), None, Some(b2)) ))
+  db.save(A( Seq(None, Some(b2)) ))
 
-  db.query[EntityWithValuePropertyInOption]
-    .filterEquals("a", None).fetchOne().get.trace()
-  db.query[EntityWithValuePropertyInOption]
-    .filterEquals("a", Some(3)).fetchOne().get.trace()
+  db.fetchById[A](1).get.seq.trace()
+  db.fetchById[A](2).get.seq.trace()
+  db.fetchById[A](3).get.seq.trace()
 
 }

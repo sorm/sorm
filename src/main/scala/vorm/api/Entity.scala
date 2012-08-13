@@ -27,13 +27,15 @@ sealed case class Entity
             r.generics.view
               .flatMap{allDescendantGenerics}
               .toStream
-        
+
         reflection.properties.values
           .flatMap{ allDescendantGenerics }
           .filter{ _ inheritsFrom Reflection[Option[_]] }
           .foreach{ r =>
             require( !r.generics(0).inheritsFrom(Reflection[Option[_]]),
                      "Type signatures with `Option` being directly nested in another `Option`, i.e. `Option[Option[_]]` are not allowed" )
+            require( !r.generics(0).inheritsFrom(Reflection[Traversable[_]]),
+                     "Type signatures with collection being directly nested in `Option`, e.g. `Option[Seq[_]]` are not allowed" )
           }
       }
 

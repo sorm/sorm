@@ -22,6 +22,7 @@ object Demo extends App {
   Db.query[Artist]
     .filterEquals("names.value(1)", "Rolling Stones")
     .fetchAll()
+    .map{_.names(Db.en).head}
     .trace()
 
 }

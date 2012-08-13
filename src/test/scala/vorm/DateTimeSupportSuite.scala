@@ -25,4 +25,11 @@ class DateTimeSupportSuite extends FunSuite with ShouldMatchers {
 
   import SampleDb._
 
+  test("Api fetchDate")(pending)
+  test("Bigger filter")(pending)
+  test("Smaller filter")(pending)
+  test("Equals filter")(pending)
+  test("In filter")(pending)
+  test("Other filters fail")(pending)
+
 }

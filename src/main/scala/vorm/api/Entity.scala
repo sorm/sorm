@@ -11,11 +11,17 @@ sealed case class Entity
   {
     //  Test validity of provided data:
     {
-      ( indexes.view.flatten ++ uniqueKeys.view.flatten )
-        .distinct
+      ( indexes.view ++ uniqueKeys.view )
+        .flatten
         .foreach{ p =>
-          require( reflection.properties.containsKey(p),
+          require( reflection.properties.contains(p),
                    "Inexistent property: `" + p + "`" )
+        }
+
+      ( indexes.view ++ uniqueKeys.view )
+        .foreach{ ps =>
+          require( ps.view.distinct.size == ps.size,
+                   "Not a distinct properties list: `" + ps.mkString(", ") + "`" )
         }
     }
 

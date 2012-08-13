@@ -1,7 +1,7 @@
 package vorm.reflection
 
 import reflect.mirror
-import vorm.mirrorQuirks
+import vorm.mirrorQuirks.MirrorQuirks
 import util.MurmurHash3
 
 
@@ -13,25 +13,25 @@ class Type(protected val mt: mirror.Type, jc: Option[Class[_]]) {
 
 
   lazy val mixinBasis =
-    tpe(mirrorQuirks.mixinBasis(mt))
+    tpe(MirrorQuirks.mixinBasis(mt))
   lazy val signature: String =
     generics match {
       case Nil => fullName
       case _ => fullName + "[" + generics.map(_.signature).mkString(", ") + "]"
     }
   lazy val fullName     =
-    mirrorQuirks.fullName(mt.typeSymbol)
+    MirrorQuirks.fullName(mt.typeSymbol)
   lazy val name         =
-    mirrorQuirks.name(mt.typeSymbol)
+    MirrorQuirks.name(mt.typeSymbol)
   lazy val generics     =
-    mirrorQuirks.generics(mt)
+    MirrorQuirks.generics(mt)
       .map(tpe(_))
   lazy val properties   =
-    mirrorQuirks.properties(mt).toList
-      .map(s => PropertyProperties(mirrorQuirks.name(s), tpe(s.typeSignature)))
+    MirrorQuirks.properties(mt).toList
+      .map(s => PropertyProperties(MirrorQuirks.name(s), tpe(s.typeSignature)))
 
   lazy val methods      =
-    mirrorQuirks.methods(mt).toList.map { s =>
+    MirrorQuirks.methods(mt).toList.map { s =>
       type MethodType = {
         def params: List[mirror.Symbol]
         def resultType: mirror.Type
@@ -45,7 +45,7 @@ class Type(protected val mt: mirror.Type, jc: Option[Class[_]]) {
       MethodProperties(name, arguments, result)
     }
   lazy val constructors =
-    mirrorQuirks.constructors(mt)
+    MirrorQuirks.constructors(mt)
       .map(
         _.typeSignature
           .asInstanceOf[{def params: List[mirror.Symbol]}].params
@@ -54,7 +54,7 @@ class Type(protected val mt: mirror.Type, jc: Option[Class[_]]) {
       .map(ConstructorProperties)
 
   lazy val javaClass =
-    jc getOrElse mirrorQuirks.javaClass(mt)
+    jc getOrElse MirrorQuirks.javaClass(mt)
 
   /**
    * Scala bugs trickery and black magic.
@@ -85,7 +85,7 @@ class Type(protected val mt: mirror.Type, jc: Option[Class[_]]) {
     methodResult(name, instance)
 
   def instance(params: Map[String, Any]) = {
-    if (mirrorQuirks.isInner(mt.typeSymbol))
+    if (MirrorQuirks.isInner(mt.typeSymbol))
       throw new UnsupportedOperationException("Dynamic instantiation of inner classes is not supported")
 
     val args =

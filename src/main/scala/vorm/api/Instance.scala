@@ -39,29 +39,59 @@ class Instance
           .toMap
       }
 
-    mode match {
-      case Mode.DropAllCreate =>
-        connection.dropAllTables()
-        for( s <- Create.statements(mappings.values) ){
-          connection.executeUpdate(s)
-        }
-      case Mode.DropCreate =>
-        for( s <- Drop.statements(mappings.values) ){
-          try {
-            connection.executeUpdate(s)
-          } catch {
-            case e : Throwable =>
-              log.warn("Couldn't drop table. " + e.getMessage)
+    // Validate input:
+    {
+      // All referred entities must be registered
+      {
+        def nestedEntities
+          ( m : Mapping )
+          : Stream[EntityMapping]
+          = m match {
+              case m : EntityMapping => 
+                Stream(m)
+              case m : HasChildren => 
+                m.children.toStream.flatMap{ nestedEntities }              
+              case _ =>
+                Stream()
+            }
+
+        mappings.values.foreach{ e =>
+          e.children.flatMap{ nestedEntities }.foreach{ e1 =>
+            require( mappings.contains(e1.reflection),
+                     "Entity `" + e1 + "` is not registered, but referred " +
+                     "in `" + e + "`" )
+            
           }
         }
-        for( s <- Create.statements(mappings.values) ){
-          connection.executeUpdate(s)
-        }
-      case Mode.Create =>
-        for( s <- Create.statements(mappings.values) ){
-          connection.executeUpdate(s)
-        }
-      case Mode.None =>
+      }
+    }
+
+    // Initialize a db schema:
+    {
+      mode match {
+        case Mode.DropAllCreate =>
+          connection.dropAllTables()
+          for( s <- Create.statements(mappings.values) ){
+            connection.executeUpdate(s)
+          }
+        case Mode.DropCreate =>
+          for( s <- Drop.statements(mappings.values) ){
+            try {
+              connection.executeUpdate(s)
+            } catch {
+              case e : Throwable =>
+                log.warn("Couldn't drop table. " + e.getMessage)
+            }
+          }
+          for( s <- Create.statements(mappings.values) ){
+            connection.executeUpdate(s)
+          }
+        case Mode.Create =>
+          for( s <- Create.statements(mappings.values) ){
+            connection.executeUpdate(s)
+          }
+        case Mode.None =>
+      }
     }
 
   }

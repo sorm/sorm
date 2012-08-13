@@ -34,12 +34,6 @@ trait Api {
           throw new RuntimeException( "Entity `" + Reflection[T].name + "` is not registered" )
       }
 
-  /**
-   * Current time at DB server
-   */
-  def date : DateTime
-    = ???
-
   def save
     [ T <: AnyRef : TypeTag ]
     ( value : T )
@@ -57,5 +51,14 @@ trait Api {
     ( id : Long )
     : Option[T with Persisted]
     = new Fetcher[T](connection, mapping[T]).filterEquals("id", id).fetchOne()
+
+  /**
+   * Current time at DB server
+   */
+  def fetchDate() : DateTime
+    = connection
+        .executeQuery( Statement("SELECT NOW()") )
+        .parseAndClose().head.head
+        .asInstanceOf[DateTime]
 
 }

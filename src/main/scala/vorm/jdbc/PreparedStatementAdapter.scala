@@ -1,7 +1,11 @@
 package vorm.jdbc
 
-import java.sql.{PreparedStatement}
-import org.joda.time.DateTime
+import java.sql.PreparedStatement
+import org.joda.time._
+
+import vorm._
+import joda.Extensions._
+import extensions._
 
 class PreparedStatementAdapter
   ( s : PreparedStatement ) 
@@ -98,18 +102,12 @@ class PreparedStatementAdapter
                                        i, 
                                        v.asInstanceOf[java.io.InputStream]
                                      )
-          case DATE               => s.setDate(
-                                       i, 
-                                       v.asInstanceOf[java.sql.Date]
-                                     )
-          case TIME               => s.setTime(
-                                       i, 
-                                       v.asInstanceOf[java.sql.Time]
-                                     )
-          case TIMESTAMP          => s.setTimestamp(
-                                       i, 
-                                       v.asInstanceOf[java.sql.Timestamp]
-                                     )
+          case DATE               => 
+            s.setDate(i, v.asInstanceOf[LocalDate].toJava)
+          case TIME               => 
+            s.setTime(i, v.asInstanceOf[LocalTime].toJava)
+          case TIMESTAMP          =>
+            s.setTimestamp(i, v.asInstanceOf[DateTime].toJava)
           case BLOB               => s.setBlob(i, v.asInstanceOf[java.sql.Blob])
           case NULL               => s.setNull(i, NULL)
           case _                  => ???

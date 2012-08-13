@@ -2,8 +2,10 @@ package vorm.jdbc
 
 import collection.mutable.ListBuffer
 import java.sql._
+import org.joda.time._
 
 import vorm._
+import joda.Extensions._
 import extensions._
 
 class ResultSetAdapter
@@ -91,9 +93,9 @@ class ResultSetAdapter
               case FLOAT | DOUBLE     => rs.getDouble(i)
               case BINARY | VARBINARY => rs.getBytes(i)
               case LONGVARBINARY      => rs.getBinaryStream(i)
-              case DATE               => rs.getDate(i)
-              case TIME               => rs.getTime(i)
-              case TIMESTAMP          => rs.getTimestamp(i)
+              case DATE               => rs.getDate(i).toJoda
+              case TIME               => rs.getTime(i).toJoda
+              case TIMESTAMP          => rs.getTimestamp(i).toJoda
               case BLOB               => rs.getBlob(i)
               case CLOB               => rs.getClob(i)
               case _                  => ???

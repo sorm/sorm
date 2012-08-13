@@ -32,7 +32,7 @@ package object jdbc {
           case _ : Long       => BIGINT
           case _ : Float      => REAL
           case _ : Double     => DOUBLE
-          case _ : DateTime   => ???
+          case _ : DateTime   => TIMESTAMP
           case null           => NULL
           case _              => ???
         }

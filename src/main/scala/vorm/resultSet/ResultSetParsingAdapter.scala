@@ -47,35 +47,38 @@ class ResultSetParsingAdapter
                 val primaryKey
                   = m.primaryKeyColumns map value
 
-                rows.get(primaryKey) match {
-                  case Some(row)
-                    ⇒ rows +
-                      ( primaryKey →
-                        row.copy(
-                            rowsOfSubTables
-                              = row.rowsOfSubTables.map {
-                                  case (m, rows)
-                                    ⇒ m → updatedRows(m, rows)
-                                }
-                          )
-                      )
-                  case None
-                    ⇒ rows +
-                      ( primaryKey →
-                        Row(
-                          data
-                            = m.columns
-                                .view
-                                .zipBy(value)
-                                .toMap,
-                          rowsOfSubTables
-                            = m.nestedTableMappings
-                                .view
-                                .zipBy( updatedRows(_, Map()) )
-                                .toMap
+                if( primaryKey.forall{_ == null} )
+                  rows
+                else
+                  rows.get(primaryKey) match {
+                    case Some(row)
+                      ⇒ rows +
+                        ( primaryKey →
+                          row.copy(
+                              rowsOfSubTables
+                                = row.rowsOfSubTables.map {
+                                    case (m, rows)
+                                      ⇒ m → updatedRows(m, rows)
+                                  }
+                            )
                         )
-                      )
-                }
+                    case None
+                      ⇒ rows +
+                        ( primaryKey →
+                          Row(
+                            data
+                              = m.columns
+                                  .view
+                                  .zipBy(value)
+                                  .toMap,
+                            rowsOfSubTables
+                              = m.nestedTableMappings
+                                  .view
+                                  .zipBy( updatedRows(_, Map()) )
+                                  .toMap
+                          )
+                        )
+                  }
               }
 
             var rows : Map[PrimaryKey, Row] = Map()

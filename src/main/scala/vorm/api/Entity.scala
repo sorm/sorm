@@ -20,15 +20,16 @@ sealed case class Entity
     //  Validate input:
     {
       {
-        def allDescendants
+        def allDescendantGenerics
           ( r : Reflection )
           : Stream[Reflection]
-          = ( r.properties.values.view ++ r.generics.view )
-              .flatMap{r => r +: allDescendants(r)}
+          = r.generics.view
+              .flatMap{r => r +: allDescendantGenerics(r)}
               .toStream
 
-        allDescendants(reflection)
-          .filter{_ inheritsFrom Reflection[Option[_]]}
+        reflection.properties.values
+          .flatMap{ allDescendantGenerics }
+          .filter{ _ inheritsFrom Reflection[Option[_]] }
           .foreach{ r =>
             require( !r.generics(0).inheritsFrom(Reflection[Option[_]]),
                      "Type signatures with `Option` being directly nested in another `Option`, i.e. `Option[Option[_]]` are not allowed" )

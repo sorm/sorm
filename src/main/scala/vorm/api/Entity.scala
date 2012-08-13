@@ -3,13 +3,21 @@ package vorm.api
 import vorm._
 import reflection._
 import structure._
+import extensions._
 
 sealed case class Entity
   [ T : TypeTag ]
   ( indexes       : Set[Seq[String]] = Set(),
     uniqueKeys    : Set[Seq[String]] = Set() )
   {
-    //  Test validity of provided data:
+
+    lazy val reflection
+      = Reflection[T]
+    def settings
+      = EntitySettings(indexes, uniqueKeys)
+
+
+    //  Validate input:
     {
       {
         def allDescendants
@@ -40,9 +48,4 @@ sealed case class Entity
                    "Not a distinct properties list: `" + ps.mkString(", ") + "`" )
         }
     }
-
-    lazy val reflection
-      = Reflection[T]
-    def settings
-      = EntitySettings(indexes, uniqueKeys)
   }

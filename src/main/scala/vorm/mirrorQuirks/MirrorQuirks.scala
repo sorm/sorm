@@ -1,11 +1,11 @@
-package vorm
+package vorm.mirrorQuirks
 
 import reflect.mirror._
 
 /**
  * Trickery and black magic around Scala's Mirror API
  */
-package object mirrorQuirks {
+object MirrorQuirks {
 
   def isMixedIn(t: Type) =
     t.kind == "RefinedType"
@@ -53,12 +53,14 @@ package object mirrorQuirks {
   def javaClass(mt: Type): Class[_] =
     try typeToClass(mt)
     catch {
-      case e: ClassNotFoundException =>
+      case _ : ClassNotFoundException =>
         mt.typeSymbol match {
           case s if s.fullName == "scala.Any" => classOf[Any]
           case s =>
             classByName(javaClassName(s))
         }
+      case _ : NoClassDefFoundError =>
+        ???
     }
 
   def classByName(n: String) =

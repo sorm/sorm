@@ -33,6 +33,7 @@ package object jdbc {
           case _ : Float      => REAL
           case _ : Double     => DOUBLE
           case _ : DateTime   => ???
+          case null           => NULL
           case _              => ???
         }
   }

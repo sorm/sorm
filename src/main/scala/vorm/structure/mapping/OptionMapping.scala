@@ -20,4 +20,7 @@ sealed class OptionMapping
                  reflection.generics(0), 
                  settingsMap )
 
+    lazy val columns
+      = columnsForContainerTable(item)
+
   }

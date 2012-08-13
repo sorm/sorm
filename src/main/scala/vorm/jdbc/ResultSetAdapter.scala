@@ -35,7 +35,9 @@ class ResultSetAdapter
             }
         }
 
-    def parseAndClose() 
+    def parse()
+      = indexedRowsTraversable.toList
+    def parseAndClose()
       = {
         val r = indexedRowsTraversable.toList
         rs.close()
@@ -75,39 +77,35 @@ class ResultSetAdapter
       : Any 
       = {
         import java.sql.Types._
-        t match {
-          case CHAR | VARCHAR     => rs.getString(i)
-          case LONGVARCHAR        => rs.getString(i)
-          case NUMERIC | DECIMAL  => rs.getBigDecimal(i)
-          case BIT                => rs.getBoolean(i)
-          case TINYINT            => rs.getByte(i)
-          case SMALLINT           => rs.getShort(i)
-          case INTEGER            => rs.getInt(i)
-          case BIGINT             => rs.getLong(i)
-          case REAL               => rs.getFloat(i)
-          case FLOAT | DOUBLE     => rs.getDouble(i)
-          case BINARY | VARBINARY => rs.getBytes(i)
-          case LONGVARBINARY      => rs.getBinaryStream(i)
-          case DATE               => rs.getDate(i)
-          case TIME               => rs.getTime(i)
-          case TIMESTAMP          => rs.getTimestamp(i)
-          case BLOB               => rs.getBlob(i)
-          case _                  => ???
-        }
+        val r
+          = t match {
+              case CHAR | VARCHAR     => rs.getString(i)
+              case LONGVARCHAR        => rs.getString(i)
+              case NUMERIC | DECIMAL  => rs.getBigDecimal(i)
+              case BIT                => rs.getBoolean(i)
+              case TINYINT            => rs.getByte(i)
+              case SMALLINT           => rs.getShort(i)
+              case INTEGER            => rs.getInt(i)
+              case BIGINT             => rs.getLong(i)
+              case REAL               => rs.getFloat(i)
+              case FLOAT | DOUBLE     => rs.getDouble(i)
+              case BINARY | VARBINARY => rs.getBytes(i)
+              case LONGVARBINARY      => rs.getBinaryStream(i)
+              case DATE               => rs.getDate(i)
+              case TIME               => rs.getTime(i)
+              case TIMESTAMP          => rs.getTimestamp(i)
+              case BLOB               => rs.getBlob(i)
+              case CLOB               => rs.getClob(i)
+              case _                  => ???
+            }
+        if( rs.wasNull() ) null
+        else r
       }
 
     def value
       ( name : String, t : JdbcType )
       : Any 
-      = {
-        import Types._
-        t match {
-          case INTEGER => rs.getInt(name)
-          case BIGINT => rs.getLong(name)
-          case CHAR | VARCHAR => rs.getString(name)
-          case _ => ???
-        }
-      }
+      = ???
 
 
   }

@@ -1,14 +1,10 @@
-package vorm.api
+package vorm
 
-import vorm._
-import reflection.Reflection
 import samples._
 import extensions._
-import query.Query._
 
 import com.codahale.logula.Logging
 import org.apache.log4j.Level
-import structure.mapping.{EntityMapping, Mapping}
 
 object Demo extends App {
 

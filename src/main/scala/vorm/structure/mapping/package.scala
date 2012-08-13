@@ -20,8 +20,12 @@ package object mapping {
             .view
             .map{ c ⇒ 
               c.copy(
-                autoIncrement = false,
-                name = m.columnName + "$" + c.name
+                autoIncrement
+                  = false,
+                name
+                  = m.columnName + "$" + c.name,
+                nullable
+                  = m.membership.isInstanceOf[Some[Membership.EntityProperty]]
               )
             }
         case m : HasChildren ⇒ 

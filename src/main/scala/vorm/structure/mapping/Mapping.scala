@@ -11,6 +11,8 @@ trait Mapping {
   def membership : Option[Membership]
   def reflection : Reflection
 
+  def parent = membership map {_.parent}
+
   override def toString : String
     = membership
         .map{

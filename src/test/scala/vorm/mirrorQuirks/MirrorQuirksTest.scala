@@ -3,6 +3,7 @@ package vorm.mirrorQuirks
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
 import vorm.mirrorQuirks.MirrorQuirksTest._
+import MirrorQuirks._
 
 class MirrorQuirksTest extends FunSuite with ShouldMatchers {
 

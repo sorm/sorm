@@ -16,9 +16,11 @@ sealed class OptionMapping
   {
     def children = item :: Nil
     lazy val item
-      = Mapping( Membership.OptionItem(this), reflection.generics(0), settingsMap )
+      = Mapping( Membership.OptionItem(this), 
+                 reflection.generics(0), 
+                 settingsMap )
 
-//    override lazy val ownerTableForeignKeys
-//      = item.ownerTableForeignKeys
+    lazy val columns
+      = columnsForContainerTable(item)
 
   }

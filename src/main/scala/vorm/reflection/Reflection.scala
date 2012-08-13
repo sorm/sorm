@@ -4,7 +4,9 @@ import reflect.mirror
 import util.MurmurHash3
 
 import vorm._
+import mirrorQuirks.MirrorQuirks
 import extensions._
+
 
 /**
  * Java class is required for dynamically generated classes, because it seems impossible
@@ -16,7 +18,7 @@ sealed class Reflection
   {
 
     lazy val mixinBasis =
-      Reflection(mirrorQuirks.mixinBasis(t))
+      Reflection(MirrorQuirks.mixinBasis(t))
 
     lazy val signature: String =
       generics match {
@@ -25,23 +27,23 @@ sealed class Reflection
       }
 
     lazy val fullName
-      = mirrorQuirks.fullName(t.typeSymbol)
+      = MirrorQuirks.fullName(t.typeSymbol)
 
     lazy val name
-      = mirrorQuirks.name(t.typeSymbol)
+      = MirrorQuirks.name(t.typeSymbol)
 
     lazy val properties
       : Map[String, Reflection]
-      = mirrorQuirks.properties(t).view
+      = MirrorQuirks.properties(t).view
           .map {
-            s ⇒ mirrorQuirks.name(s) → 
+            s ⇒ MirrorQuirks.name(s) → 
                 Reflection(s.typeSignature)
           }
           .toMap
 
     lazy val generics
       : IndexedSeq[Reflection]
-      = mirrorQuirks.generics(t).view
+      = MirrorQuirks.generics(t).view
           .map(Reflection(_))
           .toIndexedSeq
 
@@ -62,12 +64,12 @@ sealed class Reflection
 
     lazy val constructorArguments
       = collection.immutable.ListMap[String, Reflection]() ++
-        mirrorQuirks.constructors(t)
+        MirrorQuirks.constructors(t)
           .head
           .typeSignature
           .asInstanceOf[{def params: List[mirror.Symbol]}]
           .params
-          .map(s ⇒ mirrorQuirks.name(s) → Reflection(s.typeSignature) )
+          .map(s ⇒ MirrorQuirks.name(s) → Reflection(s.typeSignature) )
 
 
     def instantiate
@@ -80,7 +82,7 @@ sealed class Reflection
       ( args : Traversable[Any] = Nil )
       : Any
       = {
-        if ( mirrorQuirks.isInner(t.typeSymbol) )
+        if ( MirrorQuirks.isInner(t.typeSymbol) )
           throw new UnsupportedOperationException(
               "Dynamic instantiation of inner classes is not supported"
             )
@@ -139,6 +141,6 @@ object Reflection {
   def apply
     ( mt : mirror.Type )
     : Reflection 
-    = cache( mt, mirrorQuirks.javaClass(mt) )
+    = cache( mt, MirrorQuirks.javaClass(mt) )
 
 }

@@ -419,12 +419,22 @@ package object sql {
     case class Equals 
       ( left : ConditionObject,
         right : ConditionObject )
-      extends Condition("=")
+      extends Condition(
+        right match {
+          case Value(null) => "IS"
+          case _ => "="
+        }
+      )
     
     case class NotEquals
       ( left : ConditionObject,
         right : ConditionObject )
-      extends Condition("!=")
+      extends Condition(
+        right match {
+          case Value(null) => "IS NOT"
+          case _ => "!="
+        }
+      )
 
     case class Larger
       ( left : ConditionObject,

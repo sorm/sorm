@@ -48,7 +48,7 @@ package object save {
         case (m : OptionMapping, None) =>
           columnsForContainerTable(m.item)
             .view
-            .map{ c => c.name -> JdbcValue(null, c.t.jdbcType) }
+            .map{ c => c.name -> JdbcValue(null, java.sql.Types.NULL) }
             .toMap
         case (m : ValueMapping, v) =>
           Map( m.columnName -> JdbcValue(v, m.column.t.jdbcType) )

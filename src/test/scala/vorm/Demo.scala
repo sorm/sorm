@@ -26,13 +26,20 @@ object Demo extends App {
     ( a : Option[Int] )
   val db
     = new Instance( Entity[EntityWithValuePropertyInOption]() :: Nil,
-                    "jdbc:h2:mem:test",
-                    mode = Mode.Create
+                    "jdbc:mysql://localhost/test",
+//                    "jdbc:h2:mem:test",
+                    mode = Mode.DropAllCreate
                     )
   db.save(EntityWithValuePropertyInOption(None))
   db.save(EntityWithValuePropertyInOption(Some(3)))
 
   db.fetchById[EntityWithValuePropertyInOption](1).trace()
   db.fetchById[EntityWithValuePropertyInOption](2).trace()
+
+
+  db.query[EntityWithValuePropertyInOption]
+    .filterEquals("a", None).fetchOne().get.trace()
+  db.query[EntityWithValuePropertyInOption]
+    .filterEquals("a", Some(3)).fetchOne().get.trace()
 
 }

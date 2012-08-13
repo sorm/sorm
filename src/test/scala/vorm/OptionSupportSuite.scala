@@ -21,17 +21,14 @@ import samples._
 
 @RunWith(classOf[JUnitRunner])
 class OptionSupportSuite extends FunSuite with ShouldMatchers {
+  import OptionSupportSuite._
 
-  case class EntityWithOptionInOption
-    ( optionInOption : Option[Option[Int]] )
   test("Option in Option fails on initialization"){
     evaluating {
         Entity[EntityWithOptionInOption]()
       } should produce [IllegalArgumentException]
   }
 
-  case class EntityWithValuePropertyInOption
-    ( a : Option[Int] )
   test("Value property in Option"){
     val db
       = new Instance( Entity[EntityWithValuePropertyInOption]() :: Nil,
@@ -57,5 +54,12 @@ class OptionSupportSuite extends FunSuite with ShouldMatchers {
   test("Seq item in Option")(pending)
   test("Set item in Option")(pending)
 
+}
+object OptionSupportSuite {
+
+  case class EntityWithOptionInOption
+    ( optionInOption : Option[Option[Int]] )
+  case class EntityWithValuePropertyInOption
+    ( a : Option[Int] )
 }
 

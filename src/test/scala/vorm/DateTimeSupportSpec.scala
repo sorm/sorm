@@ -25,4 +25,15 @@ class DateTimeSupportSpec extends FunSpec with ShouldMatchers {
 
   import SampleDb._
 
+  describe("Api date"){
+    it("should return a valid date") {
+      pending
+    }
+  }
+  describe("When used in filter"){
+  }
+  describe("A date property of a class"){
+
+  }
+
 }

@@ -223,13 +223,15 @@ case class MappingSelect
 
 
     def havingRowsCount
-      ( r : Int )
+      ( r : Int,
+        o : (Sql.ConditionObject, Sql.ConditionObject) => Sql.Clause.Condition 
+          = Sql.Clause.Equals )
       : MappingSelect
       = copy(
           having
             = ( having ++ 
                 Some(
-                  Sql.Clause.Equals(
+                  o(
                     Sql.Count(
                       mapping.primaryKeyColumns
                         .map{ c => Sql.Column(c.name, Some(Sql.alias(0))) },
@@ -273,6 +275,47 @@ case class MappingSelect
         f match {
           case Filter( HasSize, m : CollectionTableMapping, v : Int ) => 
             withSelect( MappingSelect(m).primaryKey.havingRowsCount(v), o )
+          case Filter( Equals, m : SeqMapping, v : Seq[_] ) => 
+            withSelect(
+              v.view.zipWithIndex
+                .foldLeft( MappingSelect(m).primaryKey ){ case (s, (v, i)) =>
+                  s.withClause( 
+                      Sql.Clause.Equals(
+                          Sql.Column("i", s.joinsAliases(m).some),
+                          Sql.Value(i)
+                        )
+                    )
+                    .withFilter(
+                        Filter( Equals, m.item, v),
+                        Sql.Clause.Or
+                      )
+                }
+                .havingRowsCount(v.length)
+                .withSkeletonTo(m)
+                .withSelect( 
+                    MappingSelect(m).primaryKey.havingRowsCount(v.length), 
+                    Sql.Clause.And 
+                  ),
+              o
+            )
+          case Filter( NotEquals, m : SeqMapping, v : Seq[_] ) => 
+            v .view
+              .zipWithIndex
+              .foldLeft( MappingSelect(m).primaryKey ){ case (s, (v, i)) =>
+                s .withClause(
+                    Sql.Clause.NotEquals( 
+                      Sql.Column("i", s.joinsAliases(m).some),
+                      Sql.Value(i) ),
+                    Sql.Clause.Or ) 
+                  .withFilter(
+                    Filter( NotEquals, m.item, v ),
+                    Sql.Clause.Or )
+              }
+              .withSelect(
+                MappingSelect(m).primaryKey.havingRowsCount(
+                  v.length, Sql.Clause.NotEquals ),
+                Sql.Clause.Or )
+              .as{ withSelect(_, o) }
           case Filter( Contains, m : SeqMapping, v ) => 
             withFilter1( Filter( Includes, m, Seq(v) ), o )
           case Filter( Includes, m : SeqMapping, v : Seq[_] ) =>
@@ -285,29 +328,6 @@ case class MappingSelect
                   .havingRowsCount(v.length),
                 o
               )
-          case Filter( Equals, m : SeqMapping, v : Seq[_] ) => 
-            withSelect(
-              v.view.zipWithIndex
-                .foldLeft( MappingSelect(m).primaryKey ){ case (s, (v, i)) =>
-                  s.withClause( 
-                      Sql.Clause.Equals(
-                          Sql.Column("i", s.joinsAliases(m).some),
-                          Sql.Value(i)
-                        )
-                    )
-                    .withFilter(
-                        Filter( Equals,m.item, v),
-                        Sql.Clause.Or
-                      )
-                }
-                .havingRowsCount(v.length)
-                .withSkeletonTo(m)
-                .withSelect( 
-                    MappingSelect(m).primaryKey.havingRowsCount(v.length), 
-                    Sql.Clause.And 
-                  ),
-              o
-            )
           case Filter( Contains, m : SetMapping, v ) =>
             withFilter1( Filter( Includes, m, Set(v) ), o )
           case Filter( Equals, m : SetMapping, v : Set[_] ) => 

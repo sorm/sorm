@@ -1,4 +1,4 @@
-package vorm.api
+package vorm
 
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
@@ -9,9 +9,8 @@ import vorm._
 import samples._
 import extensions._
 
-
 @RunWith(classOf[JUnitRunner])
-class ApiSampleDbSuite extends FunSuite with ShouldMatchers {
+class SampleDbSuite extends FunSuite with ShouldMatchers {
 
   import SampleDb._
 

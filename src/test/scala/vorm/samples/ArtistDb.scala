@@ -5,7 +5,7 @@ import api._
 import reflection._
 import extensions._
 
-object SampleDb {
+object ArtistDb {
   
   // A model:
 

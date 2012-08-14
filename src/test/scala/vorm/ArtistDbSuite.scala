@@ -10,9 +10,9 @@ import samples._
 import extensions._
 
 @RunWith(classOf[JUnitRunner])
-class SampleDbSuite extends FunSuite with ShouldMatchers {
+class ArtistDbSuite extends FunSuite with ShouldMatchers {
 
-  import SampleDb._
+  import ArtistDb._
 
   test("path with index"){
     Db.query[Artist]

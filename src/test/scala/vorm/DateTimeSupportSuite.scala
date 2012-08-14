@@ -23,7 +23,6 @@ import samples._
 @RunWith(classOf[JUnitRunner])
 class DateTimeSupportSuite extends FunSuite with ShouldMatchers {
 
-  import SampleDb._
 
   test("Api fetchDate")(pending)
   test("Bigger filter")(pending)

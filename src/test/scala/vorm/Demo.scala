@@ -16,7 +16,7 @@ object Demo extends App {
     log.loggers("vorm.jdbc.ConnectionAdapter") = Level.TRACE
   }
 
-  import SampleDb._
+  import ArtistDb._
 
   Db.query[Artist]
     .filterEquals("names.value(1)", "Rolling Stones")

@@ -16,9 +16,11 @@ object Demo extends App {
     log.loggers("vorm.jdbc.ConnectionAdapter") = Level.TRACE
   }
 
-  new ConnectionAdapter(DriverManager.getConnection("jdbc:h2:mem:test"))
-    .executeQuery( Statement("SELECT NOW()") )
-    .parseAndClose()
-    .head.head
+  import SampleDb._
+
+  Db.query[Artist]
+    .filterEquals("names.value(1)", "Rolling Stones")
+    .fetchAll()
     .trace()
+
 }

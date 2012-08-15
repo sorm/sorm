@@ -24,27 +24,38 @@ class SeqOfEntitiesSupportSuite extends FunSuite with ShouldMatchers {
 
   import SeqOfEntitiesSupportSuite._
 
+  //  equals
   test("Non matching equals query") {
-    fetchEqualingIds( Seq(b5) ) === Set()
-    fetchEqualingIds( Seq(b1, b2, b4) ) === Set(2l)
+    fetchEqualingIds( Seq(b5) ) should be === Set()
+    fetchEqualingIds( Seq(b1, b2, b4) ) should be === Set()
   }
   test("Partially matching equals query") {
-    fetchEqualingIds( Seq(b2) ) === Set()
-    fetchEqualingIds( Seq(b1, b2) ) === Set()
-    fetchEqualingIds( Seq(b3) ) === Set()
-    fetchEqualingIds( Seq(b2, b3) ) === Set()
+    fetchEqualingIds( Seq(b2) ) should be === Set()
+    fetchEqualingIds( Seq(b1, b2) ) should be === Set()
+    fetchEqualingIds( Seq(b3) ) should be === Set()
+    fetchEqualingIds( Seq(b2, b3) ) should be === Set()
   }
   test("Empty seq equals query") {
-    fetchEqualingIds( Seq() ) === Set(1l, 3l)
+    fetchEqualingIds( Seq() ) should be === Set(1l, 3l)
   }
   test("Same seq equals query") {
-    fetchEqualingIds( Seq(b1, b2, b3) ) === Set(2l)
-    fetchEqualingIds( Seq(b4) ) === Set(4l)
+    fetchEqualingIds( Seq(b1, b2, b3) ) should be === Set(2l)
+    fetchEqualingIds( Seq(b4) ) should be === Set(4l)
   }
   test("Differently ordered seq") {
-    fetchEqualingIds( Seq(b1, b3, b2) ) === Set()
-    fetchEqualingIds( Seq(b2, b3, b1) ) === Set()
+    fetchEqualingIds( Seq(b1, b3, b2) ) should be === Set()
+    fetchEqualingIds( Seq(b2, b3, b1) ) should be === Set()
   }
+
+  //  not equals
+  test("Not equals query") {
+    fetchNotEqualingIds( Seq(b5) ) should be === Set(1,2,3,4)
+    fetchNotEqualingIds( Seq(b3, b1) ) should be === Set(2,4,5)
+    fetchNotEqualingIds( Seq(b1,b2,b3,b4) ) should be === Set(5)
+    fetchNotEqualingIds( Seq(b1,b2,b3,b4,b5) ) should be === Set()
+    true should be === false
+  }
+
 
 }
 object SeqOfEntitiesSupportSuite {
@@ -66,5 +77,7 @@ object SeqOfEntitiesSupportSuite {
 
   def fetchEqualingIds ( value : Seq[_] ) : Set[Long]
     = db.query[A].filterEquals("a", value).fetchAll().map{_.id}.toSet
+  def fetchNotEqualingIds ( value : Seq[_] ) : Set[Long]
+    = db.query[A].filterNotEquals("a", value).fetchAll().map{_.id}.toSet
 
 }

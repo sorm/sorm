@@ -35,22 +35,22 @@ class SeqOfIntsSupportSuite extends FunSuite with ShouldMatchers {
     = db.query[A].filterEquals("a", value).fetchAll().map{_.id}.toSet
 
   test("Non matching equals query") {
-    fetchEqualingIds(Seq(10)) === Set()
+    fetchEqualingIds(Seq(10)) should be === Set()
   }
   test("Partially matching equals query") {
-    fetchEqualingIds(Seq(2, 9)) === Set()
-    fetchEqualingIds(Seq(9)) === Set()
-    fetchEqualingIds(Seq(3)) === Set()
-    fetchEqualingIds(Seq(9, 3)) === Set()
+    fetchEqualingIds(Seq(2, 9)) should be === Set()
+    fetchEqualingIds(Seq(9)) should be === Set()
+    fetchEqualingIds(Seq(3)) should be === Set()
+    fetchEqualingIds(Seq(9, 3)) should be === Set()
   }
   test("Empty seq equals query") {
-    fetchEqualingIds(Seq()) === Set(1l, 4l)
+    fetchEqualingIds(Seq()) should be === Set(1l, 4l)
   }
   test("Same seq equals query") {
-    fetchEqualingIds(Seq(2, 9, 3)) === Set(2l)
+    fetchEqualingIds(Seq(2, 9, 3)) should be === Set(2l)
   }
   test("Differently ordered seq") {
-    fetchEqualingIds(Seq(9, 2, 3)) === Set()
+    fetchEqualingIds(Seq(9, 2, 3)) should be === Set()
   }
 
 }

@@ -34,9 +34,9 @@ class OptionTupleSupportSuite extends FunSuite with ShouldMatchers {
   }
   test("saved entities are correct"){
 
-    db.fetchById[A](1).get.a === None
-    db.fetchById[A](2).get.a === Some(2 -> None)
-    db.fetchById[A](3).get.a === Some(56 -> Some("asdf"))
+    db.fetchById[A](1).get.a should be === None
+    db.fetchById[A](2).get.a should be === Some(2 -> None)
+    db.fetchById[A](3).get.a should be === Some(56 -> Some("asdf"))
   }
 
 }

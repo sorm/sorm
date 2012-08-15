@@ -19,7 +19,7 @@ class ArtistDbSuite extends FunSuite with ShouldMatchers {
       .filterEquals("names.value(1)", "Rolling Stones")
       .fetchOne()
       .get
-      .names(Db.en)(1) === "Rolling Stones"
+      .names(Db.en)(1) should be === "Rolling Stones"
   }
   test("Offset"){
     pending
@@ -41,23 +41,23 @@ class ArtistDbSuite extends FunSuite with ShouldMatchers {
       .filterEquals("styles.item", Db.metal)
       .fetchAll()
       .flatMap{_.names.values.head.head}
-      .toSet === Set("Metallica", "Godsmack")
+      .toSet should be === Set("Metallica", "Godsmack")
   }
   test("Map, Set, Seq deep path"){
     Db.query[Artist]
       .filterEquals("styles.item.names.value.item", "Hard Rock")
       .fetchAll()
       .flatMap{_.names.values.head.head}
-      .toSet === Set("Metallica", "Nirvana", "Godsmack")
+      .toSet should be === Set("Metallica", "Nirvana", "Godsmack")
   }
   test("Results have correct id property"){
-    Db.query[Artist].fetchOne().map{_.id} === 1
+    Db.query[Artist].fetchOne().map{_.id} should be === 1
   }
   test("Query by id"){
     Db.query[Artist].filterEquals("id", 1).fetchOne()
-      .map{_.names.values.head.head} === "Metallica"
+      .map{_.names.values.head.head} should be === "Metallica"
     Db.query[Artist].filterEquals("id", 3).fetchOne()
-      .map{_.names.values.head.head} === "Kino"
+      .map{_.names.values.head.head} should be === "Kino"
   }
 
 }

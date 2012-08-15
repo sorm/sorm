@@ -30,21 +30,21 @@ class OptionValueSupportSuite extends FunSuite with ShouldMatchers {
     db.save(EntityWithValuePropertyInOption(Some(7)))
   }
   test("saved entities are correct"){
-    db.fetchById[EntityWithValuePropertyInOption](1).get.a === None
-    db.fetchById[EntityWithValuePropertyInOption](2).get.a === Some(3)
-    db.fetchById[EntityWithValuePropertyInOption](3).get.a === Some(7)
+    db.fetchById[EntityWithValuePropertyInOption](1).get.a should be === None
+    db.fetchById[EntityWithValuePropertyInOption](2).get.a should be === Some(3)
+    db.fetchById[EntityWithValuePropertyInOption](3).get.a should be === Some(7)
   }
   test("equals filter"){
     db.query[EntityWithValuePropertyInOption]
-      .filterEquals("a", None).fetchOne().get.id === 1
+      .filterEquals("a", None).fetchOne().get.id should be === 1
     db.query[EntityWithValuePropertyInOption]
-      .filterEquals("a", Some(3)).fetchOne().get.id === 2
+      .filterEquals("a", Some(3)).fetchOne().get.id should be === 2
   }
   test("not equals filter"){
     db.query[EntityWithValuePropertyInOption]
-      .filterNotEquals("a", None).fetchOne().get.id === 2
+      .filterNotEquals("a", None).fetchOne().get.id should be === 2
     db.query[EntityWithValuePropertyInOption]
-      .filterNotEquals("a", Some(3)).fetchOne().get.id === 1
+      .filterNotEquals("a", Some(3)).fetchOne().get.id should be === 1
   }
 
 }

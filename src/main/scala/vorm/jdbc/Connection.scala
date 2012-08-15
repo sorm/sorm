@@ -19,6 +19,8 @@ object Connection {
           Class.forName("org.h2.Driver")
         case DbType.Sqlite =>
           Class.forName("org.sqlite.JDBC")
+        case DbType.Hsqldb =>
+          Class.forName("org.hsqldb.jdbcDriver")
         case _ =>
           ???
       }

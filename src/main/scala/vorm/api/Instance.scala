@@ -64,6 +64,13 @@ class Instance
           }
         }
       }
+      // No reflection should be registered twice
+      {
+        val reflections = entities.toStream.map{_.reflection}
+        val diff = reflections.distinct diff reflections
+        require( diff == Stream(),
+                 "Reflections registered twice: " + diff.mkString(", ") )
+      }
     }
 
     // Initialize a db schema:

@@ -351,6 +351,7 @@ package object sql {
       = apply( name, Some(table) )
   }
 
+  //  TODO: to update to support only a single `what` column for compatibility reasons
   case class Count
     ( what : Seq[Column],
       distinct : Boolean = false )
@@ -360,15 +361,13 @@ package object sql {
     {
       def rendering
         = "COUNT(" +
-          ( if( distinct ) "DISTINCT " 
+          ( if( distinct ) "DISTINCT "
             else "" ) +
           what.view.map{ _.rendering }.mkString(", ") +
           ")"
       def data
         = Nil
     }
-
-
 
   trait Clause extends Renderable
   trait ConditionObject extends Renderable

@@ -24,7 +24,7 @@ class Instance
   extends Api
   with LogulaLogging
   {
-    protected val connection
+    protected[vorm] val connection
       = new ConnectionAdapter(Connection(url, user, password))
           with SaveAdapter
           with DropAllTablesAdapter

@@ -28,11 +28,11 @@ trait Api {
 
   private def mapping
     [ T : TypeTag ]
-    = mappings.get(Reflection[T]) match {
-        case Some(m) => m
-        case None =>
-          throw new RuntimeException( "Entity `" + Reflection[T].name + "` is not registered" )
-      }
+    = mappings.get(Reflection[T])
+        .getOrElse{
+          throw new Exception( "Entity `" + Reflection[T].name + 
+                               "` is not registered" )
+        }
 
   def save
     [ T <: AnyRef : TypeTag ]

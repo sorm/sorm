@@ -199,6 +199,33 @@ case class MappingSelect
 
     private def withSelect
       ( s : MappingSelect, 
+        o : (Sql.Clause, Sql.Clause) => Sql.Clause
+        )
+      : MappingSelect
+      = copy(
+            joins
+              = joins :+
+                Sql.Join( s.sql, Some(newAlias),
+                          kind = Sql.JoinKind.Inner ),
+            where
+              = ( where ++
+
+                  s.mapping.primaryKeyColumns.view
+                    .map{ _.name }
+                    .map{ n => 
+                        Sql.Clause.Equals(
+                            Sql.Column(n, Some(newAlias)),
+                            //  TODO: optimize to bind to parent
+                            Sql.Column(n, Some(alias(s.mapping)))
+                          )
+                      } 
+                    .reduceOption{ Sql.Clause.And } )
+                  .reduceOption{ o }
+          )
+
+    private def withSelect1
+      ( s : MappingSelect,
+        on : Traversable[(String, String)],
         o : (Sql.Clause, Sql.Clause) => Sql.Clause )
       : MappingSelect
       = copy(
@@ -208,15 +235,13 @@ case class MappingSelect
                           kind = Sql.JoinKind.Inner ),
             where
               = ( where ++
-                  s.mapping.primaryKeyColumns.view
-                    .map{ _.name }
-                    .map{ n => 
-                        Sql.Clause.Equals(
-                            Sql.Column(n, Some(newAlias)),
-                            //  TODO: optimize to bind to parent
-                            Sql.Column(n, Some(joinsAliases(s.mapping)))
-                          )
-                      } 
+                  on.map{ case (l, r) =>
+                      Sql.Clause.Equals(
+                        Sql.Column(l, Some(newAlias)),
+                        //  TODO: optimize to bind to parent
+                        Sql.Column(r, Some(alias(s.mapping)))
+                      )
+                    }
                     .reduceOption{ Sql.Clause.And } )
                   .reduceOption{ o }
           )
@@ -243,7 +268,7 @@ case class MappingSelect
               ) reduceOption Sql.Clause.And,
           groupBy
             = groupBy ++
-              mapping.primaryKeyColumns
+              mapping.asInstanceOf[CollectionTableMapping].containerTableColumns
                 .map{ c => Sql.Column(c.name, Some(Sql.alias(0))) }
 
         )
@@ -279,23 +304,21 @@ case class MappingSelect
             withSelect(
               v.view.zipWithIndex
                 .foldLeft( MappingSelect(m).primaryKey ){ case (s, (v, i)) =>
-                  s.withClause( 
-                      Sql.Clause.Equals(
-                          Sql.Column("i", s.joinsAliases(m).some),
-                          Sql.Value(i)
-                        )
-                    )
-                    .withFilter(
-                        Filter( Equals, m.item, v),
-                        Sql.Clause.Or
-                      )
+                  s.withWhere(
+                    And(
+                      Filter(Equals, m.index, i),
+                      Filter(Equals, m.item, v)
+                    ),
+                    Sql.Clause.Or
+                  )
                 }
                 .havingRowsCount(v.length)
                 .withSkeletonTo(m)
-                .withSelect( 
-                    MappingSelect(m).primaryKey.havingRowsCount(v.length), 
-                    Sql.Clause.And 
-                  ),
+                .withSelect1(
+                  MappingSelect(m).primaryKey.havingRowsCount(v.length),
+                  m.containerTableColumns.map{c => c.name -> c.name},
+                  Sql.Clause.And
+                ),
               o
             )
           case Filter( NotEquals, m : SeqMapping, v : Seq[_] ) => 
@@ -304,7 +327,7 @@ case class MappingSelect
               .foldLeft( MappingSelect(m).primaryKey ){ case (s, (v, i)) =>
                 s .withClause(
                     Sql.Clause.NotEquals( 
-                      Sql.Column("i", s.joinsAliases(m).some),
+                      Sql.Column("i", s.alias(m).some),
                       Sql.Value(i) ),
                     Sql.Clause.Or ) 
                   .withFilter(
@@ -373,7 +396,7 @@ case class MappingSelect
             cf(
                 Sql.Column( 
                     m.columnName,
-                    Some( joinsAliases(m.containerTableMapping.get) )
+                    Some( alias(m.containerTableMapping.get) )
                   ),
                 Sql.Value(v)
               ),

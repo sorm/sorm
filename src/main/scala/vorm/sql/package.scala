@@ -351,6 +351,7 @@ package object sql {
       = apply( name, Some(table) )
   }
 
+  //  TODO: to update to support only a single `what` column for compatibility reasons
   case class Count
     ( what : Seq[Column],
       distinct : Boolean = false )
@@ -360,17 +361,9 @@ package object sql {
     {
       def rendering
         = "COUNT(" +
-          ( if( distinct )
-              "DISTINCT " +
-              what.view.map{ _.rendering }
-                .satisfying1{_.size > 1}
-                //  a trick from here: http://h2-database.66688.n3.nabble.com/COUNT-DISTINCT-several-columns-doesn-t-work-td3721939.html
-                .left.map{"(" + _.mkString(", ") + ")"}
-                .right.map{_.mkString(", ")}
-                .merge
-            else
-              what.view.map{ _.rendering }.mkString(", ")
-          ) +
+          ( if( distinct ) "DISTINCT "
+            else "" ) +
+          what.view.map{ _.rendering }.mkString(", ") +
           ")"
       def data
         = Nil

@@ -362,13 +362,16 @@ package object sql {
         = "COUNT(" +
           ( if( distinct ) "DISTINCT " 
             else "" ) +
-          what.view.map{ _.rendering }.mkString(", ") +
+          what.view.map{ _.rendering }
+            .satisfying1{_.size > 1}
+            //  a trick from here: http://h2-database.66688.n3.nabble.com/COUNT-DISTINCT-several-columns-doesn-t-work-td3721939.html
+            .left.map{"(" + _.mkString(", ") + ")"}
+            .right.map{_.mkString(", ")}
+            .merge
           ")"
       def data
         = Nil
     }
-
-
 
   trait Clause extends Renderable
   trait ConditionObject extends Renderable

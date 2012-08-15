@@ -56,6 +56,12 @@ package object extensions {
     def satisfying(p: A => Boolean): Option[A] =
       if (p(x)) Some(x) else None
 
+    def satisfying1
+      ( p : A => Boolean )
+      : Either[A, A]
+      = if( p(x) ) Left(x)
+        else Right(x)
+
     def trace()
       = {
         Console.println(x)

@@ -40,24 +40,24 @@ class ArtistDbSuite extends FunSuite with ShouldMatchers {
     Db.query[Artist]
       .filterEquals("styles.item", Db.metal)
       .fetchAll()
-      .flatMap{_.names.values.head.head}
+      .flatMap{_.names.values.head}
       .toSet should be === Set("Metallica", "Godsmack")
   }
   test("Map, Set, Seq deep path"){
     Db.query[Artist]
       .filterEquals("styles.item.names.value.item", "Hard Rock")
       .fetchAll()
-      .flatMap{_.names.values.head.head}
+      .flatMap{_.names.values.head}
       .toSet should be === Set("Metallica", "Nirvana", "Godsmack")
   }
   test("Results have correct id property"){
-    Db.query[Artist].fetchOne().map{_.id} should be === 1
+    Db.query[Artist].fetchOne().map{_.id} should be === Some(1)
   }
   test("Query by id"){
     Db.query[Artist].filterEquals("id", 1).fetchOne()
-      .map{_.names.values.head.head} should be === "Metallica"
+      .map{_.names.values.head.head}.get should be === "Metallica"
     Db.query[Artist].filterEquals("id", 3).fetchOne()
-      .map{_.names.values.head.head} should be === "Kino"
+      .map{_.names.values.head.head}.get should be === "Kino"
   }
 
 }

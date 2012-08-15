@@ -25,7 +25,7 @@ class Instance
   with LogulaLogging
   {
     protected val connection
-      = new ConnectionAdapter(DriverManager.getConnection(url, user, password))
+      = new ConnectionAdapter(Connection(url, user, password))
           with SaveAdapter
           with DropAllTablesAdapter
 

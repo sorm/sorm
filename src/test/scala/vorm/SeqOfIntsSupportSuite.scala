@@ -23,16 +23,6 @@ import samples._
 class SeqOfIntsSupportSuite extends FunSuite with ShouldMatchers {
 
   import SeqOfIntsSupportSuite._
-  import ArtistDb._
-
-  val db = TestingInstance.h2( Entity[A]() )
-  db.save(A( Seq() ))
-  db.save(A( Seq(2, 9, 3) ))
-  db.save(A( Seq(4) ))
-  db.save(A( Seq() ))
-
-  def fetchEqualingIds ( value : Seq[_] ) : Set[Long]
-    = db.query[A].filterEquals("a", value).fetchAll().map{_.id}.toSet
 
   test("Non matching equals query") {
     fetchEqualingIds(Seq(10)) should be === Set()
@@ -53,7 +43,24 @@ class SeqOfIntsSupportSuite extends FunSuite with ShouldMatchers {
     fetchEqualingIds(Seq(9, 2, 3)) should be === Set()
   }
 
+  test("Not equals query") {
+    fetchNotEqualingIds(Seq(10)) should equal (Set(1,2,3,4))
+    fetchNotEqualingIds(Seq(4)) should equal (Set(1,2,4))
+    fetchNotEqualingIds(Seq()) should equal (Set(2,3))
+  }
+
 }
 object SeqOfIntsSupportSuite {
   case class A ( a : Seq[Int] )
+
+  val db = TestingInstance.h2( Entity[A]() )
+  db.save(A( Seq() ))
+  db.save(A( Seq(2, 9, 3) ))
+  db.save(A( Seq(4) ))
+  db.save(A( Seq() ))
+
+  def fetchEqualingIds ( value : Seq[_] ) : Set[Long]
+    = db.query[A].filterEquals("a", value).fetchAll().map{_.id}.toSet
+  def fetchNotEqualingIds ( value : Seq[_] ) : Set[Long]
+    = db.query[A].filterNotEquals("a", value).fetchAll().map{_.id}.toSet
 }

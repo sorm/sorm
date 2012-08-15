@@ -18,13 +18,14 @@ object Sandbox extends App {
 
   def h2Instance ( entities : Entity[_]* )
     = new Instance( entities, "jdbc:h2:mem:test", mode = Mode.DropAllCreate )
+  def sqliteInstance ( entities : Entity[_]* )
+    = new Instance( entities, "jdbc:sqlite::memory:", mode = Mode.DropAllCreate )
   def mysqlInstance ( entities : Entity[_]* )
     = new Instance( entities, "jdbc:mysql://localhost/test", mode = Mode.DropAllCreate )
 
-
   case class A ( a : Seq[Int] )
 
-  val db = mysqlInstance( Entity[A]() )
+  val db = sqliteInstance( Entity[A]() )
   db.save(A( Seq() ))
   db.save(A( Seq(2, 9, 3) ))
   db.save(A( Seq(4) ))

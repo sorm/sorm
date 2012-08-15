@@ -18,7 +18,7 @@ object Sandbox extends App {
 
   case class A ( a : Seq[Int] )
 
-  val db = TestInstance.hsql( Entity[A]() )
+  val db = TestInstance.h2( Entity[A]() )
   db.save(A( Seq() ))
   db.save(A( Seq(2, 9, 3) ))
   db.save(A( Seq(4) ))

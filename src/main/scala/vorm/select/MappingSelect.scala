@@ -312,14 +312,32 @@ case class MappingSelect
                     Sql.Clause.Or
                   )
                 }
-                .havingRowsCount(v.length)
+                .copy(
+                  having
+                    = ( having ++
+                        Some( 
+                          Sql.Clause.Equals( 
+                            Sql.Count( Seq(
+                              Sql.Column("i", Some(Sql.alias(0))) 
+                            ) ), 
+                            Sql.Value(v.length)
+                          )
+                        )
+                      ) reduceOption Sql.Clause.And,
+                  groupBy
+                    = groupBy ++
+                      m.containerTableColumns
+                        .map{ c => Sql.Column(c.name, Some(Sql.alias(0))) }
+
+                )
+                // .havingRowsCount(v.length)
                 .withSkeletonTo(m)
-                .withSelect1(
-                  MappingSelect(m).primaryKey.havingRowsCount(v.length),
-                  m.containerTableColumns.map{c => c.name -> c.name},
-                  Sql.Clause.And
-                ),
-              o
+                // .withSelect1(
+                //   MappingSelect(m).primaryKey.havingRowsCount(v.length),
+                //   m.containerTableColumns.map{c => c.name -> c.name},
+                //   Sql.Clause.And
+                // )
+            , o
             )
           case Filter( NotEquals, m : SeqMapping, v : Seq[_] ) => 
             v .view

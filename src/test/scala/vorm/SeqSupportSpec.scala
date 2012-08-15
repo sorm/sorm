@@ -25,7 +25,7 @@ class SeqSupportSpec extends FunSpec with ShouldMatchers {
 
   // describe("Ids returned by 'equals' query on Seq[Int]") {
   describe("An `equals` query on Seq[Int]") {
-    val db = instance( Entity[A]() )
+    val db = TestingInstance.h2( Entity[A]() )
     db.save(A( Seq() ))
     db.save(A( Seq(2, 9, 3) ))
     db.save(A( Seq(4) ))
@@ -43,7 +43,7 @@ class SeqSupportSpec extends FunSpec with ShouldMatchers {
       fetchIds(Seq(3)) === Set()
       fetchIds(Seq(9, 3)) === Set()
     }
-    it("on empty Seq should match it only") {
+    it("should correctly match empty Seq") {
       fetchIds(Seq()) === Set(1l, 4l)
     }
     it("should match the same Seq") {
@@ -56,9 +56,5 @@ class SeqSupportSpec extends FunSpec with ShouldMatchers {
 
 }
 object SeqSupportSpec {
-  def instance ( entities : Entity[_]* )
-    = new Instance( entities, "jdbc:h2:mem:test", mode = Mode.DropAllCreate )
-
   case class A ( a : Seq[Int] )
-
 }

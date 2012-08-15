@@ -6,7 +6,7 @@ import jdbc._
 import samples._
 import extensions._
 
-object TestInstance {
+object TestingInstance {
   def h2
     ( entities : Entity[_]* )
     = new Instance( entities, "jdbc:h2:mem:test", mode = Mode.DropAllCreate )

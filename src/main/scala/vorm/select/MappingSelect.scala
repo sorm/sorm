@@ -13,11 +13,11 @@ case class MappingSelect
   ( mapping : TableMapping,
     resultMappings : Seq[(TableMapping, Column)] = Seq(),
     joinsAliases : Map[TableMapping, String] = Map(),
-    joins : Vector[Sql.Join] = Vector(),
+    joins : IndexedSeq[Sql.Join] = Vector(),
     where : Option[Sql.Clause] = None,
-    groupBy : Vector[Sql.Column] = Vector(),
+    groupBy : IndexedSeq[Sql.Column] = Vector(),
     having : Option[Sql.Clause] = None,
-    orderBy : Vector[Sql.OrderByClause] = Vector(),
+    orderBy : IndexedSeq[Sql.OrderByClause] = Vector(),
     limit : Option[Int] = None,
     offset : Option[Int] = None )
   {
@@ -209,10 +209,10 @@ case class MappingSelect
                           kind = Sql.JoinKind.Inner ),
             where
               = ( where ++
-
-                  s.mapping.primaryKeyColumns.view
+                  s.resultMappings.view
+                    .map{ _._2 }
                     .map{ _.name }
-                    .map{ n => 
+                    .map{ n =>
                         Sql.Clause.Equals(
                             Sql.Column(n, Some(newAlias)),
                             //  TODO: optimize to bind to parent
@@ -300,10 +300,30 @@ case class MappingSelect
         f match {
           case Filter( HasSize, m : CollectionTableMapping, v : Int ) => 
             withSelect( MappingSelect(m).primaryKey.havingRowsCount(v), o )
-          case Filter( Equals, m : SeqMapping, v : Seq[_] ) => 
+          case Filter( Equals, m : SeqMapping, v : Seq[_] ) =>
+            lazy val countSelect
+              = MappingSelect(
+                  m,
+                  m.containerTableColumns.map{ m -> _ },
+                  having
+                    = ( having ++
+                        Some(
+                          Sql.Clause.Equals(
+                            Sql.Count(
+                              Sql.Column("i", Some(Sql.alias(0))) :: Nil,
+                              true ),
+                            Sql.Value(v.length)
+                          )
+                        )
+                      ) reduceOption Sql.Clause.And,
+                  groupBy
+                    = m.containerTableColumns.view
+                        .map{_.name}
+                        .map{Sql.Column(_, Some(Sql.alias(0)))}
+                        .toIndexedSeq
+                )
             withSelect(
-              v.view.zipWithIndex
-                .foldLeft( MappingSelect(m).primaryKey ){ case (s, (v, i)) =>
+              v.zipWithIndex.view.foldLeft(countSelect){ case (s, (v, i)) =>
                   s.withWhere(
                     And(
                       Filter(Equals, m.index, i),
@@ -312,31 +332,7 @@ case class MappingSelect
                     Sql.Clause.Or
                   )
                 }
-                .copy(
-                  having
-                    = ( having ++
-                        Some( 
-                          Sql.Clause.Equals( 
-                            Sql.Count( Seq(
-                              Sql.Column("i", Some(Sql.alias(0))) 
-                            ) ), 
-                            Sql.Value(v.length)
-                          )
-                        )
-                      ) reduceOption Sql.Clause.And,
-                  groupBy
-                    = groupBy ++
-                      m.containerTableColumns
-                        .map{ c => Sql.Column(c.name, Some(Sql.alias(0))) }
-
-                )
-                // .havingRowsCount(v.length)
-                .withSkeletonTo(m)
-                // .withSelect1(
-                //   MappingSelect(m).primaryKey.havingRowsCount(v.length),
-                //   m.containerTableColumns.map{c => c.name -> c.name},
-                //   Sql.Clause.And
-                // )
+                .withSelect(countSelect, Sql.Clause.And)
             , o
             )
           case Filter( NotEquals, m : SeqMapping, v : Seq[_] ) => 

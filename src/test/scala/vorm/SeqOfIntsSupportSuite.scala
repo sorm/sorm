@@ -25,31 +25,35 @@ class SeqOfIntsSupportSuite extends FunSuite with ShouldMatchers {
   import SeqOfIntsSupportSuite._
   import ArtistDb._
 
-  test("equals filter"){
-    val db = instance( Entity[A]() )
-    db.save(A( Seq() ))
-    db.save(A( Seq(2, 9, 3) ))
-    db.save(A( Seq(4) ))
+  val db = TestingInstance.h2( Entity[A]() )
+  db.save(A( Seq() ))
+  db.save(A( Seq(2, 9, 3) ))
+  db.save(A( Seq(4) ))
+  db.save(A( Seq() ))
 
-    db.query[A]
-      .filterEquals("a", Seq(9)).fetchAll() === Nil
-    db.query[A]
-      .filterEquals("a", Seq()).fetchAll()
-      .map{_.id}.toSet === Set(1l)
-    db.query[A]
-      .filterEquals("a", Seq(2, 9, 3)).fetchAll()
-      .map{_.id}.toSet === Set(2l)
-    db.query[A]
-      .filterEquals("a", Seq(2, 9)).fetchAll()
-      .map{_.id}.toSet === Set()
-    db.query[A].filterEquals("a", Seq(9)).fetchAll()
-      .map{_.id}.toSet === Set(3l)
+  def fetchIds ( value : Seq[_] ) : Set[Long]
+    = db.query[A].filterEquals("a", value).fetchAll().map{_.id}.toSet
+
+  test("Non matching equals query") {
+    fetchIds(Seq(10)) === Set()
+  }
+  test("Partially matching equals query") {
+    fetchIds(Seq(2, 9)) === Set()
+    fetchIds(Seq(9)) === Set()
+    fetchIds(Seq(3)) === Set()
+    fetchIds(Seq(9, 3)) === Set()
+  }
+  test("Empty seq equals query") {
+    fetchIds(Seq()) === Set(1l, 4l)
+  }
+  test("Same seq equals query") {
+    fetchIds(Seq(2, 9, 3)) === Set(2l)
+  }
+  test("Differently ordered seq") {
+    fetchIds(Seq(9, 2, 3)) === Set()
   }
 
 }
 object SeqOfIntsSupportSuite {
-  def instance ( entities : Entity[_]* )
-    = new Instance( entities, "jdbc:h2:mem:test", mode = Mode.DropAllCreate )
   case class A ( a : Seq[Int] )
-
 }

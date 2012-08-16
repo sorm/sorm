@@ -64,7 +64,7 @@ object Path {
             where(host.item, tail, value, operator)
           )
         //  virtual properties should not be supported until a general api is developed
-        // case (host : CollectionTableMapping, Part.Dotted("size") +: Seq()) =>
+        // case (host : CollectionMapping, Part.Dotted("size") +: Seq()) =>
         //   ( operator, value ) match {
         //     case (Operator.Equals, _) =>
         //       Filter(Operator.HasSize, host, value)

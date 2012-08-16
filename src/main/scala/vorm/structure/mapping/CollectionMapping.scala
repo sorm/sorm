@@ -7,7 +7,7 @@ import ddl._
 import select._
 import structure._
 
-abstract class CollectionTableMapping
+abstract class CollectionMapping
   extends TableMapping
   {
     def uniqueKeyColumns : Set[Seq[Column]] = Set.empty

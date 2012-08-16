@@ -35,7 +35,7 @@ package object save {
       m : Mapping )
     : Map[String, JdbcValue]
     = (m, v) match {
-        case (m : CollectionTableMapping, _) => 
+        case (m : CollectionMapping, _) =>
           Map.empty
         case (m : EntityMapping, v : Persisted) =>
           Map( m.columnName + "$id" -> JdbcValue(v.id, java.sql.Types.BIGINT) )

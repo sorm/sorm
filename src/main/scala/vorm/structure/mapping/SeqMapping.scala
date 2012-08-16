@@ -11,7 +11,7 @@ sealed class SeqMapping
   ( val membership : Option[Membership],
     val reflection : Reflection,
     settingsMap : SettingsMap )
-  extends CollectionTableMapping
+  extends CollectionMapping
   { 
     lazy val item : Mapping
       = Mapping( Membership.SeqItem(this), reflection.generics(0), settingsMap )

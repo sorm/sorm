@@ -13,7 +13,7 @@ package object mapping {
     ( m : Mapping ) 
     : Iterable[Column]
     = m match {
-        case m : CollectionTableMapping ⇒ 
+        case m : CollectionMapping ⇒
           Nil
         case m : TableMapping ⇒ 
           m.primaryKeyColumns

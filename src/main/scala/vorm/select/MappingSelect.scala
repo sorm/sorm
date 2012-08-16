@@ -163,7 +163,7 @@ case class MappingSelect
             def bindingsToContainer
               ( m : TableMapping )
               = m match {
-                  case m : CollectionTableMapping => 
+                  case m : CollectionMapping =>
                     m.containerTableMappingForeignKey.get.bindings.view
                   case m => 
                     m.containerTableMapping.get.foreignKeys(m)
@@ -268,7 +268,7 @@ case class MappingSelect
               ) reduceOption Sql.Clause.And,
           groupBy
             = groupBy ++
-              mapping.asInstanceOf[CollectionTableMapping].containerTableColumns
+              mapping.asInstanceOf[CollectionMapping].containerTableColumns
                 .map{ c => Sql.Column(c.name, Some(Sql.alias(0))) }
 
         )
@@ -298,7 +298,7 @@ case class MappingSelect
         import Operator._
 
         f match {
-          case Filter( HasSize, m : CollectionTableMapping, v : Int ) => 
+          case Filter( HasSize, m : CollectionMapping, v : Int ) =>
             withSelect( MappingSelect(m).primaryKey.havingRowsCount(v), o )
           case Filter( Equals, m : SeqMapping, v : Seq[_] ) =>
 

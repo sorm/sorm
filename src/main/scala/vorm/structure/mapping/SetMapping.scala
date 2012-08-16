@@ -11,7 +11,7 @@ sealed class SetMapping
   ( val membership : Option[Membership],
     val reflection : Reflection,
     settingsMap : SettingsMap )
-  extends CollectionTableMapping
+  extends CollectionMapping
   {
     lazy val item : Mapping
       = Mapping( Membership.SetItem(this), reflection.generics(0), settingsMap )

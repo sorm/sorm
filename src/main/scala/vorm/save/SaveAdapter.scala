@@ -190,7 +190,7 @@ trait SaveAdapter extends ConnectionAdapter {
     = (v, m) match {
         case (v : AnyRef, m : EntityMapping) ⇒ 
           saveEntityAndGetIt(v, m)
-        case (v : Traversable[_], m : CollectionTableMapping) ⇒ 
+        case (v : Traversable[_], m : CollectionMapping) ⇒
           v
         case (v : Product, m : TupleMapping) ⇒ 
           m.reflection.instantiate(
@@ -235,9 +235,9 @@ trait SaveAdapter extends ConnectionAdapter {
     {
       def nestedSlaveTableMappings
         ( m : Mapping )
-        : Stream[CollectionTableMapping]
+        : Stream[CollectionMapping]
         = m match {
-            case m : CollectionTableMapping => 
+            case m : CollectionMapping =>
               Stream(m) ++ m.children.toStream.flatMap{nestedSlaveTableMappings}
             case m : TableMapping => 
               Stream.empty

@@ -23,7 +23,7 @@ object Create {
             : Vector[TableMapping]
             = m.nestedTableMappings.foldLeft( Vector(m) ){ (q, m) ⇒
                 m match {
-                  case m : CollectionTableMapping ⇒
+                  case m : CollectionMapping ⇒
                     q ++ queue(m)
                   case m ⇒
                     queue(m) ++ q

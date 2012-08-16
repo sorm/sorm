@@ -75,7 +75,7 @@ package object extensions {
             x.getClass.getSimpleName + ":\n" +
             x.view
               .map{ _.prettyString }
-              .mkString(",\n")
+              .mkString("\n")
               .indent(2)
           case x : Tuple2[_, _] =>
             ( x._1.prettyString + " ->\n" +
@@ -84,7 +84,7 @@ package object extensions {
             x.getClass.getName + ":\n" +
             x.productIterator
               .map{ _.prettyString }
-              .mkString(",\n")
+              .mkString("\n")
               .indent(2)
           case x => 
             x.toString

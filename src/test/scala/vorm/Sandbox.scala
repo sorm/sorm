@@ -24,14 +24,32 @@ object Sandbox extends App {
   db.save(A( Seq(4) ))
   db.save(A( Seq() ))
 
-  def fetchIds ( value : Seq[_] ) : Set[Long]
-    = db.query[A].filterEquals("a", value).fetchAll().map{_.id}.toSet
+//  def fetchIds ( value : Seq[_] ) : Set[Long]
+//    = db.query[A].filterEquals("a", value).fetchAll().map{_.id}.toSet
+//
+//  fetchIds(Seq()).prettyString.trace()
 
-  fetchIds(Seq()).prettyString.trace()
 
-
-//  db.connection.executeQuery(
-//    Statement(
+  db.connection.executeQuery(
+    Statement(
+      """
+      SELECT
+        a.id
+        FROM
+          a
+          AS a
+        LEFT JOIN
+          a$a
+          AS b
+          ON b.p$id = a.id
+        LEFT JOIN
+          a$a
+          AS c
+          ON c.p$id = a.id
+        GROUP BY a.id
+        HAVING COUNT(DISTINCT b.i) = 0 AND
+               COUNT(DISTINCT c.i) = 0
+      """
 //      """
 //      SELECT
 //        a.p$id
@@ -46,8 +64,8 @@ object Sandbox extends App {
 //                  a.v = 2 ) )
 //        HAVING COUNT(DISTINCT a.i) = 3
 //      """
-//    )
-//  ) .parseAndClose().prettyString.trace()
+    )
+  ) .parseAndClose().prettyString.trace()
 
 
 }

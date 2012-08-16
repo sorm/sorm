@@ -1,8 +1,9 @@
-package vorm
+package vorm.sql
 
+import vorm._
 import extensions._
 
-package object sql {
+object Sql {
 
   def alias ( x : Int ) = ( 97 + x ).toChar.toString
 

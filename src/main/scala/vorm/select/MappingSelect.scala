@@ -4,8 +4,8 @@ import vorm._
 import persisted._
 import structure._
 import query._
+import sql._
 import mapping._
-import vorm.{sql => Sql}
 import ddl._
 import extensions._
 

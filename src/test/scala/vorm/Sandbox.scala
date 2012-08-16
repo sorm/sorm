@@ -27,7 +27,7 @@ object Sandbox extends App {
   def fetchIds ( value : Seq[_] ) : Set[Long]
     = db.query[A].filterEquals("a", value).fetchAll().map{_.id}.toSet
 
-  fetchIds(Seq(2, 9, 3)).prettyString.trace()
+  fetchIds(Seq()).prettyString.trace()
 
 
 //  db.connection.executeQuery(

@@ -11,69 +11,110 @@ import extensions._
 
 object SqlComposition {
 
-  implicit class ExecutableExtensions 
-    ( self : Executable )
+  implicit class SelectExtensions
+    ( self : Select )
     {
+      def narrow 
+        ( other : Executable ) 
+        : Select
+        = narrow(Select(other))
       /**
        * The `other` Select is required to have only columns and only those of
        * the `from` table in the `what` clause.
        */
-      def narrow ( other : Executable )
-        = (self, other) match {
-            // case ( self : Select, other : Select ) => self narrow other
-            case ( self : Select, other : Select ) => 
-              if( self.from == other.from )
-                if( self.join == other.join &&
-                    self.orderBy == other.orderBy &&
-                    self.groupBy == other.groupBy &&
-                    self.limit == other.limit &&
-                    self.offset == other.offset )
-                  if( self.where == other.where &&
-                      self.having == other.having )
-                    self
-                  else
-                    self.copy(
-                      where
-                        = ( self.where ++: other.where ++: Stream() )
-                            .reduceOption{ Clause.And },
-                      having
-                        = ( self.having ++: other.having ++: Stream() )
-                            .reduceOption{ Clause.And }
+      def narrow
+        ( other : Select )
+        : Select
+        = if( self.from == other.from )
+            if( self.join == other.join &&
+                self.orderBy == other.orderBy &&
+                self.groupBy == other.groupBy &&
+                self.limit == other.limit &&
+                self.offset == other.offset &&
+                ( self.having.isEmpty || other.having.isEmpty ) )
+              self.copy(
+                where
+                  = ( self.where ++: other.where ++: Stream() )
+                      .reduceOption{ Clause.And },
+                having
+                  = ( self.having ++: other.having ++: Stream() )
+                      .reduceOption{ Clause.And }
+              )
+            else {
+              val newAlias = alias( self.join.size + 1 )
+              self.copy(
+                join
+                  = self.join :+
+                    Join(
+                      what = other,
+                      as = Some( newAlias ),
+                      on = other.what.asInstanceOf[Seq[Column]]
+                             .view
+                             .map{_.name}
+                             .map{n => 
+                               Column(n, Some(newAlias)) ->
+                               Column(n, self.from.as)
+                             },
+                      kind = JoinKind.Right
                     )
-                else {
-                  lazy val newAlias = alias( self.join.size + 1 )
-                  self.copy(
-                    join
-                      = self.join :+
-                        Join(
-                          what = other,
-                          as = Some( newAlias ),
-                          on = other.what.asInstanceOf[Seq[Column]]
-                                 .view
-                                 .map{_.name}
-                                 .map{n => 
-                                   Column(n, Some(newAlias)) ->
-                                   Column(n, self.from.as)
-                                 },
-                          kind = JoinKind.Right
-                        )
-                  )
-                }
-              else
-                ???
-            case _ => ???
-          }
-      def widen ( other : Executable )
-        = Union( self, other )
+              )
+            }
+          else
+            ???
     }
 
-  object Executable {
-    def resultSetSelect
+  implicit class ExecutableExtensions 
+    ( self : Executable )
+    {
+      def narrow
+        ( other : Executable )
+        : Executable
+        = Select(self) narrow other
+      def widen 
+        ( other : Executable )
+        : Executable
+        = Union(self, other)
+    }
+
+  object Select {
+    def apply
+      ( executable : Executable )
+      : Select
+      = executable match {
+          case executable : Select => executable
+          case _ => ???
+        }
+    def apply
+      ( query : Query.Query )
+      : Select
+      = resultSet(query.mapping)
+          .narrow(
+            query.where
+              .map{ Executable.primaryKey(query.mapping, _) }
+              .map{ apply }
+              .getOrElse( Select.primaryKey(query.mapping) )
+              .copy(
+                //  todo: to add order
+                limit = query.limit,
+                offset = Some(query.offset)
+              )
+          )
+
+
+
+    def primaryKey
+      ( mapping : TableMapping )
+      : Select
+      = ???
+    def resultSet
       ( mapping : TableMapping )
       : Select
       = {
         ???
       }
+  }
+
+  object Executable {
     // def apply
     //   ( query : Query.Query )
     //   : Executable
@@ -87,8 +128,13 @@ object SqlComposition {
 
     //     )
 
+    def countItems
+      ( mapping : CollectionMapping )
+      : Executable
+      = ???
+
     def primaryKey
-      ( mapping : Mapping,
+      ( mapping : TableMapping,
         where : Query.Where )
       : Executable
       = where match {
@@ -99,13 +145,9 @@ object SqlComposition {
           case Query.Filter( Query.Operator.Equals, 
                              m : SeqMapping, 
                              v : Seq[_] ) =>
-            ???
-        }
+            Select.primaryKey(mapping)
 
-    def countItems
-      ( mapping : CollectionMapping )
-      : Executable
-      = ???
+        } 
   }
 
 }

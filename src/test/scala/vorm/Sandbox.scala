@@ -24,28 +24,48 @@ object Sandbox extends App {
   db.save(A( Seq(4) ))
   db.save(A( Seq() ))
 
-  def fetchIds ( value : Seq[_] ) : Set[Long]
-    = db.query[A].filterEquals("a", value).fetchAll().map{_.id}.toSet
 
-  fetchIds(Seq(2, 9, 3)).prettyString.trace()
+  db.query[A]
+    .filterEquals("a", Seq(2,9,3))
+    .fetchAll()
+    .map{_.id}.toSet
+    .prettyString.trace()
 
 
 //  db.connection.executeQuery(
 //    Statement(
 //      """
 //      SELECT
-//        a.p$id
+//        a.id
 //        FROM
-//          a$a
+//          a
 //          AS a
-//        WHERE ( a.i = 2 AND
-//                a.v = 3 ) OR
-//              ( ( a.i = 1 AND
-//                  a.v = 9 ) OR
-//                ( a.i = 0 AND
-//                  a.v = 2 ) )
-//        HAVING COUNT(DISTINCT a.i) = 3
+//        LEFT JOIN
+//          a$a
+//          AS b
+//          ON b.p$id = a.id
+//        LEFT JOIN
+//          a$a
+//          AS c
+//          ON c.p$id = a.id
+//        GROUP BY a.id
+//        HAVING COUNT(DISTINCT b.i) = 0 AND
+//               COUNT(DISTINCT c.i) = 0
 //      """
+////      """
+////      SELECT
+////        a.p$id
+////        FROM
+////          a$a
+////          AS a
+////        WHERE ( a.i = 2 AND
+////                a.v = 3 ) OR
+////              ( ( a.i = 1 AND
+////                  a.v = 9 ) OR
+////                ( a.i = 0 AND
+////                  a.v = 2 ) )
+////        HAVING COUNT(DISTINCT a.i) = 3
+////      """
 //    )
 //  ) .parseAndClose().prettyString.trace()
 

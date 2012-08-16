@@ -7,7 +7,6 @@ import query._
 // import Query._
 import mapping._
 import sql._
-import ddl._
 import extensions._
 
 object SqlComposition {
@@ -73,7 +72,7 @@ object SqlComposition {
       ( mapping : TableMapping )
       : Select
       = {
-
+        ???
       }
     // def apply
     //   ( query : Query.Query )

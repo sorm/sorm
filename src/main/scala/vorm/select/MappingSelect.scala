@@ -336,30 +336,68 @@ case class MappingSelect
 
             withSelect(equalsSelect, o)
           case Filter( NotEquals, m : SeqMapping, v : Seq[_] ) => 
-            lazy val equalsSelect
-              = MappingSelect(m.containerTableMapping.get).primaryKey
-                  .withFilter( Filter(Equals, m, v) )
 
-            copy(
-              joins
-                = joins :+
-                  Sql.Join( equalsSelect.sql, Some(newAlias),
-                            kind = Sql.JoinKind.Inner ),
-              where
-                = ( where ++
-                    equalsSelect.resultMappings.view
-                      .map{ _._2 }
-                      .map{ _.name }
-                      .map{ n =>
-                        Sql.Clause.NotEquals(
-                          Sql.Column(n, Some(newAlias)),
-                          Sql.Column(n, Some(alias(equalsSelect.mapping)))
-                        )
-                      } 
-                      .reduceOption{ Sql.Clause.Or } )
-                    .reduceOption{ o }
-            )
-            
+            lazy val cleanSelect
+              = MappingSelect(m.containerTableMapping.get)
+                  .primaryKey
+                  .withSkeletonTo(m)
+            lazy val countedSelect
+              = cleanSelect
+                  .copy(
+                    having
+                      = Some(
+                          Sql.Clause.NotEquals(
+                            Sql.Count(
+                              Sql.Column("i", cleanSelect.alias(m)) :: Nil,
+                              true
+                            ),
+                            Sql.Value(v.size)
+                          )
+                        ),
+                    groupBy
+                      = m.containerTableMapping.get.primaryKeyColumns.view
+                          .map{_.name}
+                          .map{Sql.Column(_, Some(Sql.alias(0)))}
+                          .toIndexedSeq
+                  )
+            lazy val filteredSelect
+              = v.view.zipWithIndex.foldLeft(cleanSelect){ case (s, (v, i)) =>
+                  s.withWhere( And( Filter( Equals, m.index, i ),
+                                    Filter( Equals, m.item, v ) ),
+                               Sql.Clause.Or )
+                }
+            lazy val notEqualsSelect
+              = filteredSelect.withSelect(countedSelect, Sql.Clause.Or)
+
+            withSelect(notEqualsSelect, o)
+
+
+
+
+            // lazy val equalsSelect
+            //   = MappingSelect(m.containerTableMapping.get).primaryKey
+            //       .withFilter( Filter(Equals, m, v) )
+
+            // copy(
+            //   joins
+            //     = joins :+
+            //       Sql.Join( equalsSelect.sql, Some(newAlias),
+            //                 kind = Sql.JoinKind.Inner ),
+            //   where
+            //     = ( where ++
+            //         equalsSelect.resultMappings.view
+            //           .map{ _._2 }
+            //           .map{ _.name }
+            //           .map{ n =>
+            //             Sql.Clause.NotEquals(
+            //               Sql.Column(n, Some(newAlias)),
+            //               Sql.Column(n, Some(alias(equalsSelect.mapping)))
+            //             )
+            //           } 
+            //           .reduceOption{ Sql.Clause.Or } )
+            //         .reduceOption{ o }
+            // )
+
           case Filter( Contains, m : SeqMapping, v ) => 
             withFilter1( Filter( Includes, m, Seq(v) ), o )
           case Filter( Includes, m : SeqMapping, v : Seq[_] ) =>

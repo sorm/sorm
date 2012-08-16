@@ -4,9 +4,9 @@ import vorm._
 import persisted._
 import structure._
 import query._
-// import Query._
 import mapping._
 import sql._
+import Sql._
 import extensions._
 
 object SqlComposition {

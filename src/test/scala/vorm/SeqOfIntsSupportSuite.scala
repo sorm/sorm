@@ -49,32 +49,41 @@ class SeqOfIntsSupportSuite extends FunSuite with ShouldMatchers {
   test("Differently ordered seq") {
     fetchEqualingIds(Seq(9, 2, 3)) should be === Set()
   }
-
-  test("Totally unmatching not equals query"){
-    fetchNotEqualingIds(Seq(10)) should (
-        contain (1l) and
-        contain (2l) and
-        contain (3l) and
-        contain (4l)
-      )
+  test("Equals on smaller size") {
+    pending
   }
-  test("Partially unmatching not equals query"){
+  test("Equals on bigger size") {
+    pending
+  }
+
+
+  test("Not equals on seq of same size"){
+    fetchNotEqualingIds(Seq(10)) should ( contain (3l) and contain (5l) )
+    fetchNotEqualingIds(Seq(12,3,4)) should contain (2l)
+  }
+  test("Not equals on partially matching seq"){
     fetchNotEqualingIds(Seq(3)) should contain (2l)
     fetchNotEqualingIds(Seq(2, 9)) should contain (2l)
   }
-  test("Completely unmatching not equals query"){
+  test("Not equals on totally matching seq"){
     fetchNotEqualingIds(Seq(2,9,3)) should not contain (2l)
   }
-  test("Empty seq not equals query"){
+  test("Not equals on empty seq"){
     fetchNotEqualingIds(Seq())
       .should(
         contain (2l) and contain(3l) and contain(5l) and
         not contain(1l) and not contain(4l)
       )
   }
-  test("Single item not equals query"){
-    fetchNotEqualingIds(Seq(4)) should(
-        not contain(3l)
+  test("Not equals on single item seq"){
+    fetchNotEqualingIds(Seq(4)) should not contain(3l)
+  }
+  test("Totally unmatching not equals query"){
+    fetchNotEqualingIds(Seq(10)) should (
+        contain (1l) and
+        contain (2l) and
+        contain (3l) and
+        contain (4l)
       )
   }
 

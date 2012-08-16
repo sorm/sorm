@@ -301,38 +301,40 @@ case class MappingSelect
           case Filter( HasSize, m : CollectionTableMapping, v : Int ) => 
             withSelect( MappingSelect(m).primaryKey.havingRowsCount(v), o )
           case Filter( Equals, m : SeqMapping, v : Seq[_] ) =>
-            lazy val seqSelect
-              = MappingSelect(
-                  m,
-                  m.containerTableColumns.map{ m -> _ },
-                  having
-                    = ( having ++
-                        Some(
+
+            lazy val cleanSelect
+              = MappingSelect(m.containerTableMapping.get)
+                  .primaryKey
+                  .withSkeletonTo(m)
+            lazy val countedSelect
+              = cleanSelect
+                  .copy(
+                    having
+                      = Some(
                           Sql.Clause.Equals(
                             Sql.Count(
-                              Sql.Column("i", Some(Sql.alias(0))) :: Nil,
-                              true ),
-                            Sql.Value(v.length)
+                              Sql.Column("i", cleanSelect.alias(m)) :: Nil,
+                              true
+                            ),
+                            Sql.Value(v.size)
                           )
-                        )
-                      ) reduceOption Sql.Clause.And,
-                  groupBy
-                    = m.containerTableColumns.view
-                        .map{_.name}
-                        .map{Sql.Column(_, Some(Sql.alias(0)))}
-                        .toIndexedSeq
-                )
-            withSelect(
-              v.view.zipWithIndex.foldLeft(seqSelect){ case (s, (v, i)) =>
-                  s.withWhere(
-                    And(
-                      Filter(Equals, m.index, i),
-                      Filter(Equals, m.item, v)
-                    ),
-                    Sql.Clause.Or
+                        ),
+                    groupBy
+                      = m.containerTableMapping.get.primaryKeyColumns.view
+                          .map{_.name}
+                          .map{Sql.Column(_, Some(Sql.alias(0)))}
+                          .toIndexedSeq
                   )
+
+            lazy val filteredSelect
+              = v.view.zipWithIndex.foldLeft(countedSelect){ case (s, (v, i)) =>
+                  s.withWhere( And( Filter( Equals, m.index, i ),
+                                    Filter( Equals, m.item, v ) ),
+                               Sql.Clause.Or )
                 }
-                .withSelect(seqSelect, Sql.Clause.And), 
+
+            withSelect(
+              filteredSelect.withSelect(countedSelect, Sql.Clause.And),
               o
             )
           case Filter( NotEquals, m : SeqMapping, v : Seq[_] ) => 

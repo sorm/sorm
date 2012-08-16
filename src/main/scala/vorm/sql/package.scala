@@ -14,6 +14,29 @@ package object sql {
       = s
   }
 
+  //  better be titled Query
+  trait Executable extends Renderable {
+    def what : Seq[SelectObject]
+    def from : From
+  }
+
+  case class Union
+    ( left : Executable,
+      right : Executable )
+    extends Executable
+    {
+      def rendering
+        = "( " + left.rendering.indent(2).trim + " )\n" +
+          "UNION\n" +
+          "( " + right.rendering.indent(2).trim + " )\n" 
+      def data
+        = left.data ++: right.data ++: Stream()
+      def what
+        = left.what
+      def from
+        = left.from
+    }
+
   case class Select
     ( what : Seq[SelectObject],
       from : From,
@@ -24,9 +47,9 @@ package object sql {
       orderBy : Seq[OrderByClause] = Nil,
       limit : Option[Int] = None,
       offset : Option[Int] = None )
-    extends FromObject 
+    extends Executable
+    with FromObject 
     with JoinObject
-    with Renderable
     {
       /**
        * Drops orphan joins

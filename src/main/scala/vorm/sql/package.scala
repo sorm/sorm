@@ -19,7 +19,10 @@ package object sql {
     def what : Seq[SelectObject]
     def from : From
   }
-
+  
+  /**
+   * A query uniting the results of inputs
+   */
   case class Union
     ( left : Executable,
       right : Executable )

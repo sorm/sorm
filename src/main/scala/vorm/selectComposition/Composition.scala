@@ -3,7 +3,7 @@ package vorm.selectComposition
 import vorm._
 import persisted._
 import structure._
-import query._
+import query.Query._
 import mapping._
 import sql._
 import ddl._
@@ -11,25 +11,29 @@ import extensions._
 
 object Composition {
 
-  def intersect
-    ( left : Select,
-      right : Select )
-    : Executable
-    = left narrow right
+  implicit class ExecutableExtensions 
+    ( self : Executable )
+    {
+      def intersect ( other : Executable )
+        = (self, other) match {
+            case ( self : Select, other : Select ) => self narrow other
+            case _ => ???
+          }
+      def union ( other : Executable )
+        = Union( self, other )
+    }
 
-  /**
-   * A query uniting the results of inputs
-   */
-  def union
-    ( left : Executable,
-      right : Executable )
-    : Executable
-    = Union( left, right )
+  object Select {
+    def apply
+      ( query : Query )
+      : Select
+      = ???
 
-  def countItems
-    ( m : CollectionMapping )
-    : Select
-    = ???
+    def countItems
+      ( mapping : CollectionMapping )
+      : Select
+      = ???
+  }
 
 
 }

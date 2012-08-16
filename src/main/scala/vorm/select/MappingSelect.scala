@@ -325,28 +325,20 @@ case class MappingSelect
                           .map{Sql.Column(_, Some(Sql.alias(0)))}
                           .toIndexedSeq
                   )
-
             lazy val filteredSelect
               = v.view.zipWithIndex.foldLeft(countedSelect){ case (s, (v, i)) =>
                   s.withWhere( And( Filter( Equals, m.index, i ),
                                     Filter( Equals, m.item, v ) ),
                                Sql.Clause.Or )
                 }
-
-            withSelect(
-              filteredSelect.withSelect(countedSelect, Sql.Clause.And),
-              o
-            )
-          case Filter( NotEquals, m : SeqMapping, v : Seq[_] ) => 
-            lazy val seqSelect
-              = MappingSelect(
-                  m,
-                  m.containerTableColumns.map{ m -> _ }
-                )
             lazy val equalsSelect
-              = seqSelect.withFilter(
-                  Filter(Equals, m, v)
-                )
+              = filteredSelect.withSelect(countedSelect, Sql.Clause.And)
+
+            withSelect(equalsSelect, o)
+          case Filter( NotEquals, m : SeqMapping, v : Seq[_] ) => 
+            lazy val equalsSelect
+              = MappingSelect(m.containerTableMapping.get).primaryKey
+                  .withFilter( Filter(Equals, m, v) )
 
             copy(
               joins
@@ -367,37 +359,7 @@ case class MappingSelect
                       .reduceOption{ Sql.Clause.Or } )
                     .reduceOption{ o }
             )
-
-
-          //   lazy val filterSelect
-          //     = v.view.zipWithIndex
-          //         .foldLeft(seqSelect){ case (s, (v, i)) =>
-          //           s .withWhere(
-          //               Or(
-          //                 Filter(NotEquals, m.index, i),
-          //                 Filter(NotEquals, m.item, v)
-          //               ),
-          //               Sql.Clause.Or
-          //             )
-          //         }
-
-          //   v .view
-          //     .zipWithIndex
-          //     .foldLeft( MappingSelect(m).primaryKey ){ case (s, (v, i)) =>
-          //       s .withClause(
-          //           Sql.Clause.NotEquals( 
-          //             Sql.Column("i", s.alias(m).some),
-          //             Sql.Value(i) ),
-          //           Sql.Clause.Or ) 
-          //         .withFilter(
-          //           Filter( NotEquals, m.item, v ),
-          //           Sql.Clause.Or )
-          //     }
-          //     .withSelect(
-          //       MappingSelect(m).primaryKey.havingRowsCount(
-          //         v.length, Sql.Clause.NotEquals ),
-          //       Sql.Clause.Or )
-          //     .as{ withSelect(_, o) }
+            
           case Filter( Contains, m : SeqMapping, v ) => 
             withFilter1( Filter( Includes, m, Seq(v) ), o )
           case Filter( Includes, m : SeqMapping, v : Seq[_] ) =>

@@ -23,10 +23,12 @@ object Query {
   }
 
   sealed trait Where
-  sealed trait Composite extends Where {
-    def left : Where
-    def right : Where
-  }
+  
+  sealed trait Composite 
+    extends Where {
+      def left : Where
+      def right : Where
+    }
   sealed case class And
     ( left : Where,
       right : Where )

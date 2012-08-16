@@ -301,7 +301,7 @@ case class MappingSelect
           case Filter( HasSize, m : CollectionTableMapping, v : Int ) => 
             withSelect( MappingSelect(m).primaryKey.havingRowsCount(v), o )
           case Filter( Equals, m : SeqMapping, v : Seq[_] ) =>
-            lazy val countSelect
+            lazy val seqSelect
               = MappingSelect(
                   m,
                   m.containerTableColumns.map{ m -> _ },
@@ -323,7 +323,7 @@ case class MappingSelect
                         .toIndexedSeq
                 )
             withSelect(
-              v.zipWithIndex.view.foldLeft(countSelect){ case (s, (v, i)) =>
+              v.view.zipWithIndex.foldLeft(seqSelect){ case (s, (v, i)) =>
                   s.withWhere(
                     And(
                       Filter(Equals, m.index, i),
@@ -332,27 +332,70 @@ case class MappingSelect
                     Sql.Clause.Or
                   )
                 }
-                .withSelect(countSelect, Sql.Clause.And)
-            , o
+                .withSelect(seqSelect, Sql.Clause.And), 
+              o
             )
           case Filter( NotEquals, m : SeqMapping, v : Seq[_] ) => 
-            v .view
-              .zipWithIndex
-              .foldLeft( MappingSelect(m).primaryKey ){ case (s, (v, i)) =>
-                s .withClause(
-                    Sql.Clause.NotEquals( 
-                      Sql.Column("i", s.alias(m).some),
-                      Sql.Value(i) ),
-                    Sql.Clause.Or ) 
-                  .withFilter(
-                    Filter( NotEquals, m.item, v ),
-                    Sql.Clause.Or )
-              }
-              .withSelect(
-                MappingSelect(m).primaryKey.havingRowsCount(
-                  v.length, Sql.Clause.NotEquals ),
-                Sql.Clause.Or )
-              .as{ withSelect(_, o) }
+            lazy val seqSelect
+              = MappingSelect(
+                  m,
+                  m.containerTableColumns.map{ m -> _ }
+                )
+            lazy val equalsSelect
+              = seqSelect.withFilter(
+                  Filter(Equals, m, v)
+                )
+
+            copy(
+              joins
+                = joins :+
+                  Sql.Join( equalsSelect.sql, Some(newAlias),
+                            kind = Sql.JoinKind.Inner ),
+              where
+                = ( where ++
+                    equalsSelect.resultMappings.view
+                      .map{ _._2 }
+                      .map{ _.name }
+                      .map{ n =>
+                        Sql.Clause.NotEquals(
+                          Sql.Column(n, Some(newAlias)),
+                          Sql.Column(n, Some(alias(equalsSelect.mapping)))
+                        )
+                      } 
+                      .reduceOption{ Sql.Clause.Or } )
+                    .reduceOption{ o }
+            )
+
+
+          //   lazy val filterSelect
+          //     = v.view.zipWithIndex
+          //         .foldLeft(seqSelect){ case (s, (v, i)) =>
+          //           s .withWhere(
+          //               Or(
+          //                 Filter(NotEquals, m.index, i),
+          //                 Filter(NotEquals, m.item, v)
+          //               ),
+          //               Sql.Clause.Or
+          //             )
+          //         }
+
+          //   v .view
+          //     .zipWithIndex
+          //     .foldLeft( MappingSelect(m).primaryKey ){ case (s, (v, i)) =>
+          //       s .withClause(
+          //           Sql.Clause.NotEquals( 
+          //             Sql.Column("i", s.alias(m).some),
+          //             Sql.Value(i) ),
+          //           Sql.Clause.Or ) 
+          //         .withFilter(
+          //           Filter( NotEquals, m.item, v ),
+          //           Sql.Clause.Or )
+          //     }
+          //     .withSelect(
+          //       MappingSelect(m).primaryKey.havingRowsCount(
+          //         v.length, Sql.Clause.NotEquals ),
+          //       Sql.Clause.Or )
+          //     .as{ withSelect(_, o) }
           case Filter( Contains, m : SeqMapping, v ) => 
             withFilter1( Filter( Includes, m, Seq(v) ), o )
           case Filter( Includes, m : SeqMapping, v : Seq[_] ) =>

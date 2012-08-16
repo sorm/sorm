@@ -1,10 +1,10 @@
 package vorm
 
 import vorm._
+import sql._
 import structure._
 import query.Query._
 import mapping._
-import vorm.{sql => Sql}
 import ddl._
 import jdbc._
 import extensions._

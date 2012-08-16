@@ -2,7 +2,7 @@ package vorm.sql
 
 import vorm._
 import extensions._
-
+import Sql._
 object ResultSetSelectDemo extends App {
   
   implicit def some ( x : String ) = Some(x)

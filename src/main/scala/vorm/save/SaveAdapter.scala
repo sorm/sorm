@@ -4,7 +4,6 @@ import vorm._
 import structure._
 import mapping._
 import jdbc._
-import sql._
 import save._
 import persisted._
 import extensions._

@@ -22,9 +22,9 @@ import com.codahale.logula.Logging
 import org.apache.log4j.Level
 
 @RunWith(classOf[JUnitRunner])
-class SeqOfSeqsOfIntsSupportSuite extends FunSuite with ShouldMatchers {
+class SeqOfSeqsSupportSuite extends FunSuite with ShouldMatchers {
 
-  import SeqOfSeqsOfIntsSupportSuite._
+  import SeqOfSeqsSupportSuite._
 
   Logging.configure { log =>
     log.level = Level.TRACE
@@ -40,8 +40,14 @@ class SeqOfSeqsOfIntsSupportSuite extends FunSuite with ShouldMatchers {
         not contain (5l)
       )
   }
+  test("A partially matching seq with container seq containing other seq of same size"){
+    db.query[A]
+      .filterEquals("a.item", Seq(2))
+      .fetchAll().view.map{_.id}.toSet
+      .should( not contain (2l) )
+  }
 }
-object SeqOfSeqsOfIntsSupportSuite {
+object SeqOfSeqsSupportSuite {
   case class A ( a : Seq[Seq[Int]] )
 
   val db = TestingInstance.h2( Entity[A]() )

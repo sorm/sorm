@@ -80,8 +80,10 @@ package object extensions {
           case x : Tuple2[_, _] =>
             ( x._1.prettyString + " ->\n" +
               x._2.prettyString )
+          case x : Product if x.productArity == 0 =>
+            x.productPrefix
           case x : Product =>
-            x.getClass.getName + ":\n" +
+            x.productPrefix + ":\n" +
             x.productIterator
               .map{ _.prettyString }
               .mkString("\n")

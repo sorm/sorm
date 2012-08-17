@@ -29,7 +29,7 @@ class Instance
           with SaveAdapter
           with DropAllTablesAdapter
 
-    protected val mappings
+    protected[vorm] val mappings
       = {
         val settings
           = entities.view.map{ e => e.reflection -> e.settings }.toMap

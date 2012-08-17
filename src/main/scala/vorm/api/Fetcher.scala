@@ -73,7 +73,7 @@ class Fetcher
     def filterRegex ( p : String, v : Any ) 
       = filter( p, v, Operator.Regex )
 
-    private def query( kind : Kind )
+    private[vorm] def query( kind : Kind )
       = Query(kind, queryMapping, queryWhere, queryOrder, queryLimit, queryOffset)
 
     def fetchAll()

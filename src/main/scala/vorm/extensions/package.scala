@@ -70,13 +70,21 @@ package object extensions {
 
     def prettyString
       : String
-      = x match {
+      = {
+        def indent ( s : String )
+          = {
+            val lines = s.lines.toStream
+            ( lines.headOption.map{"-  " + _} ++:
+              lines.tail.map{"|  " + _} )
+              .mkString("\n")
+          }
+        x match {
           case x : Traversable[_] =>
             x.stringPrefix + ":\n" +
             x.view
               .map{ _.prettyString }
+              .map{ indent }
               .mkString("\n")
-              .prependLines("|  ")
           case x : Tuple2[_, _] =>
             ( x._1.prettyString + " ->\n" +
               x._2.prettyString )
@@ -86,11 +94,12 @@ package object extensions {
             x.productPrefix + ":\n" +
             x.productIterator
               .map{ _.prettyString }
+              .map{ indent }
               .mkString("\n")
-              .prependLines("|  ")
-          case x => 
+          case x =>
             x.toString
         }
+      }
 
     def trying
       [ ResultT ]

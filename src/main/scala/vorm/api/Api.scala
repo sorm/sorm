@@ -20,8 +20,7 @@ trait Api {
 
   protected def connection
     : ConnectionAdapter with
-      SaveAdapter with
-      DropAllTablesAdapter
+      SaveAdapter
 
   protected def mappings
     : Map[Reflection, EntityMapping]

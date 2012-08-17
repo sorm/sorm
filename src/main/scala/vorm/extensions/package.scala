@@ -72,11 +72,11 @@ package object extensions {
       : String
       = x match {
           case x : Traversable[_] =>
-            x.getClass.getSimpleName + ":\n" +
+            x.stringPrefix + ":\n" +
             x.view
               .map{ _.prettyString }
               .mkString("\n")
-              .indent(2)
+              .prependLines("|  ")
           case x : Tuple2[_, _] =>
             ( x._1.prettyString + " ->\n" +
               x._2.prettyString )
@@ -87,7 +87,7 @@ package object extensions {
             x.productIterator
               .map{ _.prettyString }
               .mkString("\n")
-              .indent(2)
+              .prependLines("|  ")
           case x => 
             x.toString
         }

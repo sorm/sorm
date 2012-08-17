@@ -5,6 +5,11 @@ import extensions._
 
 object Sql {
 
+  trait ToSql[T] {
+    // TODO: change Renderable to be the common parent Sql type
+    def toSql ( t : T ) : Renderable
+  }
+
   def alias ( x : Int ) = ( 97 + x ).toChar.toString
 
   trait Renderable {

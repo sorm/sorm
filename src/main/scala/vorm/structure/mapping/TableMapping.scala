@@ -11,6 +11,70 @@ trait TableMapping
   extends Mapping
   with HasChildren
   {
+    lazy val skeletonSelect
+      = {
+        import sql.Sql._
+
+        def bindingsToContainer
+          ( m : TableMapping )
+          = m match {
+              case m : CollectionMapping =>
+                m.containerTableMappingForeignKey.get.bindings.view
+              case m => 
+                m.containerTableMapping.get.foreignKeys(m)
+                  .bindings.view.map{_.swap}
+            }
+
+        val containerTableMappings
+          = {
+            def containerTableMappings
+              ( m : Mapping )
+              : Stream[TableMapping]
+              = m.containerTableMapping
+                  .map{ m => m +: containerTableMappings(m) }
+                  .getOrElse(Stream())
+
+            containerTableMappings(this).toIndexedSeq
+          }
+
+        val aliases
+          = containerTableMappings.view
+              .zipWithIndex
+              .map{ case (v, i) => v -> (97 + i).toChar.toString }
+              .toMap
+
+        Select(
+          what
+            = containerTableMappings.last
+                .primaryKeyColumns.toStream
+                .map{_.name}
+                .map{Column(_, aliases(containerTableMappings.last))},
+          from
+            = From( Table(containerTableMappings.last.tableName), 
+                    Some( aliases(containerTableMappings.last) ) ),
+          join
+            = containerTableMappings.view
+                .reverse
+                .tail
+                .map{ m =>
+                  Join(
+                    Table(m.tableName),
+                    Some( aliases(m) ),
+                    bindingsToContainer(m)
+                      .map{ b =>
+                        Column(b._1, Some(aliases(m))) →
+                        Column(b._2, Some(aliases(m.containerTableMapping.get)))
+                      }
+                      .toList
+                  )
+                }
+
+        )
+      }
+
+
+
+
     /**
      * First descendant table mappings
      */

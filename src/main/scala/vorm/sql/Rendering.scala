@@ -7,7 +7,7 @@ import NewSql._
 
 object Rendering {
 
-  trait Rendering {
+  trait Renderable {
     def template : String
     def data : Seq[Any]
   }

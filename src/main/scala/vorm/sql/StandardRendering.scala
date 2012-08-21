@@ -12,9 +12,9 @@ object StandardRendering {
     ( s : String )
     = s
 
-  implicit class UnionRendering
-    [ L <: Statement <% Rendering,
-      R <: Statement <% Rendering ]
+  implicit class UnionRenderable
+    [ L <: Statement <% Renderable,
+      R <: Statement <% Renderable ]
     ( self : Union[L, R] )
     {
       def template 

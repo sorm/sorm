@@ -19,9 +19,10 @@ object Sql {
       ( s : String )
       = s
   }
+  trait Sql extends Renderable
 
   //  better be titled Query
-  trait Executable extends Renderable {
+  trait Executable extends Sql {
     def what : Seq[SelectObject]
     def from : From
   }
@@ -270,7 +271,7 @@ object Sql {
   case class OrderByClause
     ( what : Column,
       desc : Boolean = false )
-    extends Renderable
+    extends Sql
     {
       def rendering
         = if( desc ) what.rendering + " DESC"
@@ -279,8 +280,8 @@ object Sql {
         = what.data
     }
 
-  trait SelectObject extends Renderable
-  trait GroupByObject extends Renderable
+  trait SelectObject extends Sql
+  trait GroupByObject extends Sql
 
   case class Table
     ( name : String )
@@ -294,14 +295,14 @@ object Sql {
   case class From
     ( what : FromObject,
       as : Option[String] = None )
-    extends Renderable
+    extends Sql
     {
       def rendering
         = "FROM\n" +
           (
             ( what match {
                 case Table(name) ⇒ quote(name)
-                case r : Renderable ⇒ "(\n" + r.rendering.indent(2) + "\n)"
+                case r : Sql ⇒ "(\n" + r.rendering.indent(2) + "\n)"
               } ) +
             as.map{ "\nAS " + quote(_) }
               .getOrElse("")
@@ -315,14 +316,14 @@ object Sql {
       = apply( what, Some(as) )
   }
 
-  trait FromObject extends Renderable
+  trait FromObject extends Sql
 
   case class Join
     ( what : JoinObject,
       as : Option[String] = None,
       on : Seq[(Column, Column)] = Nil,
       kind : JoinKind = JoinKind.Left )
-    extends Renderable
+    extends Sql
     {
       def rendering
         = ( kind match {
@@ -333,7 +334,7 @@ object Sql {
           (
               ( what match {
                   case Table(name) ⇒ quote(name)
-                  case r : Renderable ⇒ "( " + r.rendering.indent(2).trim + " )"
+                  case r : Sql ⇒ "( " + r.rendering.indent(2).trim + " )"
                 } ) +
               as.map{ "\nAS " + quote(_) }
                 .getOrElse("") +
@@ -349,7 +350,7 @@ object Sql {
         = what.data
     }
 
-  trait JoinObject extends Renderable
+  trait JoinObject extends Sql
 
 
   trait JoinKind
@@ -398,8 +399,8 @@ object Sql {
         = Nil
     }
 
-  trait Clause extends Renderable
-  trait ConditionObject extends Renderable
+  trait Clause extends Sql
+  trait ConditionObject extends Sql
 
   object Clause {
     

@@ -7,26 +7,22 @@ import NewSql._
 
 object Rendering {
 
-  trait Rendering[T <: Sql] {
+  trait Renderer[T <: Sql] {
     def template ( self : T ) : String
     def data ( self : T ) : Seq[Any]
   }
 
-  trait RenderingSyntax {
+  trait RendererSyntax {
     implicit class SqlExtensions 
-      [ T <: Sql : Rendering ] 
+      [ T <: Sql : Renderer ]
       ( self : T ) 
       {
         def template
-          = implicitly[Rendering[T]].template(self)
+          = implicitly[Renderer[T]].template(self)
         def data
-          = implicitly[Rendering[T]].data(self)
+          = implicitly[Renderer[T]].data(self)
       }
   }
-
-  // case class Rendering
-  //   ( template : String, 
-  //     data : Seq[Any] )
 
 
 }

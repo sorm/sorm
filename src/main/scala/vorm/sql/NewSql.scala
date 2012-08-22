@@ -31,14 +31,14 @@ object NewSql {
     with FromObject 
     with JoinObject
 
-  sealed trait WhatObject extends Renderable
+  sealed trait WhatObject extends Sql
 
-  sealed trait GroupByObject extends Renderable
+  sealed trait GroupByObject extends Sql
 
   case class OrderByClause
     ( what : Column,
       desc : Boolean = false )
-    extends Renderable
+    extends Sql
 
 
   case class Table
@@ -49,16 +49,18 @@ object NewSql {
   case class From
     ( what : FromObject,
       as : Option[String] = None )
+    extends Sql
 
-  sealed trait FromObject extends Renderable
+  sealed trait FromObject extends Sql
 
   case class Join
     ( what : JoinObject,
       as : Option[String] = None,
       on : Seq[(Column, Column)] = Nil,
       kind : JoinKind = JoinKind.Left )
+    extends Sql
 
-  sealed trait JoinObject extends Renderable
+  sealed trait JoinObject extends Sql
 
   sealed trait JoinKind
   object JoinKind {
@@ -70,20 +72,20 @@ object NewSql {
   case class Column
     ( name : String,
       table : Option[String] = None )
-    extends SelectObject 
+    extends WhatObject
     with ConditionObject
     with GroupByObject
 
   case class Count
     ( what : Seq[Column],
       distinct : Boolean = false )
-    extends SelectObject 
+    extends WhatObject
     with ConditionObject
     with GroupByObject
 
 
-  trait Clause extends Renderable
-  trait ConditionObject extends Renderable
+  trait Clause extends Sql
+  trait ConditionObject extends Sql
 
 
 }

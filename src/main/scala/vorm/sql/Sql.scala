@@ -92,42 +92,36 @@ object Sql {
 
 
   sealed trait Condition[T] extends Sql
-  sealed case class CompositeCondition[T]
-    ( operator : CompositeOperator, left : Condition[T], right : Condition[T] )
+  sealed case class Or[T]
+    ( left : Condition[T], right : Condition[T] )
     extends Condition[T]
-  sealed case class BinaryCondition[T]
-    ( operator : BinaryOperator, left : T, right : T )
+  sealed case class And[T]
+    ( left : Condition[T], right : Condition[T] )
     extends Condition[T]
-  sealed case class UnaryCondition[T]
-    ( operator : UnaryOperator, left : T, right : T )
+  sealed case class IsNull[T]
+    ( what : T )
+    extends Condition[T]
+  sealed case class IsNotNull[T]
+    ( what : T )
+    extends Condition[T]
+  sealed case class Comparison[T]
+    ( operator : Operator, left : T, right : T )
     extends Condition[T]
 
-  sealed trait CompositeOperator extends Sql
-  object CompositeOperator {
-    case object And extends CompositeOperator
-    case object Or extends CompositeOperator
-  }
-
-  sealed trait UnaryOperator extends Sql
-  object UnaryOperator {
-    case object IsNull extends UnaryOperator
-    case object IsNotNull extends UnaryOperator
-  }
-
-  sealed trait BinaryOperator extends Sql
-  object BinaryOperator {
-    case object Equals extends BinaryOperator
-    case object NotEquals extends BinaryOperator
-    case object Larger extends BinaryOperator
-    case object LargerOrEquals extends BinaryOperator
-    case object Smaller extends BinaryOperator
-    case object SmallerOrEquals extends BinaryOperator
-    case object Like extends BinaryOperator
-    case object NotLike extends BinaryOperator
-    case object Regex extends BinaryOperator
-    case object NotRegex extends BinaryOperator
-    case object In extends BinaryOperator
-    case object NotIn extends BinaryOperator
+  sealed trait Operator extends Sql
+  object Operator {
+    case object Equals extends Operator
+    case object NotEquals extends Operator
+    case object Larger extends Operator
+    case object LargerOrEquals extends Operator
+    case object Smaller extends Operator
+    case object SmallerOrEquals extends Operator
+    case object Like extends Operator
+    case object NotLike extends Operator
+    case object Regex extends Operator
+    case object NotRegex extends Operator
+    case object In extends Operator
+    case object NotIn extends Operator
   }
 
 }

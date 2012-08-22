@@ -95,10 +95,12 @@ object StandardRendering {
                 .indent(2)
             case Column(name, table) =>
               table.map{quote(_) + "."}.getOrElse("") + quote(name)
+            case AllColumns(table) =>
+              table.map{quote(_) + "."}.getOrElse("") + "*"
             case Count(what, distinct) =>
               "COUNT(" +
               ( if( distinct ) "DISTINCT " else "" ) +
-              what.template +
+              what.view.map{ _.template }.mkString(", ") +
               ")"
             case Value(_) =>
               "?"

@@ -107,27 +107,22 @@ object Sql {
 
   sealed case class IsNull 
     [ T ]
-    ( what : T )
+    ( what : T, negative : Boolean = false )
     extends Condition[T]
 
-  sealed case class IsNotNull 
-    [ T ]
-    ( what : T )
-    extends Condition[T]
-
-  sealed case class Comparison 
+  sealed case class Comparison
     [ T ]
     ( operator : Operator, left : T, right : T )
     extends Condition[T]
 
   sealed trait Operator extends Sql
   object Operator {
-    case object Equals extends Operator
-    case object NotEquals extends Operator
+    case object Equal extends Operator
+    case object NotEqual extends Operator
     case object Larger extends Operator
-    case object LargerOrEquals extends Operator
+    case object LargerOrEqual extends Operator
     case object Smaller extends Operator
-    case object SmallerOrEquals extends Operator
+    case object SmallerOrEqual extends Operator
     case object Like extends Operator
     case object NotLike extends Operator
     case object Regex extends Operator

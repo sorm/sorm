@@ -77,7 +77,7 @@ object Sql {
     with GroupByObject
 
   sealed case class Count
-    ( what : Seq[Column],
+    ( what : Column,
       distinct : Boolean = false )
     extends Sql
     with WhatObject 
@@ -92,43 +92,41 @@ object Sql {
 
 
   sealed trait Condition 
-    [ T ] 
+    [ T <: Sql ] 
     extends Sql
 
-  sealed case class Or 
-    [ T ]
-    ( left : Condition[T], right : Condition[T] )
-    extends Condition[T]
-
-  sealed case class And 
-    [ T ]
-    ( left : Condition[T], right : Condition[T] )
+  sealed case class CompositeCondition 
+    [ T <: Sql ] 
+    ( left : Condition[T], right : Condition[T], operator : CompositeOperator )
     extends Condition[T]
 
   sealed case class IsNull 
-    [ T ]
+    [ T <: Sql ] 
     ( what : T, negative : Boolean = false )
     extends Condition[T]
 
   sealed case class Comparison
-    [ T ]
-    ( operator : Operator, left : T, right : T )
+    [ T <: Sql ] 
+    ( left : T, right : T, operator : ComparisonOperator )
     extends Condition[T]
 
-  sealed trait Operator extends Sql
-  object Operator {
-    case object Equal extends Operator
-    case object NotEqual extends Operator
-    case object Larger extends Operator
-    case object LargerOrEqual extends Operator
-    case object Smaller extends Operator
-    case object SmallerOrEqual extends Operator
-    case object Like extends Operator
-    case object NotLike extends Operator
-    case object Regex extends Operator
-    case object NotRegex extends Operator
-    case object In extends Operator
-    case object NotIn extends Operator
-  }
+
+  sealed trait CompositeOperator extends Sql
+  case object And extends CompositeOperator
+  case object Or extends CompositeOperator
+
+  sealed trait ComparisonOperator extends Sql
+  case object Equal extends ComparisonOperator
+  case object NotEqual extends ComparisonOperator
+  case object Larger extends ComparisonOperator
+  case object LargerOrEqual extends ComparisonOperator
+  case object Smaller extends ComparisonOperator
+  case object SmallerOrEqual extends ComparisonOperator
+  case object Like extends ComparisonOperator
+  case object NotLike extends ComparisonOperator
+  case object Regexp extends ComparisonOperator
+  case object NotRegexp extends ComparisonOperator
+  case object In extends ComparisonOperator
+  case object NotIn extends ComparisonOperator
 
 }

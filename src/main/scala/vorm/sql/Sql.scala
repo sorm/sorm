@@ -11,15 +11,19 @@ object Sql {
 
   sealed trait WhatObject extends Sql
   sealed trait FromObject extends Sql
-  sealed trait GroupByObject extends Sql
-  sealed trait WhereObject extends Sql
-  sealed trait HavingObject extends Sql
   sealed trait JoinObject extends Sql
+  sealed trait WhereObject extends Sql
+  sealed trait GroupByObject extends Sql
+  sealed trait HavingObject extends Sql
+  sealed trait CountObject extends Sql
 
   sealed case class Union
     ( left : Statement,
       right : Statement )
-    extends Statement
+    extends Sql
+    with Statement
+    with FromObject
+    with JoinObject
 
   sealed case class Select
     ( what : Seq[WhatObject],
@@ -31,7 +35,8 @@ object Sql {
       orderBy : Seq[OrderBy] = Nil,
       limit : Option[Int] = None,
       offset : Option[Int] = None )
-    extends Statement
+    extends Sql
+    with Statement
     with FromObject 
     with JoinObject
 
@@ -76,8 +81,15 @@ object Sql {
     with HavingObject
     with GroupByObject
 
+  sealed case class AllColumns
+    ( table : Option[String] = None )
+    extends Sql
+    with WhatObject
+    with GroupByObject
+    with CountObject
+
   sealed case class Count
-    ( what : Column,
+    ( what : Seq[CountObject],
       distinct : Boolean = false )
     extends Sql
     with WhatObject 

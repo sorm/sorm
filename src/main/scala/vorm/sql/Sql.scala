@@ -7,7 +7,10 @@ object Sql {
 
   sealed trait Sql
 
-  sealed trait Statement extends Sql
+  sealed trait Statement
+    extends Sql
+    with FromObject
+    with JoinObject
 
   sealed trait WhatObject extends Sql
   sealed trait FromObject extends Sql
@@ -22,8 +25,6 @@ object Sql {
       right : Statement )
     extends Sql
     with Statement
-    with FromObject
-    with JoinObject
 
   sealed case class Select
     ( what : Seq[WhatObject],
@@ -37,8 +38,6 @@ object Sql {
       offset : Option[Int] = None )
     extends Sql
     with Statement
-    with FromObject 
-    with JoinObject
 
   sealed case class OrderBy
     ( what : Column,

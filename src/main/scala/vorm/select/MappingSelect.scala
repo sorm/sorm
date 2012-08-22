@@ -4,7 +4,7 @@ import vorm._
 import persisted._
 import structure._
 import query._
-import sql._
+import sql.{OldSql => Sql}
 import mapping._
 import ddl._
 import extensions._

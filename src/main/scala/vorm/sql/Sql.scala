@@ -9,12 +9,12 @@ object Sql {
 
   sealed trait Statement extends Sql
 
-  sealed trait WhatObject 
-  sealed trait FromObject
-  sealed trait GroupByObject
-  sealed trait WhereObject
-  sealed trait HavingObject
-  sealed trait JoinObject
+  sealed trait WhatObject extends Sql
+  sealed trait FromObject extends Sql
+  sealed trait GroupByObject extends Sql
+  sealed trait WhereObject extends Sql
+  sealed trait HavingObject extends Sql
+  sealed trait JoinObject extends Sql
 
   sealed case class Union
     ( left : Statement,
@@ -91,14 +91,14 @@ object Sql {
     with HavingObject
 
 
-  sealed trait Condition [ T ] extends Sql
-  sealed case class CompositeCondition [ T ] 
-    ( operator : CompositeOperator, left : Condition, right : Condition )
+  sealed trait Condition[T] extends Sql
+  sealed case class CompositeCondition[T]
+    ( operator : CompositeOperator, left : Condition[T], right : Condition[T] )
     extends Condition[T]
-  sealed case class BinaryCondition [ T ] 
+  sealed case class BinaryCondition[T]
     ( operator : BinaryOperator, left : T, right : T )
     extends Condition[T]
-  sealed case class UnaryCondition [ T ] 
+  sealed case class UnaryCondition[T]
     ( operator : UnaryOperator, left : T, right : T )
     extends Condition[T]
 

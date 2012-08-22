@@ -26,7 +26,8 @@ object Composition {
             case (self : Union, _) =>
               self.toSelect narrow other
             case (self : Select, other : Select) 
-              if self.from == other.from &&
+              if self.what == other.what &&
+                 self.from == other.from &&
                  self.join == other.join &&
                  self.orderBy == other.orderBy &&
                  self.groupBy == other.groupBy &&

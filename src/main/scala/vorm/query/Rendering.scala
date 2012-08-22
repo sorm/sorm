@@ -5,31 +5,21 @@ import reflection._
 import structure._
 import mapping._
 import jdbc._
+import sql._
 import extensions._
 
+import Composition._
 import Query._
+import Operator._
 
 object Rendering {
 
-  // implicit class QueryToStatement ( self : Query ) {
-  //   def toStatement
-  //     = self.toSql.toStatement
-  // }
-
-  // implicit class QueryToSql ( self : Query ) {
-  //   def toSql
-  //     = self
-  //         .
-  // }
-
-  // implicit class QueryIdSql ( self : Query ) {
-  //   def idSql
-  //     = self.where.sql
-  // }
-
-  implicit class WhereIdSql ( self : Where ) {
-    def idSql
-      = ???
-  }
+  def idSql
+    ( where : Where )
+    : Sql.Statement
+    = where match {
+        case Filter(Equals, mapping : SeqMapping, value : Seq[_]) =>
+          ???
+      }
 
 }

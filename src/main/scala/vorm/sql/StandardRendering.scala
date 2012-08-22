@@ -12,19 +12,24 @@ object StandardRendering {
     ( s : String )
     = s
 
-  implicit class UnionRenderable
-    [ L <: Statement <% Renderable,
-      R <: Statement <% Renderable ]
-    ( self : Union[L, R] )
+  implicit class RenderableSql
+    ( self : Sql )
     {
       def template 
-        ( self : Union[L, R] )
-        = "( " + self.left.template.indent(2).trim + " )\n" +
-          "UNION\n" +
-          "( " + self.right.template.indent(2).trim + " )\n" 
+        = self match {
+            case Union(l, r) =>
+              "( " + l.template.indent(2).trim + " )\n" +
+              "UNION\n" +
+              "( " + r.template.indent(2).trim + " )\n" 
+            case Select(what, from, join, where, groupBy, having, orderBy, 
+                        limit, offset) =>
+              ???
+          }
       def data
-        ( self : Union[L, R] )
-        = self.left.data ++: self.right.data ++: Stream()
+        = self match {
+            case Union(l, r) =>
+              l.data ++: r.data ++: Stream()
+          }
     }
 
 }

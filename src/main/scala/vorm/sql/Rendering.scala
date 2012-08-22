@@ -3,7 +3,7 @@ package vorm.sql
 import vorm._
 import extensions._
 
-import NewSql._
+import Sql._
 
 object Rendering {
 

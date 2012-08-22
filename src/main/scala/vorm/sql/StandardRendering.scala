@@ -3,7 +3,7 @@ package vorm.sql
 import vorm._
 import extensions._
 
-import NewSql._
+import Sql._
 import Rendering._
 
 object StandardRendering {
@@ -14,14 +14,15 @@ object StandardRendering {
 
   implicit class RenderableSql
     ( self : Sql )
+    extends Renderable
     {
-      def template 
+      def template
         = self match {
             case Union(l, r) =>
               "( " + l.template.indent(2).trim + " )\n" +
               "UNION\n" +
-              "( " + r.template.indent(2).trim + " )\n" 
-            case Select(what, from, join, where, groupBy, having, orderBy, 
+              "( " + r.template.indent(2).trim + " )\n"
+            case Select(what, from, join, where, groupBy, having, orderBy,
                         limit, offset) =>
               ???
           }

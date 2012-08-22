@@ -48,7 +48,7 @@ trait TableMapping
             = containerTableMappings.last
                 .primaryKeyColumns.toStream
                 .map{_.name}
-                .map{Column(_, aliases(containerTableMappings.last))},
+                .map{Column(_, Some(aliases(containerTableMappings.last)))},
           from
             = From( Table(containerTableMappings.last.tableName), 
                     Some( aliases(containerTableMappings.last) ) ),

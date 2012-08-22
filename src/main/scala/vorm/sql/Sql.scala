@@ -91,20 +91,32 @@ object Sql {
     with HavingObject
 
 
-  sealed trait Condition[T] extends Sql
-  sealed case class Or[T]
+  sealed trait Condition 
+    [ T ] 
+    extends Sql
+
+  sealed case class Or 
+    [ T ]
     ( left : Condition[T], right : Condition[T] )
     extends Condition[T]
-  sealed case class And[T]
+
+  sealed case class And 
+    [ T ]
     ( left : Condition[T], right : Condition[T] )
     extends Condition[T]
-  sealed case class IsNull[T]
+
+  sealed case class IsNull 
+    [ T ]
     ( what : T )
     extends Condition[T]
-  sealed case class IsNotNull[T]
+
+  sealed case class IsNotNull 
+    [ T ]
     ( what : T )
     extends Condition[T]
-  sealed case class Comparison[T]
+
+  sealed case class Comparison 
+    [ T ]
     ( operator : Operator, left : T, right : T )
     extends Condition[T]
 

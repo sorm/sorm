@@ -1,23 +1,41 @@
-package vorm.selectComposition
+package vorm.sql
 
 import vorm._
-import persisted._
+import query.Query
 import structure._
-import query._
 import mapping._
-import sql._
-import Sql._
 import extensions._
+import Sql._
 
-object SqlComposition {
+object Composition {
 
+  def alias ( x : Int ) = ( 97 + x ).toChar.toString
+  
   implicit class SelectExtensions
     ( self : Select )
     {
-      def narrow 
-        ( other : Executable ) 
+      def narrow
+        ( other : Union )
         : Select
-        = narrow(Select(other))
+        = {
+          val newAlias = alias( self.join.size + 1 )
+          self.copy(
+            join
+              = self.join :+
+                Join(
+                  what = other,
+                  as = Some( newAlias ),
+                  on = other.what.asInstanceOf[Seq[Column]]
+                         .view
+                         .map{_.name}
+                         .map{n => 
+                           Column(n, Some(newAlias)) ->
+                           Column(n, self.from.as)
+                         },
+                  kind = JoinKind.Right
+                )
+          )
+        }
       /**
        * The `other` Select is required to have only columns and only those of
        * the `from` table in the `what` clause.
@@ -35,10 +53,10 @@ object SqlComposition {
               self.copy(
                 where
                   = ( self.where ++: other.where ++: Stream() )
-                      .reduceOption{ Clause.And },
+                      .reduceOption{ CompositeCondition(_, _, And) },
                 having
                   = ( self.having ++: other.having ++: Stream() )
-                      .reduceOption{ Clause.And }
+                      .reduceOption{ CompositeCondition(_, _, And) }
               )
             else {
               val newAlias = alias( self.join.size + 1 )
@@ -63,25 +81,32 @@ object SqlComposition {
             ???
     }
 
-  implicit class ExecutableExtensions 
-    ( self : Executable )
+
+  implicit class StatementExtensions 
+    ( self : Statement )
     {
-      def narrow
-        ( other : Executable )
-        : Executable
-        = Select(self) narrow other
-      def widen 
-        ( other : Executable )
-        : Executable
-        = Union(self, other)
+      def what : Seq[WhatObject]
+        = self match {
+            case self : Union => self.left.what
+            case self : Select => self.what
+          }
+      def narrow ( other : Statement )
+        = Select(self) narrow Select(other)
+      def widen ( other : Statement )
+        = (self, other) match {
+            case (self : Select, other : Select) =>
+              self widen other
+            case _ =>
+              Union(self, other)
+          }
     }
 
   object Select {
     def apply
-      ( executable : Executable )
+      ( s : Statement )
       : Select
-      = executable match {
-          case executable : Select => executable
+      = s match {
+          case s : Select => s
           case _ => ???
         }
     def apply
@@ -90,7 +115,7 @@ object SqlComposition {
       = resultSet(query.mapping)
           .narrow(
             query.where
-              .map{ Executable.primaryKey(query.mapping, _) }
+              .map{ Statement.primaryKey(query.mapping, _) }
               .map{ apply }
               .getOrElse( Select.primaryKey(query.mapping) )
               .copy(
@@ -114,10 +139,10 @@ object SqlComposition {
       }
   }
 
-  object Executable {
+  object Statement {
     // def apply
     //   ( query : Query.Query )
-    //   : Executable
+    //   : Statement
     //   = Select(
     //       from
     //         = From(Table(query.mapping.tableName), Some(Sql.alias(0))),
@@ -130,13 +155,13 @@ object SqlComposition {
 
     def countItems
       ( mapping : CollectionMapping )
-      : Executable
+      : Statement
       = ???
 
     def primaryKey
       ( mapping : TableMapping,
         where : Query.Where )
-      : Executable
+      : Statement
       = where match {
           case Query.And(l, r) => 
             primaryKey(mapping, l) narrow primaryKey(mapping, r)

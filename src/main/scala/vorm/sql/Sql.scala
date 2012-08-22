@@ -42,7 +42,8 @@ object Sql {
 
   sealed case class Table
     ( name : String )
-    extends FromObject 
+    extends Sql 
+    with FromObject 
     with JoinObject
 
   sealed case class From
@@ -90,7 +91,7 @@ object Sql {
     with HavingObject
 
 
-  sealed trait Condition [ T ]
+  sealed trait Condition [ T ] extends Sql
   sealed case class CompositeCondition [ T ] 
     ( operator : CompositeOperator, left : Condition, right : Condition )
     extends Condition[T]
@@ -101,19 +102,19 @@ object Sql {
     ( operator : UnaryOperator, left : T, right : T )
     extends Condition[T]
 
-  sealed trait CompositeOperator
+  sealed trait CompositeOperator extends Sql
   object CompositeOperator {
     case object And extends CompositeOperator
     case object Or extends CompositeOperator
   }
 
-  sealed trait UnaryOperator
+  sealed trait UnaryOperator extends Sql
   object UnaryOperator {
     case object IsNull extends UnaryOperator
     case object IsNotNull extends UnaryOperator
   }
 
-  sealed trait BinaryOperator
+  sealed trait BinaryOperator extends Sql
   object BinaryOperator {
     case object Equals extends BinaryOperator
     case object NotEquals extends BinaryOperator

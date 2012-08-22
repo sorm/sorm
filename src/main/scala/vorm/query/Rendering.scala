@@ -7,7 +7,9 @@ import mapping._
 import jdbc._
 import extensions._
 
-object ToStatement {
+import Query._
+
+object Rendering {
 
   // implicit class QueryToStatement ( self : Query ) {
   //   def toStatement

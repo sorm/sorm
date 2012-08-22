@@ -461,7 +461,7 @@ object Sql {
       extends Condition(
         right match {
           case Value(null) => "IS NOT"
-          case _ => "!="
+          case _ => "<>"
         }
       )
 

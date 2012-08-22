@@ -3,7 +3,7 @@ package vorm.sql
 import vorm._
 import extensions._
 
-import Sql._
+import OldSql._
 
 object PrimaryKeySelectDemo extends App {
   

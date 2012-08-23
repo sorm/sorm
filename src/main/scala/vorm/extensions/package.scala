@@ -85,9 +85,6 @@ package object extensions {
               .map{ _.prettyString }
               .map{ indent }
               .mkString("\n")
-          case x : Tuple2[_, _] =>
-            ( x._1.prettyString + " ->\n" +
-              x._2.prettyString )
           case x : Product if x.productArity == 0 =>
             x.productPrefix
           case x : Product =>

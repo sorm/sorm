@@ -17,10 +17,16 @@ object AbstractSql {
     extends Statement
 
   case class Select
-    ( expressions : Seq[Expression],
+    ( expressions : Seq[SelectExpression],
       condition : Option[Condition] = None,
       havingCount : Option[HavingCount] = None )
     extends Statement
+
+  // //  As a wrapper for any statement idea
+  // case class HavingCount
+  //   ( statement : Statement,
+  //     count : Int )
+  //   extends Statement
 
 
   case class HavingCount
@@ -28,12 +34,12 @@ object AbstractSql {
       count : Int )
 
 
-  trait Expression
+  trait SelectExpression
 
   case class Column
     ( name : String,
       table : Table )
-    extends Expression
+    extends SelectExpression
 
 
   trait Condition
@@ -49,10 +55,9 @@ object AbstractSql {
   case class Comparison
     ( table : Table,
       column : String,
-      operator : Sql.ComparisonOperator,
+      operator : Operator,
       value : Any )
     extends Condition
-
 
   case class Table
     ( name : String,
@@ -63,5 +68,18 @@ object AbstractSql {
       bindings : Seq[(String, String)] )
   
 
+  trait Operator
+  case object Equal extends Operator
+  case object NotEqual extends Operator
+  case object Larger extends Operator
+  case object LargerOrEqual extends Operator
+  case object Smaller extends Operator
+  case object SmallerOrEqual extends Operator
+  case object Like extends Operator
+  case object NotLike extends Operator
+  case object Regexp extends Operator
+  case object NotRegexp extends Operator
+  case object In extends Operator
+  case object NotIn extends Operator
 
 }

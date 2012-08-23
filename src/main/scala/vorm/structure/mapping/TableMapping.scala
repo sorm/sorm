@@ -25,13 +25,31 @@ trait TableMapping
           }
         )
     lazy val abstractSqlPrimaryKeySelect : AbstractSql.Select
-      = AbstractSql.Select(
-          primaryKeyColumns
-            .view
-            .map{_.name}
-            .map{AbstractSql.Column(_, abstractSqlTable)}
-            .toList
+      = {
+        val columns
+          = primaryKeyColumns.view
+              .map{_.name}
+              .map{AbstractSql.Column(_, abstractSqlTable)}
+              .toList
+        AbstractSql.Select(
+          expressions = columns,
+          groupBy = columns
         )
+      }
+    lazy val abstractSqlResultSetSelect : AbstractSql.Select
+      = AbstractSql.Select(
+          for { (m, c) <- resultSetMappings }
+          yield AbstractSql.Column(
+                  c.name,
+                  m.abstractSqlTable
+                )  
+        )
+    private def deepTableMappings : Set[TableMapping]
+      = nestedTableMappings.flatMap{_.deepTableMappings} + this
+
+    //  todo: when all columns will be refactored to valuemappings to change it to just mappings
+    lazy val resultSetMappings : Seq[(TableMapping, Column)]
+      = deepTableMappings.toSeq.flatMap{ m => m.columns.map{m -> _} }
 
 
     /**

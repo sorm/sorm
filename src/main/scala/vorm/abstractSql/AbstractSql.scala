@@ -16,9 +16,13 @@ object AbstractSql {
     extends Statement
 
   sealed case class Select
-    ( expressions : Seq[SelectExpression],
+    ( expressions : Seq[Column],
       condition : Option[Condition] = None,
-      havingCount : Option[HavingCount] = None )
+      havingCount : Option[HavingCount] = None,
+      groupBy : Seq[Column] = Nil,
+      order : Seq[Order] = Nil,
+      limit : Option[Int] = None,
+      offset : Int = 0 )
     extends Statement
 
   // //  As a wrapper for any statement idea
@@ -33,12 +37,15 @@ object AbstractSql {
       count : Int )
 
 
-  sealed trait SelectExpression
+  case class Order
+    ( table : Table,
+      column : String,
+      reverse : Boolean = false )
+
 
   sealed case class Column
     ( name : String,
       table : Table )
-    extends SelectExpression
 
 
   sealed trait Condition

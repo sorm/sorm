@@ -32,10 +32,9 @@ object Sandbox extends App {
   db.query[A]
     .filterEquals("b.seqOfSeqsOfInts.item", Seq(2,9,3))
     .query()
-    .where
-    .map{rootKeyStatement}
-    .map{sql}
-    .foreach{ s =>
+    .as{resultSetSelect}
+    .as{sql}
+    .tap{ s =>
       s.template.trace()
       s.data.toList.trace()
     }

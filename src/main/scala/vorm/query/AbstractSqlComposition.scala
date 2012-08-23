@@ -13,12 +13,39 @@ import vorm.abstractSql.Compositing._
 
 object AbstractSqlComposition {
 
-  def rootKeyStatement
+  def resultSetSelect
     ( query : Query )
     : AS.Statement
-    = ???
+    = ( ( query.mapping.abstractSqlResultSetSelect : AS.Statement ) /:
+        ( query.where.map{filtersStatement} ++
+          orderAndLimitSelect(query) reduceOption intersection )
+      ) {AS.Intersection}
 
-  def rootKeyStatement
+  def orderAndLimitSelect
+    ( query : Query )
+    : Option[AS.Statement]
+    = query
+        .satisfying{q => q.order.nonEmpty || q.limit.nonEmpty || q.offset != 0}
+        .map{ q =>
+          q.mapping.root.abstractSqlPrimaryKeySelect
+            .copy(
+              order
+                = q.order.map{ case Order(m, r) =>
+                    AS.Order(
+                      m.containerTableMapping.get.abstractSqlTable,
+                      m.columnName,
+                      r
+                    )
+                  },
+              limit
+                = q.limit,
+              offset
+                = q.offset
+            )
+        }
+
+
+  def filtersStatement
     ( where : Where )
     : AS.Statement
     = where match {
@@ -41,8 +68,8 @@ object AbstractSqlComposition {
                 .zipWithIndex
                 .map{ case (v, i) =>
                   intersection(
-                    rootKeyStatement(Filter(Equals, m.index, i)),
-                    rootKeyStatement(Filter(Equals, m.item, v))
+                    filtersStatement(Filter(Equals, m.index, i)),
+                    filtersStatement(Filter(Equals, m.item, v))
                   )
                 }
                 .reduceOption{union}

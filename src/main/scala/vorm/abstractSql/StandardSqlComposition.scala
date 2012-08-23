@@ -76,7 +76,7 @@ object StandardSqlComposition {
                 s.condition map condition
               },
             groupBy
-              = s.expressions.toStream
+              = s.groupBy.toStream
                   .collect{ case Column(n, t) => 
                     Sql.Column(n, Some(aliases(t))) 
                   },

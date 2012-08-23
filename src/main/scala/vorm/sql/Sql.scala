@@ -79,6 +79,7 @@ object Sql {
     with WhereObject
     with HavingObject
     with GroupByObject
+    with CountObject
 
   sealed case class AllColumns
     ( table : Option[String] = None )

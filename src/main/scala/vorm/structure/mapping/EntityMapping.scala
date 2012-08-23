@@ -68,7 +68,7 @@ sealed class EntityMapping
     def generatedIdColumn : Column
       = id.column
 
-    lazy val bindingsToContainer : Seq[(String, String)]
+    lazy val bindingsToContainerTable : Seq[(String, String)]
       = containerTableMapping
           .get.foreignKeys(this)
           .bindings.view.map{_.swap}

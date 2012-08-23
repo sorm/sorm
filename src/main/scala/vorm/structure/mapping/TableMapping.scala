@@ -13,14 +13,14 @@ trait TableMapping
   extends Mapping
   with HasChildren
   {
-    def bindingsToContainer : Seq[(String, String)]
+    def bindingsToContainerTable : Seq[(String, String)]
     lazy val abstractSqlTable : AbstractSql.Table
       = AbstractSql.Table(
           tableName,
           containerTableMapping.map{ c =>
             AbstractSql.Parent(
               c.abstractSqlTable,
-              bindingsToContainer
+              bindingsToContainerTable
             )
           }
         )

@@ -14,6 +14,7 @@ trait TableMapping
     lazy val skeletonSelect
       = {
         import sql.Sql._
+        import sql.Composition._
 
         def bindingsToContainer
           ( m : TableMapping )
@@ -25,7 +26,7 @@ trait TableMapping
                   .bindings.view.map{_.swap}
             }
 
-        val containerTableMappings
+        val tableMappings
           = {
             def containerTableMappings
               ( m : Mapping )
@@ -34,27 +35,26 @@ trait TableMapping
                   .map{ m => m +: containerTableMappings(m) }
                   .getOrElse(Stream())
 
-            containerTableMappings(this).toIndexedSeq
+            ( this +: containerTableMappings(this) ).reverse
           }
 
         val aliases
-          = containerTableMappings.view
+          = tableMappings.view
               .zipWithIndex
-              .map{ case (v, i) => v -> (97 + i).toChar.toString }
+              .map{ case (v, i) => v -> alias(i) }
               .toMap
 
         Select(
           what
-            = containerTableMappings.last
+            = tableMappings.head
                 .primaryKeyColumns.toStream
                 .map{_.name}
-                .map{Column(_, Some(aliases(containerTableMappings.last)))},
+                .map{Column(_, Some(aliases(tableMappings.head)))},
           from
-            = From( Table(containerTableMappings.last.tableName), 
-                    Some( aliases(containerTableMappings.last) ) ),
+            = From( Table(tableMappings.head.tableName),
+                    Some( aliases(tableMappings.head) ) ),
           join
-            = containerTableMappings.view
-                .reverse
+            = tableMappings.view
                 .tail
                 .map{ m =>
                   Join(
@@ -68,6 +68,7 @@ trait TableMapping
                       .toList
                   )
                 }
+                .toIndexedSeq
 
         )
       }

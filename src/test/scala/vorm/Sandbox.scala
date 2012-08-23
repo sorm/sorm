@@ -13,7 +13,7 @@ object Sandbox extends App {
 
   Logging.configure { log =>
     log.level = Level.TRACE
-    log.loggers("vorm.jdbc.ConnectionAdapter") = Level.TRACE
+    log.loggers("vorm.jdbc.ConnectionAdapter") = Level.DEBUG
   }
 
   case class A ( b : B )

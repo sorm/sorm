@@ -8,19 +8,19 @@ import AbstractSql._
 
 object Composition {
 
-  implicit class StatementCompositionOperations
-    ( self : Statement )
-    {
-      def intersect
-        ( other : Statement )
-        : Statement
-        = ???
-      def union
-        ( other : Statement )
-        : Statement
-        = ???
-      def toSelect
-        : Select
-        = ???
-    }
+  def intersection 
+    ( left : Statement, right : Statement ) 
+    : Statement
+    = ???
+  
+  def union 
+    ( left : Statement, right : Statement ) 
+    : Statement
+    = ???
+  
+  def select 
+    ( statement : Statement ) 
+    : Select
+    = ???
+
 }

@@ -24,15 +24,17 @@ object Composition {
     : AbstractSql.Statement
     = where match {
         case Filter(Equals, m : SeqMapping, v : Seq[_]) =>
-          AbstractSql.Intersection(
+          intersection(
             v.view
               .zipWithIndex
               .map{ case (v, i) =>
-                rootKeyStatement(Filter(Equals, m.index, i)) intersect
-                rootKeyStatement(Filter(Equals, m.item, v))
+                intersection(
+                  rootKeyStatement(Filter(Equals, m.index, i)),
+                  rootKeyStatement(Filter(Equals, m.item, v))
+                )
               }
-              .reduceOption{ _ union _ }
-              .map{ _.toSelect }
+              .reduceOption{union}
+              .map{select}
               .getOrElse( m.root.abstractSqlPrimaryKeySelect )
               .copy(
                 havingCount

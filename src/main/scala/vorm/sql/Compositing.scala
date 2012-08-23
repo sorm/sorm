@@ -4,11 +4,11 @@ import vorm._
 import extensions._
 import Sql._
 
-object Composition {
+object Compositing {
 
   def alias ( x : Int ) = ( 97 + x ).toChar.toString
   
-  implicit class StatementCompositionOperations
+  implicit class StatementCompositingOperations
     ( self : Statement )
     {
       def what : Seq[WhatObject]

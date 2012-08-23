@@ -9,9 +9,9 @@ import vorm.extensions._
 import Query._
 import Operator._
 import vorm.abstractSql.{AbstractSql => AS}
-import vorm.abstractSql.Composition._
+import vorm.abstractSql.Compositing._
 
-object Composition {
+object AbstractSqlComposition {
 
   def rootKeyStatement
     ( query : Query )

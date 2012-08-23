@@ -5,9 +5,9 @@ import sql._
 import extensions._
 
 import AbstractSql._
-import sql.Composition._
+import sql.Compositing._
 
-object ToSql {
+object SqlComposition {
 
   def sql
     ( statement : Statement )
@@ -106,9 +106,9 @@ object ToSql {
         = {
           def conditionTables ( condition : Condition ) : Seq[Table]
             = condition match {
-                case And(l, r) => 
+                case And(l, r) =>
                   conditionTables(l) ++ conditionTables(r)
-                case Or(l, r) => 
+                case Or(l, r) =>
                   conditionTables(l) ++ conditionTables(r)
                 case Comparison(t, _, _, _) =>
                   t +: Stream()
@@ -121,7 +121,7 @@ object ToSql {
 
       lazy val tableParents : Map[Table, Seq[Table]]
         = references
-            .zipBy{ 
+            .zipBy{
               _.unfold{ _.parent.map{_.table}.map{t => t -> t } }
             }
             .toMap

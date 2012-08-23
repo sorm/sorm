@@ -6,7 +6,7 @@ import mapping._
 
 import AbstractSql._
 
-object Composition {
+object Compositing {
 
   def intersection 
     ( left : Statement, right : Statement ) 

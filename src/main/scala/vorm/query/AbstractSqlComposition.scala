@@ -17,8 +17,8 @@ object AbstractSqlComposition {
     ( query : Query )
     : AS.Statement
     = ( ( query.mapping.abstractSqlResultSetSelect : AS.Statement ) /:
-        ( query.where.map{filtersStatement} ++
-          orderAndLimitSelect(query) reduceOption intersection )
+        ( orderAndLimitSelect(query) ++
+          query.where.map{filtersStatement} reduceOption intersection )
       ) {AS.Intersection}
 
   def orderAndLimitSelect

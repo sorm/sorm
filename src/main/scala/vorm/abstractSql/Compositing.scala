@@ -3,6 +3,7 @@ package vorm.abstractSql
 import vorm._
 import structure._
 import mapping._
+import extensions._
 
 import AbstractSql._
 

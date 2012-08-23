@@ -13,13 +13,13 @@ object Sandbox extends App {
 
   Logging.configure { log =>
     log.level = Level.TRACE
-    log.loggers("vorm.jdbc.ConnectionAdapter") = Level.DEBUG
+    log.loggers("vorm.jdbc.ConnectionAdapter") = Level.TRACE
   }
 
   case class A ( b : B )
   case class B ( seqOfSeqsOfInts : Seq[Seq[Int]])
 
-  val db = TestingInstance.h2( Entity[A](), Entity[B]() )
+  val db = TestingInstance.simulator( Entity[A](), Entity[B]() )
 //  db.save(A( Seq() ))
 //  db.save(A( Seq(2, 9, 3) ))
 //  db.save(A( Seq(4) ))

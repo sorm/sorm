@@ -26,11 +26,13 @@ object Sandbox extends App {
 //  db.save(A( Seq() ))
 
   import vorm.query.Composition._
+  import vorm.abstractSql.ToSql._
   db.query[A]
     .filterEquals("b.seqOfSeqsOfInts.item", Seq(2,9,3))
     .query()
     .where
     .map{rootKeyStatement}
+    .map{sql}
     .prettyString.trace()
 
 

@@ -21,6 +21,8 @@ object Composition {
             havingCount
               = l.havingCount orElse r.havingCount
           )
+        case (l, r) =>
+          Intersection(l, r)
       }
   
   def union 
@@ -36,6 +38,8 @@ object Composition {
             havingCount
               = l.havingCount orElse r.havingCount
           )
+        case (l, r) =>
+          Union(l, r)
       }
   
   def select 

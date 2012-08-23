@@ -1,4 +1,4 @@
-package vorm.query
+package vorm.abstractSql
 
 import vorm._
 import sql._
@@ -19,7 +19,7 @@ object AbstractSql {
   case class Select
     ( expressions : Seq[Expression],
       condition : Option[Condition] = None,
-      havingRows : Option[HavingCount] = None )
+      havingCount : Option[HavingCount] = None )
     extends Statement
 
 
@@ -33,6 +33,7 @@ object AbstractSql {
   case class Column
     ( name : String,
       table : Table )
+    extends Expression
 
 
   trait Condition

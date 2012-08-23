@@ -157,8 +157,10 @@ object StandardRendering {
             case Union(l, r) =>
               l.data ++: r.data
             case Select(what, from, join, where, groupBy, having, orderBy, limit, offset) =>
-              ( what ++: from +: join ++: where ++: groupBy ++: having ++: orderBy ++: Nil )
+              ( what ++: from +: join ++: where ++: groupBy ++: having ++: orderBy )
+                .view
                 .flatMap{_.data}
+                .toStream
             case OrderBy(what, desc) =>
               what.data
             case Table(_) =>

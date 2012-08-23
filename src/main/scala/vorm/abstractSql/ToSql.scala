@@ -37,7 +37,7 @@ object ToSql {
               = Sql.From(Sql.Table(tables.head.name), 
                          Some(aliases(tables.head))),
             join
-              = tables.view.tail
+              = tables.toStream.tail
                   .map{ t => 
                     Sql.Join(
                       Sql.Table(t.name),

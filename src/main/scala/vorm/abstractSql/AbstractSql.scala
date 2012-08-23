@@ -1,7 +1,6 @@
 package vorm.abstractSql
 
 import vorm._
-import sql._
 
 object AbstractSql {
 

@@ -1,12 +1,7 @@
 package vorm.query
 
 import vorm._
-import reflection._
-import structure._
-import mapping._
-import persisted._
 import sql._
-import extensions._
 
 object AbstractSql {
 

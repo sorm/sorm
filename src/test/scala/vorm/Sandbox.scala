@@ -31,6 +31,7 @@ object Sandbox extends App {
 
   db.query[A]
     .filterEquals("b.seqOfSeqsOfInts.item", Seq(2,9,3))
+    .order("b.id")
     .query()
     .as{resultSetSelect}
     .as{sql}

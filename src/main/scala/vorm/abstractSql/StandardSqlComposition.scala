@@ -77,7 +77,7 @@ object StandardSqlComposition {
               },
             groupBy
               = s.groupBy.toStream
-                  .collect{ case Column(n, t) => 
+                  .map{ case Column(n, t) => 
                     Sql.Column(n, Some(aliases(t))) 
                   },
             having
@@ -89,7 +89,16 @@ object StandardSqlComposition {
                         ),
                         Sql.Value(c),
                         Sql.Equal
-                      )
+                      ),
+            orderBy
+              = s.order
+                  .map{ case Order(t, n, r) =>
+                    Sql.OrderBy( Sql.Column(n, Some(aliases(t))), r ) 
+                  },
+            limit
+              = s.limit,
+            offset
+              = s.offset.satisfying{ _ != 0 }
           )
       }
 

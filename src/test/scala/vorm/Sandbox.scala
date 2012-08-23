@@ -26,7 +26,7 @@ object Sandbox extends App {
 //  db.save(A( Seq() ))
 
   import vorm.query.AbstractSqlComposition._
-  import vorm.abstractSql.SqlComposition._
+  import vorm.abstractSql.StandardSqlComposition._
   import vorm.sql.StandardRendering._
 
   db.query[A]

@@ -7,71 +7,82 @@ import select._
 import structure._
 import extensions._
 
+import abstractSql._
+
 trait TableMapping
   extends Mapping
   with HasChildren
   {
-    lazy val skeletonSelect
-      = {
-        import sql.Sql._
-        import sql.Composition._
-
-        def bindingsToContainer
-          ( m : TableMapping )
-          = m match {
-              case m : CollectionMapping =>
-                m.containerTableMappingForeignKey.get.bindings.view
-              case m => 
-                m.containerTableMapping.get.foreignKeys(m)
-                  .bindings.view.map{_.swap}
-            }
-
-        val tableMappings
-          = {
-            def containerTableMappings
-              ( m : Mapping )
-              : Stream[TableMapping]
-              = m.containerTableMapping
-                  .map{ m => m +: containerTableMappings(m) }
-                  .getOrElse(Stream())
-
-            ( this +: containerTableMappings(this) ).reverse
-          }
-
-        val aliases
-          = tableMappings.view
-              .zipWithIndex
-              .map{ case (v, i) => v -> alias(i) }
-              .toMap
-
-        Select(
-          what
-            = tableMappings.head
-                .primaryKeyColumns.toStream
-                .map{_.name}
-                .map{Column(_, Some(aliases(tableMappings.head)))},
-          from
-            = From( Table(tableMappings.head.tableName),
-                    Some( aliases(tableMappings.head) ) ),
-          join
-            = tableMappings.view
-                .tail
-                .map{ m =>
-                  Join(
-                    Table(m.tableName),
-                    Some( aliases(m) ),
-                    bindingsToContainer(m)
-                      .map{ b =>
-                        Column(b._1, Some(aliases(m))) →
-                        Column(b._2, Some(aliases(m.containerTableMapping.get)))
-                      }
-                      .toList
-                  )
-                }
-                .toIndexedSeq
-
+    lazy val abstractSqlTable : AbstractSql.Table
+      = ???
+    lazy val abstractSqlPrimaryKeySelect : AbstractSql.Select
+      = AbstractSql.Select(
+          primaryKeyColumns
+            .view
+            .map{_.name}
+            .map{AbstractSql.Column(_, abstractSqlTable)}
+            .toList
         )
-      }
+      // = {
+      //   import sql.Sql._
+      //   import sql.Composition._
+
+      //   def bindingsToContainer
+      //     ( m : TableMapping )
+      //     = m match {
+      //         case m : CollectionMapping =>
+      //           m.containerTableMappingForeignKey.get.bindings.view
+      //         case m => 
+      //           m.containerTableMapping.get.foreignKeys(m)
+      //             .bindings.view.map{_.swap}
+      //       }
+
+      //   val tableMappings
+      //     = {
+      //       def containerTableMappings
+      //         ( m : Mapping )
+      //         : Stream[TableMapping]
+      //         = m.containerTableMapping
+      //             .map{ m => m +: containerTableMappings(m) }
+      //             .getOrElse(Stream())
+
+      //       ( this +: containerTableMappings(this) ).reverse
+      //     }
+
+      //   val aliases
+      //     = tableMappings.view
+      //         .zipWithIndex
+      //         .map{ case (v, i) => v -> alias(i) }
+      //         .toMap
+
+      //   Select(
+      //     what
+      //       = tableMappings.head
+      //           .primaryKeyColumns.toStream
+      //           .map{_.name}
+      //           .map{Column(_, Some(aliases(tableMappings.head)))},
+      //     from
+      //       = From( Table(tableMappings.head.tableName),
+      //               Some( aliases(tableMappings.head) ) ),
+      //     join
+      //       = tableMappings.view
+      //           .tail
+      //           .map{ m =>
+      //             Join(
+      //               Table(m.tableName),
+      //               Some( aliases(m) ),
+      //               bindingsToContainer(m)
+      //                 .map{ b =>
+      //                   Column(b._1, Some(aliases(m))) →
+      //                   Column(b._2, Some(aliases(m.containerTableMapping.get)))
+      //                 }
+      //                 .toList
+      //             )
+      //           }
+      //           .toIndexedSeq
+
+      //   )
+      // }
 
 
 

@@ -16,19 +16,22 @@ object Sandbox extends App {
     log.loggers("vorm.jdbc.ConnectionAdapter") = Level.TRACE
   }
 
-  case class A ( a : Seq[Int] )
+  case class A ( b : B )
+  case class B ( seqOfSeqsOfInts : Seq[Seq[Int]])
 
-  val db = TestingInstance.h2( Entity[A]() )
-  db.save(A( Seq() ))
-  db.save(A( Seq(2, 9, 3) ))
-  db.save(A( Seq(4) ))
-  db.save(A( Seq() ))
+  val db = TestingInstance.h2( Entity[A](), Entity[B]() )
+//  db.save(A( Seq() ))
+//  db.save(A( Seq(2, 9, 3) ))
+//  db.save(A( Seq(4) ))
+//  db.save(A( Seq() ))
 
+  import vorm.query.Rendering._
 
   db.query[A]
-    .filterEquals("a", Seq(2,9,3))
-    .fetchAll()
-    .map{_.id}.toSet
+    .filterEquals("b.seqOfSeqsOfInts.item", Seq(2,9,3))
+    .query()
+    .where
+    .map{idSql}
     .prettyString.trace()
 
 

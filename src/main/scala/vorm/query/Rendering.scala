@@ -19,7 +19,7 @@ object Rendering {
     : Sql.Statement
     = where match {
         case Filter(Equals, mapping : SeqMapping, value : Seq[_]) =>
-          ???
+          mapping.skeletonSelect
       }
 
 }

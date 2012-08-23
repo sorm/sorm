@@ -17,56 +17,18 @@ object ToSql {
           Sql.Union( sql(l), sql(r) )
         case Intersection(l, r) => 
           sql(l) narrow sql(r)
-        case Select(expressions, condition, havingCount) =>
+        case s : Select =>
 
-          lazy val tables : Set[Table]
-            = {
-              def conditionTables ( condition : Condition ) : Seq[Table]
-                = condition match {
-                    case And(l, r) => 
-                      conditionTables(l) ++ conditionTables(r)
-                    case Or(l, r) => 
-                      conditionTables(l) ++ conditionTables(r)
-                    case Comparison(t, _, _, _) =>
-                      t +: Stream()
-                  }
-              Set() ++
-              expressions.view.collect{ case Column(n, t) => t } ++
-              condition.toSeq.flatMap{conditionTables} ++
-              havingCount.map{_.table} 
-            }
+          val tables = allTables(s)
 
-          lazy val tableParents : Map[Table, Seq[Table]]
-            = tables
-                .zipBy{
-                  _.unfold{
-                    _.parent.map{_.table}.map{t => t -> t }
-                  }
-                }
-                .toMap
-
-          lazy val leafTables : Set[Table]
-            = tables
-                .filter{ t => 
-                  tables.exists{ ! tableParents(_).contains(t) }
-                }
-
-          lazy val allTables : Seq[Table]
-            = tables
-                .foldRight( Stream[Table]() ){ (t, acc) =>
-                  tableParents(t) ++: acc
-                }
-                .reverse
-                .distinct
-
-          lazy val aliases : Map[Table, String]
-            = allTables.view.zipWithIndex
+          val aliases : Map[Table, String]
+            = tables.view.zipWithIndex
                 .map{ case(t, i) => t -> alias(i) }
                 .toMap
 
           Sql.Select(
             what
-              = expressions.view
+              = s.expressions.view
                   .collect{ 
                     case Column(n, t) => 
                       Sql.Column(n, Some(aliases(t)))
@@ -75,7 +37,7 @@ object ToSql {
               = Sql.From(Sql.Table(tables.head.name), 
                          Some(aliases(tables.head))),
             join
-              = allTables.view.tail
+              = tables.view.tail
                   .map{ t => 
                     Sql.Join(
                       Sql.Table(t.name),
@@ -86,9 +48,90 @@ object ToSql {
                           Sql.Column(r, Some(aliases(t.parent.get.table)))
                         }
                     )
-                  }
+                  },
+            where
+              = {
+                def condition ( c : Condition ) : Sql.Condition[Sql.WhereObject]
+                  = c match {
+                      case And(l, r) => 
+                        Sql.CompositeCondition( condition(l), condition(r), Sql.And )
+                      case Or(l, r) => 
+                        Sql.CompositeCondition( condition(l), condition(r), Sql.Or )
+                      case Comparison(t, c, Equal, null) =>
+                        Sql.IsNull( 
+                          Sql.Column(c, Some(aliases(t)))
+                        )
+                      case Comparison(t, c, NotEqual, null) =>
+                        Sql.IsNull(
+                          Sql.Column(c, Some(aliases(t))), true
+                        )
+                      case Comparison(t, c, o, v) =>
+                        Sql.Comparison(
+                          Sql.Column(c, Some(aliases(t))),
+                          Sql.Value(v),
+                          sql(o)
+                        )
+                    }
+                s.condition map condition
+              }
           )
       }
 
+  def sql
+    ( operator : Operator )
+    : Sql.ComparisonOperator
+    = operator match {
+        case Equal          => Sql.Equal
+        case NotEqual       => Sql.NotEqual 
+        case Larger         => Sql.Larger 
+        case LargerOrEqual  => Sql.LargerOrEqual 
+        case Smaller        => Sql.Smaller 
+        case SmallerOrEqual => Sql.SmallerOrEqual 
+        case Like           => Sql.Like 
+        case NotLike        => Sql.NotLike 
+        case Regexp         => Sql.Regexp 
+        case NotRegexp      => Sql.NotRegexp 
+        case In             => Sql.In 
+        case NotIn          => Sql.NotIn 
+      }
+
+  /**
+   * A helper that extracts all referred and intermediate table references
+   */
+  def allTables
+    ( select : Select )
+    : Seq[Table]
+    = {
+      lazy val references : Set[Table]
+        = {
+          def conditionTables ( condition : Condition ) : Seq[Table]
+            = condition match {
+                case And(l, r) => 
+                  conditionTables(l) ++ conditionTables(r)
+                case Or(l, r) => 
+                  conditionTables(l) ++ conditionTables(r)
+                case Comparison(t, _, _, _) =>
+                  t +: Stream()
+              }
+          Set() ++
+          select.expressions.view.collect{ case Column(n, t) => t } ++
+          select.condition.toSeq.flatMap{conditionTables} ++
+          select.havingCount.map{_.table}
+        }
+
+      lazy val tableParents : Map[Table, Seq[Table]]
+        = references
+            .zipBy{ 
+              _.unfold{ _.parent.map{_.table}.map{t => t -> t } }
+            }
+            .toMap
+
+      references
+        .foldRight( Stream[Table]() ){ (t, acc) =>
+          t +: tableParents(t) ++: acc
+        }
+        .reverse
+        .distinct
+    }
 
 }

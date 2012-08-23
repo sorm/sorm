@@ -29,7 +29,7 @@ object StandardSqlComposition {
 
           Sql.Select(
             what
-              = s.expressions.view
+              = s.expressions.toStream
                   .collect{ 
                     case Column(n, t) => 
                       Sql.Column(n, Some(aliases(t)))
@@ -74,7 +74,22 @@ object StandardSqlComposition {
                         )
                     }
                 s.condition map condition
-              }
+              },
+            groupBy
+              = s.expressions.toStream
+                  .collect{ case Column(n, t) => 
+                    Sql.Column(n, Some(aliases(t))) 
+                  },
+            having
+              = for { HavingCount(t, c) <- s.havingCount }
+                yield Sql.Comparison(
+                        Sql.Count(
+                          Sql.AllColumns( Some(aliases(t)) ) :: Nil, 
+                          true
+                        ),
+                        Sql.Value(c),
+                        Sql.Equal
+                      )
           )
       }
 

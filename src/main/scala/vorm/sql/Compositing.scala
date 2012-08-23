@@ -14,6 +14,7 @@ object Compositing {
       def what : Seq[WhatObject]
         = self match {
             case self : Union => self.left.what
+            case self : Select => self.what
           }
       /**
        * The `other` Select is required to have only columns and only those of
@@ -58,7 +59,7 @@ object Compositing {
                                Column(n, Some(newAlias)) ->
                                Column(n, self.from.as)
                              },
-                      kind = JoinKind.Right
+                      kind = JoinKind.Inner
                     )
               )
           } 

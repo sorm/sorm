@@ -6,69 +6,71 @@ import sql._
 object AbstractSql {
 
   
-  trait Statement
+  sealed trait Statement
 
-  case class Union
+  sealed case class Union
     ( left : Statement, right : Statement )
     extends Statement
 
-  case class Intersection
+  sealed case class Intersection
     ( left : Statement, right : Statement )
     extends Statement
 
-  case class Select
+  sealed case class Select
     ( expressions : Seq[SelectExpression],
       condition : Option[Condition] = None,
       havingCount : Option[HavingCount] = None )
     extends Statement
 
   // //  As a wrapper for any statement idea
-  // case class HavingCount
+  // sealed case class HavingCount
   //   ( statement : Statement,
   //     count : Int )
   //   extends Statement
 
 
-  case class HavingCount
+  sealed case class HavingCount
     ( table : Table,
       count : Int )
 
 
-  trait SelectExpression
+  sealed trait SelectExpression
 
-  case class Column
+  sealed case class Column
     ( name : String,
       table : Table )
     extends SelectExpression
 
 
-  trait Condition
+  sealed trait Condition
 
-  case class And
+  sealed case class And
     ( left : Condition, right : Condition )
     extends Condition
   
-  case class Or
+  sealed case class Or
     ( left : Condition, right : Condition )
     extends Condition
 
-  case class Comparison
+  sealed case class Comparison
     ( table : Table,
       column : String,
       operator : Operator,
       value : Any )
     extends Condition
 
-  case class Table
+
+  sealed case class Table
     ( name : String,
       parent : Option[Parent] )
+    
 
-  case class Parent
+  sealed case class Parent
     ( table : Table,
       bindings : Seq[(String, String)] )
   
 
-  trait Operator
+  sealed trait Operator
   case object Equal extends Operator
   case object NotEqual extends Operator
   case object Larger extends Operator

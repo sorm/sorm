@@ -1,13 +1,12 @@
-package vorm.query
+package vorm.abstractSql
 
 import vorm.structure.mapping._
 import vorm.persisted._
-import vorm.extensions._
 
 import vorm.abstractSql.AbstractSql._
 import vorm.abstractSql.Compositing._
 
-object AbstractSqlCombinators {
+object Combinators {
 
   implicit class StatementOps ( self : Statement ) {
     def | (other : Statement) 
@@ -70,18 +69,17 @@ object AbstractSqlCombinators {
   def equaling ( m : Mapping, v : Any ) : Statement
     = (m, v) match {
         case (m : ValueMapping, v) =>
-          m.root.abstractSqlPrimaryKeySelect
-            .copy(
-              condition
-                = Some(
-                    Comparison(
-                      m.containerTableMapping.get.abstractSqlTable,
-                      m.columnName,
-                      Equal,
-                      v
-                    )
+          empty(m).copy(
+            condition
+              = Some(
+                  Comparison(
+                    m.containerTableMapping.get.abstractSqlTable,
+                    m.columnName,
+                    Equal,
+                    v
                   )
-            )
+                )
+          )
         case (m : EntityMapping, v : Persisted) =>
           equaling(m.id, v.id)
         case (m : TupleMapping, v : Product ) =>
@@ -128,7 +126,18 @@ object AbstractSqlCombinators {
                     NotEqual,
                     v
                   )
-                )
+                ) ++
+                ( if( m.nullable && v != null )
+                    Some(
+                      Comparison(
+                        m.containerTableMapping.get.abstractSqlTable,
+                        m.columnName,
+                        Equal,
+                        null
+                      )
+                    )
+                  else None
+                ) reduceOption Or
           )
         case (m : EntityMapping, v : Persisted) =>
           notEqualing(m.id, v.id)

@@ -1,26 +1,20 @@
 package vorm.query
 
-import vorm.reflection._
-import vorm.structure._
-import vorm.structure.mapping._
-import vorm.persisted._
 import vorm.extensions._
 
 import vorm.abstractSql.{AbstractSql => AS}
-import vorm.abstractSql.Compositing._
+import vorm.abstractSql.Combinators._
 import Query._
 import Operator._
-import AbstractSqlCombinators._
 
 object AbstractSqlComposition {
 
   def resultSetSelect
     ( query : Query )
     : AS.Statement
-    = ( ( query.mapping.abstractSqlResultSetSelect : AS.Statement ) /:
-        ( orderAndLimitSelect(query) ++
-          query.where.map{filtersStatement} reduceOption intersection )
-      ) {AS.Intersection}
+    = query.mapping.abstractSqlResultSetSelect &&!
+      ( orderAndLimitSelect(query) ++
+        query.where.map{filtersStatement} reduceOption ( _ & _ ) )
 
   def orderAndLimitSelect
     ( query : Query )

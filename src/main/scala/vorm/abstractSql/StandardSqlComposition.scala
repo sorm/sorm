@@ -84,8 +84,7 @@ object StandardSqlComposition {
               = for { HavingCount(t, c) <- s.havingCount }
                 yield Sql.Comparison(
                         Sql.Count(
-                          Sql.AllColumns( Some(aliases(t)) ) :: Nil, 
-                          true
+                          Sql.AllColumns() :: Nil
                         ),
                         Sql.Value(c),
                         Sql.Equal

@@ -19,11 +19,16 @@ object Sandbox extends App {
   case class A ( b : B )
   case class B ( seqOfSeqsOfInts : Seq[Seq[Int]])
 
-  val db = TestingInstance.simulator( Entity[A](), Entity[B]() )
-//  db.save(A( Seq() ))
-//  db.save(A( Seq(2, 9, 3) ))
-//  db.save(A( Seq(4) ))
-//  db.save(A( Seq() ))
+  val db = TestingInstance.mysql( Entity[A](), Entity[B]() )
+  val b1 = db.save(B( Seq() ))
+  val b2 = db.save(B( Seq(Seq(2, 9, 3)) ))
+  val b3 = db.save(B( Seq(Seq(4)) ))
+  val b4 = db.save(B( Seq() ))
+  db.save(A( b1 ))
+  db.save(A( b2 ))
+  db.save(A( b2 ))
+  db.save(A( b3 ))
+  db.save(A( b4 ))
 
   import vorm.query.AbstractSqlComposition._
   import vorm.abstractSql.StandardSqlComposition._
@@ -31,14 +36,9 @@ object Sandbox extends App {
 
   db.query[A]
     .filterEquals("b.seqOfSeqsOfInts.item", Seq(2,9,3))
-    .order("b.id")
-    .query()
-    .as{resultSetSelect}
-    .as{sql}
-    .tap{ s =>
-      s.template.trace()
-      s.data.toList.trace()
-    }
+    .order("b.seqOfSeqsOfInts.item.item")
+    .fetchAll()
+    .prettyString.trace()
 
 
 //  db.connection.executeQuery(

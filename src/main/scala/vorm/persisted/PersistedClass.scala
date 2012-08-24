@@ -35,7 +35,7 @@ object PersistedClass {
             .map{ case (n, r) => n + " : " + r.signature }
             .toList
 
-      val newArgSignatures
+      val newArgSignatures : Seq[String]
         = "val id : Long" +: sourceArgSignatures
 
       val copyMethodArgSignatures
@@ -43,7 +43,7 @@ object PersistedClass {
             n + " : " + r.signature + " = " + n
           }
 
-      val copyMethodInstantiationArgs
+      val newArgNames
         = "id" +: sourceArgs.map{ _._1 }.toList
 
 
@@ -59,10 +59,35 @@ object PersistedClass {
             copyMethodArgSignatures.mkString(",\n").indent(2).trim + 
             " )\n" +
             "= " + "new " + name + "( " + 
-            copyMethodInstantiationArgs.mkString(", ") + 
+            newArgNames.mkString(", ") + 
             " )\n"
-            ).indent(2) 
-          ).indent(2) + "\n" +
+          ) .indent(2) + "\n" +
+          "override def productElement ( n : Int ) : Any\n" +
+          ( "= " + 
+            ( "n match {\n" +
+              ( ( for { (n, i) <- newArgNames.view.zipWithIndex }
+                  yield "case " + i + " => " + n
+                ) :+ 
+                "case _ => throw new IndexOutOfBoundsException(n.toString)"
+              ).mkString("\n").indent(2) + "\n" +
+              "}"
+            ) .indent(2).trim
+          ) .indent(2) + "\n" +
+          "override def productArity = " + newArgNames.size + "\n" +
+          "override def equals ( other : Any )\n" +
+          ( "= " +
+            ( "other match {\n" +
+              ( "case other : " + name + " =>\n" + (
+                  "eq(other) ||\n" + 
+                  newArgNames.map{ n => n + " == other." + n }.mkString(" &&\n")
+                ).indent(2) + "\n" + 
+                "case _ =>\n" +
+                "super.equals(other)".indent(2)
+              ).indent(2) + "\n" +
+              "}"
+            ).indent(2).trim
+          ).indent(2)
+        ).indent(2) + "\n" +
         "}" )
         .indent(2)
     }

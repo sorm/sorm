@@ -44,7 +44,6 @@ object AbstractSqlComposition {
             )
         }
 
-
   def filtersStatement
     ( where : Where )
     : AS.Statement
@@ -63,7 +62,7 @@ object AbstractSqlComposition {
                   )
             )
         case Filter(Equals, m : SeqMapping, v : Seq[_]) =>
-          val matching
+          def intersects
             = v.view
                 .zipWithIndex
                 .map{ case (v, i) =>
@@ -74,30 +73,74 @@ object AbstractSqlComposition {
                 }
                 .reduceOption{union}
                 .map{
-                  select(_).copy(
-                    havingCount
-                      = Some(
-                          AS.HavingCount(
-                            m.abstractSqlTable,
-                            m.index.columnName,
-                            v.size
+                  //  a probable pitfall, because it shouldn't support nested seqs:
+                  // select(_)
+                  // - so we make it fail in those situations for now:
+                  _.asInstanceOf[AS.Select]
+                    .copy(
+                      havingCount
+                        = Some(
+                            AS.HavingCount(
+                              m.abstractSqlTable,
+                              m.index.columnName,
+                              AS.Equal,
+                              v.size
+                            )
                           )
-                        )
-                  )
+                    )
                 }
-          val size
+          def hasSameSize
             = m.root.abstractSqlPrimaryKeySelect
                 .copy(
                   havingCount
                     = Some(
-                          AS.HavingCount(
-                            m.abstractSqlTable,
-                            m.index.columnName,
-                            v.size
-                          )
+                        AS.HavingCount(
+                          m.abstractSqlTable,
+                          m.index.columnName,
+                          AS.Equal,
+                          v.size
                         )
+                      )
                 )
-          matching.foldLeft(size : AS.Statement){AS.Intersection}
+          intersects.foldLeft(hasSameSize : AS.Statement){AS.Intersection}
+        case Filter(NotEquals, m : ValueMapping, v) =>
+          m.root.abstractSqlPrimaryKeySelect
+            .copy(
+              condition
+                = Some(
+                    AS.Comparison(
+                      m.containerTableMapping.get.abstractSqlTable,
+                      m.columnName,
+                      AS.NotEqual,
+                      v
+                    )
+                  )
+            )
+        case Filter(NotEquals, m : SeqMapping, v : Seq[_]) =>
+          def doesntIntersect
+            = v.view.zipWithIndex
+                .map{ case (v, i) =>
+                  intersection(
+                    filtersStatement(Filter(Equals, m.index, i)),
+                    filtersStatement(Filter(NotEquals, m.item, v))
+                  )
+                }
+                .reduceOption{union}
+          def sizesDontMatch
+            = m.root.abstractSqlPrimaryKeySelect
+                .copy(
+                  havingCount
+                    = Some(
+                        AS.HavingCount(
+                          m.abstractSqlTable,
+                          m.index.columnName,
+                          AS.NotEqual,
+                          v.size
+                        )
+                      )
+                )
+          ( (sizesDontMatch : AS.Statement) /: doesntIntersect ){ AS.Union }
+
       }
 
 }

@@ -21,7 +21,7 @@ class EntityReferredSeveralTimesSuite extends FunSuite with ShouldMatchers {
   }
   import EntityReferredSeveralTimesSuite._
 
-  val db = TestingInstance.mysql( Entity[A](), Entity[B]() )
+  val db = TestingInstance.h2( Entity[A](), Entity[B]() )
 
   val b1 = db.save(B(23))
   val b2 = db.save(B(0))

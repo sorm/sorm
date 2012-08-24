@@ -30,7 +30,7 @@ class SeqOfSeqsSupportSuite extends FunSuite with ShouldMatchers {
 
   import SeqOfSeqsSupportSuite._
 
-  val db = TestingInstance.mysql( Entity[A]() )
+  val db = TestingInstance.h2( Entity[A]() )
   db.save(A( Seq() ))
   db.save(A( Seq( Seq(2, 3), Seq(), Seq(7) ) ))
   db.save(A( Seq( Seq() ) ))

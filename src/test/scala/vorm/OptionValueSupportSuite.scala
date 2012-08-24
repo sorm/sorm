@@ -29,7 +29,7 @@ class OptionValueSupportSuite extends FunSuite with ShouldMatchers {
 
   import OptionValueSupportSuite._
 
-  val db = TestingInstance.mysql( Entity[EntityWithValuePropertyInOption]() )
+  val db = TestingInstance.h2( Entity[EntityWithValuePropertyInOption]() )
 
   test("saving goes ok"){
     db.save(EntityWithValuePropertyInOption(None))

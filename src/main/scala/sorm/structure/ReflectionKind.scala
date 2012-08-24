@@ -27,21 +27,21 @@ object ReflectionKind {
     = reflection match {
         case _
           if reflection inheritsFrom Reflection[collection.Seq[_]]
-          ⇒ Seq
+          => Seq
         case _
           if reflection inheritsFrom Reflection[collection.Set[_]]
-          ⇒ Set
+          => Set
         case _
           if reflection inheritsFrom Reflection[collection.Map[_, _]]
-          ⇒ Map
+          => Map
         case _
           if reflection inheritsFrom Reflection[scala.Option[_]]
-          ⇒ Option
+          => Option
         case _
           if (reflection inheritsFrom Reflection[AnyVal])
           || (reflection inheritsFrom Reflection[String])
           || (reflection inheritsFrom Reflection[org.joda.time.DateTime])
-          ⇒ Value
+          => Value
         case _
           if (reflection inheritsFrom Reflection[Tuple1[_]])
           || (reflection inheritsFrom Reflection[Tuple2[_, _]])
@@ -65,8 +65,8 @@ object ReflectionKind {
 //          || (reflection inheritsFrom Reflection[Tuple20[_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _]])
 //          || (reflection inheritsFrom Reflection[Tuple21[_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _]])
 //          || (reflection inheritsFrom Reflection[Tuple22[_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _]])
-          ⇒ Tuple
+          => Tuple
         case _
-          ⇒ Entity
+          => Entity
       }
 }

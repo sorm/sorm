@@ -18,13 +18,17 @@ import create._
 import extensions._
 
 import samples._
+import com.codahale.logula.Logging
+import org.apache.log4j.Level
 
 @RunWith(classOf[JUnitRunner])
 class SeqOfEntitiesSupportSuite extends FunSuite with ShouldMatchers {
+  Logging.configure { log =>
+    log.level = Level.TRACE
+  }
 
   import SeqOfEntitiesSupportSuite._
 
-  //  equals
   test("Non matching equals query") {
     fetchEqualingIds( Seq(b5) ) should be === Set()
     fetchEqualingIds( Seq(b1, b2, b4) ) should be === Set()
@@ -46,21 +50,30 @@ class SeqOfEntitiesSupportSuite extends FunSuite with ShouldMatchers {
     fetchEqualingIds( Seq(b1, b3, b2) ) should be === Set()
     fetchEqualingIds( Seq(b2, b3, b1) ) should be === Set()
   }
+  test("Equals on empty seq does not include non empty seqs") {
+    db.query[A]
+      .filterEquals("a", Seq())
+      .fetchAll().map(_.id.toInt).toSet
+      .should( not contain (2) and not contain (4) )
+  }
 
-  //  not equals
-  test("Not equals query") {
+  test("Everything matches not equals on inexistent") {
     db.query[A]
       .filterNotEquals("a", Seq(b5))
       .fetchAll().map(_.id.toInt).toSet
-      .should( not contain (5) )
+      .should( contain(1) and contain(2) and contain(3) and contain(4) )
+  }
+  test("A partially matching item does not get excluded from results on not equals"){
     db.query[A]
-      .filterNotEquals("a", Seq(b3, b1))
+      .filterNotEquals("a", Seq(b1, b3))
       .fetchAll().map(_.id.toInt).toSet
-      .should( contain (1) and contain (2) )
+      .should( contain (2) )
+  }
+  test("Not equals on empty seq does not return empty seqs") {
     db.query[A]
       .filterNotEquals("a", Seq())
       .fetchAll().map(_.id.toInt).toSet
-      .should( not contain (2) and not contain (4) and contain (1) )
+      .should( not contain (1) and not contain (3) )
   }
 
 

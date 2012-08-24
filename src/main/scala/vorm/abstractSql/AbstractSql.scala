@@ -1,7 +1,10 @@
 package vorm.abstractSql
 
-import vorm._
-
+/**
+ * Abstracts away from table aliases and from-join management, using a table
+ * reference which represents a specific table in a query and information on
+ * how it should be joined
+ */
 object AbstractSql {
 
   

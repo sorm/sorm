@@ -1,8 +1,5 @@
 package vorm.sql
 
-import vorm._
-import extensions._
-
 object Sql {
 
   sealed trait Sql

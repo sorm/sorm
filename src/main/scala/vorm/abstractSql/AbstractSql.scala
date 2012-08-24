@@ -37,6 +37,7 @@ object AbstractSql {
 
   sealed case class HavingCount
     ( table : Table,
+      column : String,
       count : Int )
 
 

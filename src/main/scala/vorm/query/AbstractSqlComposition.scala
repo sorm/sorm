@@ -76,14 +76,26 @@ object AbstractSqlComposition {
                 .map{
                   select(_).copy(
                     havingCount
-                      = Some(AS.HavingCount(m.abstractSqlTable, v.size))
+                      = Some(
+                          AS.HavingCount(
+                            m.abstractSqlTable,
+                            m.index.columnName,
+                            v.size
+                          )
+                        )
                   )
                 }
           val size
             = m.root.abstractSqlPrimaryKeySelect
                 .copy(
                   havingCount
-                    = Some(AS.HavingCount(m.abstractSqlTable, v.size))
+                    = Some(
+                          AS.HavingCount(
+                            m.abstractSqlTable,
+                            m.index.columnName,
+                            v.size
+                          )
+                        )
                 )
           matching.foldLeft(size : AS.Statement){AS.Intersection}
       }

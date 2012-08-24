@@ -48,17 +48,13 @@ object SqlComposition {
           Set() ++
           select.expressions.view.collect{ case Column(n, t) => t } ++
           select.condition.toSeq.flatMap{conditionTables} ++
-          select.havingCount.map{_.table} ++
           select.groupBy.map{_.table} ++
+          select.havingCount.map{_.table} ++
           select.order.map{_.table}
         }
 
-      lazy val tableParents : Map[Table, Seq[Table]]
-        = references
-            .zipBy{
-              _.unfold{ _.parent.map{_.table}.map{t => t -> t } }
-            }
-            .toMap
+      def tableParents ( t : Table ) : Seq[Table]
+        = t.unfold{ _.parent.map{_.table}.map{t => t -> t } }
 
       references
         .foldRight( Stream[Table]() ){ (t, acc) =>

@@ -81,10 +81,11 @@ object StandardSqlComposition {
                     Sql.Column(n, Some(aliases(t))) 
                   },
             having
-              = for { HavingCount(t, c) <- s.havingCount }
+              = for { HavingCount(t, n, c) <- s.havingCount }
                 yield Sql.Comparison(
                         Sql.Count(
-                          Sql.AllColumns() :: Nil
+                          Sql.Column(n, Some(aliases(t))) :: Nil,
+                          true
                         ),
                         Sql.Value(c),
                         Sql.Equal

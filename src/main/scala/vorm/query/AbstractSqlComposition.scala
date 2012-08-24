@@ -49,6 +49,10 @@ object AbstractSqlComposition {
     ( where : Where )
     : AS.Statement
     = where match {
+        case And(l, r) =>
+          filtersStatement(l) & filtersStatement(r)
+        case Or(l, r) =>
+          filtersStatement(l) | filtersStatement(r)
         case Filter(Equals, m, v) =>
           equaling(m, v)
         case Filter(NotEquals, m, v) =>

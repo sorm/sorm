@@ -9,7 +9,15 @@ import org.junit.runner.RunWith
 @RunWith(classOf[JUnitRunner])
 class Test extends FunSuite with ShouldMatchers {
 
-
+  test("Same persisted ids make otherwise equaling objects have different hashcodes") {
+    Persisted(Genre("a"), 1).hashCode should not equal(Persisted(Genre("a"), 2).hashCode)
+  }
+  test("Same persisted ids make otherwise equaling objects unequal") {
+    Persisted(Genre("a"), 1) should not equal(Persisted(Genre("a"), 2))
+  }
+  test("Same persisted ids keep otherwise equaling objects equal") {
+    Persisted(Genre("a"), 1) should equal(Persisted(Genre("a"), 1))
+  }
   test("all is fine") {
 
 

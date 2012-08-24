@@ -3,10 +3,10 @@ package vorm.sql
 import vorm._
 import extensions._
 import Sql._
+
 object ResultSetSelectDemo extends App {
   
   implicit def some ( x : String ) = Some(x)
-  implicit def some ( x : Clause ) = Some(x)
   implicit def table ( x : String ) = Table(x)
   implicit def value ( x : Any ) = Value(x)
 
@@ -26,24 +26,31 @@ object ResultSetSelectDemo extends App {
               Join( "name", "t6", Seq( Column("id", "t6") → Column("v_id", "t2") ) ) ::
               Nil,
           where
-            = Clause.Or(
-                  Clause.And(
-                      Clause.Equals( Column("value", "t5"), "hard rock" ),
-                      Clause.In( Column("value", "t6"), Seq("Nirvana", "Metallica", "Kino") )
+            = Some(
+                CompositeCondition(
+                  CompositeCondition(
+                      Comparison( Column("value", "t5"), "hard rock", Equal ),
+                      Comparison( Column("value", "t6"), Seq("Nirvana", "Metallica", "Kino"), In ),
+                      And
                     ),
-                  Clause.Equals( Column("value", "t5"), "pop" )
-                ),
+                  Comparison( Column("value", "t5"), "pop", Equal ),
+                  Or
+                )
+              ),
           having
-            = Clause.Larger(
+            = Some(
+                Comparison(
                   Count( Column("id", "t3") :: Nil, true ),
-                  1
-                ),
+                  1,
+                  Larger
+                )
+              ),
           groupBy
             = Column("id", "t0") :: Nil,
           limit
             = Some(4),
           orderBy
-            = OrderByClause( Column("value", "t6") ) ::
+            = OrderBy( Column("value", "t6") ) ::
               Nil
 
         )
@@ -72,7 +79,9 @@ object ResultSetSelectDemo extends App {
               Join( primaryKeySelect, "t7", Seq( Column("id", "t7") → Column("id", "t0") ), JoinKind.Right ) ::
               Nil
         )
-      
-  resultSetSelect.rendering.trace()
+
+  import StandardRendering._
+
+  resultSetSelect.template.trace()
   resultSetSelect.data.trace()
 }

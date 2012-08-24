@@ -18,11 +18,18 @@ import create._
 import extensions._
 
 import samples._
+import com.codahale.logula.Logging
+import org.apache.log4j.Level
 
 @RunWith(classOf[JUnitRunner])
 class OptionValueSupportSuite extends FunSuite with ShouldMatchers {
+  Logging.configure { log =>
+    log.level = Level.TRACE
+  }
 
   import OptionValueSupportSuite._
+
+  val db = TestingInstance.mysql( Entity[EntityWithValuePropertyInOption]() )
 
   test("saving goes ok"){
     db.save(EntityWithValuePropertyInOption(None))
@@ -42,9 +49,13 @@ class OptionValueSupportSuite extends FunSuite with ShouldMatchers {
   }
   test("not equals filter"){
     db.query[EntityWithValuePropertyInOption]
-      .filterNotEquals("a", None).fetchOne().get.id should be === 2
+      .filterNotEquals("a", None)
+      .fetchAll().map{_.id.toInt}.toSet
+      .should( not contain (1) and contain (3) and contain (2) )
     db.query[EntityWithValuePropertyInOption]
-      .filterNotEquals("a", Some(3)).fetchOne().get.id should be === 1
+      .filterNotEquals("a", Some(3))
+      .fetchAll().map{_.id.toInt}.toSet
+      .should( not contain (2) and contain (1) and contain (3) )
   }
 
 }
@@ -52,10 +63,5 @@ object OptionValueSupportSuite {
 
   case class EntityWithValuePropertyInOption
     ( a : Option[Int] )
-
-  val db
-    = new Instance( Entity[EntityWithValuePropertyInOption]() :: Nil,
-                    "jdbc:h2:mem:test",
-                    mode = Mode.DropAllCreate )
 
 }

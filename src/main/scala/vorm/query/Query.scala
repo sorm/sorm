@@ -45,7 +45,6 @@ object Query {
     extends Where
 
 
-
   sealed trait Operator
   object Operator {
     case object Equals extends Operator

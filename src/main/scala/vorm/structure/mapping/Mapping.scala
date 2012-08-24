@@ -12,6 +12,8 @@ trait Mapping {
   def reflection : Reflection
 
   def parent = membership map {_.parent}
+  lazy val root : TableMapping
+    = parent map {_.root} getOrElse this.asInstanceOf[TableMapping]
 
   override def toString : String
     = membership

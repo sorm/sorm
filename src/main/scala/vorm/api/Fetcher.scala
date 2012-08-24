@@ -1,6 +1,9 @@
 package vorm.api
 
 import vorm._
+import abstractSql.StandardSqlComposition
+import query.AbstractSqlComposition
+import sql.StandardRendering._
 import persisted._
 import reflection._
 import save._
@@ -76,11 +79,18 @@ class Fetcher
     private[vorm] def query( kind : Kind = Kind.Select )
       = Query(kind, queryMapping, queryWhere, queryOrder, queryLimit, queryOffset)
 
+    private def statementAndResultMappings ( q : Query )
+      = {
+        val sql = StandardSqlComposition.sql(AbstractSqlComposition.resultSetSelect(q))
+        Statement( sql.template, sql.data map JdbcValue.apply ) ->
+        q.mapping.resultSetMappings
+      }
+
     def fetchAll()
       : Seq[T with Persisted]
       = {
         val (stmt, resultSetMappings)
-          = query(Kind.Select).statementAndResultMappings
+          = statementAndResultMappings( query(Kind.Select) )
 
         connection.executeQuery(stmt)
           .fetchInstancesAndClose(
@@ -96,13 +106,7 @@ class Fetcher
     def fetchSize()
       : Int
       = {
-        val (stmt, _)
-          = query(Kind.Count).statementAndResultMappings
-
-        connection.executeQuery(stmt)
-          .parseAndClose()
-          .head.head
-          .asInstanceOf[Int]
+        ???
       }
 
   }

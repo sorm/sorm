@@ -62,7 +62,7 @@ object AbstractSqlComposition {
                   )
             )
         case Filter(Equals, m : SeqMapping, v : Seq[_]) =>
-          def intersects
+          def intersects : Option[AS.Select]
             = v.view
                 .zipWithIndex
                 .map{ case (v, i) =>
@@ -102,7 +102,25 @@ object AbstractSqlComposition {
                         )
                       )
                 )
-          intersects.foldLeft(hasSameSize : AS.Statement){AS.Intersection}
+          def containerNotEmpty : Option[AS.Select]
+            = m.containerTableMapping
+                .map{ m =>
+                  m.root.abstractSqlPrimaryKeySelect
+                    .copy(
+                      havingCount
+                        = Some(
+                            AS.HavingCount(
+                              m.abstractSqlTable,
+                              m.primaryKeyColumns.last.name,
+                              AS.NotEqual,
+                              0
+                            )
+                          )
+                    )
+                }
+
+          ( ( ( intersects ++ containerNotEmpty ) reduceOption intersection ) :\
+            ( hasSameSize : AS.Statement ) ) { AS.Intersection }
         case Filter(NotEquals, m : ValueMapping, v) =>
           m.root.abstractSqlPrimaryKeySelect
             .copy(

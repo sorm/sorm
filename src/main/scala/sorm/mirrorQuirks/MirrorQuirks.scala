@@ -1,6 +1,7 @@
 package sorm.mirrorQuirks
 
 import reflect.mirror._
+import sorm.extensions._
 
 /**
  * Trickery and black magic around Scala's Mirror API
@@ -82,11 +83,8 @@ object MirrorQuirks {
         javaClassName(o) + "$" + name(s)
     }
 
-  def symbolsTree(s: Symbol): List[Symbol] =
-    s.owner match {
-      case NoSymbol => Nil
-      case o => s :: symbolsTree(o)
-    }
+  def symbolsTree(s: Symbol) =
+    s.unfold{ s => if( s.owner == NoSymbol ) None else Some(s -> s.owner) }
 
   def isObject(s: Symbol) =
     s.kind == "object"

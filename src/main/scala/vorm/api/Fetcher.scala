@@ -10,7 +10,6 @@ import save._
 import structure._
 import mapping._
 import jdbc._
-import select._
 import resultSet._
 import extensions._
 

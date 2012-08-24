@@ -4,7 +4,6 @@ import vorm._
 import extensions._
 import reflection._
 import ddl._
-import select._
 import structure._
 
 sealed class OptionMapping

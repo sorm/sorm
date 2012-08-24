@@ -3,7 +3,6 @@ package vorm.structure.mapping
 import vorm._
 import reflection._
 import ddl._
-import select._
 import structure._
 import extensions._
 

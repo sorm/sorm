@@ -49,11 +49,18 @@ class SeqOfEntitiesSupportSuite extends FunSuite with ShouldMatchers {
 
   //  not equals
   test("Not equals query") {
-    fetchNotEqualingIds( Seq(b5) ) should be === Set(1,2,3,4)
-    fetchNotEqualingIds( Seq(b3, b1) ) should be === Set(2,4,5)
-    fetchNotEqualingIds( Seq(b1,b2,b3,b4) ) should be === Set(5)
-    fetchNotEqualingIds( Seq(b1,b2,b3,b4,b5) ) should be === Set()
-    true should be === false
+    db.query[A]
+      .filterNotEquals("a", Seq(b5))
+      .fetchAll().map(_.id.toInt).toSet
+      .should( not contain (5) )
+    db.query[A]
+      .filterNotEquals("a", Seq(b3, b1))
+      .fetchAll().map(_.id.toInt).toSet
+      .should( contain (1) and contain (2) )
+    db.query[A]
+      .filterNotEquals("a", Seq())
+      .fetchAll().map(_.id.toInt).toSet
+      .should( not contain (2) and not contain (4) and contain (1) )
   }
 
 

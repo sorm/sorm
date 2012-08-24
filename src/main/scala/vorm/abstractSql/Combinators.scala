@@ -31,15 +31,14 @@ object Combinators {
     ( s : Select, m : TableMapping, v : Int, o : Operator = Equal )
     : Select
     = s.copy(
-        havingCount
-          = Some(
-              HavingCount(
-                m.abstractSqlTable,
-                m.primaryKeyColumns.last.name,
-                o,
-                v
-              )
-            )
+        having
+          = HavingCount(
+              m.abstractSqlTable,
+              m.primaryKeyColumns.last.name,
+              o,
+              v
+            ) +:
+            s.having
       )
   def havingCount ( m : TableMapping, v : Int, o : Operator = Equal ) : Select
     = restrictingCount( empty(m), m, v, o )

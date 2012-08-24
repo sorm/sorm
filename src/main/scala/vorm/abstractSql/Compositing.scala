@@ -15,12 +15,12 @@ object Compositing {
     = (left, right) match {
         case (l : Select, r : Select)
           if l.expressions == r.expressions &&
-             ( l.havingCount.isEmpty || r.havingCount.isEmpty ) => 
+             havingsMergeable(l.having, r.having) =>
           l.copy(
             condition
               = ( l.condition ++ r.condition ) reduceOption And,
-            havingCount
-              = l.havingCount orElse r.havingCount
+            having
+              = l.having ++: r.having distinct
           )
         case (l, r) =>
           Intersection(l, r)
@@ -32,12 +32,12 @@ object Compositing {
     = (left, right) match {
         case (l : Select, r : Select)
           if l.expressions == r.expressions &&
-             ( l.havingCount.isEmpty || r.havingCount.isEmpty ) => 
+             havingsMergeable(l.having, r.having) =>
           l.copy(
             condition
               = ( l.condition ++ r.condition ) reduceOption Or,
-            havingCount
-              = l.havingCount orElse r.havingCount
+            having
+              = l.having ++: r.having distinct
           )
         case (l, r) =>
           Union(l, r)
@@ -48,6 +48,16 @@ object Compositing {
     : Select
     = statement match {
         case statement : Select => statement
+      }
+
+  private def havingsMergeable
+    ( l : Seq[HavingCount], r : Seq[HavingCount] )
+    = l.forall{ l =>
+        !r.exists{ r =>
+          l.column == r.column &&
+          l.table == r.table &&
+          l != r
+        }
       }
 
 }

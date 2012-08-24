@@ -21,7 +21,7 @@ object AbstractSql {
   sealed case class Select
     ( expressions : Seq[Column],
       condition : Option[Condition] = None,
-      havingCount : Option[HavingCount] = None,
+      having : Seq[HavingCount] = Nil,
       groupBy : Seq[Column] = Nil,
       order : Seq[Order] = Nil,
       limit : Option[Int] = None,

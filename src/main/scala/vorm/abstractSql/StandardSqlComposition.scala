@@ -81,15 +81,19 @@ object StandardSqlComposition {
                     Sql.Column(n, Some(aliases(t))) 
                   },
             having
-              = for { HavingCount(t, n, o, c) <- s.havingCount }
-                yield Sql.Comparison(
-                        Sql.Count(
-                          Sql.Column(n, Some(aliases(t))) :: Nil,
-                          true
-                        ),
-                        Sql.Value(c),
-                        SqlComposition.sql(o)
+              = s.having
+                  .map{ case HavingCount(t, n, o, c) =>
+                    Sql.Comparison(
+                      Sql.Count(
+                        Sql.Column(n, Some(aliases(t))) :: Nil,
+                        true
                       ),
+                      Sql.Value(c),
+                      SqlComposition.sql(o)
+                    )
+                  }
+                  .asInstanceOf[Seq[Sql.Condition[Sql.HavingObject]]]
+                  .reduceOption(Sql.CompositeCondition(_, _, Sql.And)),
             orderBy
               = s.order
                   .map{ case Order(t, n, r) =>

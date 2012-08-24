@@ -49,7 +49,7 @@ object SqlComposition {
           select.expressions.view.collect{ case Column(n, t) => t } ++
           select.condition.toSeq.flatMap{conditionTables} ++
           select.groupBy.map{_.table} ++
-          select.havingCount.map{_.table} ++
+          select.having.map{_.table} ++
           select.order.map{_.table}
         }
 

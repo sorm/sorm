@@ -10,7 +10,8 @@ class Reflection
   }
 object Reflection {
 
-  def apply[ A : TypeTag ] = new Reflection(typeOf[A])
+  def apply[ A : TypeTag ] : Reflection = Reflection(typeOf[A])
+  def apply( t : Type ) : Reflection = new Reflection(t)
 
 //   val cache
 //    = new collection.mutable.HashMap[(Type, Class[_]), Reflection] {

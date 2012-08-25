@@ -15,7 +15,6 @@ object Sandbox extends App {
   val artist = Artist("Nirvana", Some("saldkfj"), Set(Genre("grunge"), Genre("rock")), Set("kurt", "cobain"))
 
   val p = Persisted(artist, 4)
-  val p1 = Persisted(p, 2)
 
-  println(p1)
+  println(p)
 }

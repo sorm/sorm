@@ -12,9 +12,16 @@ trait Persisted {
 object Persisted {
 
   def apply
+    [ T <: Persisted ]
+    ( instance : T,
+      id : Long )
+    : T
+    = throw new Exception("Persisted on persisted called")
+
+  def apply
     [ T <: AnyRef : TypeTag ]
-    ( instance: T,
-      id: Long )
+    ( instance : T,
+      id : Long )
     : T with Persisted
     = apply( instance.reflected, id )
 

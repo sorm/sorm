@@ -1,7 +1,7 @@
-package sorm
+package sorm.extensions
 
 
-package object extensions {
+object Extensions {
 
   implicit def mapExtensions[K, V](x: Map[K, V]) = new MapExtensions[K, V](x)
 

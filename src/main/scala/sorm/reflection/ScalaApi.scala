@@ -19,6 +19,20 @@ object ScalaApi {
               => m
           }
           .reverse
+
+    def javaClass = mirror.runtimeClass(t)
+  }
+  implicit class SymbolApi ( s : Symbol ) {
+    def decodedName = s.name.toString.trim
+    def instantiate
+      ( constructor : MethodSymbol,
+        args : Traversable[Any] = Nil )
+      : Any
+      = s match {
+          case s : ClassSymbol =>
+            mirror.reflectClass(s)
+              .reflectConstructor(constructor)(args.toSeq : _*)
+        }
     def ancestors
       = s.unfold{ s =>
           if( s.owner == NoSymbol || s.decodedName == "<root>" ) None
@@ -30,26 +44,7 @@ object ScalaApi {
           else if( s.owner.kind == "class" ) text + "#" + s.decodedName
           else text + "." + s.decodedName
         }
-
-    def instantiate
-      ( params : Map[String, Any] )
-      : Any
-      = constructors
-          .view
-          .zipBy{ _.params.view.flatten.map{_.decodedName} }
-          .find{ _._2.toSet == params.keySet }
-          .map{ case (c, ps) => instantiate( ps.map{params}, c ) }
-          .get
-    def instantiate
-      ( args : Traversable[Any] = Nil,
-        constructor : MethodSymbol = constructors.head )
-      : Any
-      = mirror.reflectClass(s.asInstanceOf[ClassSymbol])
-          .reflectConstructor(constructor)(args.toSeq : _*)
-    def javaClass = mirror.runtimeClass(t)
-  }
-  implicit class SymbolApi ( s : Symbol ) {
-    def decodedName = s.name.toString.trim
+    def t : Type = s.typeSignature
   }
 
 

@@ -6,63 +6,50 @@ import sorm.extensions.Extensions._
 
 object ScalaApi {
 
-  implicit class TypeApi ( val t : Type ) extends AnyVal {
+  implicit class TypeApi ( t : Type ) {
     def s : Symbol = t.typeSymbol
-    def members : Stream[Symbol] = t.members.toStream
+    private def members : Stream[Symbol] = t.members.toStream
+    def properties
+      = members.filter{_.isTerm}.filter{!_.isMethod}
     def constructors
       = members.view
-          .collect{ 
-            case m : MethodSymbol 
-              if m.isConstructor && m.owner == s 
-              => m 
+          .collect{
+            case m : MethodSymbol
+              if m.isConstructor && m.owner == s
+              => m
           }
           .reverse
-    
     def ancestors
       = s.unfold{ s =>
-          if( s.owner == NoSymbol || name(s) == "<root>" ) None
+          if( s.owner == NoSymbol || s.decodedName == "<root>" ) None
           else Some(s -> s.owner)
         }
     def fullName
       = ancestors.foldRight(""){ (s, text) =>
-          if( text == "" ) name(s)
-          else if( s.owner.kind == "class" ) text + "#" + name(s)
-          else text + "." + name(s)
+          if( text == "" ) s.decodedName
+          else if( s.owner.kind == "class" ) text + "#" + s.decodedName
+          else text + "." + s.decodedName
         }
-    def instantiate
-      ( args : Traversable[Any] = Nil, 
-        constructor : MethodSymbol = constructors.head )
-      : Any
-      = mirror.reflectClass(s.asInstanceOf[ClassSymbol])
-          .reflectConstructor(constructor)(args.toSeq : _*)
 
     def instantiate
       ( params : Map[String, Any] )
       : Any
       = constructors
           .view
-          .zipBy{ _.params.view.flatten.map{name} }
+          .zipBy{ _.params.view.flatten.map{_.decodedName} }
           .find{ _._2.toSet == params.keySet }
           .map{ case (c, ps) => instantiate( ps.map{params}, c ) }
           .get
-
-          // .find{
-          //   _.params.view.flatten.map{name}.toSet ==
-          //   params.keySet
-          // }
-          // .map{ c => 
-          //   instrantiate(
-          //     c.params.view.flatten.map{name}.map{params}, 
-          //     c
-          //   )
-          // }
-          // .get
-      // = instantiate( constructorArguments.view.unzip._1.map{params} )
-
+    def instantiate
+      ( args : Traversable[Any] = Nil,
+        constructor : MethodSymbol = constructors.head )
+      : Any
+      = mirror.reflectClass(s.asInstanceOf[ClassSymbol])
+          .reflectConstructor(constructor)(args.toSeq : _*)
     def javaClass = mirror.runtimeClass(t)
-
-    def name (s : Symbol) = s.name.toString.trim
-    
+  }
+  implicit class SymbolApi ( s : Symbol ) {
+    def decodedName = s.name.toString.trim
   }
 
 

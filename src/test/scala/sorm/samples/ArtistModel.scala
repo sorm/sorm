@@ -1,4 +1,4 @@
-package vorm.samples
+package sorm.samples
 
 object ArtistModel {
 

@@ -18,14 +18,9 @@ import create._
 import extensions.Extensions._
 
 import samples._
-import com.codahale.logula.Logging
-import org.apache.log4j.Level
 
 @RunWith(classOf[JUnitRunner])
 class OptionValueSupportSuite extends FunSuite with ShouldMatchers {
-  Logging.configure { log =>
-    log.level = Level.TRACE
-  }
 
   import OptionValueSupportSuite._
 

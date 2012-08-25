@@ -5,16 +5,10 @@ import jdbc._
 import samples._
 import extensions.Extensions._
 
-import com.codahale.logula.Logging
-import org.apache.log4j.Level
 import java.sql.DriverManager
 
 object Sandbox extends App {
 
-  Logging.configure { log =>
-    log.level = Level.TRACE
-    log.loggers("sorm.jdbc.ConnectionAdapter") = Level.TRACE
-  }
 
   case class A ( b : B )
   case class B ( seqOfSeqsOfInts : Seq[Seq[Int]])

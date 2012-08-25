@@ -9,13 +9,10 @@ object Sandbox extends App {
   case class A ( a : Seq[Int] ) {
     def this(b:Int) = this(Seq(b))
     def this(a: Int, b: Int) = this(a :: b :: Nil)
+    type B = Seq[String]
   }
   trait Pers
 
-  Reflection[A].constructorArguments.prettyString.trace()
-
-  val a = Reflection[A].members
-
-  a.prettyString.trace()
+  Reflection[A].signature.prettyString.trace()
 
 }

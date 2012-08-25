@@ -9,6 +9,7 @@ import structure._
 import mapping._
 import jdbc._
 import extensions._
+import Extensions._
 
 class ResultSetParsingAdapter
   ( rs : ResultSet )

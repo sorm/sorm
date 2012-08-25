@@ -11,7 +11,7 @@ import structure._
 import mapping._
 import jdbc._
 import resultSet._
-import extensions._
+import extensions.Extensions._
 
 import query.Query._
 

@@ -5,7 +5,7 @@ import structure._
 import mapping._
 import jdbc._
 import sorm.ddl.Table
-import extensions._
+import extensions.Extensions._
 
 object Drop {
 

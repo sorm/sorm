@@ -1,7 +1,7 @@
 package sorm.mirrorQuirks
 
 import reflect.mirror._
-import sorm.extensions._
+import sorm.extensions.Extensions._
 
 /**
  * Trickery and black magic around Scala's Mirror API

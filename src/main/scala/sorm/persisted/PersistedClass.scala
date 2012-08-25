@@ -5,7 +5,7 @@ import tools.nsc._
 
 import sorm._
 import reflection._
-import extensions._
+import extensions.Extensions._
 
 object PersistedClass {
 

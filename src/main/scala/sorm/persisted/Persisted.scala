@@ -2,7 +2,7 @@ package sorm.persisted
 
 import sorm._
 import reflection._
-import extensions._
+import extensions.Extensions._
 
 trait Persisted {
   def id: Long

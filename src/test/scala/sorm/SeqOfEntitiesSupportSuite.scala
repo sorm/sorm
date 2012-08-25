@@ -10,7 +10,7 @@ import org.apache.log4j.Level
 
 import sorm._
 import api._
-import extensions._
+import extensions.Extensions._
 
 import samples._
 

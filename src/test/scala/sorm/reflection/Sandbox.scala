@@ -15,6 +15,6 @@ object Sandbox extends App {
   trait Pers
 
 
-  Reflection[ApiSuite.Wrapper#InnerClass].signature.prettyString.trace()
+  Reflection[ReflectionSuite.Wrapper#InnerClass].signature.prettyString.trace()
 
 }

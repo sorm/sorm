@@ -6,8 +6,34 @@ import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
-class ApiSuite extends FunSuite with ShouldMatchers {
-  import ApiSuite._
+class ReflectionSuite extends FunSuite with ShouldMatchers {
+  import ReflectionSuite._
+
+//  from mirrorquirks
+//  test("isInner") {
+//    isInner(tag[NestedClasses#NestedClass].sym) should be(true)
+//    isInner(tag[NestedClasses#NestedClass#DeeplyNestedClass].sym) should be(true)
+//    isInner(tag[Genre].sym) should be(false)
+//    isInner(tag[MirrorQuirksTest].sym) should be(false)
+//  }
+//  test("fullname of nested class") {
+//    fullName(tag[NestedClasses#NestedClass].sym) should
+//    be("sorm.mirrorQuirks.MirrorQuirksTest.NestedClasses#NestedClass")
+//  }
+//  test("fullname of deeply nested class") {
+//    fullName(tag[NestedClasses#NestedClass#DeeplyNestedClass].sym) should
+//    be("sorm.mirrorQuirks.MirrorQuirksTest.NestedClasses#NestedClass#DeeplyNestedClass")
+//  }
+//  test("name of type with mixin") {
+//    name(tag[Artist with Mixin].sym) should equal(name(tag[Artist].sym))
+//  }
+//  test("properties of types with mixins") {
+//    println(tag[Artist with Mixin].tpe.kind)
+//    println(tag[Artist].tpe.kind)
+//    println(isMixedIn(tag[Artist with Mixin].tpe))
+//    properties(tag[Artist with Mixin].tpe) should equal (properties(tag[Artist].tpe))
+//  }
+
 
   test("String signature"){
     Reflection[String].signature should be === "java.lang.String"
@@ -71,11 +97,11 @@ class ApiSuite extends FunSuite with ShouldMatchers {
       equal("scala.Int")
   }
   test("inner class fullName") {
-    Reflection[Wrapper#InnerClass].fullName should equal("sorm.reflection.ApiSuite.Wrapper#InnerClass")
+    Reflection[Wrapper#InnerClass].fullName should equal("sorm.reflection.ReflectionSuite$.Wrapper#InnerClass")
   }
 
 }
-object ApiSuite {
+object ReflectionSuite {
 
   case class Genre(name: String)
   case class Artist(id: Int, name: String, genres: Set[Genre], tags: Set[String]) {

@@ -27,8 +27,8 @@ object PersistedClass {
     ( r : Reflection,
       name : String )
     = {
-      val sourceArgs
-        = r.constructorArguments
+      val sourceArgs : Map[String, Reflection]
+        = r.primaryConstructorArguments
 
       val sourceArgSignatures
         = sourceArgs.view

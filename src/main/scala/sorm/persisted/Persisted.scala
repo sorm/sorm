@@ -1,5 +1,7 @@
 package sorm.persisted
 
+import reflect.basis._
+
 import sorm._
 import reflection._
 import extensions.Extensions._
@@ -39,7 +41,7 @@ object Persisted {
     : Persisted
     = PersistedClass(r)
         .instantiate(
-          id +: r.constructorArguments.keysIterator.toStream.map{args}
+          id +: r.primaryConstructorArguments.keysIterator.toStream.map{args}
         )
 
 }

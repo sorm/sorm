@@ -3,6 +3,7 @@ package sorm.reflection
 import sorm.extensions.Extensions._
 
 import reflect.runtime.universe._
+import reflect.runtime.{currentMirror => mirror}
 
 object Sandbox extends App {
 
@@ -13,6 +14,7 @@ object Sandbox extends App {
   }
   trait Pers
 
-  Reflection[A].signature.prettyString.trace()
+
+  Reflection[ApiSuite.Wrapper#InnerClass].signature.prettyString.trace()
 
 }

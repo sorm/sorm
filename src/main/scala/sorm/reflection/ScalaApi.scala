@@ -23,6 +23,7 @@ object ScalaApi {
     def javaClass = mirror.runtimeClass(t)
   }
   implicit class SymbolApi ( s : Symbol ) {
+    def t : Type = s.typeSignature
     def decodedName = s.name.toString.trim
     def instantiate
       ( constructor : MethodSymbol,
@@ -38,13 +39,6 @@ object ScalaApi {
           if( s.owner == NoSymbol || s.decodedName == "<root>" ) None
           else Some(s -> s.owner)
         }
-    def fullName
-      = ancestors.foldRight(""){ (s, text) =>
-          if( text == "" ) s.decodedName
-          else if( s.owner.kind == "class" ) text + "#" + s.decodedName
-          else text + "." + s.decodedName
-        }
-    def t : Type = s.typeSignature
   }
 
 

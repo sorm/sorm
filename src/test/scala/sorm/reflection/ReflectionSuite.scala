@@ -33,8 +33,13 @@ class ReflectionSuite extends FunSuite with ShouldMatchers {
 //    println(isMixedIn(tag[Artist with Mixin].tpe))
 //    properties(tag[Artist with Mixin].tpe) should equal (properties(tag[Artist].tpe))
 //  }
-
-
+  test("Reflections on same type must be identical"){
+    Reflection[String] should equal (Reflection[String])
+    Reflection[Seq[String]] should equal (Reflection[Seq[String]])
+  }
+  test("Reflection extending type must not equal it's ancestor"){
+    Reflection[String] should not equal (Reflection[Any])
+  }
   test("String signature"){
     Reflection[String].signature should be === "java.lang.String"
   }
@@ -59,7 +64,7 @@ class ReflectionSuite extends FunSuite with ShouldMatchers {
     assert( Reflection[Seq[Seq[Int]]].inheritsFrom(Reflection[Seq[Traversable[Any]]]) )
   }
   test("Generics must be proper"){
-    assert( Reflection[Seq[Int]].generics(0) =:= Reflection[Int] )
+    assert( Reflection[Seq[Int]].generics(0) == Reflection[Int] )
   }
   test("Instantiation by map"){
     Reflection[Artist]
@@ -97,7 +102,7 @@ class ReflectionSuite extends FunSuite with ShouldMatchers {
       equal("scala.Int")
   }
   test("inner class fullName") {
-    Reflection[Wrapper#InnerClass].fullName should equal("sorm.reflection.ReflectionSuite$.Wrapper#InnerClass")
+    Reflection[Wrapper#InnerClass].fullName should equal("sorm.reflection.ReflectionSuite.Wrapper#InnerClass")
   }
 
 }

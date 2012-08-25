@@ -11,6 +11,17 @@ class Reflection ( protected val t : Type ) {
 
   override def toString = t.toString
 
+  override def hashCode = t.hashCode
+  override def equals ( other : Any )
+    = other match {
+        case other : Reflection =>
+          t =:= other.t
+        case _ =>
+          false
+      }
+
+  def inheritsFrom ( other : Reflection ) = t <:< other.t
+
   def properties
     = t.properties
         .map{ s => s.decodedName -> Reflection(s.t) }
@@ -30,12 +41,6 @@ class Reflection ( protected val t : Type ) {
   def signature : String
     = if( generics.isEmpty ) fullName
       else fullName + "[" + generics.map(_.signature).mkString(", ") + "]"
-
-  def inheritsFrom ( other : Reflection ) = t <:< other.t
-  def <:< ( other : Reflection ) = t <:< other.t
-  def !<:< ( other : Reflection ) = !(t <:< other.t)
-  def =:= ( other : Reflection ) = t =:= other.t
-  def !=:= ( other : Reflection ) = !(t =:= other.t)
 
   def instantiate
     ( params : Map[String, Any] )

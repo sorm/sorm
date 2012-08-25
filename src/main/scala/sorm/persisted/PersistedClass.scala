@@ -6,10 +6,11 @@ import tools.nsc._
 import sorm._
 import reflection._
 import extensions.Extensions._
+import com.weiglewilczek.slf4s.Logging
 
-object PersistedClass {
+object PersistedClass extends Logging {
 
-  private lazy val interpreter 
+  private lazy val interpreter
     = {
       val settings = new Settings()
       settings.usejavacp.value = true
@@ -27,8 +28,8 @@ object PersistedClass {
     ( r : Reflection,
       name : String )
     = {
-      val sourceArgs
-        = r.constructorArguments
+      val sourceArgs : Map[String, Reflection]
+        = r.primaryConstructorArguments
 
       val sourceArgSignatures
         = sourceArgs.view
@@ -77,12 +78,11 @@ object PersistedClass {
           "override def equals ( other : Any )\n" +
           ( "= " +
             ( "other match {\n" +
-              ( "case other : " + name + " =>\n" + (
-                  "eq(other) ||\n" + 
-                  newArgNames.map{ n => n + " == other." + n }.mkString(" &&\n")
-                ).indent(2) + "\n" + 
+              ( "case other : " + Reflection[Persisted].signature + " =>\n" + (
+                  "id == other.id && super.equals(other)"
+                ).indent(2) + "\n" +
                 "case _ =>\n" +
-                "super.equals(other)".indent(2)
+                "false".indent(2)
               ).indent(2) + "\n" +
               "}"
             ).indent(2).trim
@@ -99,7 +99,9 @@ object PersistedClass {
     = {
       val name = generateName()
 
-      interpreter.compileString(code(r, name))
+      val code1 = code(r, name)
+      logger.trace("Generated class:\n" + code1)
+      interpreter.compileString( code1 )
       val c 
         = interpreter.classLoader.findClass(name)
             .asInstanceOf[Class[T with Persisted]]

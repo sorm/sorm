@@ -19,8 +19,8 @@ class Reflected
       = reflection.propertyValue(name, instance.asInstanceOf[AnyRef])
 
     def methodResult
-      ( name: String, 
-        args: List[Any] = Nil ) 
+      ( name: String,
+        args: List[Any] = Nil )
       : Any
       = throw new NotImplementedError
 

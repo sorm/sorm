@@ -8,6 +8,8 @@ import mapping._
 import persisted._
 import extensions.Extensions._
 
+import reflect.basis._
+
 object Demo extends App {
 
   import samples.ArtistModel._

@@ -1,5 +1,7 @@
 package sorm.api
 
+import reflect.basis._
+
 import sorm._
 import reflection._
 import structure._

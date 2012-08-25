@@ -1,13 +1,20 @@
 package sorm.reflection
 
-import sorm._
-import mirrorQuirks._
-import extensions.Extensions._
+import sorm.extensions.Extensions._
+
+import reflect.runtime.universe._
+import reflect.runtime.{currentMirror => mirror}
 
 object Sandbox extends App {
 
-  tpe[TypeTest.Artist]
-    .instance(Map("id" -> "id1", "name" -> "name1", "genres" -> Set(), "tags" -> Set("tag1")))
-    .trace()
+  case class A ( a : Seq[Int] ) {
+    def this(b:Int) = this(Seq(b))
+    def this(a: Int, b: Int) = this(a :: b :: Nil)
+    type B = Seq[String]
+  }
+  trait Pers
+
+
+  Reflection[ReflectionSuite.Wrapper#InnerClass].signature.prettyString.trace()
 
 }

@@ -15,6 +15,7 @@ import create._
 import drop._
 import extensions._
 import Extensions._
+import com.weiglewilczek.slf4s.Logging
 
 class Instance
   ( entities : Traversable[Entity[_]],
@@ -23,7 +24,7 @@ class Instance
     password : String = "",
     mode : Mode = Mode.None )
   extends Api
-  with LogulaLogging
+  with Logging
   {
     protected[sorm] val connection
       = new ConnectionAdapter(Connection(url, user, password))
@@ -88,7 +89,7 @@ class Instance
               connection.executeUpdate(s)
             } catch {
               case e : Throwable =>
-                log.warn("Couldn't drop table. " + e.getMessage)
+                logger.warn("Couldn't drop table. " + e.getMessage)
             }
           }
           for( s <- Create.statements(mappings.values) ){

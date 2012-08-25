@@ -2,12 +2,12 @@ package sorm.persisted
 
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
-import sorm.persisted.Test._
+import sorm.persisted.PersistedSuite._
 import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
 
 @RunWith(classOf[JUnitRunner])
-class Test extends FunSuite with ShouldMatchers {
+class PersistedSuite extends FunSuite with ShouldMatchers {
 
   test("Same persisted ids make otherwise equaling objects have different hashcodes") {
     Persisted(Genre("a"), 1).hashCode should not equal(Persisted(Genre("a"), 2).hashCode)
@@ -26,12 +26,10 @@ class Test extends FunSuite with ShouldMatchers {
 
     val instance = Persisted(artist, 24)
 
-    assert(instance.isInstanceOf[Persisted])
-    assert(instance.isInstanceOf[Artist])
-    assert(instance.id == 24)
-    assert(instance.name == "Nirvana")
-    assert(instance == artist) //  an interesting and useful effect
-
+    assert(instance.isInstanceOf[Persisted], "is not Persisted")
+    assert(instance.isInstanceOf[Artist], "is not Artist")
+    assert(instance.id == 24, "incorrect id")
+    assert(instance.name == "Nirvana", "incorrect properties")
 
     val copy = instance.copy(name = "Puddle of Mudd")
 
@@ -63,10 +61,12 @@ class Test extends FunSuite with ShouldMatchers {
     evaluating {Persisted[Artist](Map("name" -> "Nirvana"), 35)} should produce[Exception]
   }
   test("persisted on persisted") {
-    Persisted(Persisted(Artist("Nirvana", Set()), 2), 4).id should equal(4)
+    evaluating { Persisted(Persisted(Artist("Nirvana", Set()), 2), 4) }
+      .should( produce[Exception])
+      .getMessage should be ("Persisted on persisted called")
   }
 }
-object Test {
+object PersistedSuite {
 
   case class Artist(name: String, genres: Set[Genre])
 

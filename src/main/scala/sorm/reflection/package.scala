@@ -1,39 +1,19 @@
-package sorm
+package sorm.reflection
 
-import reflect.mirror
+import reflect.runtime.universe._
+import reflect.runtime.{currentMirror => mirror}
+import sorm.extensions.Extensions._
+import ScalaApi._
 
-package object reflection {
+object `package` {
 
-  private val tpeCache =
-    collection.mutable.Map[mirror.Type, Type]()
-
-  private[reflection] def tpe[T](mt: mirror.Type, jc: Option[Class[_]] = None): Type =
-    try tpeCache(mt)
-    catch {
-      case _ =>
-        val t = new Type(mt, jc)
-        tpeCache.update(mt, t)
-        t
-    }
-
-  def tpe[T: TypeTag]: Type =
-    tag[T] match { case t => tpe(t.tpe, Some(t.erasure)) }
-
-
-
-  implicit class AnyAdapter
+  implicit class AnyReflected
     [ T : TypeTag ]
     ( any : T )
     {
       def reflected
         = new Reflected( any, Reflection( typeTag[T] ) )
-      def isInstanceOf
-        ( r : Reflection )
-        : Boolean
-        = reflected.reflection inheritsFrom r
     }
-
-
 
   implicit class ClassAdapter
     [ T ]
@@ -42,12 +22,9 @@ package object reflection {
       def instantiate
         ( args : Seq[Any] )
         : T
-        = c 
-          .getConstructors.head
-          .newInstance(args.asInstanceOf[Seq[Object]]: _*)
-          .asInstanceOf[T]
+        = c .getConstructors.head
+            .newInstance(args.asInstanceOf[Seq[Object]]: _*)
+            .asInstanceOf[T]
     }
-
-
 
 }

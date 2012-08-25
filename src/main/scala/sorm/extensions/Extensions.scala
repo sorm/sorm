@@ -72,12 +72,13 @@ object Extensions {
       : String
       = {
         def indent ( s : String )
-          = {
-            val lines = s.lines.toStream
-            ( lines.headOption.map{"-  " + _} ++:
-              lines.tail.map{"|  " + _} )
-              .mkString("\n")
-          }
+          = s.lines.toStream match {
+              case h +: t =>
+                ( ("- " + h) +: 
+                  t.map{"|  " + _}
+                ) .mkString("\n")
+              case _ => ""
+            }
         x match {
           case x : Traversable[_] =>
             x.stringPrefix + ":\n" +

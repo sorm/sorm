@@ -5,7 +5,7 @@ import java.sql.{ResultSet, PreparedStatement, Connection, Statement => JStateme
 import org.joda.time.DateTime
 
 import sorm._
-import extensions._
+import extensions.Extensions._
 
 case class Statement
   ( sql: String,

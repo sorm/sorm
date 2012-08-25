@@ -14,6 +14,7 @@ import jdbc._
 import create._
 import drop._
 import extensions._
+import Extensions._
 
 class Instance
   ( entities : Traversable[Entity[_]],

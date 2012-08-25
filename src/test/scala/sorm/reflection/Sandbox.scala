@@ -2,7 +2,7 @@ package sorm.reflection
 
 import sorm._
 import mirrorQuirks._
-import extensions._
+import extensions.Extensions._
 
 object Sandbox extends App {
 

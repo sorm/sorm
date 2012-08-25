@@ -6,7 +6,7 @@ import mapping._
 import jdbc._
 import save._
 import persisted._
-import extensions._
+import extensions.Extensions._
 
 trait SaveAdapter extends ConnectionAdapter {
   def saveEntityAndGetIt

@@ -2,7 +2,7 @@ package sorm.abstractSql
 
 import sorm._
 import sql._
-import extensions._
+import extensions.Extensions._
 
 import AbstractSql._
 import sql.Compositing._

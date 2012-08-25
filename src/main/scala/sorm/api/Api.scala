@@ -14,7 +14,7 @@ import mapping._
 import jdbc._
 import create._
 import drop._
-import extensions._
+import extensions.Extensions._
 
 trait Api {
 

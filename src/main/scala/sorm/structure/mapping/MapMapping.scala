@@ -1,7 +1,7 @@
 package sorm.structure.mapping
 
 import sorm._
-import extensions._
+import extensions.Extensions._
 import reflection._
 import ddl._
 import structure._

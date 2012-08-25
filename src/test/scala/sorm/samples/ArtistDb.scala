@@ -3,7 +3,7 @@ package sorm.samples
 import sorm._
 import api._
 import reflection._
-import extensions._
+import extensions.Extensions._
 
 object ArtistDb {
   

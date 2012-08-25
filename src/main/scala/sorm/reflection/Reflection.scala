@@ -5,7 +5,7 @@ import util.MurmurHash3
 
 import sorm._
 import mirrorQuirks.MirrorQuirks
-import extensions._
+import extensions.Extensions._
 
 
 /**

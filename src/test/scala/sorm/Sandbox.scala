@@ -3,7 +3,7 @@ package sorm
 import api._
 import jdbc._
 import samples._
-import extensions._
+import extensions.Extensions._
 
 import com.codahale.logula.Logging
 import org.apache.log4j.Level

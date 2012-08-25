@@ -5,7 +5,7 @@ import org.joda.time._
 
 import sorm._
 import joda.Extensions._
-import extensions._
+import extensions.Extensions._
 
 class PreparedStatementAdapter
   ( s : PreparedStatement ) 

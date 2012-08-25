@@ -1,7 +1,7 @@
 package sorm.reflection
 
 import sorm._
-import extensions._
+import extensions.Extensions._
 
 //  or InstanceReflection
 class Reflected

@@ -9,10 +9,12 @@ import structure._
 import mapping._
 import jdbc._
 import extensions._
+import Extensions._
+import com.weiglewilczek.slf4s.Logging
 
 class ResultSetParsingAdapter
   ( rs : ResultSet )
-  extends LogulaLogging
+  extends Logging
   {
 
     def fetchInstancesAndClose

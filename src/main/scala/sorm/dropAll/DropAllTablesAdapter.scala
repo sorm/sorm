@@ -2,7 +2,7 @@ package sorm.dropAll
 
 import sorm._
 import jdbc._
-import extensions._
+import extensions.Extensions._
 
 trait DropAllTablesAdapter extends ConnectionAdapter {
   def dropAllTables() {

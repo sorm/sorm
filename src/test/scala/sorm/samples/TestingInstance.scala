@@ -7,7 +7,7 @@ import samples._
 import save._
 import structure._
 import mapping._
-import extensions._
+import extensions.Extensions._
 
 object TestingInstance {
 

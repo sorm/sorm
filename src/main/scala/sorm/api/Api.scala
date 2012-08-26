@@ -1,20 +1,16 @@
 package sorm.api
 
 import org.joda.time.DateTime
-import java.sql.DriverManager
 
+import reflect.basis._
 import sorm._
-import dropAll._
 import persisted._
-import query._
 import reflection._
 import save._
 import structure._
 import mapping._
 import jdbc._
-import create._
-import drop._
-import extensions._
+import extensions.Extensions._
 
 trait Api {
 

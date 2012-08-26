@@ -6,7 +6,9 @@ import reflection._
 import structure._
 import mapping._
 import persisted._
-import extensions._
+import extensions.Extensions._
+
+import reflect.basis._
 
 object Demo extends App {
 

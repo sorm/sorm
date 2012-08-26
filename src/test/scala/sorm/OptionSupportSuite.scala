@@ -15,7 +15,7 @@ import structure._
 import mapping._
 import jdbc._
 import create._
-import extensions._
+import extensions.Extensions._
 
 import samples._
 

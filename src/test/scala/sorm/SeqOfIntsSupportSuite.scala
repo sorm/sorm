@@ -15,21 +15,14 @@ import structure._
 import mapping._
 import jdbc._
 import create._
-import extensions._
+import extensions.Extensions._
 
 import samples._
-import com.codahale.logula.Logging
-import org.apache.log4j.Level
 
 @RunWith(classOf[JUnitRunner])
 class SeqOfIntsSupportSuite extends FunSuite with ShouldMatchers {
 
   import SeqOfIntsSupportSuite._
-
-  Logging.configure { log =>
-    log.level = Level.TRACE
-    log.loggers("sorm.jdbc.ConnectionAdapter") = Level.TRACE
-  }
 
   test("Non matching equals query") {
     fetchEqualingIds(Seq(10)) should be === Set()

@@ -7,7 +7,7 @@ import org.scalatest.junit.JUnitRunner
 
 import sorm._
 import samples._
-import extensions._
+import extensions.Extensions._
 
 @RunWith(classOf[JUnitRunner])
 class ArtistDbSuite extends FunSuite with ShouldMatchers {

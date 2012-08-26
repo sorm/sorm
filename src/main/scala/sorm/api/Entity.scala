@@ -1,9 +1,11 @@
 package sorm.api
 
+import reflect.basis._
+
 import sorm._
 import reflection._
 import structure._
-import extensions._
+import extensions.Extensions._
 
 sealed case class Entity
   [ T : TypeTag ]

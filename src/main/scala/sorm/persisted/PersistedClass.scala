@@ -1,34 +1,32 @@
 package sorm.persisted
 
-import tools.nsc.interpreter.IMain
-import tools.nsc._
-
 import sorm._
 import reflection._
-import extensions._
+import extensions.Extensions._
+import com.weiglewilczek.slf4s.Logging
 
-object PersistedClass {
+object PersistedClass extends Logging {
 
-  private lazy val interpreter 
-    = {
-      val settings = new Settings()
-      settings.usejavacp.value = true
-      new IMain(settings, new NewLinePrintWriter(new ConsoleWriter, true))
-    }
+  import reflect.runtime.universe._
+  import reflect.runtime.{currentMirror => mirror}
+  import scala.tools.reflect.ToolBox
+
+  private lazy val toolbox = mirror.mkToolBox()
 
   private var generateNameCounter = 0
   private def generateName() 
     = synchronized {
-      generateNameCounter += 1
-      "PersistedAnonymous" + generateNameCounter
-    }
+        generateNameCounter += 1
+        "PersistedAnonymous" + generateNameCounter
+      }
 
-  private[persisted] def code
+  private[persisted] def generateCode
     ( r : Reflection,
       name : String )
+    : String
     = {
-      val sourceArgs
-        = r.constructorArguments
+      val sourceArgs : Map[String, Reflection]
+        = r.primaryConstructorArguments
 
       val sourceArgSignatures
         = sourceArgs.view
@@ -77,19 +75,19 @@ object PersistedClass {
           "override def equals ( other : Any )\n" +
           ( "= " +
             ( "other match {\n" +
-              ( "case other : " + name + " =>\n" + (
-                  "eq(other) ||\n" + 
-                  newArgNames.map{ n => n + " == other." + n }.mkString(" &&\n")
-                ).indent(2) + "\n" + 
+              ( "case other : " + Reflection[Persisted].signature + " =>\n" + (
+                  "id == other.id && super.equals(other)"
+                ).indent(2) + "\n" +
                 "case _ =>\n" +
-                "super.equals(other)".indent(2)
+                "false".indent(2)
               ).indent(2) + "\n" +
               "}"
             ).indent(2).trim
           ).indent(2)
         ).indent(2) + "\n" +
         "}" )
-        .indent(2)
+        .indent(2) + "\n" +
+        "classOf[" + name + "]"
     }
 
   private[persisted] def createClass
@@ -97,15 +95,12 @@ object PersistedClass {
     ( r : Reflection )
     : Class[T with Persisted]
     = {
-      val name = generateName()
-
-      interpreter.compileString(code(r, name))
-      val c 
-        = interpreter.classLoader.findClass(name)
-            .asInstanceOf[Class[T with Persisted]]
-      interpreter.reset()
-
-      c
+      toolbox.runExpr(
+        toolbox.parseExpr(
+          generateCode(r, generateName())
+            .tap{ c => logger.trace("Generating class:\n" + c) }
+        )
+      ) .asInstanceOf[Class[T with Persisted]]
     }
 
   private val cache

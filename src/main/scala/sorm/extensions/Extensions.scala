@@ -1,7 +1,7 @@
-package sorm
+package sorm.extensions
 
 
-package object extensions {
+object Extensions {
 
   implicit def mapExtensions[K, V](x: Map[K, V]) = new MapExtensions[K, V](x)
 
@@ -72,12 +72,13 @@ package object extensions {
       : String
       = {
         def indent ( s : String )
-          = {
-            val lines = s.lines.toStream
-            ( lines.headOption.map{"-  " + _} ++:
-              lines.tail.map{"|  " + _} )
-              .mkString("\n")
-          }
+          = s.lines.toStream match {
+              case h +: t =>
+                ( ("- " + h) +: 
+                  t.map{"|  " + _}
+                ) .mkString("\n")
+              case _ => ""
+            }
         x match {
           case x : Traversable[_] =>
             x.stringPrefix + ":\n" +

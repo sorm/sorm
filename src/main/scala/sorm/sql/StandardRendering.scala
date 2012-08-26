@@ -1,7 +1,7 @@
 package sorm.sql
 
 import sorm._
-import extensions._
+import extensions.Extensions._
 
 import Sql._
 import Rendering._

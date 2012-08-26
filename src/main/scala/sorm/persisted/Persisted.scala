@@ -1,8 +1,10 @@
 package sorm.persisted
 
+import reflect.basis._
+
 import sorm._
 import reflection._
-import extensions._
+import extensions.Extensions._
 
 trait Persisted {
   def id: Long
@@ -10,9 +12,16 @@ trait Persisted {
 object Persisted {
 
   def apply
+    [ T <: Persisted ]
+    ( instance : T,
+      id : Long )
+    : T
+    = throw new Exception("Persisted on persisted called")
+
+  def apply
     [ T <: AnyRef : TypeTag ]
-    ( instance: T,
-      id: Long )
+    ( instance : T,
+      id : Long )
     : T with Persisted
     = apply( instance.reflected, id )
 
@@ -39,7 +48,7 @@ object Persisted {
     : Persisted
     = PersistedClass(r)
         .instantiate(
-          id +: r.constructorArguments.keysIterator.toStream.map{args}
+          id +: r.primaryConstructorArguments.keysIterator.toStream.map{args}
         )
 
 }

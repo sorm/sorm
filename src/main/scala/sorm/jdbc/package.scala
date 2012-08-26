@@ -1,14 +1,12 @@
 package sorm
 
-import com.weiglewilczek.slf4s.Logger
 import java.sql.{ResultSet, PreparedStatement, Connection, Statement => JStatement}
 import org.joda.time.DateTime
 
 import sorm._
-import extensions._
+import extensions.Extensions._
 
 package object jdbc {
-  private lazy val logger = Logger(this.getClass)
 
   implicit def connectionAdapter(x: Connection) = new ConnectionAdapter(x)
   implicit def preparedStatementAdapter(x: PreparedStatement) = new PreparedStatementAdapter(x)

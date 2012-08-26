@@ -4,7 +4,7 @@ import sorm._
 import reflection._
 import ddl._
 import structure._
-import extensions._
+import extensions.Extensions._
 
 sealed class EntityMapping
   ( val membership : Option[Membership],

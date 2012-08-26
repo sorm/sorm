@@ -1,6 +1,6 @@
 package sorm
 
-import extensions._
+import extensions.Extensions._
 
 package object ddl {
 //  def quote ( x : String ) = "`" + x + "`"

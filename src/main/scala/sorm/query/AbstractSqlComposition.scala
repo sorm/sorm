@@ -1,6 +1,6 @@
 package sorm.query
 
-import sorm.extensions._
+import sorm.extensions.Extensions._
 
 import sorm.abstractSql.{AbstractSql => AS}
 import sorm.abstractSql.Combinators._

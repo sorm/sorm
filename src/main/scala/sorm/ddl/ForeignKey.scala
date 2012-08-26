@@ -1,7 +1,7 @@
 package sorm.ddl
 
 import sorm._
-import extensions._
+import extensions.Extensions._
 import ForeignKey._
 
 sealed case class ForeignKey

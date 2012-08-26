@@ -5,20 +5,14 @@ import org.scalatest.matchers.ShouldMatchers
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 
-import com.codahale.logula.Logging
-import org.apache.log4j.Level
-
 import sorm._
 import api._
-import extensions._
+import extensions.Extensions._
 
 import samples._
 
 @RunWith(classOf[JUnitRunner])
 class EntityReferredSeveralTimesSuite extends FunSuite with ShouldMatchers {
-  Logging.configure { log =>
-    log.level = Level.TRACE
-  }
   import EntityReferredSeveralTimesSuite._
 
   val db = TestingInstance.h2( Entity[A](), Entity[B]() )

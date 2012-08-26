@@ -1,7 +1,7 @@
 package sorm.ddl
 
 import sorm._
-import extensions._
+import extensions.Extensions._
 
 sealed case class Column
   ( name : String,

@@ -4,7 +4,7 @@ import sorm._
 import structure._
 import mapping._
 import jdbc._
-import extensions._
+import extensions.Extensions._
 
 object Create {
 

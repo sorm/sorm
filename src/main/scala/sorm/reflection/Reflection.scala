@@ -1,146 +1,118 @@
 package sorm.reflection
 
-import reflect.mirror
-import util.MurmurHash3
+import reflect.runtime.universe._
+import reflect.runtime.{currentMirror => mirror}
+import sorm.extensions.Extensions._
+import ScalaApi._
 
-import sorm._
-import mirrorQuirks.MirrorQuirks
-import extensions._
+class Reflection ( protected val t : Type ) {
 
+  protected def s : Symbol = t.s
 
-/**
- * Java class is required for dynamically generated classes, because it seems impossible
- * to find them based on mirror's Type
- */
-sealed class Reflection
-  ( val t : mirror.Type,
-    val javaClass : Class[_] )
-  {
+  override def toString = t.toString
 
-    lazy val mixinBasis =
-      Reflection(MirrorQuirks.mixinBasis(t))
-
-    lazy val signature: String =
-      generics match {
-        case IndexedSeq() => fullName
-        case _ => fullName + "[" + generics.map(_.signature).mkString(", ") + "]"
+  override def hashCode = t.hashCode
+  override def equals ( other : Any )
+    = other match {
+        case other : Reflection =>
+          t =:= other.t
+        case _ =>
+          false
       }
 
-    lazy val fullName
-      = MirrorQuirks.fullName(t.typeSymbol)
+  def inheritsFrom ( other : Reflection ) = t <:< other.t
 
-    lazy val name
-      = MirrorQuirks.name(t.typeSymbol)
+  def properties
+    = t.properties
+        .map{ s => s.decodedName -> Reflection(s.t) }
+        .toMap
+  def generics
+    = t match {
+        case t : TypeRef => t.args.view.map{ Reflection(_) }.toIndexedSeq
+      }
+  def name
+    = s.decodedName
+  def fullName
+    = s.ancestors.foldRight(""){ (s, text) =>
+        if( text == "" ) s.decodedName
+        else if( s.owner.kind == "class" ) text + "#" + s.decodedName
+        else text + "." + s.decodedName
+      }
+  def signature : String
+    = if( generics.isEmpty ) fullName
+      else fullName + "[" + generics.map(_.signature).mkString(", ") + "]"
 
-    lazy val properties
-      : Map[String, Reflection]
-      = MirrorQuirks.properties(t).view
-          .map {
-            s ⇒ MirrorQuirks.name(s) → 
-                Reflection(s.typeSignature)
-          }
-          .toMap
+  def instantiate
+    ( params : Map[String, Any] )
+    : Any
+    = t.constructors
+        .view
+        .zipBy{ _.params.view.flatten.map{_.decodedName} }
+        .find{ _._2.toSet == params.keySet }
+        .map{ case (c, ps) => s.instantiate( c, ps.map{params} ) }
+        .get
 
-    lazy val generics
-      : IndexedSeq[Reflection]
-      = MirrorQuirks.generics(t).view
-          .map(Reflection(_))
-          .toIndexedSeq
-
-    def inheritsFrom
-      ( reflection : Reflection )
-      : Boolean
-      = reflection.fullName match {
-          case n if n == "scala.Any" 
-            ⇒ true
-          case n if n == "scala.AnyVal" 
-            ⇒ t.typeSymbol.isPrimitiveValueClass
-          case _ 
-            ⇒ reflection.javaClass.isAssignableFrom(javaClass) &&
-              generics.view
-                .zip(reflection.generics)
-                .forall {case (a, b) => a.inheritsFrom(b)}
-        }
-
-    lazy val constructorArguments
-      = collection.immutable.ListMap[String, Reflection]() ++
-        MirrorQuirks.constructors(t)
-          .head
-          .typeSignature
-          .asInstanceOf[{def params: List[mirror.Symbol]}]
-          .params
-          .map(s ⇒ MirrorQuirks.name(s) → Reflection(s.typeSignature) )
+  def instantiate
+    ( params : Seq[Any] )
+    : Any
+    = s.instantiate(t.constructors.head, params)
 
 
-    def instantiate
-      ( params : Map[String, Any] )
-      : Any
-      = instantiate( constructorArguments.view.unzip._1.map{params} )
+  private lazy val javaMethodsByName
+    = t.javaClass.getMethods.groupBy{_.getName}
 
-    //  TODO: to change input subtype to AnyRef
-    def instantiate
-      ( args : Traversable[Any] = Nil )
-      : Any
-      = {
-        if ( MirrorQuirks.isInner(t.typeSymbol) )
-          throw new UnsupportedOperationException(
-              "Dynamic instantiation of inner classes is not supported"
-            )
-        
-        javaClass.getConstructors.head
-          .newInstance( args.toSeq.asInstanceOf[Seq[AnyRef]] : _* )
+  def propertyValue
+    ( name : String,
+      instance : AnyRef )
+    : Any
+    = javaMethodsByName(name).head.invoke( instance )
+
+  def propertyValues
+    ( instance : AnyRef )
+    : Map[String, Any]
+    = properties.keys.view.zipBy{ propertyValue(_, instance) }.toMap
+
+  def primaryConstructorArguments
+    : Map[String, Reflection]
+    = t.constructors.head.params.flatten
+        .map{ s => s.decodedName -> Reflection(s.t) }
+        .toMap
+
+  /**
+   * Either the type itself if it's not mixed in or the first of its parents
+   */
+  def mixinBasis
+    = t match {
+        case t : RefinedType => Reflection(t.parents.head)
+        case _ => this
       }
 
-    lazy val javaMethodsByName
-      = javaClass.getMethods.groupBy{_.getName}
-
-    def propertyValue
-      ( name : String,
-        instance : AnyRef )
-      : Any
-      = javaMethodsByName(name).head.invoke( instance )
-
-    def propertyValues
-      ( instance : AnyRef )
-      : Map[String, Any]
-      = properties.keys.view.zipBy{ propertyValue(_, instance) }.toMap
-
-    override def equals(x: Any) =
-      x match {
-        case x: Reflection =>
-          eq(x) ||
-          t.typeSymbol == x.t.typeSymbol &&
-          generics == x.generics
-        case _ => super.equals(x)
-      }
-    override def hashCode =
-      MurmurHash3.finalizeHash(t.typeSymbol.hashCode, generics.hashCode)
-
-    override def toString = t.toString
-  }
-  
+}
 object Reflection {
 
-   val cache
-    = new collection.mutable.HashMap[(mirror.Type, Class[_]), Reflection] {
-        override def default
-          ( key : (mirror.Type, Class[_]) )
-          = {
-            val value = new Reflection(key._1, key._2)
-            update(key, value)
-            value
-          }
-      }
+  def apply[ A : TypeTag ] : Reflection = Reflection(typeOf[A])
+  def apply( t : Type ) : Reflection = new Reflection(t)
 
-  def apply
-    [ T ]
-    ( implicit tag : TypeTag[T] )
-    : Reflection
-    = cache( tag.tpe, tag.erasure )
+//   val cache
+//    = new collection.mutable.HashMap[(Type, Class[_]), Reflection] {
+//        override def default
+//          ( key : (Type, Class[_]) )
+//          = {
+//            val value = new Reflection(key._1, key._2)
+//            update(key, value)
+//            value
+//          }
+//      }
+//
+//  def apply
+//    [ T ]
+//    ( implicit tag : TypeTag[T] )
+//    : Reflection
+//    = cache( tag.tpe -> tag.erasure )
 
-  def apply
-    ( mt : mirror.Type )
-    : Reflection 
-    = cache( mt, MirrorQuirks.javaClass(mt) )
+  // def apply
+  //   ( mt : Type )
+  //   : Reflection 
+  //   = cache( mt, MirrorQuirks.javaClass(mt) )
 
 }

@@ -1,8 +1,5 @@
 package sorm.persisted
 
-import tools.nsc.interpreter.IMain
-import tools.nsc._
-
 import sorm._
 import reflection._
 import extensions.Extensions._
@@ -10,23 +7,23 @@ import com.weiglewilczek.slf4s.Logging
 
 object PersistedClass extends Logging {
 
-  private lazy val interpreter
-    = {
-      val settings = new Settings()
-      settings.usejavacp.value = true
-      new IMain(settings, new NewLinePrintWriter(new ConsoleWriter, true))
-    }
+  import reflect.runtime.universe._
+  import reflect.runtime.{currentMirror => mirror}
+  import scala.tools.reflect.ToolBox
+
+  private lazy val toolbox = mirror.mkToolBox()
 
   private var generateNameCounter = 0
   private def generateName() 
     = synchronized {
-      generateNameCounter += 1
-      "PersistedAnonymous" + generateNameCounter
-    }
+        generateNameCounter += 1
+        "PersistedAnonymous" + generateNameCounter
+      }
 
-  private[persisted] def code
+  private[persisted] def generateCode
     ( r : Reflection,
       name : String )
+    : String
     = {
       val sourceArgs : Map[String, Reflection]
         = r.primaryConstructorArguments
@@ -89,7 +86,8 @@ object PersistedClass extends Logging {
           ).indent(2)
         ).indent(2) + "\n" +
         "}" )
-        .indent(2)
+        .indent(2) + "\n" +
+        "classOf[" + name + "]"
     }
 
   private[persisted] def createClass
@@ -97,17 +95,12 @@ object PersistedClass extends Logging {
     ( r : Reflection )
     : Class[T with Persisted]
     = {
-      val name = generateName()
-
-      val code1 = code(r, name)
-      logger.trace("Generated class:\n" + code1)
-      interpreter.compileString( code1 )
-      val c 
-        = interpreter.classLoader.findClass(name)
-            .asInstanceOf[Class[T with Persisted]]
-      interpreter.reset()
-
-      c
+      toolbox.runExpr(
+        toolbox.parseExpr(
+          generateCode(r, generateName())
+            .tap{ c => logger.trace("Generating class:\n" + c) }
+        )
+      ) .asInstanceOf[Class[T with Persisted]]
     }
 
   private val cache

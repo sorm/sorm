@@ -16,7 +16,6 @@ object Sandbox extends App {
     val Listing, Album = Value
   }
 
-  Reflection[ResponseType.Value].containerObject
-    .map{ _.asInstanceOf[Enumeration].values }
+  Reflection[ResponseType.Value].inheritsFrom(Reflection[Enumeration#Value])
     .prettyString.trace()
 }

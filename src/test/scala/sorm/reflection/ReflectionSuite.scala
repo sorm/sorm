@@ -33,6 +33,14 @@ class ReflectionSuite extends FunSuite with ShouldMatchers {
 //    println(isMixedIn(tag[Artist with Mixin].tpe))
 //    properties(tag[Artist with Mixin].tpe) should equal (properties(tag[Artist].tpe))
 //  }
+  test("Enum#Value inheritance"){
+    object ResponseType extends Enumeration {
+      val Listing, Album = Value
+    }
+    assert(
+      Reflection[ResponseType.Value].inheritsFrom(Reflection[Enumeration#Value])
+    )
+  }
   test("Reflections on same type must be identical"){
     Reflection[String] should equal (Reflection[String])
     Reflection[Seq[String]] should equal (Reflection[Seq[String]])

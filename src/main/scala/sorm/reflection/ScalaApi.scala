@@ -41,11 +41,4 @@ object ScalaApi {
         }
   }
 
-  /**
-   * A copy of the Universe's typeOf just for the simplicity which frees the
-   * client from requirement to import `reflect.runtime.universe._` to actually
-   * address the ScalaApi.
-   */
-  def t[T : TypeTag] : Type = typeOf[T]
-
 }

@@ -41,6 +41,4 @@ object ScalaApi {
         }
   }
 
-
-
 }

@@ -104,32 +104,14 @@ object Extensions {
       ( f : A => ResultT )
       = try Some(f(x)) catch { case _ => None }
 
-    def unfold
-      [ B ]
-      ( f : A => Option[(B, A)] )
-      : Stream[B]
-      = f(x) match {
-          case None => Stream.empty
-          case Some((b, a)) => b #:: a.unfold(f)
+    def asInstanceOfOption[ T ]
+      = x match {
+          case x : T => Some(x)
+          case _ => None
         }
 
-    def foldTo
-      [ B ]
-      ( xs : Traversable[B] )
-      ( f : (B, A) ⇒ A)
-      = xs.foldRight(x)(f)
-
-    def foldFrom
-      [ B ]
-      ( xs : Traversable[B] )
-      ( f : (A, B) ⇒ A)
-      = xs.foldLeft(x)(f)
-
-    def some
-      = Some(x)
-
-
   }
+
 
   implicit class OptionExtensions
     [ T ]
@@ -162,5 +144,38 @@ object Extensions {
               (a, b.drop(splitter.size))
           }
     }
+
+
+  implicit class AnyFunctional[ A ]( val α : A ) extends AnyVal {
+
+    def unfold
+      [ B ]
+      ( ƒ : A => Option[(B, A)] )
+      : Stream[B]
+      = ƒ(α) map {case (β, α) ⇒ β #:: (α unfold ƒ)} getOrElse Stream()    
+
+    def unfold1
+      ( ƒ : A => Option[A] )
+      : Stream[A]
+      = ƒ(α) map (α ⇒ α #:: (α unfold1 ƒ)) getOrElse Stream()
+
+    def iterate
+      ( ƒ : A => A )
+      : Stream[A]
+      = α #:: (ƒ(α) iterate ƒ)
+
+    def foldTo
+      [ B ]
+      ( σ : Traversable[B] )
+      ( ƒ : (B, A) ⇒ A)
+      = (σ foldRight α)(ƒ)
+
+    def foldFrom
+      [ B ]
+      ( σ : Traversable[B] )
+      ( ƒ : (A, B) ⇒ A)
+      = (σ foldLeft α)(ƒ)
+
+  }
 
 }

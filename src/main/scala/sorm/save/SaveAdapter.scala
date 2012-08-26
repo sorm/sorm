@@ -8,6 +8,13 @@ import save._
 import persisted._
 import extensions.Extensions._
 
+/**
+ * This implementation is based on strict rules about how statements are resolved to whether be Update or Insert. These are:
+ * 1. All entities must have an autoincremented id property
+ * 2. Whether this property is defined determines which method to use
+ * 3. This may result in updates being called on inexisting rows - these situations should be considered caused by improper use and as such should result in a runtime exception being thrown
+ * 4. All rows of collection tables are deleted before update and thus should result in no such conflicts
+ */
 trait SaveAdapter extends ConnectionAdapter {
   def saveEntityAndGetIt
     ( v : AnyRef,
@@ -161,27 +168,6 @@ trait SaveAdapter extends ConnectionAdapter {
       values.toSet
     }
 
-  // def saveOptionAndGetIt
-  //   ( v : Option[_],
-  //     m : OptionMapping,
-  //     containerKey : Iterable[JdbcValue] )
-  //   = {
-  //     val containerKeyCv
-  //       = m.containerTableColumns.view
-  //           .map{ _.name } 
-  //           .zip(containerKey)
-  //           .toMap
-  //     val values
-  //       = v.view
-  //           .map{ v =>
-  //             val v1 = saveAndGetIt(v, m.item, containerKeyCv.values)
-  //             insert( m.tableName, containerKeyCv ++ 
-  //                                  rowValuesForContainerTable(v1, m.item) )
-  //             v1
-  //           }
-  //     m.reflection.instantiate(values)
-  //   }
-
   def saveAndGetIt1
     ( v : Any,
       m : Mapping )
@@ -198,7 +184,7 @@ trait SaveAdapter extends ConnectionAdapter {
           )
         case (v : Option[_], m : OptionMapping) ⇒ 
           v.map{ saveAndGetIt1(_, m.item) }
-        case (v : Any, m : ValueMapping) ⇒ 
+        case (v : Any, m : ColumnMapping) ⇒ 
           v
       }
 
@@ -223,7 +209,7 @@ trait SaveAdapter extends ConnectionAdapter {
           )
         case (v : Option[_], m : OptionMapping) ⇒ 
           v.map{ saveAndGetIt2(_, m.item, containerKey) }
-        case (v : Any, m : ValueMapping) ⇒ 
+        case (v : Any, m : ColumnMapping) ⇒ 
           v
       }
 
@@ -326,5 +312,37 @@ trait SaveAdapter extends ConnectionAdapter {
         Stream() ++ where.view.unzip._2
       )
 
+
+
+  private def rowValuesForContainerTable
+    ( v : Any,
+      m : Mapping )
+    : Map[String, JdbcValue]
+    = (m, v) match {
+        case (m : CollectionMapping, _) =>
+          Map.empty
+        case (m : EntityMapping, v : Persisted) =>
+          Map( m.columnName + "$id" -> JdbcValue(v.id, java.sql.Types.BIGINT) )
+        case (m : TupleMapping, v : Product) =>
+          (v.productIterator.toStream zip m.items)
+            .flatMap{ case (v, m) => rowValuesForContainerTable(v, m) }
+            .toMap
+        case (m : OptionMapping, Some(v)) =>
+          rowValuesForContainerTable(v, m.item)
+        case (m : OptionMapping, None) =>
+          m.columns
+            .view
+            .map{ c => c.name -> JdbcValue(null, java.sql.Types.NULL) }
+            .toMap
+        case (m : EnumMapping, v : Enumeration#Value) =>
+          Map( m.columnName -> JdbcValue(m.dbValues(v), m.column.t.jdbcType) )
+        case (m : ValueMapping, v) =>
+          Map( m.columnName -> JdbcValue(v, m.column.t.jdbcType) )
+
+      }
+
+  private def quote
+    ( s : String )
+    = s
 
 }

@@ -12,6 +12,7 @@ class Reflection ( protected val t : Type ) {
   override def toString = t.toString
 
   override def hashCode = t.hashCode
+
   override def equals ( other : Any )
     = other match {
         case other : Reflection =>
@@ -39,8 +40,7 @@ class Reflection ( protected val t : Type ) {
         else text + "." + s.decodedName
       }
   def signature : String
-    = if( generics.isEmpty ) fullName
-      else fullName + "[" + generics.map(_.signature).mkString(", ") + "]"
+    = t.toString
 
   def instantiate
     ( params : Map[String, Any] )
@@ -87,32 +87,26 @@ class Reflection ( protected val t : Type ) {
         case _ => this
       }
 
+  def containerObjectName : Option[String]
+    = t.asInstanceOfOption[TypeRef].map(_.pre.s.decodedName)
+
+  def containerObject : Option[Any]
+    = t match {
+        case t : TypeRef =>
+          t.pre.typeSymbol match {
+            case s =>
+              Some(
+                mirror.reflectModule(
+                  s.owner.typeSignature.member(s.name.toTermName).asModule
+                ).instance
+              )
+          }
+        case _ => None
+      }
+
 }
 object Reflection {
-
-  def apply[ A : TypeTag ] : Reflection = Reflection(typeOf[A])
-  def apply( t : Type ) : Reflection = new Reflection(t)
-
-//   val cache
-//    = new collection.mutable.HashMap[(Type, Class[_]), Reflection] {
-//        override def default
-//          ( key : (Type, Class[_]) )
-//          = {
-//            val value = new Reflection(key._1, key._2)
-//            update(key, value)
-//            value
-//          }
-//      }
-//
-//  def apply
-//    [ T ]
-//    ( implicit tag : TypeTag[T] )
-//    : Reflection
-//    = cache( tag.tpe -> tag.erasure )
-
-  // def apply
-  //   ( mt : Type )
-  //   : Reflection 
-  //   = cache( mt, MirrorQuirks.javaClass(mt) )
+  def apply[ A : TypeTag ]  : Reflection = Reflection(typeOf[A])
+  def apply( t : Type )     : Reflection = new Reflection(t)
 
 }

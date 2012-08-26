@@ -28,6 +28,15 @@ object Column {
 
     import java.sql.Types
 
+    case class Enum 
+      ( values : Seq[String] )
+      extends Type
+      {
+        lazy val ddl 
+          = "ENUM(" + values.map("'" + _ + "'").mkString(", ") + ")"
+        val jdbcType = Types.VARCHAR
+      }
+
     case object Integer  
       extends Type
       {
@@ -81,6 +90,12 @@ object Column {
       {
         val ddl = "SMALLINT"
         val jdbcType = Types.SMALLINT
+      }
+    case object TinyInt
+      extends Type
+      {
+        val ddl = "TINYINT"
+        val jdbcType = Types.TINYINT
       }
       
   }

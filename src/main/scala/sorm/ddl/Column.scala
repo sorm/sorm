@@ -91,6 +91,12 @@ object Column {
         val ddl = "SMALLINT"
         val jdbcType = Types.SMALLINT
       }
+    case object TinyInt
+      extends Type
+      {
+        val ddl = "TINYINT"
+        val jdbcType = Types.TINYINT
+      }
       
   }
 

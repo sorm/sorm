@@ -100,7 +100,7 @@ class ResultSetParsingAdapter
           : Any
           = m match {
               case m : EnumMapping =>
-                m.values( row.data(m.column).asInstanceOf[String] )
+                m.values( row.data(m.column).asInstanceOf[Byte] )
               case m : ValueMapping =>
                 row.data( m.column )
               case m : OptionMapping =>

@@ -16,12 +16,15 @@ sealed class EnumMapping
     lazy val name
       = reflection.containerObjectName.get
  
-    lazy val values
+    lazy val dbValues : Map[Enumeration#Value, Byte]
+      = values.map(_.swap)
+
+    lazy val values : Map[Byte, Enumeration#Value]
       = reflection.containerObject.get.asInstanceOf[Enumeration].values
-          .toSeq.map( v => v.toString -> v ).toMap
+          .view.map( v => v.id.toByte -> v ).toMap
 
     lazy val columnType
-      = Column.Type.Enum(values.keys.toSeq)
+      = Column.Type.TinyInt
 
     def autoIncremented = false
     

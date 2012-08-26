@@ -40,8 +40,7 @@ class Reflection ( protected val t : Type ) {
         else text + "." + s.decodedName
       }
   def signature : String
-    = if( generics.isEmpty ) fullName
-      else fullName + "[" + generics.map(_.signature).mkString(", ") + "]"
+    = t.toString
 
   def instantiate
     ( params : Map[String, Any] )

@@ -67,7 +67,12 @@ object Combinators {
 
   def equaling ( m : Mapping, v : Any ) : Statement
     = (m, v) match {
-        case (m : ValueMapping, v) =>
+        case (m : ColumnMapping, v) =>
+          def theValue
+            = (m, v) match {
+                case (m : EnumMapping, v : Enumeration#Value) => m.dbValues(v) 
+                case _ => v
+              }
           empty(m).copy(
             condition
               = Some(
@@ -75,7 +80,7 @@ object Combinators {
                     m.containerTableMapping.get.abstractSqlTable,
                     m.columnName,
                     Equal,
-                    v
+                    theValue
                   )
                 )
           )
@@ -115,7 +120,12 @@ object Combinators {
 
   def notEqualing ( m : Mapping, v : Any ) : Statement
     = (m, v) match {
-        case (m : ValueMapping, v) =>
+        case (m : ColumnMapping, v) =>
+          def theValue
+            = (m, v) match {
+                case (m : EnumMapping, v : Enumeration#Value) => m.dbValues(v) 
+                case _ => v
+              }
           empty(m).copy(
             condition
               = Some(
@@ -123,7 +133,7 @@ object Combinators {
                     m.containerTableMapping.get.abstractSqlTable,
                     m.columnName,
                     NotEqual,
-                    v
+                    theValue
                   )
                 ) ++
                 ( if( m.nullable && v != null )

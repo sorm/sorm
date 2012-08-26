@@ -33,10 +33,11 @@ class ReflectionSuite extends FunSuite with ShouldMatchers {
 //    println(isMixedIn(tag[Artist with Mixin].tpe))
 //    properties(tag[Artist with Mixin].tpe) should equal (properties(tag[Artist].tpe))
 //  }
+  test("Enumeration signature is correct"){
+    Reflection[ResponseType.Value].signature
+      .should(equal("sorm.reflection.ReflectionSuite.ResponseType.Value"))
+  }
   test("Enum#Value inheritance"){
-    object ResponseType extends Enumeration {
-      val Listing, Album = Value
-    }
     assert(
       Reflection[ResponseType.Value].inheritsFrom(Reflection[Enumeration#Value])
     )
@@ -47,9 +48,6 @@ class ReflectionSuite extends FunSuite with ShouldMatchers {
   }
   test("Reflection extending type must not equal it's ancestor"){
     Reflection[String] should not equal (Reflection[Any])
-  }
-  test("String signature"){
-    Reflection[String].signature should be === "java.lang.String"
   }
   test("Int inheritance"){
     (Reflection[Int] inheritsFrom Reflection[AnyVal]) should equal (true)
@@ -97,20 +95,32 @@ class ReflectionSuite extends FunSuite with ShouldMatchers {
 
     Reflection[Artist].propertyValue("name", artist) should equal("Nirvana")
   }
+  test("signature of class with non-Predef generics") {
+    Reflection[collection.mutable.Map[collection.mutable.HashSet[String], Int]].signature should
+    equal("scala.collection.mutable.Map[scala.collection.mutable.HashSet[String],Int]")
+  }
   test("signature of class with deep generics") {
     Reflection[Map[Set[String], Int]].signature should
-      equal("scala.collection.immutable.Map[scala.collection.immutable.Set[java.lang.String], scala.Int]")
+    equal("Map[Set[String],Int]")
   }
-//  test("signature of class with empty generics") {
-//    Reflection[Seq[_]].signature should
-//      equal("scala.collection.Seq[scala.Any]")
-//  }
+  test("signature of class with empty generics") {
+    Reflection[Seq[_]].signature should
+    equal("Seq[_]")
+  }
+  test("String signature"){
+    Reflection[String].signature should be === "String"
+  }
   test("signature of class with no generics") {
     Reflection[Int].signature should
-      equal("scala.Int")
+    equal("Int")
   }
   test("inner class fullName") {
-    Reflection[Wrapper#InnerClass].fullName should equal("sorm.reflection.ReflectionSuite.Wrapper#InnerClass")
+    Reflection[Wrapper#InnerClass].fullName should
+    equal("sorm.reflection.ReflectionSuite.Wrapper#InnerClass")
+  }
+  test("inner class signature") {
+    Reflection[Wrapper#InnerClass].signature should
+    equal("sorm.reflection.ReflectionSuite.Wrapper#InnerClass")
   }
 
 }
@@ -128,4 +138,8 @@ object ReflectionSuite {
     class InnerClass
   }
   trait Mixin
+
+  object ResponseType extends Enumeration {
+    val Listing, Album = Value
+  }
 }

@@ -125,7 +125,11 @@ object Extensions {
       ( f : (A, B) ⇒ A)
       = xs.foldLeft(x)(f)
 
-
+    def asInstanceOfOption[ T ]
+      = x match {
+          case x : T => Some(x)
+          case _ => None
+        }
 
   }
 

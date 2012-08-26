@@ -12,9 +12,11 @@ sealed class EnumMapping
     settingsMap : SettingsMap )
   extends Mapping
   {
-//    lazy val name
-//      = reflection.containerObjectName.get
-//    lazy val values
-//      = reflection.containerObject.values
+
+   lazy val name
+     = reflection.containerObjectName.get
+
+   lazy val values
+     = reflection.containerObject.get.asInstanceOf[Enumeration].values
 
   }

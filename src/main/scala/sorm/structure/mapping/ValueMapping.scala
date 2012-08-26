@@ -10,32 +10,8 @@ sealed class ValueMapping
   ( val membership : Option[Membership],
     val reflection : Reflection,
     settingsMap : SettingsMap )
-  extends Mapping
+  extends ColumnMapping
   {
-
-    lazy val isKeyPart
-      = {
-        def isKeyPart
-          ( m : Mapping )
-          : Boolean
-          = m.membership
-              .map{
-                case Membership.EntityId(_) =>
-                  true
-                case Membership.EntityProperty(n, e) =>
-                  e.settings.uniqueKeys.view.flatten.exists(_ == n) ||
-                  e.settings.indexes.view.flatten.exists(_ == n)
-                case Membership.TupleItem(_, m) =>
-                  isKeyPart(m)
-                case Membership.OptionItem(m) =>
-                  isKeyPart(m)
-                case _ =>
-                  false
-              }
-              .getOrElse(false)
-
-        isKeyPart(this)
-      }
 
     lazy val columnType
       = reflection match {
@@ -67,22 +43,5 @@ sealed class ValueMapping
           case Some(Membership.EntityId(_)) => true
           case _ => false
         }
-
-    lazy val nullable
-      = {
-        def ancestorsToTable
-          ( m : Mapping )
-          : Stream[Mapping]
-          = m.parent.toStream flatMap {
-              case p : TableMapping => Stream(p)
-              case p => p #:: ancestorsToTable(p)
-            }
-
-        ancestorsToTable(this)
-          .exists{_.isInstanceOf[OptionMapping]}
-      }
-
-    lazy val column
-      = Column(columnName, columnType, autoIncremented, nullable)
 
   }

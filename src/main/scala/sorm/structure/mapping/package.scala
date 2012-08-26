@@ -8,6 +8,7 @@ import extensions.Extensions._
 
 package object mapping {
 
+  //  TODO : should be just moved to Mapping as a property
   def columnsForContainerTable
     ( m : Mapping ) 
     : Iterable[Column]
@@ -29,7 +30,7 @@ package object mapping {
             }
         case m : HasChildren ⇒ 
           m.children.view flatMap columnsForContainerTable
-        case m : ValueMapping ⇒
+        case m : ColumnMapping ⇒
           m.column :: Nil
       }
 

@@ -60,7 +60,7 @@ trait TableMapping
           ( m : Mapping )
           : Iterable[TableMapping]
           = m match {
-            case m : ValueMapping ⇒ Nil
+            case m : ColumnMapping ⇒ Nil
             case m : TupleMapping ⇒ m.items.view flatMap nestedTableMappings
             case m : OptionMapping ⇒ m.item as nestedTableMappings
             case m : TableMapping ⇒ m :: Nil

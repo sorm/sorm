@@ -161,27 +161,6 @@ trait SaveAdapter extends ConnectionAdapter {
       values.toSet
     }
 
-  // def saveOptionAndGetIt
-  //   ( v : Option[_],
-  //     m : OptionMapping,
-  //     containerKey : Iterable[JdbcValue] )
-  //   = {
-  //     val containerKeyCv
-  //       = m.containerTableColumns.view
-  //           .map{ _.name } 
-  //           .zip(containerKey)
-  //           .toMap
-  //     val values
-  //       = v.view
-  //           .map{ v =>
-  //             val v1 = saveAndGetIt(v, m.item, containerKeyCv.values)
-  //             insert( m.tableName, containerKeyCv ++ 
-  //                                  rowValuesForContainerTable(v1, m.item) )
-  //             v1
-  //           }
-  //     m.reflection.instantiate(values)
-  //   }
-
   def saveAndGetIt1
     ( v : Any,
       m : Mapping )
@@ -198,7 +177,7 @@ trait SaveAdapter extends ConnectionAdapter {
           )
         case (v : Option[_], m : OptionMapping) ⇒ 
           v.map{ saveAndGetIt1(_, m.item) }
-        case (v : Any, m : ValueMapping) ⇒ 
+        case (v : Any, m : ColumnMapping) ⇒ 
           v
       }
 
@@ -223,7 +202,7 @@ trait SaveAdapter extends ConnectionAdapter {
           )
         case (v : Option[_], m : OptionMapping) ⇒ 
           v.map{ saveAndGetIt2(_, m.item, containerKey) }
-        case (v : Any, m : ValueMapping) ⇒ 
+        case (v : Any, m : ColumnMapping) ⇒ 
           v
       }
 

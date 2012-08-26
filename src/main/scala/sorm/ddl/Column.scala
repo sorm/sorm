@@ -28,6 +28,15 @@ object Column {
 
     import java.sql.Types
 
+    case class Enum 
+      ( values : Seq[String] )
+      extends Type
+      {
+        lazy val ddl 
+          = "ENUM(" + values.map("'" + _ + "'").mkString(", ") + ")"
+        val jdbcType = Types.VARCHAR
+      }
+
     case object Integer  
       extends Type
       {

@@ -10,13 +10,19 @@ sealed class EnumMapping
   ( val membership : Option[Membership],
     val reflection : Reflection,
     settingsMap : SettingsMap )
-  extends Mapping
+  extends ColumnMapping
   {
 
-   lazy val name
-     = reflection.containerObjectName.get
+    lazy val name
+      = reflection.containerObjectName.get
+ 
+    lazy val values
+      = reflection.containerObject.get.asInstanceOf[Enumeration].values
+          .toSeq.map( v => v.toString -> v ).toMap
 
-   lazy val values
-     = reflection.containerObject.get.asInstanceOf[Enumeration].values
+    lazy val columnType
+      = Column.Type.Enum(values.keys.toSeq)
 
-  }
+    def autoIncremented = false
+    
+}

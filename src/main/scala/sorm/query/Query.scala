@@ -54,17 +54,23 @@ object Query {
     case object Smaller extends Operator
     case object SmallerIncluding extends Operator
     case object Like extends Operator
+    case object NotLike extends Operator
     case object Regex extends Operator
+    case object NotRegex extends Operator
     case object In extends Operator
+    case object NotIn extends Operator
     case object Contains extends Operator
+    case object NotContains extends Operator
     /**
      * Makes part of a collection
      */
     case object Constitutes extends Operator
+    case object NotConstitutes extends Operator
     /**
      * Includes a collection
      */
     case object Includes extends Operator
+    case object NotIncludes extends Operator
     /**
      * For collections. Could be replaced by reference to `size` pseudo-
      * property, as well as there could be introduced such common properties as

@@ -64,6 +64,19 @@ object Combinators {
         .map{ restrictingCount(_, m, v.size) }
     }
 
+  def havingCondition ( m : Mapping, c : Condition )
+    = empty(m).copy( condition = Some(c) )
+
+  def comparing ( m : Mapping, o : Operator, v : Any )
+    = empty(m).copy(
+        condition
+          = Some(
+              Comparison(
+                m.containerTableMapping.get.abstractSqlTable,
+                m.columnName, o, v 
+              )
+            )
+      )
 
   def equaling ( m : Mapping, v : Any ) : Statement
     = (m, v) match {

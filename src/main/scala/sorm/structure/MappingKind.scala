@@ -3,24 +3,18 @@ package sorm.structure
 import sorm._
 import reflection._
 
-sealed trait ReflectionKind
+sealed trait MappingKind
 
-object ReflectionKind {
+object MappingKind {
 
-  case object Entity
-    extends ReflectionKind
-  case object Value
-    extends ReflectionKind
-  case object Tuple
-    extends ReflectionKind
-  case object Option
-    extends ReflectionKind
-  case object Seq
-    extends ReflectionKind
-  case object Set
-    extends ReflectionKind
-  case object Map
-    extends ReflectionKind
+  case object Enum   extends MappingKind
+  case object Entity extends MappingKind
+  case object Value  extends MappingKind
+  case object Tuple  extends MappingKind
+  case object Option extends MappingKind
+  case object Seq    extends MappingKind
+  case object Set    extends MappingKind
+  case object Map    extends MappingKind
 
   def apply
     ( reflection : Reflection )
@@ -43,6 +37,9 @@ object ReflectionKind {
           || (reflection inheritsFrom Reflection[org.joda.time.DateTime])
           => Value
         case _
+          if (reflection inheritsFrom Reflection[Enumeration#Value])
+          => Enum
+        case _
           if (reflection inheritsFrom Reflection[Tuple1[_]])
           || (reflection inheritsFrom Reflection[Tuple2[_, _]])
           || (reflection inheritsFrom Reflection[Tuple3[_, _, _]])
@@ -61,10 +58,10 @@ object ReflectionKind {
           || (reflection inheritsFrom Reflection[Tuple16[_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _]])
           || (reflection inheritsFrom Reflection[Tuple17[_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _]])
           || (reflection inheritsFrom Reflection[Tuple18[_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _]])
-//          || (reflection inheritsFrom Reflection[Tuple19[_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _]])
-//          || (reflection inheritsFrom Reflection[Tuple20[_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _]])
-//          || (reflection inheritsFrom Reflection[Tuple21[_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _]])
-//          || (reflection inheritsFrom Reflection[Tuple22[_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _]])
+          || (reflection inheritsFrom Reflection[Tuple19[_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _]])
+          || (reflection inheritsFrom Reflection[Tuple20[_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _]])
+          || (reflection inheritsFrom Reflection[Tuple21[_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _]])
+          || (reflection inheritsFrom Reflection[Tuple22[_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _]])
           => Tuple
         case _
           => Entity

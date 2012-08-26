@@ -110,22 +110,22 @@ object Mapping {
       reflection : Reflection,
       settings : SettingsMap )
     : Mapping
-    = ReflectionKind( reflection ) match {
-        case ReflectionKind.Value
+    = MappingKind( reflection ) match {
+        case MappingKind.Value
           ⇒ new ValueMapping (membership, reflection, settings)
-        case ReflectionKind.Tuple
+        case MappingKind.Tuple
           ⇒ new TupleMapping (membership, reflection, settings)
-        case ReflectionKind.Seq
+        case MappingKind.Seq
           ⇒ new SeqMapping (membership, reflection, settings)
-        case ReflectionKind.Set
+        case MappingKind.Set
           ⇒ new SetMapping (membership, reflection, settings)
-        case ReflectionKind.Map
+        case MappingKind.Map
           ⇒ new MapMapping (membership, reflection, settings)
-        case ReflectionKind.Entity
+        case MappingKind.Entity
           ⇒ new EntityMapping (membership, reflection, settings)
-        case ReflectionKind.Option
+        case MappingKind.Option
           ⇒ new OptionMapping (membership, reflection, settings)
-        case ReflectionKind.Entity
+        case MappingKind.Entity
           ⇒ new EntityMapping (membership, reflection, settings)
       }
 }

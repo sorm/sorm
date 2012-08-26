@@ -26,7 +26,7 @@ sealed case class Table
             "CREATE TABLE " + quote(name) + "\n" +
             ( "( " + 
               ( ( columns.view.map{_.ddl} ++
-                  primaryKeyDdl.some ++
+                  Some(primaryKeyDdl) ++
                   indexes.view.map{indexDdl} ++
                   uniqueKeys.view.map{uniqueKeyDdl} ++
                   foreignKeys.view.map{_.ddl}

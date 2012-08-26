@@ -125,8 +125,6 @@ object Extensions {
       ( f : (A, B) ⇒ A)
       = xs.foldLeft(x)(f)
 
-    def some
-      = Some(x)
 
 
   }

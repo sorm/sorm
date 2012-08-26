@@ -3,19 +3,11 @@ package sorm
 package object structure {
 
   import reflection._
+  import com.google.common.base.CaseFormat._
 
-
-  implicit class StringDdlNameSupport
-    ( string : String )
-    {
-      import com.google.common.base.CaseFormat._
-      def asDdlName
-        : String
-        = UPPER_CAMEL.to( LOWER_UNDERSCORE, string )
-      def addDdlNamePart
-        ( x : String )
-        = string + "$" + x
-    }
+  def ddlName ( string : String )
+    : String
+    = UPPER_CAMEL.to( LOWER_UNDERSCORE, string )
 
 
   implicit class ReflectionDdlColumnTypeSupport

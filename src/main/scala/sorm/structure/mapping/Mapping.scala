@@ -47,7 +47,7 @@ trait Mapping {
           case Membership.EntityId(_)
             ⇒ "id"
           case Membership.EntityProperty(name, _)
-            ⇒ name.asDdlName
+            ⇒ ddlName(name)
           case Membership.TupleItem(index, tuple)
             ⇒ tuple.columnName + "$" + index
           case Membership.OptionItem(option)
@@ -66,12 +66,12 @@ trait Mapping {
   lazy val tableName : String
     = this match {
         case _ : EntityMapping 
-          ⇒ reflection.name.asDdlName
+          ⇒ ddlName(reflection.name)
         case _
           ⇒ membership
               .map {
                 case Membership.EntityProperty(name, entity)
-                  ⇒ entity.tableName + "$" + name.asDdlName
+                  ⇒ entity.tableName + "$" + ddlName(name)
                 case Membership.TupleItem(index, tuple)
                   ⇒ tuple.tableName + "$" + index
                 case Membership.SeqItem(seq)
@@ -83,7 +83,7 @@ trait Mapping {
                 case Membership.MapValue(map)
                   ⇒ map.tableName + "$v"
               }
-              .getOrElse( reflection.name.asDdlName )
+              .getOrElse( ddlName(reflection.name) )
       }
 
   lazy val containerTableMapping : Option[TableMapping]

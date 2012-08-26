@@ -162,7 +162,7 @@ object Extensions {
     def iterate
       ( ƒ : A => A )
       : Stream[A]
-      = ƒ(α) as (α ⇒ α #:: (α iterate ƒ))
+      = α #:: (ƒ(α) iterate ƒ)
 
     def foldTo
       [ B ]

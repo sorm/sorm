@@ -149,7 +149,7 @@ object Extensions {
         else None
       }
   }
-  implicit class AnyFunctional[ A ]( val α : A ) extends AnyVal {
+  implicit class AnyFunctional[ A ]( α : A ) {
 
     def unfold
       [ B ]

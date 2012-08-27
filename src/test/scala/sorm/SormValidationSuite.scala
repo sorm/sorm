@@ -18,7 +18,7 @@ class SormValidationSuite extends FunSuite with ShouldMatchers {
         Entity[A]() :: Nil,
         "jdbc:h2:mem:test"
       )
-    } should produce [IllegalArgumentException]
+    } should produce [ValidationException]
   }
   test("self reference validation"){
     pending

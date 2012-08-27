@@ -26,8 +26,8 @@ class OptionSupportSuite extends FunSuite with ShouldMatchers {
 
   test("Option in Option fails on initialization"){
     evaluating {
-        Entity[EntityWithOptionInOption]()
-      } should produce [IllegalArgumentException]
+      Entity[EntityWithOptionInOption]()
+    } should produce [ValidationException]
   }
 
 }

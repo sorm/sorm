@@ -85,24 +85,33 @@ object Sorm {
             .flatMap{ allDescendantGenerics }
             .filter{ _ inheritsFrom Reflection[Option[_]] }
             .foreach{ r =>
-              require( !r.generics(0).inheritsFrom(Reflection[Option[_]]),
-                       "Type signatures with `Option` being directly nested in another `Option`, i.e. `Option[Option[_]]` are not allowed" )
-              require( !r.generics(0).inheritsFrom(Reflection[Traversable[_]]),
-                       "Type signatures with collection being directly nested in `Option`, e.g. `Option[Seq[_]]` are not allowed" )
+              if( r.generics(0).inheritsFrom(Reflection[Option[_]]) )
+                throw new ValidationException(
+                  "Type signatures with `Option` being directly nested " +
+                  "in another `Option`, i.e. `Option[Option[_]]` are " +
+                  "not supported" 
+                )
+              if( r.generics(0).inheritsFrom(Reflection[Traversable[_]]) )
+                throw new ValidationException(
+                  "Type signatures with collection being directly nested" +
+                  " in `Option`, e.g. `Option[Seq[_]]` are not supported" 
+                )
             }
         }
 
         ( indexes.view ++ uniqueKeys.view )
           .flatten
           .foreach{ p =>
-            require( reflection.properties.contains(p),
-                     "Inexistent property: `" + p + "`" )
+            if( !reflection.properties.contains(p) )
+              throw new ValidationException(s"Inexistent property: `$p`")
           }
 
         ( indexes.view ++ uniqueKeys.view )
           .foreach{ ps =>
-            require( ps.view.distinct.size == ps.size,
-                     "Not a distinct properties list: `" + ps.mkString(", ") + "`" )
+            if( ps.view.distinct.size != ps.size )
+              throw new ValidationException(
+                "Not a distinct properties list: `" + ps.mkString(", ") + "`"
+              )
           }
       }
     }
@@ -160,9 +169,11 @@ object Sorm {
 
           mappings.values.foreach{ e =>
             e.children.flatMap{ nestedEntities }.foreach{ e1 =>
-              require( mappings.contains(e1.reflection),
-                       "Entity `" + e1 + "` is not registered, but referred " +
-                       "in `" + e + "`" )
+              if( !mappings.contains(e1.reflection) )
+                throw new ValidationException(
+                  "Entity `" + e1 + "` is not registered, but referred " +
+                  "in `" + e + "`" 
+                )
 
             }
           }
@@ -171,8 +182,10 @@ object Sorm {
         {
           val reflections = entities.toStream.map{_.reflection}
           val diff = reflections.distinct diff reflections
-          require( diff == Stream(),
-                   "Reflections registered twice: " + diff.mkString(", ") )
+          if( diff != Stream() )
+            throw new ValidationException(
+              "Reflections registered twice: " + diff.mkString(", ") 
+            )
         }
       }
 
@@ -206,5 +219,5 @@ object Sorm {
 
     }
 
-
+  class ValidationException (m : String) extends SormException(m)
 }

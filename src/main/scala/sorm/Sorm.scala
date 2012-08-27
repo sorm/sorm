@@ -86,7 +86,7 @@ object Sorm {
     with Logging
     {
       protected[sorm] val connection
-        = new ConnectionAdapter(Connection(url, user, password))
+        = new ConnectionAdapter(JdbcConnection(url, user, password))
             with SaveAdapter
             with DropAllTablesAdapter
 

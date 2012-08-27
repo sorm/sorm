@@ -2,7 +2,7 @@ package sorm.jdbc
 
 import java.sql.DriverManager
 
-object Connection {
+object JdbcConnection {
 
   def apply
     ( url : String,

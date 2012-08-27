@@ -8,6 +8,7 @@ import save._
 import structure._
 import mapping._
 import extensions.Extensions._
+import Sorm._
 
 object TestingInstance {
 

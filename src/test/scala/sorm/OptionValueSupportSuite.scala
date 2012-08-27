@@ -18,6 +18,7 @@ import create._
 import extensions.Extensions._
 
 import samples._
+import Sorm._
 
 @RunWith(classOf[JUnitRunner])
 class OptionValueSupportSuite extends FunSuite with ShouldMatchers {

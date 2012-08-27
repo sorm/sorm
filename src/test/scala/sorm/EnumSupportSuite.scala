@@ -8,6 +8,7 @@ import org.scalatest.junit.JUnitRunner
 import sorm._
 import api._
 import extensions.Extensions._
+import Sorm._
 
 import samples._
 

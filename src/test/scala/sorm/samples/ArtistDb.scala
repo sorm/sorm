@@ -4,6 +4,7 @@ import sorm._
 import api._
 import reflection._
 import extensions.Extensions._
+import Sorm._
 
 object ArtistDb {
   

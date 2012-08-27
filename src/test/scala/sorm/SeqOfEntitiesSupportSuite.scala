@@ -10,6 +10,7 @@ import api._
 import extensions.Extensions._
 
 import samples._
+import Sorm._
 
 @RunWith(classOf[JUnitRunner])
 class SeqOfEntitiesSupportSuite extends FunSuite with ShouldMatchers {

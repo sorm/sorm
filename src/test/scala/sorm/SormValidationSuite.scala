@@ -1,16 +1,16 @@
-package sorm.api
+package sorm
 
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 
-import sorm._
+import Sorm._
 import samples._
 
 @RunWith(classOf[JUnitRunner])
-class InstanceSuite extends FunSuite with ShouldMatchers {
-  import InstanceSuite._
+class SormValidationSuite extends FunSuite with ShouldMatchers {
+  import SormValidationSuite._
 
   test("referred entities validation"){
     evaluating {
@@ -24,7 +24,7 @@ class InstanceSuite extends FunSuite with ShouldMatchers {
     pending
   }
 }
-object InstanceSuite {
+object SormValidationSuite {
   case class A
     ( a : Seq[Option[(B, Int)]] )
   case class B

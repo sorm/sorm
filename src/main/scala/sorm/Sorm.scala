@@ -60,27 +60,30 @@ object Sorm {
       {
         // All referred entities must be registered
         {
-          def nestedEntities
-            ( m : Mapping )
-            : Stream[EntityMapping]
-            = m match {
-                case m : EntityMapping =>
-                  Stream(m)
-                case m : HasChildren =>
-                  m.children.toStream.flatMap{ nestedEntities }
-                case _ =>
-                  Stream()
-              }
 
           mappings.values.foreach{ e =>
-            e.children.flatMap{ nestedEntities }.foreach{ e1 =>
+
+            val descendants
+              = e.children
+                  .unfold1{ σ =>
+                    ( for { α <- σ
+                            β <- α.toInstanceOf[HasChildren].toIterable
+                            γ <- α +: β.children.toStream }
+                      yield γ ).notEmpty
+                  }
+                  .flatten
+
+            val nestedEntities
+              = descendants.collect{ case e : EntityMapping => e }
+
+            nestedEntities.foreach{ e1 =>
               if( !mappings.contains(e1.reflection) )
                 throw new ValidationException(
                   "Entity `" + e1 + "` is not registered, but referred " +
                   "in `" + e + "`"
                 )
-
             }
+            
           }
         }
         // No reflection should be registered twice

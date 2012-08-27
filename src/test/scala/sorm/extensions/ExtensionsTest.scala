@@ -13,9 +13,9 @@ class ExtensionsTest extends FunSuite with ShouldMatchers {
     equal(Map("b1" -> 1, "c1" -> 4, "a1" -> 9))
   }
   test("asInstanceOfOption returns None for unmatching type"){
-    8.asInstanceOf1[String] should equal(None)
+    8.toInstanceOf[String] should equal(None)
   }
   test("asInstanceOfOption returns Some for a matching type"){
-    8.asInstanceOf1[Int] should equal(Some(8))
+    8.toInstanceOf[Int] should equal(Some(8))
   }
 }

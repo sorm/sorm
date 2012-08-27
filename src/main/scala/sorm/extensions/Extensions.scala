@@ -1,5 +1,6 @@
 package sorm.extensions
 
+import reflect.runtime.universe._
 
 object Extensions {
 
@@ -135,9 +136,8 @@ object Extensions {
           }
     }
 
-  import reflect.runtime.universe._
-  implicit class AnyAsInstanceOf1[ A : TypeTag ]( α : A ) {
-    def asInstanceOf1[ T : TypeTag ] : Option[T]
+  implicit class AnyInstanceOf[ A : TypeTag ]( α : A ) {
+    def toInstanceOf[ T : TypeTag ] : Option[T]
       = if( typeOf[T] <:< typeOf[A] ) Some( α.asInstanceOf[T] )
         else None
   }

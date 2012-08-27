@@ -43,13 +43,6 @@ object Compositing {
           Union(l, r)
       }
   
-  def select 
-    ( statement : Statement ) 
-    : Select
-    = statement match {
-        case statement : Select => statement
-      }
-
   private def havingsMergeable
     ( l : Seq[HavingCount], r : Seq[HavingCount] )
     = l.forall{ l =>

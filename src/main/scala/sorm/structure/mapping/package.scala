@@ -25,7 +25,8 @@ package object mapping {
                 name
                   = m.columnName + "$" + c.name,
                 nullable
-                  = m.membership.isInstanceOf[Some[Membership.EntityProperty]]
+                  = m.membership
+                      .toInstanceOf[Some[Membership.EntityProperty]].isDefined
               )
             }
         case m : HasChildren ⇒ 

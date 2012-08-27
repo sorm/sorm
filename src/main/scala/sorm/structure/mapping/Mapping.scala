@@ -73,14 +73,10 @@ trait Mapping {
                 entity.tableName + "$" + ddlName(name)
               case Membership.TupleItem(index, tuple) => 
                 tuple.tableName + "$" + index
-              case Membership.SeqItem(seq) => 
-                seq.tableName + "$v"
-              case Membership.SetItem(set) => 
-                set.tableName + "$v"
               case Membership.MapKey(map) => 
                 map.tableName + "$k"
-              case Membership.MapValue(map) => 
-                map.tableName + "$v"
+              case _ => 
+                parent.get.tableName + "$v"
             }
             .getOrElse( ddlName(reflection.name) )
       }
@@ -122,9 +118,7 @@ object Mapping {
           new EntityMapping( membership, reflection, settings )
         case MappingKind.Option => 
           new OptionMapping( membership, reflection, settings )
-        case MappingKind.Entity => 
-          new EntityMapping( membership, reflection, settings )
-        case MappingKind.Enum => 
+        case MappingKind.Enum =>
           new EnumMapping( membership, reflection, settings )
       }
 }

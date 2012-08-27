@@ -1,9 +1,5 @@
 package sorm.jdbc
 
-import com.weiglewilczek.slf4s.Logger
-import java.sql.{ResultSet, PreparedStatement, Connection, Statement => JStatement}
-import org.joda.time.DateTime
-
 import sorm._
 import extensions.Extensions._
 

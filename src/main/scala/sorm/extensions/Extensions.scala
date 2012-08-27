@@ -1,6 +1,7 @@
 package sorm.extensions
 
 import reflect.runtime.universe._
+import util.Try
 
 object Extensions {
 
@@ -99,7 +100,7 @@ object Extensions {
     def trying
       [ ResultT ]
       ( f : A => ResultT )
-      = try Some(f(x)) catch { case _ => None }
+      = Try(f(x)).toOption
 
   }
 

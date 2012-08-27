@@ -154,34 +154,29 @@ object StandardRendering {
 
       def data
         = self match {
-            case Union(l, r) =>
+            case Union(l, r) => 
               l.data ++: r.data
-            case Select(what, from, join, where, groupBy, having, orderBy, limit, offset) =>
-              ( what ++: from +: join ++: where ++: groupBy ++: having ++: orderBy )
-                .view
+            case Select(what, from, join, where, groupBy, having, orderBy, 
+                        limit, offset) =>
+              ( what ++: from +: join ++: where ++: groupBy ++: having ++:
+                orderBy 
+              ) .view
                 .flatMap{_.data}
                 .toStream
-            case OrderBy(what, desc) =>
+            case OrderBy(what, desc) => 
               what.data
-            case Table(_) =>
-              Stream()
-            case From(what, as) =>
+            case From(what, as) => 
               what.data
-            case Join(what, _, _, _) =>
+            case Join(what, _, _, _) => 
               what.data
-            case Column(_, _) =>
-              Stream()
-            case Count(_, _) =>
-              Stream()
-            case Value(v) =>
+            case Value(v) => 
               Stream(v)
-            case CompositeCondition(l, r, _) =>
+            case CompositeCondition(l, r, _) => 
               l.data ++: r.data
-            case IsNull(_, _) =>
+            case Comparison(l, r, _) => 
+              l.data ++: r.data
+            case _ => 
               Stream()
-            case Comparison(l, r, _) =>
-              l.data ++: r.data
-
           }
     }
 

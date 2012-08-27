@@ -7,9 +7,15 @@ import org.scalatest.junit.JUnitRunner
 import sorm.extensions.Extensions._
 
 @RunWith(classOf[JUnitRunner])
-class Test extends FunSuite with ShouldMatchers {
+class ExtensionsTest extends FunSuite with ShouldMatchers {
   test("mapKeys") {
     Map("b" -> 1, "c" -> 4, "a" -> 9).mapKeys(_ + "1") should
     equal(Map("b1" -> 1, "c1" -> 4, "a1" -> 9))
+  }
+  test("asInstanceOfOption returns None for unmatching type"){
+    8.asInstanceOf1[String] should equal(None)
+  }
+  test("asInstanceOfOption returns Some for a matching type"){
+    8.asInstanceOf1[Int] should equal(Some(8))
   }
 }

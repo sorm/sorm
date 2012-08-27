@@ -104,12 +104,6 @@ object Extensions {
       ( f : A => ResultT )
       = try Some(f(x)) catch { case _ => None }
 
-    def asInstanceOfOption[ T ]
-      = x match {
-          case x : T => Some(x)
-          case _ => None
-        }
-
   }
 
 
@@ -145,7 +139,12 @@ object Extensions {
           }
     }
 
-
+  import reflect.runtime.universe._
+  implicit class AnyAsInstanceOf1[ A : TypeTag ]( α : A ) {
+    def asInstanceOf1[ T : TypeTag ] : Option[T]
+      = if( typeOf[T] <:< typeOf[A] ) Some( α.asInstanceOf[T] )
+        else None
+  }
   implicit class AnyFunctional[ A ]( val α : A ) extends AnyVal {
 
     def unfold

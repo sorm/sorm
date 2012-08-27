@@ -88,7 +88,7 @@ class Reflection ( protected val t : Type ) {
       }
 
   def containerObjectName : Option[String]
-    = t.asInstanceOfOption[TypeRef].map(_.pre.s.decodedName)
+    = t.asInstanceOf1[TypeRef].map(_.pre.s.decodedName)
 
   def containerObject : Option[Any]
     = t match {

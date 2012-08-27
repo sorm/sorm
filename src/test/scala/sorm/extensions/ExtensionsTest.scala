@@ -25,6 +25,11 @@ class ExtensionsTest extends FunSuite with ShouldMatchers {
   test("toInstanceOf on mixins"){
     (new A with B).toInstanceOf[B] should be ('defined)
   }
+  test("toInstanceOf on general types as input"){
+    (Seq(new A with B, new A{}, new B {}))
+      .flatMap{_.toInstanceOf[B]}
+      .should( have size (2) )
+  }
 }
 object ExtensionsTest {
   trait A

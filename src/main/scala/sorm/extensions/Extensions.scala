@@ -1,7 +1,8 @@
 package sorm.extensions
 
-import reflect.runtime.universe._
 import util.Try
+import reflect.runtime.universe._
+import reflect.runtime.currentMirror
 
 object Extensions {
 
@@ -136,11 +137,17 @@ object Extensions {
               (a, b.drop(splitter.size))
           }
     }
-
-  implicit class AnyInstanceOf[ A : TypeTag ]( α : A ) {
+  implicit class AnyInstanceOf[ A : TypeTag ]( x : A ) {
     def toInstanceOf[ T : TypeTag ] : Option[T]
-      = if( typeOf[A] <:< typeOf[T] ) Some( α.asInstanceOf[T] )
+      = {
+        def test
+          = currentMirror.runtimeClass(typeOf[T]) match {
+              case c if c.isPrimitive => typeOf[A] <:< typeOf[T]
+              case c => c.isAssignableFrom(x.getClass) || typeOf[A] <:< typeOf[T]
+            }
+        if( test ) Some( x.asInstanceOf[T] )
         else None
+      }
   }
   implicit class AnyFunctional[ A ]( val α : A ) extends AnyVal {
 

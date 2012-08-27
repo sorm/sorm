@@ -23,26 +23,26 @@ object Sorm {
    * The mode for initialization performed when a connection to the db is
    * established on creation of SORM instance.
    */
-  sealed trait Initialization
-  object Initialization {
+  sealed trait InitMode
+  object InitMode {
     /**
      * Wipe out all the contents of the db and generate the tables
      */
-    case object DropAllCreate extends Initialization
+    case object DropAllCreate extends InitMode
     /**
      * Drop only the tables which have conflicting names with the ones to be
      * generated and actually generate them
      */
-    case object DropCreate extends Initialization
+    case object DropCreate extends InitMode
     /**
      * Just generate the tables. Fail if name conflicts arise with the existing
      * ones
      */
-    case object Create extends Initialization
+    case object Create extends InitMode
     /**
      * Do nothing
      */
-    case object DoNothing extends Initialization
+    case object DoNothing extends InitMode
   }
 
   /**
@@ -116,14 +116,14 @@ object Sorm {
    *            be: `jdbc:mysql://localhost/test`
    * @param user A username used for connection
    * @param password A password used for connection
-   * @param initialization An initialization mode for this instance
+   * @param initMode An initialization mode for this instance
    */
   class Instance
     ( entities : Traversable[Entity[_]],
       url : String,
       user : String = "",
       password : String = "",
-      initialization : Initialization = Initialization.DoNothing )
+      initMode : InitMode = InitMode.DoNothing )
     extends Api
     with Logging
     {
@@ -178,13 +178,13 @@ object Sorm {
 
       // Initialize a db schema:
       {
-        initialization match {
-          case Initialization.DropAllCreate =>
+        initMode match {
+          case InitMode.DropAllCreate =>
             connection.dropAllTables()
             for( s <- Create.statements(mappings.values) ){
               connection.executeUpdate(s)
             }
-          case Initialization.DropCreate =>
+          case InitMode.DropCreate =>
             for( s <- Drop.statements(mappings.values) ){
               try {
                 connection.executeUpdate(s)
@@ -196,11 +196,11 @@ object Sorm {
             for( s <- Create.statements(mappings.values) ){
               connection.executeUpdate(s)
             }
-          case Initialization.Create =>
+          case InitMode.Create =>
             for( s <- Create.statements(mappings.values) ){
               connection.executeUpdate(s)
             }
-          case Initialization.DoNothing =>
+          case InitMode.DoNothing =>
         }
       }
 

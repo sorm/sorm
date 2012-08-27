@@ -50,6 +50,6 @@ object OptionEntitySeqItemSupportSuite {
   val db
     = new Instance( Entity[A]() :: Entity[B]() :: Nil,
                     "jdbc:h2:mem:test",
-                    initialization = Initialization.DropAllCreate )
+                    initMode = InitMode.DropAllCreate )
 
 }

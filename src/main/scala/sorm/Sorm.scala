@@ -19,31 +19,110 @@ import reflect.basis._
 
 object Sorm {
 
+  class ValidationException ( m : String ) extends SormException(m)
+
   /**
-   * The mode for initialization performed when a connection to the db is
-   * established on creation of SORM instance.
+   * The instance of SORM
+   * @param entities A list of entity settings describing the entities to be
+   *                 registered with this instance
+   * @param url A url of database to connect to. For instance, to connect to a
+   *            database `test` on MySQL server running on your computer it will
+   *            be: `jdbc:mysql://localhost/test`
+   * @param user A username used for connection
+   * @param password A password used for connection
+   * @param initMode An initialization mode for this instance
    */
-  sealed trait InitMode
-  object InitMode {
-    /**
-     * Wipe out all the contents of the db and generate the tables
-     */
-    case object DropAllCreate extends InitMode
-    /**
-     * Drop only the tables which have conflicting names with the ones to be
-     * generated and actually generate them
-     */
-    case object DropCreate extends InitMode
-    /**
-     * Just generate the tables. Fail if name conflicts arise with the existing
-     * ones
-     */
-    case object Create extends InitMode
-    /**
-     * Do nothing
-     */
-    case object DoNothing extends InitMode
-  }
+  class Instance
+    ( entities : Traversable[Entity[_]],
+      url : String,
+      user : String = "",
+      password : String = "",
+      initMode : InitMode = InitMode.DoNothing )
+    extends Api
+    with Logging
+    {
+      protected[sorm] val connection
+        = new ConnectionAdapter(JdbcConnection(url, user, password))
+            with SaveAdapter
+            with DropAllTablesAdapter
+
+      protected[sorm] val mappings
+        = {
+          val settings
+            = entities.view.map{ e => e.reflection -> e.settings }.toMap
+
+          settings.keys
+            .zipBy{ new EntityMapping(None, _, settings) }
+            .toMap
+        }
+
+      // Validate input:
+      {
+        // All referred entities must be registered
+        {
+          def nestedEntities
+            ( m : Mapping )
+            : Stream[EntityMapping]
+            = m match {
+                case m : EntityMapping =>
+                  Stream(m)
+                case m : HasChildren =>
+                  m.children.toStream.flatMap{ nestedEntities }
+                case _ =>
+                  Stream()
+              }
+
+          mappings.values.foreach{ e =>
+            e.children.flatMap{ nestedEntities }.foreach{ e1 =>
+              if( !mappings.contains(e1.reflection) )
+                throw new ValidationException(
+                  "Entity `" + e1 + "` is not registered, but referred " +
+                  "in `" + e + "`"
+                )
+
+            }
+          }
+        }
+        // No reflection should be registered twice
+        {
+          val reflections = entities.toStream.map{_.reflection}
+          val diff = reflections.distinct diff reflections
+          if( diff != Stream() )
+            throw new ValidationException(
+              "Reflections registered twice: " + diff.mkString(", ")
+            )
+        }
+      }
+
+      // Initialize a db schema:
+      {
+        initMode match {
+          case InitMode.DropAllCreate =>
+            connection.dropAllTables()
+            for( s <- Create.statements(mappings.values) ){
+              connection.executeUpdate(s)
+            }
+          case InitMode.DropCreate =>
+            for( s <- Drop.statements(mappings.values) ){
+              try {
+                connection.executeUpdate(s)
+              } catch {
+                case e : Throwable =>
+                  logger.warn("Couldn't drop table. " + e.getMessage)
+              }
+            }
+            for( s <- Create.statements(mappings.values) ){
+              connection.executeUpdate(s)
+            }
+          case InitMode.Create =>
+            for( s <- Create.statements(mappings.values) ){
+              connection.executeUpdate(s)
+            }
+          case InitMode.DoNothing =>
+        }
+      }
+
+    }
 
   /**
    * Entity settings. Used for registring entities with the SORM instance.
@@ -117,107 +196,30 @@ object Sorm {
     }
 
   /**
-   * The instance of SORM
-   * @param entities A list of entity settings describing the entities to be
-   *                 registered with this instance
-   * @param url A url of database to connect to. For instance, to connect to a
-   *            database `test` on MySQL server running on your computer it will
-   *            be: `jdbc:mysql://localhost/test`
-   * @param user A username used for connection
-   * @param password A password used for connection
-   * @param initMode An initialization mode for this instance
+   * The mode for initialization performed when a connection to the db is
+   * established on creation of SORM instance.
    */
-  class Instance
-    ( entities : Traversable[Entity[_]],
-      url : String,
-      user : String = "",
-      password : String = "",
-      initMode : InitMode = InitMode.DoNothing )
-    extends Api
-    with Logging
-    {
-      protected[sorm] val connection
-        = new ConnectionAdapter(JdbcConnection(url, user, password))
-            with SaveAdapter
-            with DropAllTablesAdapter
+  sealed trait InitMode
+  object InitMode {
+    /**
+     * Wipe out all the contents of the db and generate the tables
+     */
+    case object DropAllCreate extends InitMode
+    /**
+     * Drop only the tables which have conflicting names with the ones to be
+     * generated and actually generate them
+     */
+    case object DropCreate extends InitMode
+    /**
+     * Just generate the tables. Fail if name conflicts arise with the existing
+     * ones
+     */
+    case object Create extends InitMode
+    /**
+     * Do nothing
+     */
+    case object DoNothing extends InitMode
+  }
 
-      protected[sorm] val mappings
-        = {
-          val settings
-            = entities.view.map{ e => e.reflection -> e.settings }.toMap
 
-          settings.keys
-            .zipBy{ new EntityMapping(None, _, settings) }
-            .toMap
-        }
-
-      // Validate input:
-      {
-        // All referred entities must be registered
-        {
-          def nestedEntities
-            ( m : Mapping )
-            : Stream[EntityMapping]
-            = m match {
-                case m : EntityMapping =>
-                  Stream(m)
-                case m : HasChildren =>
-                  m.children.toStream.flatMap{ nestedEntities }
-                case _ =>
-                  Stream()
-              }
-
-          mappings.values.foreach{ e =>
-            e.children.flatMap{ nestedEntities }.foreach{ e1 =>
-              if( !mappings.contains(e1.reflection) )
-                throw new ValidationException(
-                  "Entity `" + e1 + "` is not registered, but referred " +
-                  "in `" + e + "`" 
-                )
-
-            }
-          }
-        }
-        // No reflection should be registered twice
-        {
-          val reflections = entities.toStream.map{_.reflection}
-          val diff = reflections.distinct diff reflections
-          if( diff != Stream() )
-            throw new ValidationException(
-              "Reflections registered twice: " + diff.mkString(", ") 
-            )
-        }
-      }
-
-      // Initialize a db schema:
-      {
-        initMode match {
-          case InitMode.DropAllCreate =>
-            connection.dropAllTables()
-            for( s <- Create.statements(mappings.values) ){
-              connection.executeUpdate(s)
-            }
-          case InitMode.DropCreate =>
-            for( s <- Drop.statements(mappings.values) ){
-              try {
-                connection.executeUpdate(s)
-              } catch {
-                case e : Throwable =>
-                  logger.warn("Couldn't drop table. " + e.getMessage)
-              }
-            }
-            for( s <- Create.statements(mappings.values) ){
-              connection.executeUpdate(s)
-            }
-          case InitMode.Create =>
-            for( s <- Create.statements(mappings.values) ){
-              connection.executeUpdate(s)
-            }
-          case InitMode.DoNothing =>
-        }
-      }
-
-    }
-
-  class ValidationException (m : String) extends SormException(m)
 }

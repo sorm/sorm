@@ -55,34 +55,34 @@ object Path {
           Filter(operator, host, value)
         case (host : MapMapping, Part.Braced(key) +: tail) =>
           And(
-            Filter(Operator.Equals, host.key, key),
+            Filter(Operator.Equal, host.key, key),
             where(host.value, tail, value, operator)
           )
         case (host : SeqMapping, Part.Braced(index) +: tail) =>
           And(
-            Filter(Operator.Equals, host.index, index.toInt),
+            Filter(Operator.Equal, host.index, index.toInt),
             where(host.item, tail, value, operator)
           )
         //  virtual properties should not be supported until a general api is developed
         // case (host : CollectionMapping, Part.Dotted("size") +: Seq()) =>
         //   ( operator, value ) match {
-        //     case (Operator.Equals, _) =>
+        //     case (Operator.Equal, _) =>
         //       Filter(Operator.HasSize, host, value)
         //   }
         // case (host : MapMapping, Part.Dotted("keys") +: Seq()) =>
         //   ( operator, value ) match {
-        //     case (Operator.Equals, value : Traversable[_]) => 
+        //     case (Operator.Equal, value : Traversable[_]) =>
         //       value.view
-        //         .map{ Filter(Operator.Equals, host.key, _) }
+        //         .map{ Filter(Operator.Equal, host.key, _) }
         //         .reduceOption{ Or }
         //         .foldLeft( Filter(Operator.HasSize, host, value.size) ){ And }
         //     case (Operator.Includes, value : Traversable[_]) 
         //       if value.size > 0 =>
         //       value.view
-        //         .map{ Filter(Operator.Equals, host.key, _) }
+        //         .map{ Filter(Operator.Equal, host.key, _) }
         //         .reduce{ Or }
         //     case (Operator.Contains, value : Any) =>
-        //       Filter(Operator.Equals, host.key, value)
+        //       Filter(Operator.Equal, host.key, value)
         //   }         
         case (_, Part.Dotted(id) +: tail) =>
           where( mapping(host, id), tail, value, operator )

@@ -42,10 +42,10 @@ class SeqOfIntsSupportSuite extends FunSuite with ShouldMatchers {
   test("Differently ordered seq") {
     fetchEqualingIds(Seq(9, 2, 3)) should be === Set()
   }
-  test("Equals on smaller size") {
+  test("Equal on smaller size") {
     pending
   }
-  test("Equals on bigger size") {
+  test("Equal on bigger size") {
     pending
   }
 
@@ -93,7 +93,7 @@ object SeqOfIntsSupportSuite {
   db.save(A( Seq(3) ))
 
   def fetchEqualingIds ( value : Seq[_] ) : Set[Long]
-    = db.query[A].filterEquals("a", value).fetchAll().map{_.id}.toSet
+    = db.query[A].filterEqual("a", value).fetchAll().map{_.id}.toSet
   def fetchNotEqualingIds ( value : Seq[_] ) : Set[Long]
-    = db.query[A].filterNotEquals("a", value).fetchAll().map{_.id}.toSet
+    = db.query[A].filterNotEqual("a", value).fetchAll().map{_.id}.toSet
 }

@@ -47,12 +47,12 @@ object Query {
 
   sealed trait Operator
   object Operator {
-    case object Equals extends Operator
-    case object NotEquals extends Operator
+    case object Equal extends Operator
+    case object NotEqual extends Operator
     case object Larger extends Operator
-    case object LargerIncluding extends Operator
+    case object LargerOrEqual extends Operator
     case object Smaller extends Operator
-    case object SmallerIncluding extends Operator
+    case object SmallerOrEqual extends Operator
     case object Like extends Operator
     case object NotLike extends Operator
     case object Regex extends Operator

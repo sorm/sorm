@@ -54,26 +54,26 @@ object AbstractSqlComposition extends Logging {
         case Or(l, r) =>
           filtersStatement(l) | filtersStatement(r)
 
-        case Filter(Equals, m, v) =>
+        case Filter(Equal, m, v) =>
           equaling(m, v)
 
-        case Filter(NotEquals, m, v) =>
+        case Filter(NotEqual, m, v) =>
           notEqualing(m, v)
 
         case Filter(Larger, m: ValueMapping, v) =>
           logger.warn("`Larger` filter is not tested")
           comparing( m, AS.Larger, v )
 
-        case Filter(LargerIncluding, m: ValueMapping, v) => 
-          logger.warn("`LargerIncluding` filter is not tested")
+        case Filter(LargerOrEqual, m: ValueMapping, v) =>
+          logger.warn("`LargerOrEqual` filter is not tested")
           comparing( m, AS.LargerOrEqual, v )
 
         case Filter(Smaller, m: ValueMapping, v) => 
           logger.warn("`Smaller` filter is not tested")
           comparing( m, AS.Smaller, v )
 
-        case Filter(SmallerIncluding, m: ValueMapping, v) => 
-          logger.warn("`SmallerIncluding` filter is not tested")
+        case Filter(SmallerOrEqual, m: ValueMapping, v) =>
+          logger.warn("`SmallerOrEqual` filter is not tested")
           comparing( m, AS.SmallerOrEqual, v )
 
         case Filter(Like, m: ValueMapping, v) => 

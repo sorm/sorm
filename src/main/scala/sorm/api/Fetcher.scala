@@ -16,6 +16,7 @@ import extensions.Extensions._
 import query.Query._
 
 import collection.immutable.Queue
+import com.weiglewilczek.slf4s.Logging
 
 class Fetcher
   [ T ]
@@ -25,6 +26,7 @@ class Fetcher
     queryOrder      : Queue[Order] = Queue.empty,
     queryLimit      : Option[Int] = None,
     queryOffset     : Int = 0 )
+  extends Logging
   {
     private def copy
       ( connection      : ConnectionAdapter = connection,
@@ -54,26 +56,60 @@ class Fetcher
       : Fetcher[T]
       = filter( Path.where( queryMapping, p, v, o ) )
 
-    def filterEquals ( p : String, v : Any ) 
-      = filter( p, v, Operator.Equals )
-    def filterNotEquals ( p : String, v : Any ) 
-      = filter( p, v, Operator.NotEquals )
+    def filterEqual ( p : String, v : Any )
+      = filter( p, v, Operator.Equal )
+
+    def filterNotEqual ( p : String, v : Any )
+      = filter( p, v, Operator.NotEqual )
+
+    def filterLarger ( p : String, v : Any )
+      = filter( p, v, Operator.Larger )
+
+    def filterLargerOrEqual ( p : String, v : Any )
+      = filter( p, v, Operator.LargerOrEqual )
+
     def filterSmaller ( p : String, v : Any ) 
       = filter( p, v, Operator.Smaller )
-    def filterLarger ( p : String, v : Any ) 
-      = filter( p, v, Operator.Larger )
-    def filterContains ( p : String, v : Any ) 
-      = filter( p, v, Operator.Contains )
+
+    def filterSmallerOrEqual ( p : String, v : Any )
+      = filter( p, v, Operator.SmallerOrEqual )
+
+    def filterLike( p : String, v : Any ) 
+      = filter( p, v, Operator.Like )
+
+    def filterNotLike( p : String, v : Any ) 
+      = filter( p, v, Operator.NotLike )
+
+    def filterRegex( p : String, v : Any ) 
+      = filter( p, v, Operator.Regex )
+
+    def filterNotRegex( p : String, v : Any ) 
+      = filter( p, v, Operator.NotRegex )
+
     def filterIn ( p : String, v : Any ) 
       = filter( p, v, Operator.In )
-    def filterIncludes ( p : String, v : Any ) 
-      = filter( p, v, Operator.Includes )
+
+    def filterNotIn ( p : String, v : Any ) 
+      = filter( p, v, Operator.NotIn )
+
+    def filterContains ( p : String, v : Any ) 
+      = filter( p, v, Operator.Contains )
+
+    def filterNotContains ( p : String, v : Any ) 
+      = filter( p, v, Operator.NotContains )
+
     def filterConstitutes ( p : String, v : Any ) 
       = filter( p, v, Operator.Constitutes )
-    def filterLike ( p : String, v : Any ) 
-      = filter( p, v, Operator.Like )
-    def filterRegex ( p : String, v : Any ) 
-      = filter( p, v, Operator.Regex )
+
+    def filterNotConstitutes ( p : String, v : Any ) 
+      = filter( p, v, Operator.NotConstitutes )
+
+    def filterIncludes ( p : String, v : Any ) 
+      = filter( p, v, Operator.Includes )
+
+    def filterNotIncludes ( p : String, v : Any ) 
+      = filter( p, v, Operator.NotIncludes )
+
 
     private[sorm] def query( kind : Kind = Kind.Select )
       = Query(kind, queryMapping, queryWhere, queryOrder, queryLimit, queryOffset)
@@ -102,10 +138,17 @@ class Fetcher
     def fetchOne()
       = limit(1).fetchAll().headOption
 
-    def fetchSize()
+    def fetchCount()
       : Int
       = {
-        ???
+        logger.warn("TODO: to implement effective fetchCount")
+        fetchAll().size
+      }
+
+    def fetchExists()
+      = {
+        logger.warn("TODO: to implement effective fetchExists")
+        fetchOne().isDefined
       }
 
   }

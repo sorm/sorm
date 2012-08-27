@@ -38,17 +38,17 @@ class OptionValueSupportSuite extends FunSuite with ShouldMatchers {
   }
   test("equals filter"){
     db.query[EntityWithValuePropertyInOption]
-      .filterEquals("a", None).fetchOne().get.id should be === 1
+      .filterEqual("a", None).fetchOne().get.id should be === 1
     db.query[EntityWithValuePropertyInOption]
-      .filterEquals("a", Some(3)).fetchOne().get.id should be === 2
+      .filterEqual("a", Some(3)).fetchOne().get.id should be === 2
   }
   test("not equals filter"){
     db.query[EntityWithValuePropertyInOption]
-      .filterNotEquals("a", None)
+      .filterNotEqual("a", None)
       .fetchAll().map{_.id.toInt}.toSet
       .should( not contain (1) and contain (3) and contain (2) )
     db.query[EntityWithValuePropertyInOption]
-      .filterNotEquals("a", Some(3))
+      .filterNotEqual("a", Some(3))
       .fetchAll().map{_.id.toInt}.toSet
       .should( not contain (2) and contain (1) and contain (3) )
   }

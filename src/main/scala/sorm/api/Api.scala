@@ -45,7 +45,7 @@ trait Api {
     [ T <: AnyRef : TypeTag ]
     ( id : Long )
     : Option[T with Persisted]
-    = new Fetcher[T](connection, mapping[T]).filterEquals("id", id).fetchOne()
+    = new Fetcher[T](connection, mapping[T]).filterEqual("id", id).fetchOne()
 
   /**
    * Current time at DB server

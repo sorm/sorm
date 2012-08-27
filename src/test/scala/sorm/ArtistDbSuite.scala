@@ -16,7 +16,7 @@ class ArtistDbSuite extends FunSuite with ShouldMatchers {
 
   test("path with index"){
     Db.query[Artist]
-      .filterEquals("names.value(1)", "Rolling Stones")
+      .filterEqual("names.value(1)", "Rolling Stones")
       .fetchOne()
       .get
       .names(Db.en)(1) should be === "Rolling Stones"
@@ -38,14 +38,14 @@ class ArtistDbSuite extends FunSuite with ShouldMatchers {
   }
   test("Equality to persisted entity"){
     Db.query[Artist]
-      .filterEquals("styles.item", Db.metal)
+      .filterEqual("styles.item", Db.metal)
       .fetchAll()
       .flatMap{_.names.values.head}
       .toSet should be === Set("Metallica", "Godsmack")
   }
   test("Map, Set, Seq deep path"){
     Db.query[Artist]
-      .filterEquals("styles.item.names.value.item", "Hard Rock")
+      .filterEqual("styles.item.names.value.item", "Hard Rock")
       .fetchAll()
       .flatMap{_.names.values.head}
       .toSet should be === Set("Metallica", "Nirvana", "Godsmack")
@@ -54,9 +54,9 @@ class ArtistDbSuite extends FunSuite with ShouldMatchers {
     Db.query[Artist].fetchOne().map{_.id} should be === Some(1)
   }
   test("Query by id"){
-    Db.query[Artist].filterEquals("id", 1).fetchOne()
+    Db.query[Artist].filterEqual("id", 1).fetchOne()
       .map{_.names.values.head.head}.get should be === "Metallica"
-    Db.query[Artist].filterEquals("id", 3).fetchOne()
+    Db.query[Artist].filterEqual("id", 3).fetchOne()
       .map{_.names.values.head.head}.get should be === "Kino"
   }
 

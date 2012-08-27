@@ -27,7 +27,7 @@ class DateTimeSupportSuite extends FunSuite with ShouldMatchers {
   test("Api fetchDate")(pending)
   test("Bigger filter")(pending)
   test("Smaller filter")(pending)
-  test("Equals filter")(pending)
+  test("Equal filter")(pending)
   test("In filter")(pending)
   test("Other filters fail")(pending)
 

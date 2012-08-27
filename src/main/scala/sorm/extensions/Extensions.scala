@@ -139,7 +139,7 @@ object Extensions {
 
   implicit class AnyInstanceOf[ A : TypeTag ]( α : A ) {
     def toInstanceOf[ T : TypeTag ] : Option[T]
-      = if( typeOf[T] <:< typeOf[A] ) Some( α.asInstanceOf[T] )
+      = if( typeOf[A] <:< typeOf[T] ) Some( α.asInstanceOf[T] )
         else None
   }
   implicit class AnyFunctional[ A ]( val α : A ) extends AnyVal {

@@ -18,4 +18,7 @@ class ExtensionsTest extends FunSuite with ShouldMatchers {
   test("asInstanceOfOption returns Some for a matching type"){
     8.toInstanceOf[Int] should equal(Some(8))
   }
+  test("asInstanceOfOption returns Some for an inheriting type"){
+    List(1).toInstanceOf[Seq[Int]] should be ('defined)
+  }
 }

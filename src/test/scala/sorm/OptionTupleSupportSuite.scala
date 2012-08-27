@@ -6,7 +6,7 @@ import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 
 import sorm._
-import api._
+import core._
 import persisted._
 import query._
 import reflection._

@@ -1,4 +1,4 @@
-package sorm.api
+package sorm.core
 
 import org.joda.time.DateTime
 

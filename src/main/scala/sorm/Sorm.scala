@@ -1,7 +1,7 @@
 package sorm
 
 import sorm._
-import api._
+import core._
 import dropAll._
 import persisted._
 import reflection._

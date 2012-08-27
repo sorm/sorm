@@ -1,6 +1,6 @@
 package sorm
 
-import api._
+import core._
 import jdbc._
 import persisted.Persisted
 import reflection.Reflection

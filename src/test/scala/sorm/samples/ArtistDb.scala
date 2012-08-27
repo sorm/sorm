@@ -1,7 +1,7 @@
 package sorm.samples
 
 import sorm._
-import api._
+import core._
 import reflection._
 import extensions.Extensions._
 import Sorm._

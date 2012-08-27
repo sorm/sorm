@@ -1,7 +1,7 @@
 package sorm.samples
 
 import sorm._
-import api._
+import core._
 import jdbc._
 import samples._
 import save._

@@ -31,8 +31,8 @@ object ArtistDb {
                Entity[Locale]() ),
       url
         = "jdbc:h2:mem:test",
-      mode
-        = Mode.DropAllCreate
+      initialization
+        = Initialization.DropAllCreate
     )
     {
       //  Fill up the db with sample data.

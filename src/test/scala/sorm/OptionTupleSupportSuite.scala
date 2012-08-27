@@ -49,6 +49,6 @@ object OptionTupleSupportSuite {
   val db
     = new Instance( Entity[A]() :: Nil,
                     "jdbc:h2:mem:test",
-                    mode = Mode.DropAllCreate )
+                    initialization = Initialization.DropAllCreate )
 
 }

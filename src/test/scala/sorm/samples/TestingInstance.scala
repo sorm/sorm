@@ -31,15 +31,15 @@ object TestingInstance {
       }
   def h2
     ( entities : Entity[_]* )
-    = new Instance( entities, "jdbc:h2:mem:test", mode = Mode.DropAllCreate )
+    = new Instance( entities, "jdbc:h2:mem:test", initialization = Initialization.DropAllCreate )
   def mysql
     ( entities : Entity[_]* )
-    = new Instance( entities, "jdbc:mysql://localhost/test", mode = Mode.DropAllCreate )
+    = new Instance( entities, "jdbc:mysql://localhost/test", initialization = Initialization.DropAllCreate )
   def sqlite
     ( entities : Entity[_]* )
-    = new Instance( entities, "jdbc:sqlite::memory:", mode = Mode.DropAllCreate )
+    = new Instance( entities, "jdbc:sqlite::memory:", initialization = Initialization.DropAllCreate )
   def hsql
     ( entities : Entity[_]* )
-    = new Instance( entities, "jdbc:hsqldb:mem:testdb", mode = Mode.DropCreate)
+    = new Instance( entities, "jdbc:hsqldb:mem:testdb", initialization = Initialization.DropCreate)
 
 }

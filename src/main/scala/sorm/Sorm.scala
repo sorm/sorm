@@ -19,14 +19,45 @@ import reflect.basis._
 
 object Sorm {
 
-  sealed trait Mode
-  object Mode {
-    case object DropAllCreate extends Mode
-    case object DropCreate extends Mode
-    case object Create extends Mode
-    case object None extends Mode
+  /**
+   * The mode for initialization performed when a connection to the db is
+   * established on creation of SORM instance.
+   */
+  sealed trait Initialization
+  object Initialization {
+    /**
+     * Wipe out all the contents of the db and generate the tables
+     */
+    case object DropAllCreate extends Initialization
+    /**
+     * Drop only the tables which have conflicting names with the ones to be
+     * generated and actually generate them
+     */
+    case object DropCreate extends Initialization
+    /**
+     * Just generate the tables. Fail if name conflicts arise with the existing
+     * ones
+     */
+    case object Create extends Initialization
+    /**
+     * Do nothing
+     */
+    case object DoNothing extends Initialization
   }
 
+  /**
+   * Entity settings. Used for registring entities with the SORM instance.
+   * @param indexes
+   * Fields of case class on which the filtering operations will be performed
+   * when querying the db. Specifying those may help the DB to perform a little
+   * better.
+   * @param uniqueKeys
+   * Fields of case class which are known to have a unique value amongst all
+   * possible instances of this class. Specifying these may help the db perform
+   * a little better and will protect you from storing entities having duplicate
+   * values of this field.
+   * @tparam T The case class
+   */
   sealed case class Entity
     [ T : TypeTag ]
     ( indexes       : Set[Seq[String]] = Set(),
@@ -76,12 +107,23 @@ object Sorm {
       }
     }
 
+  /**
+   * The instance of SORM
+   * @param entities A list of entity settings describing the entities to be
+   *                 registered with this instance
+   * @param url A url of database to connect to. For instance, to connect to a
+   *            database `test` on MySQL server running on your computer it will
+   *            be: `jdbc:mysql://localhost/test`
+   * @param user A username used for connection
+   * @param password A password used for connection
+   * @param initialization An initialization mode for this instance
+   */
   class Instance
     ( entities : Traversable[Entity[_]],
       url : String,
       user : String = "",
       password : String = "",
-      mode : Mode = Mode.None )
+      initialization : Initialization = Initialization.DoNothing )
     extends Api
     with Logging
     {
@@ -136,13 +178,13 @@ object Sorm {
 
       // Initialize a db schema:
       {
-        mode match {
-          case Mode.DropAllCreate =>
+        initialization match {
+          case Initialization.DropAllCreate =>
             connection.dropAllTables()
             for( s <- Create.statements(mappings.values) ){
               connection.executeUpdate(s)
             }
-          case Mode.DropCreate =>
+          case Initialization.DropCreate =>
             for( s <- Drop.statements(mappings.values) ){
               try {
                 connection.executeUpdate(s)
@@ -154,11 +196,11 @@ object Sorm {
             for( s <- Create.statements(mappings.values) ){
               connection.executeUpdate(s)
             }
-          case Mode.Create =>
+          case Initialization.Create =>
             for( s <- Create.statements(mappings.values) ){
               connection.executeUpdate(s)
             }
-          case Mode.None =>
+          case Initialization.DoNothing =>
         }
       }
 

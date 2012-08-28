@@ -4,6 +4,7 @@ import reflect.runtime.universe._
 import reflect.runtime.{currentMirror => mirror}
 import sorm.extensions.Extensions._
 import ScalaApi._
+import util.hashing.MurmurHash3
 
 class Reflection ( protected val t : Type ) {
 
@@ -11,7 +12,8 @@ class Reflection ( protected val t : Type ) {
 
   override def toString = t.toString
 
-  override def hashCode = t.hashCode
+  override def hashCode
+    = MurmurHash3.finalizeHash(t.typeSymbol.hashCode, generics.hashCode)
 
   override def equals ( other : Any )
     = other match {

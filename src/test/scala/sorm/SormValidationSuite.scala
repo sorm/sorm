@@ -7,6 +7,7 @@ import org.scalatest.junit.JUnitRunner
 
 import Sorm._
 import samples._
+import sorm.Sorm.ValidationException
 
 @RunWith(classOf[JUnitRunner])
 class SormValidationSuite extends FunSuite with ShouldMatchers {
@@ -20,13 +21,21 @@ class SormValidationSuite extends FunSuite with ShouldMatchers {
       )
     } should produce [ValidationException]
   }
+  test("Correct instantiation doesn't throw exceptions"){
+    new Instance(
+      Entity[A]() :: Entity[B]() :: Entity[C]() :: List.empty[Entity[_]],
+      "jdbc:h2:mem:test"
+    )
+  }
   test("self reference validation"){
     pending
   }
 }
 object SormValidationSuite {
   case class A
-    ( a : Seq[Option[(B, Int)]] )
+    ( a : Seq[Option[(B, Int)]], b : B, c : Seq[C] )
   case class B
+    ( a : Int, b : C )
+  case class C
     ( a : Int )
 }

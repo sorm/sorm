@@ -7,7 +7,6 @@ import org.scalatest.junit.JUnitRunner
 
 import Sorm._
 import samples._
-import sorm.Sorm.ValidationException
 import org.joda.time.DateTime
 
 @RunWith(classOf[JUnitRunner])
@@ -15,24 +14,36 @@ class SophisticatedDomainSuite extends FunSuite with ShouldMatchers {
   import SophisticatedDomainSuite._
 
   test("Correct instantiation doesn't throw exceptions"){
-    new Sorm.Instance(
-      Sorm.Entity[Settings]() +:
-      Sorm.Entity[Task](/* indexes = Set(Seq("opened"), Seq("closed")) */) +:
-      Sorm.Entity[Album]() +:
-      Sorm.Entity[Track]() +:
-      Sorm.Entity[Genre]() +:
-      Sorm.Entity[Artist]() +:
-      List.empty[Sorm.Entity[_]],
+    new Instance(
+      Entity[Settings]() +:
+      Entity[Task](/* indexes = Set(Seq("opened"), Seq("closed")) */) +:
+      Entity[Album]() +:
+      Entity[Track]() +:
+      Entity[Genre]() +:
+      Entity[Artist]() +:
+      List.empty[Entity[_]],
       "jdbc:h2:mem:test"
     )
   }
-
+  test("Saving goes fine"){
+    val db = TestingInstance.h2(
+      Entity[Settings](),
+      Entity[Task](),
+      Entity[Album](),
+      Entity[Track](),
+      Entity[Genre](),
+      Entity[Artist]()
+    )
+    val rock = db.save(Genre("Rock"))
+    val hardRock = db.save(Genre("Hard Rock"))
+    val pop = db.save(Genre("Pop"))
+  }
 
 }
 object SophisticatedDomainSuite {
   case class Settings
     ( listingUrlTemplate : String,
-      requestsIntervalRange : Seq[Int] )
+      requestsIntervalRange : Range )
 
   object ResponseType extends Enumeration {
     val Listing, Album = Value

@@ -50,67 +50,43 @@ class PreparedStatementAdapter
       {
         import java.sql.Types._
         t match {
-          case CHAR | VARCHAR     => s.setString(
-                                       i, 
-                                       v.asInstanceOf[String]
-                                     )
-          case LONGVARCHAR        => s.setString(
-                                       i, 
-                                       v.asInstanceOf[String]
-                                     )
-//          case LONGVARCHAR        => s.setCharacterStream(
-//                                       i,
-//                                       v.asInstanceOf[java.io.Reader]
-//                                     )
-          case NUMERIC | DECIMAL  => s.setBigDecimal(
-                                       i, 
-                                       v.asInstanceOf[java.math.BigDecimal]
-                                     )
-          case BIT                => s.setBoolean(
-                                       i, 
-                                       v.asInstanceOf[Boolean]
-                                     )
-          case TINYINT            => s.setByte(
-                                       i, 
-                                       v.asInstanceOf[Byte]
-                                     )
-          case SMALLINT           => s.setShort(
-                                       i, 
-                                       v.asInstanceOf[Short]
-                                     )
-          case INTEGER            => s.setInt(
-                                       i, 
-                                       v.asInstanceOf[Int]
-                                     )
-          case BIGINT             => s.setLong(
-                                       i, 
-                                       v.asInstanceOf[Long]
-                                     )
-          case REAL               => s.setFloat(
-                                       i, 
-                                       v.asInstanceOf[Float]
-                                     )
-          case FLOAT | DOUBLE     => s.setDouble(
-                                       i, 
-                                       v.asInstanceOf[Double]
-                                     )
-          case BINARY | VARBINARY => s.setBytes(
-                                       i, 
-                                       v.asInstanceOf[Array[Byte]]
-                                     )
-          case LONGVARBINARY      => s.setBinaryStream(
-                                       i, 
-                                       v.asInstanceOf[java.io.InputStream]
-                                     )
-          case DATE               => 
+          case CHAR | VARCHAR => 
+            s.setString(i, v.asInstanceOf[String])
+          case LONGVARCHAR => 
+            s.setString(i, v.asInstanceOf[String])
+          // case LONGVARCHAR => 
+          //   s.setCharacterStream(i, v.asInstanceOf[java.io.Reader])
+          case NUMERIC | DECIMAL => 
+            s.setBigDecimal(i, v.asInstanceOf[java.math.BigDecimal])
+          case BIT => 
+            s.setBoolean(i, v.asInstanceOf[Boolean])
+          case TINYINT => 
+            s.setByte(i, v.asInstanceOf[Byte])
+          case SMALLINT => 
+            s.setShort(i, v.asInstanceOf[Short])
+          case INTEGER => 
+            s.setInt(i, v.asInstanceOf[Int])
+          case BIGINT => 
+            s.setLong(i, v.asInstanceOf[Long])
+          case REAL => 
+            s.setFloat(i, v.asInstanceOf[Float])
+          case FLOAT | DOUBLE => 
+            s.setDouble(i, v.asInstanceOf[Double])
+          case BINARY | VARBINARY => 
+            s.setBytes(i, v.asInstanceOf[Array[Byte]])
+          case LONGVARBINARY => 
+            s.setBinaryStream(i, v.asInstanceOf[java.io.InputStream])
+          case DATE => 
             s.setDate(i, v.asInstanceOf[LocalDate].toJava)
-          case TIME               => 
+          case TIME => 
             s.setTime(i, v.asInstanceOf[LocalTime].toJava)
-          case TIMESTAMP          =>
+          case TIMESTAMP =>
             s.setTimestamp(i, v.asInstanceOf[DateTime].toJava)
-          case BLOB               => s.setBlob(i, v.asInstanceOf[java.sql.Blob])
-          case NULL               => s.setNull(i, NULL)
-          case _                  => ???
+          case BLOB => 
+            s.setBlob(i, v.asInstanceOf[java.sql.Blob])
+          case NULL => 
+            s.setNull(i, NULL)
+          case _ => ???
         }
       }
   }

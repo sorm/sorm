@@ -37,6 +37,24 @@ object Column {
         val jdbcType = Types.VARCHAR
       }
 
+    case object Time
+      extends Type
+      {
+        val ddl = "TIME"
+        val jdbcType = Types.TIME
+      }
+    case object Date
+      extends Type
+      {
+        val ddl = "DATE"
+        val jdbcType = Types.DATE
+      }
+    case object TimeStamp
+      extends Type
+      {
+        val ddl = "TIMESTAMP"
+        val jdbcType = Types.TIMESTAMP
+      }
     case object Integer  
       extends Type
       {

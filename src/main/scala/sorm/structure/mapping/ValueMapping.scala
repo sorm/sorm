@@ -5,6 +5,7 @@ import extensions.Extensions._
 import reflection._
 import ddl._
 import structure._
+import org.joda.time.{LocalDate, LocalTime, DateTime}
 
 sealed class ValueMapping
   ( val membership : Option[Membership],
@@ -20,8 +21,12 @@ sealed class ValueMapping
                 Column.Type.VarChar
               else
                 Column.Type.Text
+          case _ if reflection inheritsFrom Reflection[BigDecimal]
+            ⇒ Column.Type.Decimal
           case _ if reflection inheritsFrom Reflection[Boolean]
             ⇒ Column.Type.Boolean
+          case _ if reflection inheritsFrom Reflection[Byte]
+            ⇒ Column.Type.TinyInt
           case _ if reflection inheritsFrom Reflection[Short]
             ⇒ Column.Type.SmallInt
           case _ if reflection inheritsFrom Reflection[Int]
@@ -32,9 +37,13 @@ sealed class ValueMapping
             ⇒ Column.Type.Float
           case _ if reflection inheritsFrom Reflection[Double]
             ⇒ Column.Type.Double
-          case _ if reflection inheritsFrom Reflection[BigDecimal]
-            ⇒ Column.Type.Decimal
-          case _
+          case _ if reflection inheritsFrom Reflection[DateTime]
+            ⇒ Column.Type.TimeStamp
+          case _ if reflection inheritsFrom Reflection[LocalTime]
+            ⇒ Column.Type.Time
+          case _ if reflection inheritsFrom Reflection[LocalDate]
+            ⇒ Column.Type.Date
+          case _ 
             ⇒ ???
         }
 

@@ -76,8 +76,8 @@ object Sorm {
             e.children.flatMap{ nestedEntities }.foreach{ e1 =>
               if( !mappings.contains(e1.reflection) )
                 throw new ValidationException(
-                  "Entity `" + e1 + "` is not registered, but referred " +
-                  "in `" + e + "`"
+                  "Entity `" + e1.reflection.name + "` is not registered, " +
+                  "but referred to in `" + e.reflection.name + "`"
                 )
 
             }

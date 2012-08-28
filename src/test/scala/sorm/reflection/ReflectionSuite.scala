@@ -33,6 +33,13 @@ class ReflectionSuite extends FunSuite with ShouldMatchers {
 //    println(isMixedIn(tag[Artist with Mixin].tpe))
 //    properties(tag[Artist with Mixin].tpe) should equal (properties(tag[Artist].tpe))
 //  }
+  test("Generics have effect on hashCode"){
+    Reflection[Seq[Int]].hashCode should not equal(Reflection[Seq[Any]].hashCode)
+  }
+  test("Identical reflections should have same hashCode"){
+    Reflection[Artist].properties("genres").generics(0).hashCode
+      .should(equal(Reflection[Genre].hashCode))
+  }
   test("Enumeration signature is correct"){
     Reflection[ResponseType.Value].signature
       .should(equal("sorm.reflection.ReflectionSuite.ResponseType.Value"))
@@ -122,7 +129,6 @@ class ReflectionSuite extends FunSuite with ShouldMatchers {
     Reflection[Wrapper#InnerClass].signature should
     equal("sorm.reflection.ReflectionSuite.Wrapper#InnerClass")
   }
-
 }
 object ReflectionSuite {
 

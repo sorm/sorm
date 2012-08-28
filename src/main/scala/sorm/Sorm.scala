@@ -187,7 +187,7 @@ object Sorm {
 
         ( indexes.view ++ uniqueKeys.view )
           .foreach{ ps =>
-            if( ps.view.distinct.size != ps.size )
+            if( ps.distinct.size != ps.size )
               throw new ValidationException(
                 "Not a distinct properties list: `" + ps.mkString(", ") + "`"
               )

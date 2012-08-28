@@ -64,10 +64,10 @@ trait Mapping {
             "k"
           case Membership.MapValue(_) => 
             "v"
-          case Membership.RangeFrom(_) =>
-            "f"
-          case Membership.RangeTo(_) =>
-            "t"
+          case Membership.RangeFrom(r) =>
+            r.columnName + "$f"
+          case Membership.RangeTo(r) =>
+            r.columnName + "$t"
         }
         .getOrElse("")
 

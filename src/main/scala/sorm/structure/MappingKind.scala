@@ -15,10 +15,14 @@ object MappingKind {
   case object Seq    extends MappingKind
   case object Set    extends MappingKind
   case object Map    extends MappingKind
+  case object Range  extends MappingKind
 
   def apply
     ( reflection : Reflection )
     = reflection match {
+        case _
+          if reflection inheritsFrom Reflection[scala.Range]
+          => Range
         case _
           if reflection inheritsFrom Reflection[collection.Seq[_]]
           => Seq

@@ -184,7 +184,7 @@ trait SaveAdapter extends ConnectionAdapter {
           )
         case (v : Option[_], m : OptionMapping) ⇒ 
           v.map{ saveAndGetIt1(_, m.item) }
-        case (v : Any, m : ColumnMapping) ⇒ 
+        case _ ⇒
           v
       }
 
@@ -209,7 +209,7 @@ trait SaveAdapter extends ConnectionAdapter {
           )
         case (v : Option[_], m : OptionMapping) ⇒ 
           v.map{ saveAndGetIt2(_, m.item, containerKey) }
-        case (v : Any, m : ColumnMapping) ⇒ 
+        case _ ⇒
           v
       }
 
@@ -336,6 +336,9 @@ trait SaveAdapter extends ConnectionAdapter {
             .toMap
         case (m : EnumMapping, v : Enumeration#Value) =>
           Map( m.columnName -> JdbcValue(m.dbValues(v), m.column.t.jdbcType) )
+        case (m : RangeMapping, v : Range) =>
+          rowValuesForContainerTable(v.start, m.from) ++
+          rowValuesForContainerTable(v.end, m.to)
         case (m : ValueMapping, v) =>
           Map( m.columnName -> JdbcValue(v, m.column.t.jdbcType) )
 

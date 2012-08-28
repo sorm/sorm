@@ -99,6 +99,8 @@ class ResultSetParsingAdapter
             row : Row )
           : Any
           = m match {
+              case m : RangeMapping =>
+                value(m.from, row).asInstanceOf[Int] to value(m.to, row).asInstanceOf[Int]
               case m : EnumMapping =>
                 m.values( row.data(m.column).asInstanceOf[Byte] )
               case m : ValueMapping =>

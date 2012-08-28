@@ -99,6 +99,8 @@ object Combinators {
           )
         case (m : EntityMapping, v : Persisted) =>
           equaling(m.id, v.id)
+        case (m : RangeMapping, v : Range ) =>
+          equaling(m.from, v.start) & equaling(m.to, v.end)
         case (m : TupleMapping, v : Product ) =>
           v.productIterator.zipWithIndex
             .map{ case (v, i) => equaling(m.items(i), v) }

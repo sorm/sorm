@@ -8,6 +8,12 @@ sealed trait Membership {
 
 object Membership {
 
+  sealed case class RangeFrom
+    ( parent : RangeMapping )
+    extends Membership
+  sealed case class RangeTo
+    ( parent : RangeMapping )
+    extends Membership
   sealed case class SeqIndex
     ( parent : SeqMapping )
     extends Membership

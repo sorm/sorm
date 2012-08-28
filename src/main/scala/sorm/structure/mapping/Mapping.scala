@@ -35,6 +35,10 @@ trait Mapping {
             "mapKey"
           case Membership.MapValue(_) => 
             "mapValue"
+          case Membership.RangeFrom(_) =>
+            "rangeFrom"
+          case Membership.RangeTo(_) =>
+            "rangeTo"
         }
         .map{ membership.get.parent.toString + "." + _ }
         .getOrElse( reflection.name )
@@ -60,6 +64,10 @@ trait Mapping {
             "k"
           case Membership.MapValue(_) => 
             "v"
+          case Membership.RangeFrom(_) =>
+            "f"
+          case Membership.RangeTo(_) =>
+            "t"
         }
         .getOrElse("")
 
@@ -120,5 +128,7 @@ object Mapping {
           new OptionMapping( membership, reflection, settings )
         case MappingKind.Enum =>
           new EnumMapping( membership, reflection, settings )
+        case MappingKind.Range =>
+          new RangeMapping( membership, reflection, settings )
       }
 }

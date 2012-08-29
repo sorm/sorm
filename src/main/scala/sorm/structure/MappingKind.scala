@@ -39,6 +39,8 @@ object MappingKind {
           if (reflection inheritsFrom Reflection[AnyVal])
           || (reflection inheritsFrom Reflection[String])
           || (reflection inheritsFrom Reflection[org.joda.time.DateTime])
+          || (reflection inheritsFrom Reflection[org.joda.time.LocalDate])
+          || (reflection inheritsFrom Reflection[org.joda.time.LocalTime])
           => Value
         case _
           if (reflection inheritsFrom Reflection[Enumeration#Value])

@@ -25,8 +25,9 @@ trait Api {
     [ T : TypeTag ]
     = mappings.get(Reflection[T])
         .getOrElse{
-          throw new Exception( "Entity `" + Reflection[T].name + 
-                               "` is not registered" )
+          throw new SormException(
+            "Entity `" + Reflection[T].name + "` is not registered"
+          )
         }
 
   def save

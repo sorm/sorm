@@ -27,7 +27,7 @@ object Path {
     = """^(?:\.?(\w+)|\((\w+)\))(.*)$""".r
         .findFirstMatchIn(p)
         .getOrElse {
-          throw new Exception("Unparsable path: `" + p + "`")
+          throw new SormException("Unparsable path: `" + p + "`")
         }
         .subgroups match {
           case List(name, null, remainder) =>
@@ -104,7 +104,7 @@ object Path {
             case Some(index) =>
               mapping( host.items(index.toInt - 1), remainder )
             case None =>
-              throw new Exception("Unparseable tuple item id `" + id + "` in path `" + path + "` of `" + host + "`")
+              throw new SormException("Unparseable tuple item id `" + id + "` in path `" + path + "` of `" + host + "`")
           }
         case (host : OptionMapping, ("item", remainder)) =>
           mapping( host.item, remainder )
@@ -117,7 +117,7 @@ object Path {
         case (host : MapMapping, ("value", remainder)) =>
           mapping( host.value, remainder )
         case (_, (id, _)) =>
-          throw new Exception("Unparseable id `" + id + "` in path `" + path + "` of `" + host + "`")
+          throw new SormException("Unparseable id `" + id + "` in path `" + path + "` of `" + host + "`")
       }
 
 }

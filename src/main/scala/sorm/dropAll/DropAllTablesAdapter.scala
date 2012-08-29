@@ -1,6 +1,7 @@
 package sorm.dropAll
 
 import sorm._
+import core.SormException
 import jdbc._
 import extensions.Extensions._
 
@@ -31,7 +32,7 @@ trait DropAllTablesAdapter extends ConnectionAdapter {
     }
 
     if( !lastTables.isEmpty ) {
-      throw new Exception("Couldn't drop all tables")
+      throw new SormException("Couldn't drop all tables")
     }
 
   }

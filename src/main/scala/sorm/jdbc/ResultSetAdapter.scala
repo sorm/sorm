@@ -93,15 +93,20 @@ class ResultSetAdapter
               case FLOAT | DOUBLE     => rs.getDouble(i)
               case BINARY | VARBINARY => rs.getBytes(i)
               case LONGVARBINARY      => rs.getBinaryStream(i)
-              case DATE               => rs.getDate(i).toJoda
-              case TIME               => rs.getTime(i).toJoda
-              case TIMESTAMP          => rs.getTimestamp(i).toJoda
+              case DATE               => rs.getDate(i)
+              case TIME               => rs.getTime(i)
+              case TIMESTAMP          => rs.getTimestamp(i)
               case BLOB               => rs.getBlob(i)
               case CLOB               => rs.getClob(i)
               case _                  => ???
             }
         if( rs.wasNull() ) null
-        else r
+        else r match {
+          case r : java.sql.Date => r.toJoda
+          case r : java.sql.Time => r.toJoda
+          case r : java.sql.Timestamp => r.toJoda
+          case _ => r
+        }
       }
 
     def value

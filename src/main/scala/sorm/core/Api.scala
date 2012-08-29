@@ -45,7 +45,6 @@ trait Api extends Logging {
         .asInstanceOf[T with Persisted]
 
 
-
   private def statementAndResultMappings ( q : Query )
     = {
       val sql 
@@ -99,19 +98,14 @@ trait Api extends Logging {
       )
     }
 
-  def query
-    [ T <: AnyRef : TypeTag ]
-    : Fetcher[T]
-    = new Fetcher[T](connection, mapping[T])
-
   def fetchById
     [ T <: AnyRef : TypeTag ]
     ( id : Long )
     : Option[T with Persisted]
-    = new Fetcher[T](connection, mapping[T]).filterEqual("id", id).fetchOne()
+    = one[T].filterEqual("id", id).fetch()
 
   /**
-   * Current time at DB server
+   * Current DateTime at DB server
    */
   def fetchDate() : DateTime
     = connection

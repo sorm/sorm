@@ -10,9 +10,16 @@ import save._
 import structure._
 import mapping._
 import jdbc._
+import query.Query._
 import extensions.Extensions._
 
-trait Api {
+import abstractSql.StandardSqlComposition
+import query.AbstractSqlComposition
+import sql.StandardRendering._
+import resultSet._
+import com.weiglewilczek.slf4s.Logging
+
+trait Api extends Logging {
 
   protected def connection
     : ConnectionAdapter with
@@ -37,19 +44,68 @@ trait Api {
     = connection.saveEntityAndGetIt( value, mapping[T] )
         .asInstanceOf[T with Persisted]
 
-  def query
+
+  private def statementAndResultMappings ( q : Query )
+    = {
+      val sql 
+        = StandardSqlComposition.sql(AbstractSqlComposition.resultSetSelect(q))
+      Statement( sql.template, sql.data map JdbcValue.apply ) ->
+      q.mapping.resultSetMappings
+    }
+  private def fetch [ T <: AnyRef ] ( q : Query )
+    = {
+      val (stmt, resultSetMappings) = statementAndResultMappings( q )
+
+      connection.executeQuery(stmt)
+        .fetchInstancesAndClose(
+          q.mapping,
+          resultSetMappings.view.zipWithIndex.toMap
+        )
+        .asInstanceOf[Seq[T with Persisted]]
+    }
+
+  def all
     [ T <: AnyRef : TypeTag ]
-    : Fetcher[T]
-    = new Fetcher[T](connection, mapping[T])
+    = new FetchableQuery(
+        Query(Kind.Select, mapping[T]),
+        fetch[T]
+      )
+
+  def one
+    [ T <: AnyRef : TypeTag ]
+    = new FetchableQuery(
+        Query(Kind.Select, mapping[T], limit = Some(1)),
+        ( q : Query ) => fetch[T](q).headOption
+      )
+
+  def count
+    [ T <: AnyRef : TypeTag ]
+    = {
+      logger.warn("Effective `count` query is not yet implemented. Using ineffective version")
+      new FetchableQuery(
+        Query(Kind.Select, mapping[T]),
+        fetch[T] _ andThen (_.size)
+      )
+    }
+
+  def exists
+    [ T <: AnyRef : TypeTag ]
+    = {
+      logger.warn("Effective `exists` query is not yet implemented. Using ineffective version")
+      new FetchableQuery(
+        Query(Kind.Select, mapping[T], limit = Some(1)),
+        fetch[T] _ andThen (_.nonEmpty)
+      )
+    }
 
   def fetchById
     [ T <: AnyRef : TypeTag ]
     ( id : Long )
     : Option[T with Persisted]
-    = new Fetcher[T](connection, mapping[T]).filterEqual("id", id).fetchOne()
+    = one[T].filterEqual("id", id).fetch()
 
   /**
-   * Current time at DB server
+   * Current DateTime at DB server
    */
   def fetchDate() : DateTime
     = connection

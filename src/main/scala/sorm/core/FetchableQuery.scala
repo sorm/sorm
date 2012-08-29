@@ -15,33 +15,33 @@ import extensions.Extensions._
 
 import query.Query._
 
-import collection.immutable.Queue
 import com.weiglewilczek.slf4s.Logging
 
-class Fetcher
+class FetchableQuery
   [ T ]
-  ( connection      : ConnectionAdapter,
-    queryMapping    : EntityMapping,
-    queryWhere      : Option[Where] = None,
-    queryOrder      : Queue[Order] = Queue.empty,
-    queryLimit      : Option[Int] = None,
-    queryOffset     : Int = 0 )
-  extends Logging
+  ( query : Query,
+    fetchFunction : Query => T )
   {
+    def fetch() = fetchFunction(query)
+
     private def copy
-      ( connection      : ConnectionAdapter = connection,
-        queryMapping    : EntityMapping = queryMapping,
-        queryWhere      : Option[Where] = queryWhere,
-        queryOrder      : Queue[Order] = queryOrder,
-        queryLimit      : Option[Int] = queryLimit,
-        queryOffset     : Int = queryOffset )
-      : Fetcher[T]
-      = new Fetcher[T](
-          connection, queryMapping, queryWhere, queryOrder, queryLimit, queryOffset
+      ( kind    : Kind          = query.kind,
+        mapping : TableMapping  = query.mapping,
+        where   : Option[Where] = query.where,
+        order   : Seq[Order]    = query.order,
+        limit   : Option[Int]   = query.limit,
+        offset  : Int           = query.offset )
+      = new FetchableQuery[T](
+          Query(kind, mapping, where, order, limit, offset),
+          fetchFunction
         )
 
-    private def order ( p : String, r : Boolean = false )
-      = copy( queryOrder = queryOrder enqueue Order(Path.mapping(queryMapping, p), r) )
+    private def order ( p : String, desc : Boolean = false )
+      = copy(
+          order
+            = query.order.toVector :+
+              Order(Path.mapping(query.mapping, p), desc)
+        ) 
 
     def orderAsc ( p : String )
       = order(p, false)
@@ -50,19 +50,19 @@ class Fetcher
       = order(p, true)
 
     def limit ( x : Int )
-      = copy( queryLimit = Some(x) )
+      = copy( limit = Some(x) )
 
     def offset ( x : Int )
-      = copy( queryOffset = x )
+      = copy( offset = x )
 
     def filter ( w : Where )
-      : Fetcher[T]
+      : FetchableQuery[T]
       = copy( 
-          queryWhere = (queryWhere ++: List(w)) reduceOption And
+          where = (query.where ++: List(w)) reduceOption And
         )
     private def filter ( p : String, v : Any, o : Operator )
-      : Fetcher[T]
-      = filter( Path.where( queryMapping, p, v, o ) )
+      : FetchableQuery[T]
+      = filter( Path.where( query.mapping, p, v, o ) )
 
     def filterEqual ( p : String, v : Any )
       = filter( p, v, Operator.Equal )
@@ -117,46 +117,5 @@ class Fetcher
 
     def filterNotIncludes ( p : String, v : Any ) 
       = filter( p, v, Operator.NotIncludes )
-
-
-    private[sorm] def query( kind : Kind = Kind.Select )
-      = Query(kind, queryMapping, queryWhere, queryOrder, queryLimit, queryOffset)
-
-    private def statementAndResultMappings ( q : Query )
-      = {
-        val sql = StandardSqlComposition.sql(AbstractSqlComposition.resultSetSelect(q))
-        Statement( sql.template, sql.data map JdbcValue.apply ) ->
-        q.mapping.resultSetMappings
-      }
-
-    def fetchAll()
-      : Seq[T with Persisted]
-      = {
-        val (stmt, resultSetMappings)
-          = statementAndResultMappings( query(Kind.Select) )
-
-        connection.executeQuery(stmt)
-          .fetchInstancesAndClose(
-            queryMapping,
-            resultSetMappings.view.zipWithIndex.toMap
-          )
-          .asInstanceOf[Seq[T with Persisted]]
-      }
-
-    def fetchOne()
-      = limit(1).fetchAll().headOption
-
-    def fetchCount()
-      : Int
-      = {
-        logger.warn("TODO: to implement effective fetchCount")
-        fetchAll().size
-      }
-
-    def fetchExists()
-      = {
-        logger.warn("TODO: to implement effective fetchExists")
-        fetchOne().isDefined
-      }
 
   }

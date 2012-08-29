@@ -34,9 +34,9 @@ class SeqOfSeqsSupportSuite extends FunSuite with ShouldMatchers {
 
 
   test("Empty Seq matches empty Seq and not Seq of empty Seq"){
-    db.query[A]
+    db.all[A]
       .filterEqual("a", Seq())
-      .fetchAll().view.map{_.id}.toSet
+      .fetch().view.map{_.id}.toSet
       .should(
         contain (1l) and
         contain (5l) and
@@ -44,18 +44,18 @@ class SeqOfSeqsSupportSuite extends FunSuite with ShouldMatchers {
       )
   }
   test("An empty item Seq does not match inexistent one"){
-    db.query[A]
+    db.all[A]
       .filterEqual("a.item", Seq())
-      .fetchAll().view.map{_.id}.toSet 
+      .fetch().view.map{_.id}.toSet
       .should(
         not contain (1l) and
         not contain (5l)
       )
   }
   test("A partially matching seq with container seq containing other seq of same size"){
-    db.query[A]
+    db.all[A]
       .filterEqual("a.item", Seq(2))
-      .fetchAll().view.map{_.id}.toSet
+      .fetch().view.map{_.id}.toSet
       .should( not contain (2l) )
   }
 }

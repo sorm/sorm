@@ -94,7 +94,7 @@ object SeqOfIntsSupportSuite {
   db.save(A( Seq(3) ))
 
   def fetchEqualingIds ( value : Seq[_] ) : Set[Long]
-    = db.query[A].filterEqual("a", value).fetchAll().map{_.id}.toSet
+    = db.all[A].filterEqual("a", value).fetch().map{_.id}.toSet
   def fetchNotEqualingIds ( value : Seq[_] ) : Set[Long]
-    = db.query[A].filterNotEqual("a", value).fetchAll().map{_.id}.toSet
+    = db.all[A].filterNotEqual("a", value).fetch().map{_.id}.toSet
 }

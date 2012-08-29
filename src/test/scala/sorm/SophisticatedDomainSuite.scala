@@ -15,7 +15,7 @@ class SophisticatedDomainSuite extends FunSuite with ShouldMatchers {
 
   test("Date not storing None in Mysql bugfix"){
     val db = TestingInstance.mysql(
-      Entity[Task]( uniqueKeys = Set(Seq("opened"), Seq("closed")) )
+      Entity[Task]( unique = Set(Seq("opened"), Seq("closed")) )
     )
     db.save(Task(ResponseType.Album, "", db.fetchDate()))
     db.fetchById[Task](1l).get.closed should equal(None)
@@ -23,10 +23,10 @@ class SophisticatedDomainSuite extends FunSuite with ShouldMatchers {
   test("Unique keys support"){
     val db = TestingInstance.h2(
       Entity[Settings](),
-      Entity[Task]( uniqueKeys = Set(Seq("opened"), Seq("closed")) ),
+      Entity[Task]( unique = Set(Seq("opened"), Seq("closed")) ),
       Entity[Album](),
       Entity[Track](),
-      Entity[Genre](),
+      Entity[Genre]( unique = Set(Seq("name")) ),
       Entity[Artist]()
     )
     db.save(Genre("Rock"))
@@ -39,7 +39,7 @@ class SophisticatedDomainSuite extends FunSuite with ShouldMatchers {
           Entity[Task]( indexes = Set(Seq("opened"), Seq("closed")) ),
           Entity[Album](),
           Entity[Track](),
-          Entity[Genre](),
+          Entity[Genre]( unique = Set(Seq("name")) ),
           Entity[Artist]()
         ),
         "jdbc:h2:mem:test",

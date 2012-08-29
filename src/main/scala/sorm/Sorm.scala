@@ -190,7 +190,7 @@ object Sorm {
      * Fields of case class on which the filtering operations will be performed
      * when querying the db. Specifying those may help the DB to perform a little
      * better.
-     * @param uniqueKeys
+     * @param unique
      * Fields of case class which are known to have a unique value amongst all
      * possible instances of this class. Specifying these may help the db perform
      * a little better and will protect you from storing entities having duplicate
@@ -200,9 +200,9 @@ object Sorm {
     def apply
       [ T : TypeTag ]
       ( indexes    : Set[Seq[String]] = Set(),
-        uniqueKeys : Set[Seq[String]] = Set() )
+        unique : Set[Seq[String]] = Set() )
       : Entity
-      = Entity(Reflection[T], indexes, uniqueKeys)
+      = Entity(Reflection[T], indexes, unique)
   }
 
   /**

@@ -102,7 +102,12 @@ object Sorm {
       {
         initMode match {
           case InitMode.DropAllCreate =>
-            connection.dropAllTables()
+            try {
+              connection.dropAllTables()
+            } catch {
+              case e : Throwable =>
+                logger.warn("Couldn't drop all tables.")
+            }
             for( s <- Create.statements(mappings.values) ){
               connection.executeUpdate(s)
             }

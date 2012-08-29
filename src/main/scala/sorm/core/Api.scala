@@ -113,4 +113,35 @@ trait Api extends Logging {
         .parseAndClose().head.head
         .asInstanceOf[DateTime]
 
+  // /**
+  //  * Returns a query which when fetched either returns the matching result or
+  //  * saves the default value.
+  //  * @param dflt Default value
+  //  */
+  // def getOrSave
+  //   [ T <: AnyRef : TypeTag ]
+  //   ( dflt : => T ) 
+  //   = new FetchableQuery(
+  //       Query(Kind.Select, mapping[T], limit = Some(1)),
+  //       fetch[T] _ andThen (_.headOption) andThen (_.getOrElse(save(dflt)))
+  //     )
+  
+  /**
+   * If an entity with all fields matching is already saved, return it,
+   * otherwise save this one and return its persisted copy.
+   */
+  def fetchOrSave
+    [ T <: AnyRef : TypeTag ]
+    ( v : T ) 
+    : T with Persisted
+    = v match {
+        case v : Persisted =>
+          v.asInstanceOf[T with Persisted]
+        case v =>
+          v.reflected.propertyValues
+            .foldLeft( one[T] ){ case (q, (n, v)) => q.filterEqual(n, v) }
+            .fetch()
+            .getOrElse( save(v).asInstanceOf[T with Persisted] )
+      }
+
 }

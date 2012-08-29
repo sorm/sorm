@@ -40,10 +40,18 @@ class Fetcher
           connection, queryMapping, queryWhere, queryOrder, queryLimit, queryOffset
         )
 
-    def order ( p : String, r : Boolean = false )
+    private def order ( p : String, r : Boolean = false )
       = copy( queryOrder = queryOrder enqueue Order(Path.mapping(queryMapping, p), r) )
+
+    def orderAsc ( p : String )
+      = order(p, false)
+
+    def orderDesc ( p : String )
+      = order(p, true)
+
     def limit ( x : Int )
       = copy( queryLimit = Some(x) )
+
     def offset ( x : Int )
       = copy( queryOffset = x )
 

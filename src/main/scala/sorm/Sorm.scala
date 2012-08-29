@@ -33,7 +33,7 @@ object Sorm {
    * @param initMode An initialization mode for this instance
    */
   class Instance
-    ( entities : Traversable[Entity[_]],
+    ( entities : Traversable[Entity],
       url : String,
       user : String = "",
       password : String = "",
@@ -49,7 +49,11 @@ object Sorm {
       protected[sorm] val mappings
         = {
           val settings
-            = entities.view.map{ e => e.reflection -> e.settings }.toMap
+            = entities.view
+                .map{ e =>
+                  e.reflection -> EntitySettings(e.indexes, e.uniqueKeys)
+                }
+                .toMap
 
           settings.keys
             .zipBy{ new EntityMapping(None, _, settings) }
@@ -124,31 +128,11 @@ object Sorm {
 
     }
 
-  /**
-   * Entity settings. Used for registring entities with the SORM instance.
-   * @param indexes
-   * Fields of case class on which the filtering operations will be performed
-   * when querying the db. Specifying those may help the DB to perform a little
-   * better.
-   * @param uniqueKeys
-   * Fields of case class which are known to have a unique value amongst all
-   * possible instances of this class. Specifying these may help the db perform
-   * a little better and will protect you from storing entities having duplicate
-   * values of this field.
-   * @tparam T The case class
-   */
   sealed case class Entity
-    [ T : TypeTag ]
-    ( indexes       : Set[Seq[String]] = Set(),
-      uniqueKeys    : Set[Seq[String]] = Set() )
+    ( reflection    : Reflection,
+      indexes       : Set[Seq[String]],
+      uniqueKeys    : Set[Seq[String]] )
     {
-
-      lazy val reflection
-        = Reflection[T]
-      def settings
-        = EntitySettings(indexes, uniqueKeys)
-
-
       //  Validate input:
       {
         {
@@ -194,6 +178,27 @@ object Sorm {
           }
       }
     }
+  object Entity {
+    /**
+     * Entity settings. Used for registring entities with the SORM instance.
+     * @param indexes
+     * Fields of case class on which the filtering operations will be performed
+     * when querying the db. Specifying those may help the DB to perform a little
+     * better.
+     * @param uniqueKeys
+     * Fields of case class which are known to have a unique value amongst all
+     * possible instances of this class. Specifying these may help the db perform
+     * a little better and will protect you from storing entities having duplicate
+     * values of this field.
+     * @tparam T The case class
+     */
+    def apply
+      [ T : TypeTag ]
+      ( indexes    : Set[Seq[String]] = Set(),
+        uniqueKeys : Set[Seq[String]] = Set() )
+      : Entity
+      = Entity(Reflection[T], indexes, uniqueKeys)
+  }
 
   /**
    * The mode for initialization performed when a connection to the db is

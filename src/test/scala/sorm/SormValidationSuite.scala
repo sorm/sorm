@@ -23,7 +23,7 @@ class SormValidationSuite extends FunSuite with ShouldMatchers {
   }
   test("Correct instantiation doesn't throw exceptions"){
     new Instance(
-      Entity[A]() :: Entity[B]() :: Entity[C]() :: List.empty[Entity[_]],
+      Entity[A]() :: Entity[B]() :: Entity[C]() :: Nil,
       "jdbc:h2:mem:test"
     )
   }

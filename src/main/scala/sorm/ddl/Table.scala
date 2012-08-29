@@ -19,23 +19,24 @@ sealed case class Table
             ")"
         def indexDdl
           ( key : Seq[String] )
-          = "KEY (" + key.view.map{quote}.mkString(", ") + ")"
+          = "INDEX (" + key.view.map{quote}.mkString(", ") + ")"
         def uniqueKeyDdl
           ( key : Seq[String] )
           = "UNIQUE (" + key.view.map{quote}.mkString(", ") + ")"
-            "CREATE TABLE " + quote(name) + "\n" +
-            ( "( " + 
-              ( ( columns.view.map{_.ddl} ++
-                  Some(primaryKeyDdl) ++
-                  indexes.view.map{indexDdl} ++
-                  uniqueKeys.view.map{uniqueKeyDdl} ++
-                  foreignKeys.view.map{_.ddl}
-                  )
-                  .mkString(",\n") +
-                  " )"
-                )
-                .indent(2).trim
+
+        "CREATE TABLE " + quote(name) + "\n" +
+        ( "( " +
+          ( ( columns.view.map{_.ddl} ++
+              Some(primaryKeyDdl) ++
+//              indexes.view.map{indexDdl} ++ // not supported by h2
+              uniqueKeys.view.map{uniqueKeyDdl} ++
+              foreignKeys.view.map{_.ddl}
               )
-              .indent(2)
+              .mkString(",\n") +
+              " )"
+            )
+            .indent(2).trim
+          )
+          .indent(2)
       }
   }

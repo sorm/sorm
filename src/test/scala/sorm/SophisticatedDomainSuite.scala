@@ -13,6 +13,33 @@ import org.joda.time.DateTime
 class SophisticatedDomainSuite extends FunSuite with ShouldMatchers {
   import SophisticatedDomainSuite._
 
+  test("Unique keys support"){
+    val db = TestingInstance.h2(
+      Entity[Settings](),
+      Entity[Task]( uniqueKeys = Set(Seq("opened"), Seq("closed")) ),
+      Entity[Album](),
+      Entity[Track](),
+      Entity[Genre](),
+      Entity[Artist]()
+    )
+    db.save(Genre("Rock"))
+  }
+  test("Entities Set in instance parameters cause unregistered entity exception bugfix"){
+    val db =
+      new Instance(
+        Set(
+          Entity[Settings](),
+          Entity[Task]( indexes = Set(Seq("opened"), Seq("closed")) ),
+          Entity[Album](),
+          Entity[Track](),
+          Entity[Genre](),
+          Entity[Artist]()
+        ),
+        "jdbc:h2:mem:test",
+        initMode = InitMode.DropAllCreate
+      )
+    db.save(Genre("Rock"))
+  }
   test("Correct instantiation doesn't throw exceptions"){
     new Instance(
       Entity[Settings]() +:
@@ -21,8 +48,9 @@ class SophisticatedDomainSuite extends FunSuite with ShouldMatchers {
       Entity[Track]() +:
       Entity[Genre]() +:
       Entity[Artist]() +:
-      List.empty[Entity[_]],
-      "jdbc:h2:mem:test"
+      Nil,
+      "jdbc:h2:mem:test",
+      initMode = InitMode.DropAllCreate
     )
   }
   test("Saving goes fine"){

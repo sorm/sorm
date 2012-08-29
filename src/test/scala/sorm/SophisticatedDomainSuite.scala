@@ -13,6 +13,13 @@ import org.joda.time.DateTime
 class SophisticatedDomainSuite extends FunSuite with ShouldMatchers {
   import SophisticatedDomainSuite._
 
+  test("Date not storing None in Mysql bugfix"){
+    val db = TestingInstance.mysql(
+      Entity[Task]( uniqueKeys = Set(Seq("opened"), Seq("closed")) )
+    )
+    db.save(Task(ResponseType.Album, "", db.fetchDate()))
+    db.fetchById[Task](1l).get.closed should equal(None)
+  }
   test("Unique keys support"){
     val db = TestingInstance.h2(
       Entity[Settings](),

@@ -11,7 +11,7 @@ sealed case class Column
   {
     def ddl
       = quote(name) + " " + t.ddl + 
-        ( if( nullable ) "" else " NOT NULL" ) +
+        ( if( nullable ) " NULL" else " NOT NULL" ) +
         ( if( autoIncrement ) " AUTO_INCREMENT" else "" )
     override def toString
       = name

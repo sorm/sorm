@@ -20,8 +20,10 @@ import com.weiglewilczek.slf4s.Logging
 class FetchableQuery
   [ T ]
   ( query : Query,
-    val fetch : Query => T )
+    fetchFunction : Query => T )
   {
+    def fetch() = fetchFunction(query)
+
     private def copy
       ( kind    : Kind          = query.kind,
         mapping : TableMapping  = query.mapping,
@@ -31,7 +33,7 @@ class FetchableQuery
         offset  : Int           = query.offset )
       = new FetchableQuery[T](
           Query(kind, mapping, where, order, limit, offset),
-          fetch
+          fetchFunction
         )
 
     private def order ( p : String, desc : Boolean = false )

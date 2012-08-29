@@ -94,7 +94,7 @@ object Extensions {
               .map{ indent }
               .mkString("\n")
           case null =>
-            ""
+            "null"
           case x =>
             x.toString
         }

@@ -1,5 +1,6 @@
 package sorm.jdbc
 
+import sorm.extensions.Extensions._
 import java.sql.{Connection, ResultSet, Statement => JdbcStatement}
 import com.weiglewilczek.slf4s.Logging
 
@@ -8,7 +9,7 @@ class ConnectionAdapter( connection : Connection ) extends Logging {
     ( s : Statement )
     : ResultSet
     = {
-      logger.trace("Executing statement:\n" + s.toString)
+      logger.trace("Executing statement:\n" + s.prettyString)
       preparedStatement(s).executeQuery()
     }
 
@@ -16,7 +17,7 @@ class ConnectionAdapter( connection : Connection ) extends Logging {
     ( s : Statement )
     : List[IndexedSeq[Any]]
     = {
-      logger.trace("Executing statement:\n" + s.toString)
+      logger.trace("Executing statement:\n" + s.prettyString)
       if( s.data.isEmpty ) {
         val js = connection.createStatement()
         js.executeUpdate(s.sql, JdbcStatement.RETURN_GENERATED_KEYS)
@@ -31,7 +32,7 @@ class ConnectionAdapter( connection : Connection ) extends Logging {
   def executeUpdate
     ( s : Statement )
     : Int = {
-      logger.trace("Executing statement:\n" + s.toString)
+      logger.trace("Executing statement:\n" + s.prettyString)
       if( s.data.isEmpty ){
         connection.createStatement().executeUpdate(s.sql)
       } else {

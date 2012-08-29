@@ -93,6 +93,8 @@ object Extensions {
               .map{ _.prettyString }
               .map{ indent }
               .mkString("\n")
+          case null =>
+            ""
           case x =>
             x.toString
         }

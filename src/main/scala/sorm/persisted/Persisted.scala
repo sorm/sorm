@@ -48,7 +48,7 @@ object Persisted {
     : Persisted
     = PersistedClass(r)
         .instantiate(
-          id +: r.primaryConstructorArguments.keysIterator.toStream.map{args}
+          id +: r.primaryConstructorArguments.toStream.unzip._1.map{args}
         )
 
 }

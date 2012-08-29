@@ -5,6 +5,7 @@ import reflect.runtime.{currentMirror => mirror}
 import sorm.extensions.Extensions._
 import ScalaApi._
 import util.hashing.MurmurHash3
+import collection.immutable.ListMap
 
 class Reflection ( protected val t : Type ) {
 
@@ -75,10 +76,9 @@ class Reflection ( protected val t : Type ) {
     = properties.keys.view.zipBy{ propertyValue(_, instance) }.toMap
 
   def primaryConstructorArguments
-    : Map[String, Reflection]
+    : List[(String, Reflection)]
     = t.constructors.head.params.flatten
         .map{ s => s.decodedName -> Reflection(s.t) }
-        .toMap
 
   /**
    * Either the type itself if it's not mixed in or the first of its parents

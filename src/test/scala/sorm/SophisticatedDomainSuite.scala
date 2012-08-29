@@ -7,7 +7,7 @@ import org.scalatest.junit.JUnitRunner
 
 import Sorm._
 import samples._
-import org.joda.time.DateTime
+import org.joda.time.{LocalDate, DateTime}
 
 @RunWith(classOf[JUnitRunner])
 class SophisticatedDomainSuite extends FunSuite with ShouldMatchers {
@@ -17,7 +17,7 @@ class SophisticatedDomainSuite extends FunSuite with ShouldMatchers {
     val db = TestingInstance.mysql(
       Entity[Task]( unique = Set(Seq("opened"), Seq("closed")) )
     )
-    db.save(Task(ResponseType.Album, "", db.fetchDate()))
+    db.save(Task(PageType.Album, "", db.fetchDate()))
     db.fetchById[Task](1l).get.closed should equal(None)
   }
   test("Unique keys support"){
@@ -80,29 +80,30 @@ object SophisticatedDomainSuite {
     ( listingUrlTemplate : String,
       requestsIntervalRange : Range )
 
-  object ResponseType extends Enumeration {
-    val Listing, Album = Value
+  object PageType extends Enumeration {
+    val Listing, Album, Artist = Value
   }
 
   case class Task
-    ( responseType : ResponseType.Value,
+    ( pageType : PageType.Value,
       url : String,
       opened : DateTime,
-      // opened : DateTime = db.fetchDate(),
-      closed : Option[DateTime] = None )
+      closed : Option[DateTime] = None,
+      priority : Byte = 0 )
 
   case class Album
     ( genres : Set[Genre],
       tagScores : Map[String, Int],
       name : String,
       tracks : List[Track],
-      rawTrackListing : Option[String],
-      artist : Option[Artist],
+      plainTracklist : List[String],
+      artists : List[Artist],
       edition : Option[Edition.Value],
+      originalReleaseDate : Option[LocalDate],
       amazonId : String )
 
   case class Track
-    ( genre : Set[Genre],
+    ( genres : Set[Genre],
       amazonId : String,
       artists : Seq[Artist],
       name : String )
@@ -117,4 +118,5 @@ object SophisticatedDomainSuite {
   object Edition extends Enumeration {
     val MainAlbums, SinglesAndEPs, LiveAlbums, Imports, LimitedEditions, BoxSets, Compilations = Value
   }
+
 }

@@ -25,7 +25,7 @@ object PersistedClass extends Logging {
       name : String )
     : String
     = {
-      val sourceArgs : Map[String, Reflection]
+      val sourceArgs : List[(String, Reflection)]
         = r.primaryConstructorArguments
 
       val sourceArgSignatures

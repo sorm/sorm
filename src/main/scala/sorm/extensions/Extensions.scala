@@ -6,7 +6,14 @@ import reflect.runtime.currentMirror
 
 object Extensions {
 
-  implicit def mapExtensions[K, V](x: Map[K, V]) = new MapExtensions[K, V](x)
+  implicit class MapExtensions[ K, V ](x : Map[ K, V ]) {
+    def filterValues(predicate: V => Boolean) =
+      x.filter(pair => predicate(pair._2))
+    def withValuesFilter(predicate: V => Boolean) =
+      x.withFilter(pair => predicate(pair._2))
+    def mapKeys[K2](f: K => K2) =
+      x.map(pair => f(pair._1) -> pair._2)
+  }
 
   implicit class TraversableExtensions
     [ ItemT,
@@ -73,10 +80,8 @@ object Extensions {
         def indent ( s : String )
           = s.lines.toStream match {
               case h +: t =>
-                ( ("- " + h) +: 
-                  t.map{"|  " + _}
-                ) .mkString("\n")
-              case _ => ""
+                ( ("-  " + h) +: t.map{"|  " + _} ) mkString "\n"
+              case _ => "-  "
             }
         x match {
           case x : Traversable[_] =>
@@ -95,7 +100,7 @@ object Extensions {
               .mkString("\n")
           case null =>
             "null"
-          case x =>
+          case _ =>
             x.toString
         }
       }
@@ -122,7 +127,7 @@ object Extensions {
         = if( s.isEmpty ) None else Some(s)
       def indent
         ( i : Int )
-        = prependLines(" " * i) 
+        = prependLines(" " * i)
       def prependLines
         ( p : String )
         = s.lines
@@ -150,6 +155,35 @@ object Extensions {
         if( test ) Some( x.asInstanceOf[T] )
         else None
       }
+  }
+  implicit class AnyTreeString[ A ]( a : A ){
+    def valueTreeString
+      : String
+      = a match {
+          case (k, v) =>
+            k.valueTreeString + "\n" +
+            v.valueTreeString.prependLines("| ")
+          case a : Traversable[_] =>
+            a.view
+              .map(_.valueTreeString)
+              .map("- " + _.indent(2).trim)
+              .mkString("\n")
+          case a : Product =>
+            currentMirror.reflect(a).symbol.typeSignature.members.toStream
+              .collect{ case a : TermSymbol => a }
+              .filterNot(_.isMethod)
+              .filterNot(_.isModule)
+              .filterNot(_.isClass)
+              .map( currentMirror.reflect(a).reflectField )
+              .map( f => f.symbol.name.toString.trim -> f.get )
+              .reverse
+              .as(collection.immutable.ListMap(_:_*))
+              .valueTreeString
+          case null =>
+            "null"
+          case _ =>
+            a.toString
+        }
   }
   implicit class AnyFunctional[ A ]( α : A ) {
 

@@ -163,8 +163,8 @@ object Extensions {
           case (k, v) =>
             k.valueTreeString + "\n" +
             v.valueTreeString.prependLines("| ")
-          case a : Traversable[_] =>
-            a.view
+          case a : TraversableOnce[_] =>
+            a.toStream
               .map(_.valueTreeString)
               .map("- " + _.indent(2).trim)
               .mkString("\n")

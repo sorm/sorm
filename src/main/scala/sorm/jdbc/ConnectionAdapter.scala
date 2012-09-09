@@ -9,7 +9,7 @@ class ConnectionAdapter( connection : Connection ) extends Logging {
     ( s : Statement )
     : ResultSet
     = {
-      logger.trace("Executing statement:\n" + s.prettyString)
+      logger.trace("Executing statement:\n" + s.treeString)
       preparedStatement(s).executeQuery()
     }
 
@@ -17,7 +17,7 @@ class ConnectionAdapter( connection : Connection ) extends Logging {
     ( s : Statement )
     : List[IndexedSeq[Any]]
     = {
-      logger.trace("Executing statement:\n" + s.prettyString)
+      logger.trace("Executing statement:\n" + s.treeString)
       if( s.data.isEmpty ) {
         val js = connection.createStatement()
         js.executeUpdate(s.sql, JdbcStatement.RETURN_GENERATED_KEYS)
@@ -32,7 +32,7 @@ class ConnectionAdapter( connection : Connection ) extends Logging {
   def executeUpdate
     ( s : Statement )
     : Int = {
-      logger.trace("Executing statement:\n" + s.prettyString)
+      logger.trace("Executing statement:\n" + s.treeString)
       if( s.data.isEmpty ){
         connection.createStatement().executeUpdate(s.sql)
       } else {

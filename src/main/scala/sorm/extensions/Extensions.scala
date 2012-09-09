@@ -74,7 +74,7 @@ object Extensions {
         x
       }
 
-    def prettyString
+    def treeString
       : String
       = {
         def indent ( s : String )
@@ -87,7 +87,7 @@ object Extensions {
           case x : Traversable[_] =>
             x.stringPrefix + ":\n" +
             x.view
-              .map{ _.prettyString }
+              .map{ _.treeString }
               .map{ indent }
               .mkString("\n")
           case x : Product if x.productArity == 0 =>
@@ -95,7 +95,7 @@ object Extensions {
           case x : Product =>
             x.productPrefix + ":\n" +
             x.productIterator
-              .map{ _.prettyString }
+              .map{ _.treeString }
               .map{ indent }
               .mkString("\n")
           case null =>

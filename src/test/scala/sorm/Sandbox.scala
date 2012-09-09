@@ -17,5 +17,5 @@ object Sandbox extends App {
   }
 
   Reflection[ResponseType.Value].inheritsFrom(Reflection[Enumeration#Value])
-    .prettyString.trace()
+    .treeString.trace()
 }

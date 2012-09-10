@@ -16,6 +16,6 @@ object Sandbox extends App {
     val Listing, Album = Value
   }
 
-  Reflection[ResponseType.Value].inheritsFrom(Reflection[Enumeration#Value])
+  Reflection[ResponseType.Value].<:<(Reflection[Enumeration#Value])
     .treeString.trace()
 }

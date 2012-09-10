@@ -164,13 +164,13 @@ object Sorm {
           descendats
             .filter{ _ <:< Reflection[Option[_]] }
             .foreach{ r =>
-              if( r.generics(0).inheritsFrom(Reflection[Option[_]]) )
+              if( r.generics(0).<:<(Reflection[Option[_]]) )
                 throw new ValidationException(
                   "Type signatures with `Option` being directly nested " +
                   "in another `Option`, i.e. `Option[Option[_]]` are " +
                   "not supported" 
                 )
-              if( r.generics(0).inheritsFrom(Reflection[Traversable[_]]) )
+              if( r.generics(0).<:<(Reflection[Traversable[_]]) )
                 throw new ValidationException(
                   "Type signatures with collection being directly nested" +
                   " in `Option`, e.g. `Option[Seq[_]]` are not supported" 

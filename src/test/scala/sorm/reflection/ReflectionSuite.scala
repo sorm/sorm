@@ -46,7 +46,7 @@ class ReflectionSuite extends FunSuite with ShouldMatchers {
   }
   test("Enum#Value inheritance"){
     assert(
-      Reflection[ResponseType.Value].inheritsFrom(Reflection[Enumeration#Value])
+      Reflection[ResponseType.Value].<:<(Reflection[Enumeration#Value])
     )
   }
   test("Reflections on same type must be identical"){
@@ -57,24 +57,24 @@ class ReflectionSuite extends FunSuite with ShouldMatchers {
     Reflection[String] should not equal (Reflection[Any])
   }
   test("Int inheritance"){
-    (Reflection[Int] inheritsFrom Reflection[AnyVal]) should equal (true)
-    (Reflection[Int] inheritsFrom Reflection[Any]) should equal (true)
-    (Reflection[Int] inheritsFrom Reflection[Int]) should equal (true)
-    (Reflection[Int] inheritsFrom Reflection[AnyRef]) should equal (false)
+    (Reflection[Int] <:< Reflection[AnyVal]) should equal (true)
+    (Reflection[Int] <:< Reflection[Any]) should equal (true)
+    (Reflection[Int] <:< Reflection[Int]) should equal (true)
+    (Reflection[Int] <:< Reflection[AnyRef]) should equal (false)
   }
   test("String inheritance"){
-    assert( Reflection[String] inheritsFrom Reflection[Any] )
-    assert( Reflection[String] inheritsFrom Reflection[String] )
+    assert( Reflection[String] <:< Reflection[Any] )
+    assert( Reflection[String] <:< Reflection[String] )
   }
   test("Generic type does not inherit from same basis with other generics"){
-    assert( !Reflection[Seq[Int]].inheritsFrom(Reflection[Seq[String]]) )
+    assert( !Reflection[Seq[Int]].<:<(Reflection[Seq[String]]) )
   }
   test("Generic type inherits higher basis type with same generics"){
-    assert( Reflection[Seq[Int]].inheritsFrom(Reflection[Traversable[Int]]) )
+    assert( Reflection[Seq[Int]].<:<(Reflection[Traversable[Int]]) )
   }
   test("Generic type inherits higher generics"){
-    assert( Reflection[Seq[Seq[Int]]].inheritsFrom(Reflection[Seq[Traversable[Int]]]) )
-    assert( Reflection[Seq[Seq[Int]]].inheritsFrom(Reflection[Seq[Traversable[Any]]]) )
+    assert( Reflection[Seq[Seq[Int]]].<:<(Reflection[Seq[Traversable[Int]]]) )
+    assert( Reflection[Seq[Seq[Int]]].<:<(Reflection[Seq[Traversable[Any]]]) )
   }
   test("Generics must be proper"){
     assert( Reflection[Seq[Int]].generics(0) == Reflection[Int] )

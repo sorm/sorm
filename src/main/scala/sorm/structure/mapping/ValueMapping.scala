@@ -16,32 +16,32 @@ sealed class ValueMapping
 
     lazy val columnType
       = reflection match {
-          case _ if reflection inheritsFrom Reflection.apply[String]
+          case _ if reflection <:< Reflection.apply[String]
             ⇒ if (isKeyPart)
                 Column.Type.VarChar
               else
                 Column.Type.Text
-          case _ if reflection inheritsFrom Reflection[BigDecimal]
+          case _ if reflection <:< Reflection[BigDecimal]
             ⇒ Column.Type.Decimal
-          case _ if reflection inheritsFrom Reflection[Boolean]
+          case _ if reflection <:< Reflection[Boolean]
             ⇒ Column.Type.Boolean
-          case _ if reflection inheritsFrom Reflection[Byte]
+          case _ if reflection <:< Reflection[Byte]
             ⇒ Column.Type.TinyInt
-          case _ if reflection inheritsFrom Reflection[Short]
+          case _ if reflection <:< Reflection[Short]
             ⇒ Column.Type.SmallInt
-          case _ if reflection inheritsFrom Reflection[Int]
+          case _ if reflection <:< Reflection[Int]
             ⇒ Column.Type.Integer
-          case _ if reflection inheritsFrom Reflection[Long]
+          case _ if reflection <:< Reflection[Long]
             ⇒ Column.Type.BigInt
-          case _ if reflection inheritsFrom Reflection[Float]
+          case _ if reflection <:< Reflection[Float]
             ⇒ Column.Type.Float
-          case _ if reflection inheritsFrom Reflection[Double]
+          case _ if reflection <:< Reflection[Double]
             ⇒ Column.Type.Double
-          case _ if reflection inheritsFrom Reflection[DateTime]
+          case _ if reflection <:< Reflection[DateTime]
             ⇒ Column.Type.TimeStamp
-          case _ if reflection inheritsFrom Reflection[LocalTime]
+          case _ if reflection <:< Reflection[LocalTime]
             ⇒ Column.Type.Time
-          case _ if reflection inheritsFrom Reflection[LocalDate]
+          case _ if reflection <:< Reflection[LocalDate]
             ⇒ Column.Type.Date
           case _ 
             ⇒ ???

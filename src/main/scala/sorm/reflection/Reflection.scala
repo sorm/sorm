@@ -24,7 +24,8 @@ class Reflection ( protected val t : Type ) {
           false
       }
 
-  def inheritsFrom ( other : Reflection ) = t <:< other.t
+  def <:< ( other : Reflection ) = t <:< other.t
+  def =:= ( other : Reflection ) = t =:= other.t
 
   def properties
     = t.properties
@@ -106,6 +107,7 @@ class Reflection ( protected val t : Type ) {
         case _ => None
       }
 
+  def javaClass = t.javaClass
 }
 object Reflection {
   def apply[ A : TypeTag ]  : Reflection = Reflection(typeOf[A])

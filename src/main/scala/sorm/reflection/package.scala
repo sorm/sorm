@@ -34,7 +34,8 @@ object `package` {
                 c.getConstructors.head.getParameterTypes.view
                   .zip(args)
                   .filter{ case (t, v) => !t.isAssignableFrom(v.getClass) }
-                  .treeString,
+                  .map{ case (t, v) => t -> (v.getClass -> v) }
+                  .valueTreeString,
                 e
               )
           }

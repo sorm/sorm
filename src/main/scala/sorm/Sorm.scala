@@ -140,18 +140,29 @@ object Sorm {
     {
       //  Validate input:
       {
-        {
-          def allDescendantGenerics
-            ( r : Reflection )
-            : Stream[Reflection]
-            = r +:
-              r.generics.view
-                .flatMap{allDescendantGenerics}
-                .toStream
+        lazy val descendats
+          = reflection.properties.values
+              .unfold( a => a.notEmpty.map(a => a -> a.flatMap(_.generics)) )
+              .flatten
+        descendats.toStream
+          .filter(_ <:< Reflection[TraversableOnce[_]])
+          .filterNot(r =>
+            //  using java class to erase generics
+            r.javaClass == classOf[Seq[_]] ||
+            r.javaClass == classOf[Set[_]] ||
+            r.javaClass == classOf[Map[_, _]] ||
+            r.javaClass == classOf[Range]
+          )
+          .foreach(r =>
+            throw new ValidationException(
+              s"Only general immutable `Seq`, `Set`, `Map` and `Range` are supported traversable types. `$r` detected instead"
+            )
+          )
 
-          reflection.properties.values
-            .flatMap{ allDescendantGenerics }
-            .filter{ _ inheritsFrom Reflection[Option[_]] }
+
+        {
+          descendats
+            .filter{ _ <:< Reflection[Option[_]] }
             .foreach{ r =>
               if( r.generics(0).inheritsFrom(Reflection[Option[_]]) )
                 throw new ValidationException(

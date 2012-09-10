@@ -1,8 +1,8 @@
 package sorm.reflection
 
 import reflect.runtime.universe._
-import reflect.runtime.{currentMirror => mirror}
 import sext.Sext._
+import reflect.runtime.currentMirror
 import ScalaApi._
 
 object `package` {
@@ -22,9 +22,24 @@ object `package` {
       def instantiate
         ( args : Seq[Any] )
         : T
-        = c .getConstructors.head
+        = {
+
+        try {
+          c .getConstructors.head
             .newInstance(args.asInstanceOf[Seq[Object]]: _*)
             .asInstanceOf[T]
+        } catch {
+          case e : IllegalArgumentException =>
+            throw new IllegalArgumentException(
+              e.getMessage + ":\n" +
+              "Types of constructor parameters:\n" +
+              c.getConstructors.head.getParameterTypes.treeString + "\n" +
+              "Provided arguments:\n" +
+              args.treeString,
+              e
+            )
+        }
+      }
     }
 
 }

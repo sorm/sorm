@@ -16,24 +16,24 @@ package object structure {
       def ddlColumnType
         ( isKeyPart : Boolean )
         = reflection match {
-            case _ if reflection inheritsFrom Reflection[String]
+            case _ if reflection <:< Reflection[String]
               ⇒ if (isKeyPart) 
                   sorm.ddl.Column.Type.VarChar
                 else 
                   sorm.ddl.Column.Type.Text
-            case _ if reflection inheritsFrom Reflection[Boolean]
+            case _ if reflection <:< Reflection[Boolean]
               ⇒ sorm.ddl.Column.Type.Boolean
-            case _ if reflection inheritsFrom Reflection[Short]
+            case _ if reflection <:< Reflection[Short]
               ⇒ sorm.ddl.Column.Type.SmallInt
-            case _ if reflection inheritsFrom Reflection[Int]
+            case _ if reflection <:< Reflection[Int]
               ⇒ sorm.ddl.Column.Type.Integer
-            case _ if reflection inheritsFrom Reflection[Long]
+            case _ if reflection <:< Reflection[Long]
               ⇒ sorm.ddl.Column.Type.BigInt
-            case _ if reflection inheritsFrom Reflection[Float]
+            case _ if reflection <:< Reflection[Float]
               ⇒ sorm.ddl.Column.Type.Float
-            case _ if reflection inheritsFrom Reflection[Double]
+            case _ if reflection <:< Reflection[Double]
               ⇒ sorm.ddl.Column.Type.Double
-            case _ if reflection inheritsFrom Reflection[BigDecimal]
+            case _ if reflection <:< Reflection[BigDecimal]
               ⇒ sorm.ddl.Column.Type.Decimal
           }
     }

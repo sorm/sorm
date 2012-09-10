@@ -5,11 +5,17 @@ import java.sql.{Connection, ResultSet, Statement => JdbcStatement}
 import com.weiglewilczek.slf4s.Logging
 
 class ConnectionAdapter( connection : Connection ) extends Logging {
+  private def logStatement(s : Statement){
+    logger.trace(
+      "Executing statement:\n" +
+      Map("sql" -> s.sql, "data" -> s.data.map(_.value)).valueTreeString
+    )
+  }
   def executeQuery
     ( s : Statement )
     : ResultSet
     = {
-      logger.trace("Executing statement:\n" + s.valueTreeString)
+      logStatement(s)
       preparedStatement(s).executeQuery()
     }
 
@@ -17,7 +23,7 @@ class ConnectionAdapter( connection : Connection ) extends Logging {
     ( s : Statement )
     : List[IndexedSeq[Any]]
     = {
-      logger.trace("Executing statement:\n" + s.valueTreeString)
+      logStatement(s)
       if( s.data.isEmpty ) {
         val js = connection.createStatement()
         js.executeUpdate(s.sql, JdbcStatement.RETURN_GENERATED_KEYS)
@@ -32,7 +38,7 @@ class ConnectionAdapter( connection : Connection ) extends Logging {
   def executeUpdate
     ( s : Statement )
     : Int = {
-      logger.trace("Executing statement:\n" + s.valueTreeString)
+      logStatement(s)
       if( s.data.isEmpty ){
         connection.createStatement().executeUpdate(s.sql)
       } else {

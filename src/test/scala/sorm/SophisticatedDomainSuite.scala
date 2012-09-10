@@ -95,9 +95,9 @@ object SophisticatedDomainSuite {
     ( genres : Set[Genre],
       tagScores : Map[String, Int],
       name : String,
-      tracks : List[Track],
-      plainTracklist : List[String],
-      artists : List[Artist],
+      tracks : Seq[Track],
+      plainTracklist : Seq[String],
+      artists : Seq[Artist],
       edition : Option[Edition.Value],
       originalReleaseDate : Option[LocalDate],
       amazonId : String )

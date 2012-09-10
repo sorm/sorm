@@ -22,24 +22,22 @@ object `package` {
       def instantiate
         ( args : Seq[Any] )
         : T
-        = {
-
-        try {
-          c .getConstructors.head
-            .newInstance(args.asInstanceOf[Seq[Object]]: _*)
-            .asInstanceOf[T]
-        } catch {
-          case e : IllegalArgumentException =>
-            throw new IllegalArgumentException(
-              e.getMessage + ":\n" +
-              "Types of constructor parameters:\n" +
-              c.getConstructors.head.getParameterTypes.treeString + "\n" +
-              "Provided arguments:\n" +
-              args.treeString,
-              e
-            )
-        }
-      }
+        = try {
+            c .getConstructors.head
+              .newInstance(args.asInstanceOf[Seq[Object]]: _*)
+              .asInstanceOf[T]
+          } catch {
+            case e : IllegalArgumentException =>
+              throw new IllegalArgumentException(
+                e.getMessage + ":\n" +
+                "Incorrect values of parameter types:\n" +
+                c.getConstructors.head.getParameterTypes.view
+                  .zip(args)
+                  .filter{ case (t, v) => !t.isAssignableFrom(v.getClass) }
+                  .treeString,
+                e
+              )
+          }
     }
 
 }

@@ -4,7 +4,7 @@ import sorm._
 import reflection._
 import ddl._
 import structure._
-import extensions.Extensions._
+import sext.Sext._
 
 package object mapping {
 

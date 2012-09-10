@@ -1,7 +1,7 @@
 package sorm.ddl
 
 import sorm._
-import extensions.Extensions._
+import sext.Sext._
 
 sealed case class Table
   ( name : String,

@@ -11,7 +11,7 @@ import structure._
 import mapping._
 import jdbc._
 import query.Query._
-import extensions.Extensions._
+import sext.Sext._
 
 import abstractSql.StandardSqlComposition
 import query.AbstractSqlComposition

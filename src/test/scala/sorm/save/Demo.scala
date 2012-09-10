@@ -6,7 +6,7 @@ import reflection._
 import structure._
 import mapping._
 import persisted._
-import extensions.Extensions._
+import sext.Sext._
 
 import reflect.basis._
 

@@ -3,7 +3,7 @@ package sorm.abstractSql
 import sorm._
 import structure._
 import mapping._
-import extensions.Extensions._
+import sext.Sext._
 
 import AbstractSql._
 

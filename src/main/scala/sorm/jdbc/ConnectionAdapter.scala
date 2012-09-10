@@ -1,6 +1,6 @@
 package sorm.jdbc
 
-import sorm.extensions.Extensions._
+import sext.Sext._
 import java.sql.{Connection, ResultSet, Statement => JdbcStatement}
 import com.weiglewilczek.slf4s.Logging
 

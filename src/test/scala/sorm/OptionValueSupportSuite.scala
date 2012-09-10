@@ -15,7 +15,7 @@ import structure._
 import mapping._
 import jdbc._
 import create._
-import extensions.Extensions._
+import sext.Sext._
 
 import samples._
 import Sorm._

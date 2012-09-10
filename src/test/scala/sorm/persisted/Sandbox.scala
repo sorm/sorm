@@ -2,7 +2,7 @@ package sorm.persisted
 
 import sorm._
 import reflection._
-import extensions.Extensions._
+import sext.Sext._
 
 object Sandbox extends App {
 

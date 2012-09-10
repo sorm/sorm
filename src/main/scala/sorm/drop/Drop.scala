@@ -5,7 +5,7 @@ import structure._
 import mapping._
 import jdbc._
 import sorm.ddl.Table
-import extensions.Extensions._
+import sext.Sext._
 
 object Drop {
 

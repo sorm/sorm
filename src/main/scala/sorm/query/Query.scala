@@ -4,7 +4,7 @@ import sorm._
 import reflection._
 import structure._
 import mapping._
-import extensions.Extensions._
+import sext.Sext._
 
 object Query {
 

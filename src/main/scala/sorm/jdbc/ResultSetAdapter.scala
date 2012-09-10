@@ -6,7 +6,7 @@ import org.joda.time._
 
 import sorm._
 import joda.Extensions._
-import extensions.Extensions._
+import sext.Sext._
 
 class ResultSetAdapter
   ( rs : ResultSet ) 

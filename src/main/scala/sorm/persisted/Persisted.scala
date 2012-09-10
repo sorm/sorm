@@ -4,7 +4,7 @@ import reflect.basis._
 
 import sorm._
 import reflection._
-import extensions.Extensions._
+import sext.Sext._
 
 trait Persisted {
   def id: Long

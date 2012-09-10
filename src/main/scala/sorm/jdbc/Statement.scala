@@ -1,7 +1,7 @@
 package sorm.jdbc
 
 import sorm._
-import extensions.Extensions._
+import sext.Sext._
 
 case class Statement
   ( sql: String,

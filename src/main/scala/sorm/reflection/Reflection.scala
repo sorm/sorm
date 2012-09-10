@@ -2,7 +2,7 @@ package sorm.reflection
 
 import reflect.runtime.universe._
 import reflect.runtime.{currentMirror => mirror}
-import sorm.extensions.Extensions._
+import sext.Sext._
 import ScalaApi._
 import util.hashing.MurmurHash3
 import collection.immutable.ListMap

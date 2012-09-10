@@ -8,8 +8,8 @@ import reflection._
 import structure._
 import mapping._
 import jdbc._
-import extensions._
-import Extensions._
+import sext.Sext._
+
 import com.weiglewilczek.slf4s.Logging
 
 class ResultSetParsingAdapter

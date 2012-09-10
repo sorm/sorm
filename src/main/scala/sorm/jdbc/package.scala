@@ -4,7 +4,7 @@ import java.sql.{ResultSet, PreparedStatement, Connection, Statement => JStateme
 import org.joda.time.DateTime
 
 import sorm._
-import extensions.Extensions._
+import sext.Sext._
 
 package object jdbc {
 

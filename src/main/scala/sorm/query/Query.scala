@@ -46,6 +46,7 @@ object Query {
 
 
   sealed trait Operator
+  //  todo: factor out of group
   object Operator {
     case object Equal extends Operator
     case object NotEqual extends Operator

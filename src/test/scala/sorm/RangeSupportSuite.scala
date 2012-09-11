@@ -35,6 +35,10 @@ class RangeSupportSuite extends FunSuite with ShouldMatchers {
         contain(1)
       )
   }
+  test("0 to 0 range"){
+    val a = db.save(A(0 to 0))
+    db.fetchById[A](a.id).get.a should equal (0 to 0)
+  }
 
 }
 object RangeSupportSuite {

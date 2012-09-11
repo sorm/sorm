@@ -70,6 +70,7 @@ object MappingKind {
           || (reflection <:< Reflection[Tuple22[_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _]])
           => Tuple
         case _
+          if reflection.isCaseClass
           => Entity
       }
 }

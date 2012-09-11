@@ -107,6 +107,12 @@ class Reflection ( protected val t : Type ) {
         case _ => None
       }
 
+  def isCaseClass
+    = s match {
+        case s : ClassSymbol => s.isCaseClass
+        case _ => false
+      }
+
   def javaClass = t.javaClass
 }
 object Reflection {

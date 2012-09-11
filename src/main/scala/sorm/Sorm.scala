@@ -151,7 +151,12 @@ object Sorm {
           = reflection.properties.values
               .unfold( a => a.notEmpty.map(a => a -> a.flatMap(_.generics)) )
               .flatten
-        descendats.toStream
+
+        descendats
+          .filter(r => r =:= Reflection[Any] || r =:= Reflection[AnyRef] || r =:= Reflection[AnyVal])
+          .foreach(r => throw new ValidationException(s"Specifying general types `Any`, `AnyRef` or `AnyVal` is not allowed."))
+
+        descendats
           .filter(_ <:< Reflection[TraversableOnce[_]])
           .filterNot(r =>
             //  using java class to erase generics

@@ -13,6 +13,11 @@ import sorm.Sorm.ValidationException
 class SormValidationSuite extends FunSuite with ShouldMatchers {
   import SormValidationSuite._
 
+  test("`Any` type is not supported"){
+    evaluating {
+      new Instance(Entity[D]() :: Nil, "jdbc:h2:mem:test")
+    } should produce [ValidationException]
+  }
   test("referred entities validation"){
     evaluating {
       new Instance(
@@ -38,4 +43,6 @@ object SormValidationSuite {
     ( a : Int, b : C )
   case class C
     ( a : Int )
+  case class D
+    ( a : Seq[Any] )
 }

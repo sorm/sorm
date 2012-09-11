@@ -97,7 +97,7 @@ class ResultSetAdapter
               case TIME               => rs.getTime(i)
               case TIMESTAMP          => rs.getTimestamp(i)
               case BLOB               => rs.getBlob(i)
-              case CLOB               => rs.getClob(i)
+              case CLOB               => rs.getString(i)
               case _                  => ???
             }
         if( rs.wasNull() ) null
@@ -108,11 +108,5 @@ class ResultSetAdapter
           case _ => r
         }
       }
-
-    def value
-      ( name : String, t : JdbcType )
-      : Any 
-      = ???
-
 
   }

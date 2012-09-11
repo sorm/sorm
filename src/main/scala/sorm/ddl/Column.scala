@@ -82,8 +82,8 @@ object Column {
     case object Text    
       extends Type
       {
-        val ddl = "TEXT"
-        val jdbcType = Types.LONGVARCHAR
+        val ddl = "MEDIUMTEXT"
+        val jdbcType = Types.CLOB
       }
     case object BigInt   
       extends Type

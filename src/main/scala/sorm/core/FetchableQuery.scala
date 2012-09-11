@@ -55,12 +55,36 @@ class FetchableQuery
     def offset ( x : Int )
       = copy( offset = x )
 
-    def filter ( w : Where )
+    def filter ( f : ApiFilter.Filter )
+      : FetchableQuery[T]
+      = {
+        def queryWhere (f : ApiFilter.Filter) : Where
+          = f match {
+              case ApiFilter.Equal(p, v) => 
+                Path.where( query.mapping, p, v, Operator.Equal)
+              case ApiFilter.NotEqual(p, v) => 
+                Path.where( query.mapping, p, v, Operator.NotEqual)
+              case ApiFilter.Larger(p, v) =>
+                Path.where( query.mapping, p, v, Operator.Larger)
+              case ApiFilter.LargerOrEqual(p, v) =>
+                Path.where( query.mapping, p, v, Operator.LargerOrEqual)
+              case ApiFilter.Smaller(p, v) =>
+                Path.where( query.mapping, p, v, Operator.Smaller)
+              case ApiFilter.SmallerOrEqual(p, v) =>
+                Path.where( query.mapping, p, v, Operator.SmallerOrEqual)
+              case ApiFilter.Or(l, r) => 
+                Or(queryWhere(l), queryWhere(r))
+              case ApiFilter.And(l, r) => 
+                And(queryWhere(l), queryWhere(r))
+            }
+        filter(queryWhere(f))
+      }
+    private def filter ( w : Where )
       : FetchableQuery[T]
       = copy( 
-          where = (query.where ++: List(w)) reduceOption And
+          where = (query.where ++: w +: Nil) reduceOption And
         )
-    private def filter ( p : String, v : Any, o : Operator )
+    @inline private def filter ( p : String, v : Any, o : Operator )
       : FetchableQuery[T]
       = filter( Path.where( query.mapping, p, v, o ) )
 

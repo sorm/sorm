@@ -5,10 +5,10 @@ SORM also provides an
 You can develop your application knowing that database integration will be a trivial step.
 
 
-#Features -- fuck that
+##Features -- fuck that
 1. Maximum decoupling of the model from database. Your mapped objects don't need to extend any interface
 
-#Getting started
+##Getting started
 Let's add a dependency to SORM artifact. In Maven it will look like so: 
 
     <dependency>
@@ -114,8 +114,11 @@ Guess what, that's it! We now have an up and running database connection with a 
     db.all[Artist].whereEquals("names.value.item.value", "Hard Rock").fetch()
 
 
-#Supported databases
+##Supported databases
 Currently SORM releases are getting tested against MySQL and H2 databases. Other DBs may also be supported but are yet not guaranteed to be.
 
+##Future plans
+* Support for other popular DBs
+* Transactions support
 
-#API
+##API

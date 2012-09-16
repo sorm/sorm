@@ -142,7 +142,7 @@ object Sorm {
       {
         entities.toStream
           .map(_.reflection)
-          .map(PersistedClass.apply)
+          .foreach(PersistedClass.apply)
       }
 
     }

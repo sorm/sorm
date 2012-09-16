@@ -122,10 +122,12 @@ trait Api extends Logging {
     ( v : T ) 
     = new FetchableQuery(
         Query(Kind.Select, mapping[T], limit = Some(1)),
-        fetch[T] _ andThen (_.headOption) andThen 
-        (_ map (_.id) map (Persisted(v, _)) map (save(_)) getOrElse (save(v)))
+        transaction {
+          fetch[T] _ andThen (_.headOption) andThen
+          (_ map (_.id) map (Persisted(v, _)) map (save(_)) getOrElse (save(v)))
+        }
       )
-  
+
   /**
    * If an entity with all fields matching is already saved, return it,
    * otherwise save this one and return its persisted copy.
@@ -138,10 +140,14 @@ trait Api extends Logging {
         case v : Persisted =>
           v.asInstanceOf[T with Persisted]
         case v =>
-          v.reflected.propertyValues
-            .foldLeft( one[T] ){ case (q, (n, v)) => q.filterEqual(n, v) }
-            .fetch()
-            .getOrElse( save(v).asInstanceOf[T with Persisted] )
+          transaction {
+            v.reflected.propertyValues
+              .foldLeft( one[T] ){ case (q, (n, v)) => q.filterEqual(n, v) }
+              .fetch()
+              .getOrElse( save(v).asInstanceOf[T with Persisted] )
+          }
       }
+
+  def transaction [ T ] ( t : => T ) : T = connection.transaction(t)
 
 }

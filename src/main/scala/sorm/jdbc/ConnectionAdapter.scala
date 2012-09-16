@@ -3,6 +3,7 @@ package sorm.jdbc
 import sext.Sext._
 import java.sql.{Connection, ResultSet, Statement => JdbcStatement}
 import com.weiglewilczek.slf4s.Logging
+import sorm.core.SormException
 
 class ConnectionAdapter( connection : Connection ) extends Logging {
   private def logStatement(s : Statement){
@@ -64,5 +65,21 @@ class ConnectionAdapter( connection : Connection ) extends Logging {
       s
     }
 
-
+  def transaction [ T ] ( t : => T ) : T
+    = synchronized {
+        if( !connection.getAutoCommit ) throw new SormException ("Attempt to start a transaction started on a connection which is already in one")
+        else {
+          var committed = false
+          try {
+            connection.setAutoCommit(false)
+            val r = t
+            connection.commit()
+            committed = true
+            r
+          } finally {
+            if( !committed ) connection.rollback()
+            connection.setAutoCommit(true)
+          }
+        }
+      }
 }

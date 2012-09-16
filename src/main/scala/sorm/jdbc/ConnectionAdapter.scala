@@ -67,7 +67,7 @@ class ConnectionAdapter( connection : Connection ) extends Logging {
 
   def transaction [ T ] ( t : => T ) : T
     = synchronized {
-        if( !connection.getAutoCommit ) throw new SormException ("Attempt to start a transaction started on a connection which is already in one")
+        if( !connection.getAutoCommit ) throw new SormException ("Attempt to start a transaction on a connection which is already in one")
         else {
           var committed = false
           try {

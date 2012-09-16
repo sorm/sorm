@@ -138,6 +138,13 @@ object Sorm {
         }
       }
 
+      // Precache persisted classes (required for multithreading)
+      {
+        entities.toStream
+          .map(_.reflection)
+          .map(PersistedClass.apply)
+      }
+
     }
 
   sealed case class Entity

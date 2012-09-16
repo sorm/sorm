@@ -16,26 +16,48 @@ object AbstractSqlComposition extends Logging {
   def resultSetSelect
     ( query : Query )
     : AS.Statement
-    = query.mapping.abstractSqlResultSetSelect &&!
-      ( orderAndLimitSelect(query) ++
+    = selectWithOrder(query) &&!
+      ( limitSelect(query) ++
         query.where.map{filtersStatement} reduceOption ( _ & _ ) )
 
-  def orderAndLimitSelect
+  def selectWithOrder
+    ( query : Query )
+    : AS.Select
+    = (query.mapping.abstractSqlResultSetSelect /: query.order.notEmpty){ case (s, o) =>
+        s.copy(
+          order
+            = o.map{ case Order(m, r) =>
+                AS.Order(
+                  m.containerTableMapping.get.abstractSqlTable,
+                  m.columnName,
+                  r
+                )
+              }
+        )
+      }
+//    = query.order.notEmpty
+//        .map{ order =>
+//          query.mapping.abstractSqlResultSetSelect
+//            .copy(
+//              order
+//                = order.map{ case Order(m, r) =>
+//                    AS.Order(
+//                      m.containerTableMapping.get.abstractSqlTable,
+//                      m.columnName,
+//                      r
+//                    )
+//                  }
+//            )
+//        }
+
+  def limitSelect
     ( query : Query )
     : Option[AS.Statement]
     = query
-        .satisfying{q => q.order.nonEmpty || q.limit.nonEmpty || q.offset != 0}
+        .satisfying{q => q.limit.nonEmpty || q.offset != 0}
         .map{ q =>
           q.mapping.root.abstractSqlPrimaryKeySelect
             .copy(
-              order
-                = q.order.map{ case Order(m, r) =>
-                    AS.Order(
-                      m.containerTableMapping.get.abstractSqlTable,
-                      m.columnName,
-                      r
-                    )
-                  },
               limit
                 = q.limit,
               offset

@@ -65,13 +65,17 @@ class ConnectionAdapter( connection : Connection ) extends Logging {
       s
     }
 
+  private var thread : Thread = _
   def transaction [ T ] ( t : => T ) : T
     = synchronized {
-        if( !connection.getAutoCommit ) throw new SormException ("Attempt to start a transaction on a connection which is already in one")
-        else {
+        if( !connection.getAutoCommit ){
+          assume( Thread.currentThread == thread, "Attempt to get a transaction started on a connection which is already in one on a different thread" )
+          t
+        } else {
           var committed = false
           try {
             connection.setAutoCommit(false)
+            thread = Thread.currentThread
             val r = t
             connection.commit()
             committed = true

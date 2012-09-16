@@ -28,7 +28,7 @@ class ArtistDbSuite extends FunSuite with ShouldMatchers {
     pending
   }
   test("Ordering"){
-    pending
+    Db.all[Artist].orderDesc("id").fetch().map(_.id) should equal (6::5::4::3::2::1::Nil)
   }
   test("Contains"){
     pending

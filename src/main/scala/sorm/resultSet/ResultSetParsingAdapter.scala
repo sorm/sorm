@@ -11,6 +11,7 @@ import jdbc._
 import sext.Sext._
 
 import com.weiglewilczek.slf4s.Logging
+import sext.OrderedMap
 
 class ResultSetParsingAdapter
   ( rs : ResultSet )
@@ -83,7 +84,7 @@ class ResultSetParsingAdapter
                   }
               }
 
-            var rows : Map[PrimaryKey, Row] = Map()
+            var rows : Map[PrimaryKey, Row] = OrderedMap()
 
             rs.beforeFirst()
             while ( rs.next() ) {

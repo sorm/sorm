@@ -113,6 +113,22 @@ trait Api extends Logging {
         .parseAndClose().head.head
         .asInstanceOf[DateTime]
 
+  /**
+   * Returns a query which when executed either updates the matched result with
+   * the value or just saves the value
+   */
+  def overwrite
+    [ T <: AnyRef : TypeTag ]
+    ( v : T )
+    = new FetchableQuery(
+        Query(Kind.Select, mapping[T], limit = Some(1)),
+        transaction {
+          fetch[T] _ andThen (_.headOption) andThen
+          (_ map (_.id) map (Persisted(v, _)) map (save(_)) getOrElse (save(v)))
+        }
+      )
+
+
   def transaction [ T ] ( t : => T ) : T = connection.transaction(t)
 
 }

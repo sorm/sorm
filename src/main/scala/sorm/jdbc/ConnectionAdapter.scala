@@ -8,7 +8,8 @@ class ConnectionAdapter( protected val connection : Connection ) extends Transac
   private def logStatement(s : Statement){
     logger.trace(
       "Executing statement:\n" +
-      Map("sql" -> s.sql, "data" -> s.data.map(_.value)).valueTreeString
+      (("sql" -> s.sql) +: s.data.map(_.value).notEmpty.map("data" -> _) ++: Stream())
+        .toMap.valueTreeString
     )
   }
   def executeQuery

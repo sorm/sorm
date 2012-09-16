@@ -30,12 +30,16 @@ trait Api extends Logging {
 
   private def mapping
     [ T : TypeTag ]
-    = mappings.get(Reflection[T])
-        .getOrElse{
-          throw new SormException(
-            "Entity `" + Reflection[T].name + "` is not registered"
-          )
-        }
+    = {
+      def mapping( r : Reflection ) =
+        mappings.get(r)
+          .getOrElse {
+            throw new SormException(
+              "Entity `" + r.name + "` is not registered"
+            )
+          }
+      mapping(Reflection[T].mixinBasis)
+    }
 
   def save
     [ T <: AnyRef : TypeTag ]
@@ -120,14 +124,18 @@ trait Api extends Logging {
   def overwrite
     [ T <: AnyRef : TypeTag ]
     ( v : T )
-    = new FetchableQuery(
+    = {
+      val t = typeTag[T]
+      new FetchableQuery(
         Query(Kind.Select, mapping[T], limit = Some(1)),
-        transaction {
-          fetch[T] _ andThen (_.headOption) andThen
-          (_ map (_.id) map (Persisted(v, _)) map (save(_)) getOrElse (save(v)))
+        q => transaction {
+          fetch[T](q).headOption.map(_.id).map(Persisted(v, _)) match {
+            case Some(p) => save(p)(t.asInstanceOf[TypeTag[T with Persisted]])
+            case None => save(v)
+          }
         }
       )
-
+    }
 
   def transaction [ T ] ( t : => T ) : T = connection.transaction(t)
 

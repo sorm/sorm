@@ -6,16 +6,18 @@ import persisted.Persisted
 import reflection.Reflection
 import samples._
 import sext.Sext._
+import sorm.Sorm._
 
 object Sandbox extends App {
 
-  import reflect.runtime.universe._
-  import sorm.reflection.ScalaApi._
+  case class A ( a : Int )
 
-  object ResponseType extends Enumeration {
-    val Listing, Album = Value
-  }
+  val db = TestingInstance.h2( Entity[A]() )
 
-  Reflection[ResponseType.Value].<:<(Reflection[Enumeration#Value])
-    .treeString.trace()
+  val a = db.save(A( 23 ))
+
+  db.save(a)
+//  db.overwrite(a.copy(a = 312)).filterEqual("id", 1).fetch()
+//  db.overwrite(A( 123 )).filterEqual("id", 1).fetch()
+
 }

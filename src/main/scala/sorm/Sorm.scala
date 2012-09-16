@@ -124,11 +124,9 @@ object Sorm {
               connection.executeUpdate(s)
             }
           case InitMode.Create =>
-            for( s <- Drop.statements(mappings.values) ){
+            for( s <- Create.statements(mappings.values) ){
               try {
-                for( s <- Create.statements(mappings.values) ){
-                  connection.executeUpdate(s)
-                }
+                connection.executeUpdate(s)
               } catch {
                 case e : Throwable =>
                   logger.warn("Couldn't create table. " + e.getMessage)

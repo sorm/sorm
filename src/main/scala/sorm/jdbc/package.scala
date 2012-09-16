@@ -1,5 +1,6 @@
 package sorm
 
+import core.SormException
 import java.sql.{ResultSet, PreparedStatement, Connection, Statement => JStatement}
 import org.joda.time.DateTime
 
@@ -32,7 +33,7 @@ package object jdbc {
           case _ : Double     => DOUBLE
           case _ : DateTime   => TIMESTAMP
           case null           => NULL
-          case _              => ???
+          case _              => throw new SormException("Value of unsupported type `" + v.getClass + "`: " + v)
         }
   }
 

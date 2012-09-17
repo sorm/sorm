@@ -112,9 +112,7 @@ class ResultSetParsingAdapter
                 else
                   Option( value( m.item, row ) )
               case m : TupleMapping =>
-                m.reflection.instantiate(
-                  m.items.map{ value( _, row ) }
-                )
+                m.reflection.instantiate( m.items.map{ value( _, row ) } )
               case m : EntityMapping =>
                 val row1
                   = if( m.membership.isEmpty ) row

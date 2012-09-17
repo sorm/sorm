@@ -34,6 +34,7 @@ class Reflection ( protected val t : Type ) {
   def generics
     = t match {
         case t : TypeRef => t.args.view.map{ Reflection(_) }.toIndexedSeq
+        case _ => Vector()
       }
   def name
     = s.decodedName

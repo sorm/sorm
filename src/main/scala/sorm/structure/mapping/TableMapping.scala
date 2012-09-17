@@ -87,14 +87,14 @@ trait TableMapping
           }
           .toMap
 
-    lazy val childrenColumns : Set[Column]
-      = children.view flatMap columnsForContainerTable toSet
+    lazy val childrenColumns : Stream[Column]
+      = children.toStream flatMap columnsForContainerTable
 
     // lazy val deepNestedTableMappings : Iterable[TableMapping]
     //   = nestedTableMappings.view ++ 
     //     nestedTableMappings.view.map{_.deepNestedTableMappings}
 
-    def columns : Set[Column]
+    def columns : Seq[Column]
 
     def primaryKeyColumns : Seq[Column]    
 

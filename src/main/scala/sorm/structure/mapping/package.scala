@@ -11,13 +11,13 @@ package object mapping {
   //  TODO : should be just moved to Mapping as a property
   def columnsForContainerTable
     ( m : Mapping ) 
-    : Iterable[Column]
+    : Stream[Column]
     = m match {
         case m : CollectionMapping ⇒
-          Nil
+          Stream()
         case m : TableMapping ⇒ 
           m.primaryKeyColumns
-            .view
+            .toStream
             .map{ c ⇒ 
               c.copy(
                 autoIncrement
@@ -30,9 +30,9 @@ package object mapping {
               )
             }
         case m : HasChildren ⇒ 
-          m.children.view flatMap columnsForContainerTable
+          m.children.toStream flatMap columnsForContainerTable
         case m : ColumnMapping ⇒
-          m.column :: Nil
+          m.column +: Stream()
       }
 
 

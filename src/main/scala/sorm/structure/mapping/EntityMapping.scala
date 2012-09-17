@@ -32,9 +32,7 @@ sealed class EntityMapping
     lazy val settings = settingsMap(reflection)
 
     lazy val columns
-      = Set.empty +
-        generatedIdColumn ++
-        childrenColumns
+      = generatedIdColumn +: childrenColumns ++: Nil
 
     lazy val primaryKeyColumns
       = generatedIdColumn :: Nil

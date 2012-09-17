@@ -24,7 +24,7 @@ sealed class SetMapping
     lazy val hashColumn : Column
       = Column( "h", Column.Type.Integer )
 
-    lazy val columns : Set[Column]
-      = primaryKeyColumns.view ++ childrenColumns.view toSet
+    lazy val columns
+      = primaryKeyColumns ++: childrenColumns
 
   }

@@ -27,7 +27,7 @@ sealed class SeqMapping
     def indexColumn : Column
       = index.column
 
-    lazy val columns : Set[Column]
-      = primaryKeyColumns.view ++ childrenColumns.view toSet
+    lazy val columns
+      = primaryKeyColumns ++: childrenColumns
 
   }

@@ -62,8 +62,8 @@ trait TableMapping
           = m match {
             case m : ColumnMapping ⇒ Nil
             case m : RangeMapping ⇒ Nil
-            case m : TupleMapping ⇒ m.items.view flatMap nestedTableMappings
-            case m : OptionMapping ⇒ m.item as nestedTableMappings
+            case m : TupleMapping ⇒ m.children.view flatMap nestedTableMappings
+            case m : OptionMapping ⇒ m.children.view flatMap nestedTableMappings
             case m : TableMapping ⇒ m :: Nil
           }
         children.view flatMap nestedTableMappings toSet

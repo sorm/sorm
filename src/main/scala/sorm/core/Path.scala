@@ -99,6 +99,10 @@ object Path {
           mapping( host.id, r )
         case (host : EntityMapping, (id, r)) =>
           mapping( host.properties(id), r )
+        case (host : RangeMapping, ("start", r)) =>
+          mapping( host.from, r )
+        case (host : RangeMapping, ("end", r)) =>
+          mapping( host.to, r )
         case (host : TupleMapping, (id, remainder)) =>
           "(?<=^_)\\d+(?=$)".r.findFirstIn(id) match {
             case Some(index) =>

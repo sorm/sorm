@@ -212,4 +212,7 @@ object Combinators {
           notMatchingSize ||! disjoint
       }
 
+  //  or where false
+  def everFalse ( m : Mapping ) : Statement = empty(m).copy(condition = Some(EverFalse))
+  def everTrue ( m : Mapping ) : Statement = empty(m).copy(condition = Some(EverTrue))
 }

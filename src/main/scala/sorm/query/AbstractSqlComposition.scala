@@ -115,12 +115,13 @@ object AbstractSqlComposition extends Logging {
           comparing( m, AS.NotRegexp, v )
 
         case Filter(In, m, v: Iterable[_]) => 
-          logger.warn("`In` filter is not tested")
-          v.map(equaling(m, _)).reduce(_ | _)
+          if( v.nonEmpty ) v.map(equaling(m, _)).reduce(_ | _)
+          else everFalse(m)
 
         case Filter(NotIn, m, v: Iterable[_]) => 
           logger.warn("`NotIn` filter is not tested")
-          v.map(notEqualing(m, _)).reduce(_ & _)
+          if( v.nonEmpty ) v.map(notEqualing(m, _)).reduce(_ & _)
+          else everTrue(m)
 
         case Filter(Contains, m: SeqMapping, v) => 
           logger.warn("`Contains` filter is not tested")

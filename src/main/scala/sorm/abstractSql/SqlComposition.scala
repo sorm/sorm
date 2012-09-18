@@ -44,6 +44,8 @@ object SqlComposition {
                   conditionTables(l) ++ conditionTables(r)
                 case Comparison(t, _, _, _) =>
                   t +: Stream()
+                case _ =>
+                  Stream()
               }
           Set() ++
           select.expressions.view.collect{ case Column(n, t) => t } ++

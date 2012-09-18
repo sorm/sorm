@@ -70,6 +70,10 @@ object AbstractSql {
       value : Any )
     extends Condition
 
+  case object EverTrue extends Condition
+
+  case object EverFalse extends Condition
+
 
   sealed case class Table
     ( name : String,

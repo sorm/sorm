@@ -72,6 +72,10 @@ object StandardSqlComposition {
                           Sql.Value(v),
                           SqlComposition.sql(o)
                         )
+                      case EverTrue =>
+                        Sql.Comparison( Sql.Value(true), Sql.Value(true), Sql.Equal )
+                      case EverFalse =>
+                        Sql.Comparison( Sql.Value(true), Sql.Value(false), Sql.Equal )
                     }
                 s.condition map condition
               },

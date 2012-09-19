@@ -19,7 +19,7 @@ import sql.StandardRendering._
 import resultSet._
 import com.weiglewilczek.slf4s.Logging
 
-trait Api extends Logging {
+trait Api extends Logging with CurrentDateTime {
 
   protected def connection
     : ConnectionAdapter with
@@ -107,15 +107,6 @@ trait Api extends Logging {
     ( id : Long )
     : Option[T with Persisted]
     = one[T].filterEqual("id", id).fetch()
-
-  /**
-   * Current DateTime at DB server
-   */
-  def fetchDate() : DateTime
-    = connection
-        .executeQuery( Statement("SELECT NOW()") )
-        .parseAndClose().head.head
-        .asInstanceOf[DateTime]
 
   /**
    * Returns a query which when executed either updates the matched result with

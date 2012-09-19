@@ -8,8 +8,7 @@ import sext.Sext._
 trait DropAllTablesAdapter extends ConnectionAdapter {
   def dropAllTables() {
     def listTables()
-      = executeQuery( Statement("SHOW TABLES") )
-          .parseAndClose()
+      = executeQuery( Statement("SHOW TABLES") )()
           .flatten
           .asInstanceOf[List[String]]
 

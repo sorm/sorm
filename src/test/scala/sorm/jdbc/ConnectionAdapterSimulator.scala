@@ -8,8 +8,10 @@ class ConnectionAdapterSimulator
   with Logging
   {
     override def executeQuery
+      [ T ]
       ( s : Statement )
-      : ResultSet
+      ( parse : ResultSet => T )
+      : T
       = {
         println(s.toString)
         ???

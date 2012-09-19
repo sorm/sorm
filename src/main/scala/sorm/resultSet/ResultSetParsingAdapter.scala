@@ -18,7 +18,7 @@ class ResultSetParsingAdapter
   extends Logging
   {
 
-    def fetchInstancesAndClose
+    def parseInstances
       ( m : TableMapping,
         indexes : Map[(TableMapping, Column), Int] )
       : Seq[_]
@@ -31,7 +31,7 @@ class ResultSetParsingAdapter
         type PrimaryKey = Seq[Any]
 
 
-        def fetchRowsAndClose()
+        def parseRows()
           : Map[PrimaryKey, Row]
           = {
 
@@ -86,11 +86,9 @@ class ResultSetParsingAdapter
 
             var rows : Map[PrimaryKey, Row] = OrderedMap()
 
-            rs.beforeFirst()
             while ( rs.next() ) {
               rows = updatedRows( m, rows )
             }
-            rs.close()
 
             rows
           }
@@ -144,7 +142,7 @@ class ResultSetParsingAdapter
           = rows.values.map{ value(m, _) }.toList
 
 
-        values( m, fetchRowsAndClose() )
+        values( m, parseRows() )
 
       }
 

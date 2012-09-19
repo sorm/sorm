@@ -5,14 +5,14 @@ import sorm.jdbc._
 
 trait CurrentDateTime {
   protected def connection : ConnectionAdapter
-  private def fetchDate1() : DateTime
+  private def fetch() : DateTime
     = connection
-        .executeQuery( Statement("SELECT NOW()") )
-        .parseAndClose().head.head
+        .executeQuery(Statement("SELECT NOW()"))()
+        .head.head
         .asInstanceOf[DateTime]
 
   private lazy val deviation
-    = System.currentTimeMillis - fetchDate1().getMillis
+    = System.currentTimeMillis - fetch().getMillis
 
   def millis = System.currentTimeMillis - deviation
   /**

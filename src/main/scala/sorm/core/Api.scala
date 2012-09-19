@@ -60,11 +60,7 @@ trait Api extends Logging with CurrentDateTime {
     = {
       val (stmt, resultSetMappings) = statementAndResultMappings( q )
 
-      connection.executeQuery(stmt)
-        .fetchInstancesAndClose(
-          q.mapping,
-          resultSetMappings.view.zipWithIndex.toMap
-        )
+      connection.executeQuery(stmt)(_.parseInstances(q.mapping, resultSetMappings.view.zipWithIndex.toMap))
         .asInstanceOf[Seq[T with Persisted]]
     }
 

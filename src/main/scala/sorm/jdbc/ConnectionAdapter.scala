@@ -12,12 +12,19 @@ class ConnectionAdapter( protected val connection : Connection ) extends Transac
         .toMap.valueTreeString
     )
   }
-  def executeQuery
+  def executeQuery 
+    [ T ]
     ( s : Statement )
-    : ResultSet
+    ( parse : ResultSet => T = ((x : ResultSet) => x.parse()) )
+    : T
     = {
       logStatement(s)
-      preparedStatement(s).executeQuery()
+      val js = preparedStatement(s)
+      val rs = js.executeQuery()
+      val r = parse(rs)
+      rs.close()
+      js.close()
+      r
     }
 
   def executeUpdateAndGetGeneratedKeys
@@ -28,11 +35,19 @@ class ConnectionAdapter( protected val connection : Connection ) extends Transac
       if( s.data.isEmpty ) {
         val js = connection.createStatement()
         js.executeUpdate(s.sql, JdbcStatement.RETURN_GENERATED_KEYS)
-        js.getGeneratedKeys.parseAndClose()
+        val rs = js.getGeneratedKeys
+        val r = rs.parse()
+        rs.close()
+        js.close()
+        r
       } else {
         val js = preparedStatement(s, true)
         js.executeUpdate()
-        js.getGeneratedKeys.parseAndClose()
+        val rs = js.getGeneratedKeys
+        val r = rs.parse()
+        rs.close()
+        js.close()
+        r
       }
     }
 
@@ -41,9 +56,15 @@ class ConnectionAdapter( protected val connection : Connection ) extends Transac
     : Int = {
       logStatement(s)
       if( s.data.isEmpty ){
-        connection.createStatement().executeUpdate(s.sql)
+        val js = connection.createStatement()
+        val r = js.executeUpdate(s.sql)
+        js.close()
+        r
       } else {
-        preparedStatement(s).executeUpdate()
+        val js = preparedStatement(s)
+        val r = js.executeUpdate()
+        js.close()
+        r
       }
     }
 

@@ -7,7 +7,9 @@ import reflect.ClassTag
 
 trait Transactions {
   protected def connection : Connection
+
   private var thread : Thread = _
+  
   def transaction [ T ] ( t : => T ) : T
     = transaction(100)(t)
 

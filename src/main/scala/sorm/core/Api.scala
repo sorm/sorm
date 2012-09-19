@@ -109,13 +109,20 @@ trait Api extends Logging {
     = one[T].filterEqual("id", id).fetch()
 
   /**
-   * Current DateTime at DB server
+   * Current DateTime at DB server. Effectively fetches the date only once to
+   * calculate the deviation.
    */
-  def fetchDate() : DateTime
-    = connection
-        .executeQuery( Statement("SELECT NOW()") )
-        .parseAndClose().head.head
-        .asInstanceOf[DateTime]
+  val fetchDate : () => DateTime
+    = {
+        def fetchDate() : DateTime
+          = connection
+              .executeQuery( Statement("SELECT NOW()") )
+              .parseAndClose().head.head
+              .asInstanceOf[DateTime]
+
+        lazy val deviation = new DateTime().getMillis - fetchDate().getMillis
+        () => new DateTime().minus(deviation)
+      }
 
   /**
    * Returns a query which when executed either updates the matched result with

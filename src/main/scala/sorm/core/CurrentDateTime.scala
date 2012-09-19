@@ -14,11 +14,11 @@ trait CurrentDateTime {
   private lazy val deviation
     = System.currentTimeMillis - fetchDate1().getMillis
 
-  def fetchMillis() = System.currentTimeMillis - deviation
+  def millis = System.currentTimeMillis - deviation
   /**
    * Current DateTime at DB server. Effectively fetches the date only once to
    * calculate the deviation.
    */
-  def fetchDate() = new DateTime(fetchMillis())
+  def dateTime = new DateTime(millis)
 
 }

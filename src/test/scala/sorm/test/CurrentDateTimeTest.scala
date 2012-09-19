@@ -11,9 +11,9 @@ class CurrentDateTimeTest extends FunSuite with ShouldMatchers {
   val db = TestingInstance.h2()
 
   test("should be changing"){
-    val a = db.fetchDate()
+    val a = db.dateTime
     Thread.sleep(1500)
-    val b = db.fetchDate()
+    val b = db.dateTime
     (b.getMillis - a.getMillis) should be >= 1500l
   }
 }

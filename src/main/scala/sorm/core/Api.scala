@@ -129,5 +129,6 @@ trait Api extends Logging with CurrentDateTime {
     }
 
   def transaction [ T ] ( t : => T ) : T = connection.transaction(t)
+  def transaction [ T ] ( t : Api => T ) : T = connection.transaction(t(this))
 
 }

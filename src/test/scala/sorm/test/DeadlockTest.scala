@@ -8,6 +8,7 @@ import sorm.samples.TestingInstance
 import sorm.Sorm.{Instance, Entity}
 import util.Random
 import org.joda.time.{DateTime, LocalDate}
+import sext.Sext._
 
 object DeadlockTest {
   case class Album
@@ -58,8 +59,16 @@ object DeadlockTest {
 class DeadlockTest extends FunSuite with ShouldMatchers {
   import DeadlockTest._
 
-//  def instance = TestingInstance.mysql(Entity[A](unique = Set() + Seq("a")), Entity[B]())
-//
+  def instance = TestingInstance.mysql(
+    Entity[Task](indexes = Set() + Seq("asin") + Seq("opened") + Seq("closed") + Seq("started")),
+    Entity[Artist](unique = Set() + Seq("asin")),
+    Entity[Mp3](unique = Set() + Seq("asin")),
+    Entity[Copyright](),
+    Entity[Genre](unique = Set() + Seq("name")),
+    Entity[Album](unique = Set() + Seq("asin"))
+  )
+
+  val instances = (0 until 3).map(_ => instance).par
 //  val db1 = instance
 //  val db2 = instance
 //  val db3 = instance
@@ -78,35 +87,44 @@ class DeadlockTest extends FunSuite with ShouldMatchers {
 //  db3.save(A(2))
 //  db3.save(B(db3.save(A(4)) :: db3.save(A(6)) :: Nil))
 //
-//  test("Parallel transactions"){
-//    val ops =
-//      Seq(
-//        (db : Instance) =>
-//          db.transaction {
-//            db.one[A].filterEqual("a", 3).fetch()
-//              .map(_.copy(a = 3))
-//              .map(db.save)
-//          },
-//        (db : Instance) =>
-//          db.transaction {
-//            db.all[B].fetch()
-//          }
-//      )
-//    (0 until 100).view
-//      .flatMap(_ => db1 :: db2 :: db3 :: Nil)
-//      .map(db => { () => Random.shuffle(ops).head(db) } )
-//      .par
-//      .map(_())
-//
-////    .par.map{ db =>
-////      db.transaction{
-////        db.one[A].filterEqual("a", 3).fetch()
-////          .map(_.copy(a = 3))
-////          .map(db.save)
-////      }
-////    }
-//
-//  }
+  test("Parallel transactions"){
+    val ops : Seq[Instance => _]
+      = ( (db : Instance) => db.transaction {
+            import sorm.Sorm.FilterDsl._
+            db.one[Task]
+              .filterEqual("closed", None)
+              .filter(
+                "started" equal None or
+                ("started.item" smaller (db.dateTime.minusMinutes(1)))
+              )
+              .orderAsc("opened")
+              .fetch()
+              .map(_.copy(started = Some(db.dateTime), failure = None))
+              .map(db.save)
+            Thread.sleep(2)
+          } ) ::
+        ( (db : Instance) => db.transaction {
+            db.one[Artist].filterEqual("asin", "lsdjkflkjsldf").fetch()
+              .map(a => a.copy(names = a.names ++ Nil distinct))
+              .map(db.save)
+            Thread.sleep(2)
+          } ) ::
+        ( (db : Instance) => db.transaction {
+            db.one[Genre].filterEqual("name", "lsdfj").fetch()
+            Thread.sleep(2)
+          } ) ::
+//        ( (db : Instance) => db.transaction {
+//            val savedArtists = mp3.artists map saveArtist
+//            db.one[Mp3].filterEqual("asin", mp3.asin).fetch()
+//              .map(a => a.copy(artists = a.artists ++ savedArtists distinct))
+//              .getOrElse(mp3.copy(artists = savedArtists))
+//              .|>(db.save)
+//          } ) ::
+        Nil
+
+    (0 to 100).flatMap(_ => instances).map(Random.shuffle(ops).head)
+
+  }
   test("Parallel saving"){
     pending
   }

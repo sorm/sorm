@@ -12,7 +12,7 @@ object MultithreadingTest {
 }
 @RunWith(classOf[JUnitRunner])
 class MultithreadingTest extends FunSuite with ShouldMatchers {
-  import DeadlockTest._
+  import MultithreadingTest._
 
   val db = TestingInstance.mysql(Entity[A](unique = Set() + Seq("a")))
 

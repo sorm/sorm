@@ -56,8 +56,7 @@
     <dependency>
       <groupId>org.scalatest</groupId>
       <artifactId>scalatest_2.10.0-M7</artifactId>
-      <version>1.9-2.10.0-M7-B1</version>
-      <scope>test</scope>
+      <version>2.0.M4-2.10.0-M7-B1</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>

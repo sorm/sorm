@@ -1,12 +1,13 @@
 #SORM. A complete abstraction ORM framework for Scala
-SORM is an object-relational mapping framework having simplicity of use and absolute abstraction from relational side at its core principles. It automagically creates database tables, emits queries, inserts, updates and deletes records. This all functionality is presented to the user with a simple API which works on standard Scala's case classes. Using SORM there is absolutely no need for the user to know anything about SQL, DDL and what concepts like many-to-many or one-to-many even mean. Also besides being completely abstra
-SORM also provides an 
+SORM is an object-relational mapping framework having simplicity of use and absolute abstraction from relational side at its core principles. It automagically creates database tables, emits queries, inserts, updates and deletes records. This all functionality is presented to the user with a simple API which works on standard Scala's case classes. 
 
-You can develop your application knowing that database integration will be a trivial step.
+Using SORM there is absolutely no need for the user to know anything about SQL, DDL and what concepts like many-to-many or one-to-many even mean. One can develop an application knowing that database integration will be a trivial step.
 
+##Supported databases
+Currently SORM releases are getting tested against MySQL and H2 databases. Other DBs may also be supported but are yet not guaranteed to be.
 
-##Features -- fuck that
-1. Maximum decoupling of the model from database. Your mapped objects don't need to extend any interface
+##Future plans
+* Support for other popular DBs
 
 ##Getting started
 Let's add a dependency to SORM artifact. In Maven it will look like so: 
@@ -47,14 +48,15 @@ Please consider a data model described with these standard case classes:
     val db
       = new Instance(
           entities
-            = Seq( Entity[Artist](), 
-                   Entity[Style](), 
-                   Entity[Locale]() ),
+            = Set() +
+              Entity[Artist]() +
+              Entity[Style]() +
+              Entity[Locale](),
           url
             = "jdbc:h2:mem:test"
         )
 
-> If you need an explanation with the code above, we create a SORM instance ready to work with objects of types `Artist`, `Style` and `Locale`. That instance connects to the in-memory H2 database without specifying user or password.
+> If you need an explanation with the code above, we create a SORM instance ready to work with objects of types `Artist`, `Style` and `Locale`. That instance connects to an in-memory H2 database without specifying user or password.
 
 Guess what, that's it! We now have an up and running database connection with a full schema structure required for storing our objects already created for us. All that's left to do is put it to use. 
 
@@ -108,17 +110,8 @@ Guess what, that's it! We now have an up and running database connection with a 
 ###Now let's fetch some data from our populated database:
 
     //  get an artist by id:
-    db.one[Artist].whereEquals("id", 2) // will return Nirvana
+    db.one[Artist].filterEquals("id", 2).fetch() // will return Nirvana
 
     //  all artists having a style that has `Hard Rock` in a list of its names
-    db.all[Artist].whereEquals("names.value.item.value", "Hard Rock").fetch()
+    db.all[Artist].filterEquals("names.value.item.value", "Hard Rock").fetch()
 
-
-##Supported databases
-Currently SORM releases are getting tested against MySQL and H2 databases. Other DBs may also be supported but are yet not guaranteed to be.
-
-##Future plans
-* Support for other popular DBs
-* Transactions support
-
-##API

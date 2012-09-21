@@ -84,47 +84,15 @@
 
   <repositories>
     <repository>
-      <id>scala-releases</id>
-      <url>http://scala-tools.org/repo-releases</url>
-    </repository>
-    <repository>
-      <id>scala-snapshots</id>
-      <url>http://scala-tools.org/repo-snapshots</url>
-      <snapshots>
-        <enabled>true</enabled>
-        <updatePolicy>interval:10080</updatePolicy>
-      </snapshots>
-    </repository>
-    <repository>
       <id>typesafe</id>
       <url>http://typesafe.artifactoryonline.com/typesafe/repo</url>
-      <snapshots>
-        <enabled>true</enabled>
-        <updatePolicy>interval:10080</updatePolicy>
-      </snapshots>
     </repository>
   </repositories>
 
   <pluginRepositories>
     <pluginRepository>
-      <id>scala-tools.org</id>
-      <url>http://scala-tools.org/repo-releases</url>
-    </pluginRepository>
-    <pluginRepository>
-      <id>scala-snapshots</id>
-      <url>http://scala-tools.org/repo-snapshots</url>
-      <snapshots>
-        <enabled>true</enabled>
-        <updatePolicy>interval:10080</updatePolicy>
-      </snapshots>
-    </pluginRepository>
-    <pluginRepository>
       <id>typesafe</id>
       <url>http://typesafe.artifactoryonline.com/typesafe/repo</url>
-      <snapshots>
-        <enabled>true</enabled>
-        <updatePolicy>interval:10080</updatePolicy>
-      </snapshots>
     </pluginRepository>
   </pluginRepositories>
 

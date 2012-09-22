@@ -3,6 +3,15 @@ SORM is an object-relational mapping framework having simplicity of use and abso
 
 Using SORM there is absolutely no need for the user to know anything about SQL, DDL and what concepts like many-to-many or one-to-many even mean. One can develop an application knowing that database integration will be a trivial step.
 
+##Project status
+Currently the project is in active development. Release of first stable version 0.1.0 is expected in the comming weeks as of September of 2012. 
+
+The framework is already in a perfectly working state and is being heavily use-tested in some private projects, but until the actual release the API is subject to changes and therefore there won't yet be any more documentation than what is in the "Getting started" section.
+
+##Known issues
+* No rows deletion functionality. Comming soon, definitely before release.
+* Memory leak. This is due to Scala 2.10-M7 reflection bug, which is expected to be fixed in the next release.
+
 ##Supported databases
 Currently SORM releases are getting tested against MySQL and H2 databases. Other DBs may also be supported but are yet not guaranteed to be.
 
@@ -10,7 +19,7 @@ Currently SORM releases are getting tested against MySQL and H2 databases. Other
 * Support for other popular DBs
 
 ##Getting started
-Let's add a dependency to SORM artifact. In Maven it will look like so: 
+<!-- Let's add a dependency to SORM artifact. In Maven it will look like so: 
 
     <dependency>
       <groupId>com.github.nikita-volkov</groupId>
@@ -26,7 +35,7 @@ For our testing project we will use an in-memory version of H2 database - let's 
       <version>1.3.168</version>
     </dependency>
 
-###Now, to the actual program. 
+###Now, to the actual program.  -->
 Please consider a data model described with these standard case classes:
 
     case class Artist

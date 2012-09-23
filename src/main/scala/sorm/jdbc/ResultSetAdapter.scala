@@ -98,6 +98,7 @@ class ResultSetAdapter
               case TIMESTAMP          => rs.getTimestamp(i)
               case BLOB               => rs.getBlob(i)
               case CLOB               => rs.getString(i)
+              case BOOLEAN            => rs.getBoolean(i)
               case _                  => ???
             }
         if( rs.wasNull() ) null

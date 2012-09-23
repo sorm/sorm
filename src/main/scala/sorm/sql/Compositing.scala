@@ -6,7 +6,7 @@ import Sql._
 
 object Compositing {
 
-  def alias ( x : Int ) = ( 97 + x ).toChar.toString
+  def alias ( x : Int ) = "t" + x
   
   implicit class StatementCompositingOperations
     ( self : Statement )

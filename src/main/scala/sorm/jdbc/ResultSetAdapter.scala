@@ -1,8 +1,6 @@
 package sorm.jdbc
 
-import collection.mutable.ListBuffer
 import java.sql._
-import org.joda.time._
 
 import sorm._
 import joda.Extensions._
@@ -17,11 +15,10 @@ class ResultSetAdapter
      */
     private def indexedRowsTraversable
       = new Traversable[IndexedSeq[Any]] {
-
-          val md 
+          private val md
             = rs.getMetaData
 
-          val indexTypeSeq : IndexedSeq[(Int, JdbcType)]
+          private val indexTypeSeq : IndexedSeq[(Int, JdbcType)]
             = ( 1 to md.getColumnCount ) zipBy md.getColumnType
 
           def foreach
@@ -30,21 +27,43 @@ class ResultSetAdapter
             {
               rs.beforeFirst()
               while( rs.next() ){
-                f(
-                  indexTypeSeq.map{ case (i, t) ⇒ rs.value(i, t) }
-                )
+                f( indexTypeSeq.map{ case (i, t) ⇒ rs.value(i, t) } )
+              }
+            }
+        }
+
+    private def byNameRowsTraversable
+      = new Traversable[String => Any] {
+          private val md
+            = rs.getMetaData
+
+          private val indexTypeByName
+            = (1 to md.getColumnCount)
+                .map(i => md.getColumnName(i) -> (i -> md.getColumnType(i)))
+                .toMap
+
+          def foreach
+            [ U ]
+            ( f : (String => Any) => U )
+            {
+              rs.beforeFirst()
+              while( rs.next() ){
+                f( indexTypeByName andThen (value _).tupled )
               }
             }
         }
 
     def parse()
       = indexedRowsTraversable.toList
+
     def parseAndClose()
       = {
         val r = indexedRowsTraversable.toList
         rs.close()
         r
       }
+
+    def toStream : Stream[String => Any] = byNameRowsTraversable.toStream map (f => memo(f))
 
     @deprecated("use parseAndClose()")
     def parseToListsAndClose() 
@@ -53,7 +72,7 @@ class ResultSetAdapter
     @deprecated("index based approach is preferred")
     def parseToMapsAndClose() 
       = {
-        val b = ListBuffer[Map[String, Any]]()
+        val b = collection.mutable.ListBuffer[Map[String, Any]]()
 
         val md = rs.getMetaData
 

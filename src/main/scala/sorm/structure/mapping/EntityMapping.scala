@@ -32,10 +32,10 @@ sealed class EntityMapping
     lazy val settings = settingsMap(reflection)
 
     lazy val columns
-      = generatedIdColumn +: childrenColumns ++: Nil
+      = generatedIdColumn +: childrenColumns ++: Stream()
 
     lazy val primaryKeyColumns
-      = generatedIdColumn :: Nil
+      = generatedIdColumn +: Stream()
 
     lazy val uniqueKeyColumns
       = settings.uniqueKeys

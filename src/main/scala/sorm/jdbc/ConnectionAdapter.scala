@@ -53,7 +53,8 @@ class ConnectionAdapter( protected val connection : Connection ) extends Transac
 
   def executeUpdate
     ( s : Statement )
-    : Int = {
+    : Int
+    = {
       logStatement(s)
       if( s.data.isEmpty ){
         val js = connection.createStatement()

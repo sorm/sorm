@@ -32,6 +32,6 @@ abstract class CollectionMapping
       = nestedTableMappingsForeignKeys ++
         containerTableMappingForeignKey.map{ containerTableMapping.get → _ }
 
-    lazy val bindingsToContainerTable
+    lazy val bindingsToContainerTable : Seq[(String, String)]
       = containerTableMappingForeignKey.get.bindings
   }

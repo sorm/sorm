@@ -8,6 +8,7 @@ import sorm._
 import joda.Extensions._
 import sext.Sext._
 
+//  or SaneResultSet
 class ResultSetAdapter
   ( rs : ResultSet ) 
   {
@@ -45,6 +46,8 @@ class ResultSetAdapter
         rs.close()
         r
       }
+
+    def toStream = indexedRowsTraversable.toStream
 
     @deprecated("use parseAndClose()")
     def parseToListsAndClose() 

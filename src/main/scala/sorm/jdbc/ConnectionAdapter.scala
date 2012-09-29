@@ -15,13 +15,15 @@ class ConnectionAdapter( protected val connection : Connection ) extends Transac
   def executeQuery 
     [ T ]
     ( s : Statement )
-    ( parse : ResultSet => T = ((x : ResultSet) => x.parse()) )
+//    ( parse : Stream[Map[String, _]] => T = (_ : Stream[Map[String, _]]).toList)
+    ( parse : Stream[Map[String, _]] => T = (_.toList) )
+    // ( parse : ResultSet => T = ((x : ResultSet) => x.parse()) )
     : T
     = {
       logStatement(s)
       val js = preparedStatement(s)
       val rs = js.executeQuery()
-      val r = parse(rs)
+      val r = parse(rs.toStream)
       rs.close()
       js.close()
       r

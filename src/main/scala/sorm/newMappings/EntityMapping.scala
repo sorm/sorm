@@ -13,7 +13,7 @@ class EntityMapping
     protected val settings : Map[Reflection, EntitySettings],
     protected val driver : Driver ) 
   extends TableMapping 
-  with TableMappingQuerying 
+  with Querying
   with Parsing {
 
   protected def parseRows ( rows : Stream[Map[String, _]] ) : Option[_]

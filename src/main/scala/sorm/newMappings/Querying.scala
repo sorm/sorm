@@ -4,28 +4,17 @@ import sext.Sext._
 import sorm._
 import core._
 
-trait TableMappingQuerying extends TableMapping {
+trait Querying {
   import abstractSql.AbstractSql._
 
   protected def parseRows ( rows : Stream[Map[String, _]] ) : Option[_]
 
-  // private lazy val containerTable : Option[Table]
-  //   = containerTableMapping map (_.tableName) map (Table(_))
-  // private lazy val table : Table
-  //   = Table(tableName, containerTable.map(Parent(_, bindingsToContainerTable)))
-  // private lazy val selectColumns : Stream[Column]
-  //   = columns.map(_.name).map(Column(_, table))
-  // private lazy val bindingsToContainerTable : Stream[(String, String)]
-  //   = masterTableForeignKey match {
-  //       case Some(fk) => 
-  //         fk.bindings.toStream
-  //       case None =>
-  //         foreignKeyForContainer.toStream flatMap (_.bindings.toStream) map (_.swap)
-  //     }
-  // def fetchByContainerPrimaryKey ( primaryKey : Map[String, _] ) : _
-  //   = primaryKey map {case (n, v) => Comparison(containerTable.get, n, Equal, v)} reduceOption And as
-  //     ( Select(selectColumns, _) ) as
-  //     ( driver.query(_)(parseRows) )
+  protected def containerTableMapping : Option[TableMapping]
+  protected def tableName : String
+  protected def columns : Stream[ddl.Column]
+  protected def masterTableForeignKey : Option[ddl.ForeignKey]
+  protected def foreignKeyForContainer : Option[ddl.ForeignKey]
+  protected def driver : Driver
 
   val fetchByContainerPrimaryKey : Map[String, _] => Option[_]
     = {
@@ -49,7 +38,6 @@ trait TableMappingQuerying extends TableMapping {
         as ( driver.query(_)(parseRows) )
       )
     }
-
 
   val fetchByPrimaryKey : Map[String, _] => Option[_]
     = {

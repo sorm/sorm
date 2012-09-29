@@ -11,7 +11,7 @@ class SeqMapping
     protected val settings : Map[Reflection, EntitySettings],
     protected val driver : Driver )
   extends TableMapping
-  with TableMappingQuerying
+  with Querying
   with Parsing {
 
   lazy val item 

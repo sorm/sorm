@@ -9,18 +9,20 @@ import sext.Sext._
 class ResultSetAdapter
   ( rs : ResultSet ) 
   {
+    private lazy val md = rs.getMetaData
+    private lazy val indexTypeSeq : IndexedSeq[(Int, JdbcType)]
+      = ( 1 to md.getColumnCount ) zipBy md.getColumnType
+    private lazy val indexTypeByName : Map[String, (Int, JdbcType)]
+      = (1 to md.getColumnCount)
+          .map(i => md.getColumnName(i) -> (i -> md.getColumnType(i)))
+          .toMap
+
     /**
      * Is preferred to Iterator since not all adapters support the `isLast` test
      * required for its implementation.
      */
     private def indexedRowsTraversable
       = new Traversable[IndexedSeq[Any]] {
-          private val md
-            = rs.getMetaData
-
-          private val indexTypeSeq : IndexedSeq[(Int, JdbcType)]
-            = ( 1 to md.getColumnCount ) zipBy md.getColumnType
-
           def foreach
             [ U ]
             ( f : IndexedSeq[Any] => U )
@@ -31,17 +33,8 @@ class ResultSetAdapter
               }
             }
         }
-
     private def byNameRowsTraversable
       = new Traversable[String => Any] {
-          private val md
-            = rs.getMetaData
-
-          private val indexTypeByName
-            = (1 to md.getColumnCount)
-                .map(i => md.getColumnName(i) -> (i -> md.getColumnType(i)))
-                .toMap
-
           def foreach
             [ U ]
             ( f : (String => Any) => U )
@@ -62,8 +55,8 @@ class ResultSetAdapter
         rs.close()
         r
       }
-
-    def toStream : Stream[String => Any] = byNameRowsTraversable.toStream map (f => memo(f))
+    def toStream : Stream[Map[String, Any]]
+      = byNameRowsTraversable.toStream map (_ => indexTypeByName.mapValues((value _).tupled))
 
     @deprecated("use parseAndClose()")
     def parseToListsAndClose() 

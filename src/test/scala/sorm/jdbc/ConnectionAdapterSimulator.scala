@@ -10,7 +10,7 @@ class ConnectionAdapterSimulator
     override def executeQuery
       [ T ]
       ( s : Statement )
-      ( parse : ResultSet => T )
+      ( parse : Stream[Map[String, Any]] => T = (_ : Stream[Map[String, Any]]).map(_.values).toList)
       : T
       = {
         println(s.toString)

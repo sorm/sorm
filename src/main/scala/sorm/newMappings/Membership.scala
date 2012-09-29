@@ -25,9 +25,9 @@ object Membership {
   sealed case class TupleItem
     ( index : Int, parent : TupleMapping )
     extends Membership
-//  sealed case class OptionItem
-//    ( parent : OptionMapping )
-//    extends Membership
+  sealed case class OptionItem
+    ( parent : OptionMapping )
+    extends Membership
   sealed case class SeqItem
     ( parent : SeqMapping )
     extends Membership

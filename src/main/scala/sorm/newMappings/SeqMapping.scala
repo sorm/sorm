@@ -6,12 +6,11 @@ import core._
 import reflection.Reflection
 
 class SeqMapping
-  ( protected val reflection : Reflection,
-    protected val membership : Option[Membership],
-    protected val settings : Map[Reflection, EntitySettings],
-    protected val driver : Driver )
-  extends TableMapping
-  with Querying
+  ( val reflection : Reflection,
+    val membership : Option[Membership],
+    val settings : Map[Reflection, EntitySettings],
+    val driver : Driver )
+  extends SlaveTableMapping
   with Parsing {
 
   lazy val item 
@@ -30,16 +29,11 @@ class SeqMapping
   //     def propertyValue ( p : String )
   //       = 
   //   }
-  protected def parseRows ( rows : Stream[Map[String, _]] ) : Vector[_]
-    = rows.map(valueFromOwnRow).toVector
+  def parseRows ( rows : Stream[String => Any] )
+    = rows.map(item.valueFromContainerRow).toVector.notEmpty
 
-  private def valueFromOwnRow ( row : Map[String, _] ) : Any
-    = item.valueFromContainerRow(row, primaryKey.zipBy(row).toMap)
-
-  protected def valueFromContainerRow ( row : Map[String, _], pk : Map[String, _] )
-    = fetchByContainerPrimaryKey(pk).get
-
-  protected def mappings = item +: Stream()
-  protected def primaryKey = ???
-  protected def isMasterTable = false
+  lazy val index
+    = new ValueMapping(Reflection[Int], Some(Membership.SeqIndex(this)), settings, driver)
+  lazy val mappings = item +: Stream()
+  lazy val primaryKeyColumns = masterTableColumns :+ index.column
 }

@@ -59,13 +59,13 @@ object Mapping {
       membership : Option[Membership],
       settings : Map[Reflection, EntitySettings],
       driver : Driver )
-    : Mapping with Parsing
+    : Mapping
     = ???
   def apply
     ( reflection : Reflection,
       membership : Membership,
       settings : Map[Reflection, EntitySettings],
       driver : Driver )
-    : Mapping with Parsing
+    : Mapping 
     = ???
 }

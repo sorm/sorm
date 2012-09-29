@@ -16,8 +16,7 @@ class Driver ( renderer : Renderer, connection : ConnectionAdapter ) {
   def query
     [ T ] 
     ( asql : Statement ) 
-//    ( parse : Stream[Map[String, _]] => T = (_ : Stream[Map[String, _]]).toList )
-    ( parse : Stream[Map[String, _]] => T = (_.toList) )
+    ( parse : Stream[String => Any] => T = (_ : Stream[String => Any]).toList )
     : T
-    = (asql as renderer.sql as connection.executeQuery)(parse)
+    = connection.executeQuery(renderer.sql(asql))(parse)
 }

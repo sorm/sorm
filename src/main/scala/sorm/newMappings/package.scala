@@ -15,12 +15,4 @@ package object newMappings {
     }
 
 
-  
-  // trait MasterTableMapping extends TableMapping {
-  //   def name = ddlName(reflection.name)
-  // }
-  // trait SlaveTableMapping extends TableMapping {
-  //   def name = ???
-  // }
-
 }

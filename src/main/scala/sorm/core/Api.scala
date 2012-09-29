@@ -1,7 +1,5 @@
 package sorm.core
 
-import org.joda.time.DateTime
-
 import reflect.basis._
 import sorm._
 import persisted._
@@ -56,12 +54,11 @@ trait Api extends Logging with CurrentDateTime {
       Statement( sql.template, sql.data map JdbcValue.apply ) ->
       q.mapping.resultSetMappings
     }
-  private def fetch [ T <: AnyRef ] ( q : Query )
+  private def fetch [ T <: AnyRef ] ( q : Query ) : Seq[T with Persisted]
     = {
       val (stmt, resultSetMappings) = statementAndResultMappings( q )
-
-      connection.executeQuery(stmt)(_.parseInstances(q.mapping, resultSetMappings.view.zipWithIndex.toMap))
-        .asInstanceOf[Seq[T with Persisted]]
+//      connection.executeQuery(stmt)(_.parseInstances(q.mapping, resultSetMappings.view.zipWithIndex.toMap)).asInstanceOf[Seq[T with Persisted]]
+      ???
     }
 
   def all

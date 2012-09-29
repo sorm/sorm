@@ -8,32 +8,28 @@ import reflection.Reflection
 
 
 class EntityMapping 
-  ( protected val reflection : Reflection, 
-    protected val membership : Option[Membership], 
-    protected val settings : Map[Reflection, EntitySettings],
-    protected val driver : Driver ) 
-  extends TableMapping 
-  with Querying
-  with Parsing {
+  ( val reflection : Reflection, 
+    val membership : Option[Membership], 
+    val settings : Map[Reflection, EntitySettings],
+    val driver : Driver ) 
+  extends MasterTableMapping {
 
-  protected def parseRows ( rows : Stream[Map[String, _]] ) : Option[_]
+  override def parseRows ( rows : Stream[String => Any] ) : Option[Any]
     = rows
         .headOption
         .map( row => Persisted(
-          properties.mapValues( _.valueFromContainerRow(row, primaryKey.zipBy(row).toMap) ),
+          properties.mapValues( _.valueFromContainerRow(row) ),
           row("id").asInstanceOf[Long],
           reflection
         ) )
 
-  protected def valueFromContainerRow ( row : Map[String, _], pk : Map[String, _] ) : Any
-    = fetchByContainerPrimaryKey(pk).get
-
-
-  protected lazy val properties
+  lazy val properties
     = reflection.properties.map{case (n, r) => n -> Mapping(r, Membership.EntityProperty(n, this), settings, driver)}
-  protected lazy val mappings // todo: add id
-    = reflection.properties.map{case (n, r) => Mapping(r, Membership.EntityProperty(n, this), settings, driver)}
-  protected lazy val primaryKey = "id" +: Stream()
-  protected def isMasterTable = true
-  
+  lazy val mappings // todo: add id
+    = reflection.properties.map{case (n, r) => Mapping(r, Membership.EntityProperty(n, this), settings, driver)}.toStream
+  lazy val primaryKeyColumns
+    = id.column +: Stream()
+  lazy val id
+    = new ValueMapping(Reflection[Int], Some(Membership.EntityId(this)), settings, driver)
+
 }

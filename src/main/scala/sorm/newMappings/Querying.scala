@@ -7,30 +7,23 @@ import core._
 trait Querying {
   import abstractSql.AbstractSql._
 
-  protected def parseRows ( rows : Stream[Map[String, _]] ) : Option[_]
+  def parseRows ( rows : Stream[String => Any] ) : Option[Any]
 
-  protected def containerTableMapping : Option[TableMapping]
-  protected def tableName : String
-  protected def columns : Stream[ddl.Column]
-  protected def masterTableForeignKey : Option[ddl.ForeignKey]
-  protected def foreignKeyForContainer : Option[ddl.ForeignKey]
-  protected def driver : Driver
+  def containerTableMapping : Option[TableMapping]
+  def name : String
+  def columns : Stream[ddl.Column]
+  def driver : Driver
+  def bindingsToContainerTable : Stream[(String, String)]
 
-  val fetchByContainerPrimaryKey : Map[String, _] => Option[_]
+  val fetchByContainerPrimaryKey : Map[String, Any] => Option[Any]
     = {
       lazy val containerTable : Option[Table]
-        = containerTableMapping map (_.tableName) map (Table(_))
+        = containerTableMapping map (_.name) map (Table(_))
       lazy val table : Table
-        = Table(tableName, containerTable.map(Parent(_, bindingsToContainerTable)))
+        = Table(name, containerTable.map(Parent(_, bindingsToContainerTable)))
       lazy val selectColumns : Stream[Column]
         = columns.map(_.name).map(Column(_, table))
-      lazy val bindingsToContainerTable : Stream[(String, String)]
-        = masterTableForeignKey match {
-            case Some(fk) => 
-              fk.bindings.toStream
-            case None =>
-              foreignKeyForContainer.toStream flatMap (_.bindings.toStream) map (_.swap)
-          }
+
       ( _ 
         map {case (n, v) => Comparison(containerTable.get, n, Equal, v)} 
         reduceOption And
@@ -39,9 +32,9 @@ trait Querying {
       )
     }
 
-  val fetchByPrimaryKey : Map[String, _] => Option[_]
+  val fetchByPrimaryKey : Map[String, Any] => Option[Any]
     = {
-      lazy val table = Table(tableName, None)
+      lazy val table = Table(name, None)
       lazy val columns = this.columns.map(_.name).map(Column(_, table))
 
       ( _ 

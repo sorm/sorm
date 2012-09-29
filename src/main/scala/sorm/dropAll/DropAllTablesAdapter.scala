@@ -5,7 +5,7 @@ import core.SormException
 import jdbc._
 import sext.Sext._
 
-trait DropAllTablesAdapter extends ConnectionAdapter {
+trait DropAllTablesAdapter extends JdbcConnection {
   def dropAllTables() {
     def listTables()
       = executeQuery( Statement("SHOW TABLES") )()

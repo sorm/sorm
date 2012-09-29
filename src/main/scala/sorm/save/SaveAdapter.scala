@@ -15,7 +15,7 @@ import sext.Sext._
  * 3. This may result in updates being called on inexisting rows - these situations should be considered caused by improper use and as such should result in a runtime exception being thrown
  * 4. All rows of collection tables are deleted before update and thus should result in no such conflicts
  */
-trait SaveAdapter extends ConnectionAdapter {
+trait SaveAdapter extends JdbcConnection {
   def saveEntityAndGetIt
     ( v : AnyRef,
       m : EntityMapping )

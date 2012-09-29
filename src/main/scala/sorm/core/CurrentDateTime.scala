@@ -4,7 +4,7 @@ import org.joda.time.DateTime
 import sorm.jdbc._
 
 trait CurrentDateTime {
-  protected def connection : ConnectionAdapter
+  protected def connection : JdbcConnection
   private def fetch() : DateTime
     = connection
         .executeQuery(Statement("SELECT NOW()"))()

@@ -20,7 +20,7 @@ import com.weiglewilczek.slf4s.Logging
 trait Api extends Logging with CurrentDateTime {
 
   protected def connection
-    : ConnectionAdapter with
+    : JdbcConnection with
       SaveAdapter
 
   protected def mappings

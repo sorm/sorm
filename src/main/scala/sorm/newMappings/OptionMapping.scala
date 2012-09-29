@@ -11,7 +11,7 @@ sealed class OptionMapping
   ( val reflection : Reflection,
     val membership : Option[Membership],
     val settings : Map[Reflection, EntitySettings],
-    val driver : Driver )
+    val driver : Connection )
   extends CompositeMapping
   {
 

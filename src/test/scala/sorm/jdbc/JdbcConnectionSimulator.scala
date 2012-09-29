@@ -3,8 +3,8 @@ package sorm.jdbc
 import com.weiglewilczek.slf4s.Logging
 import java.sql.ResultSet
 
-class ConnectionAdapterSimulator
-  extends ConnectionAdapter(null)
+class JdbcConnectionSimulator
+  extends JdbcConnection(null)
   with Logging
   {
     override def executeQuery

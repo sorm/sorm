@@ -22,7 +22,7 @@ trait Mapping extends Parsing {
 //    def mappings : Stream[Mapping]  //  child mappings
   def settings : Map[Reflection, EntitySettings]
 
-  def driver : Driver
+  def driver : Connection
 
   lazy val memberName : String
 //      = membership
@@ -58,14 +58,14 @@ object Mapping {
     ( reflection : Reflection,
       membership : Option[Membership],
       settings : Map[Reflection, EntitySettings],
-      driver : Driver )
+      driver : Connection )
     : Mapping
     = ???
   def apply
     ( reflection : Reflection,
       membership : Membership,
       settings : Map[Reflection, EntitySettings],
-      driver : Driver )
+      driver : Connection )
     : Mapping 
     = ???
 }

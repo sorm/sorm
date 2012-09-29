@@ -11,7 +11,7 @@ class EntityMapping
   ( val reflection : Reflection, 
     val membership : Option[Membership], 
     val settings : Map[Reflection, EntitySettings],
-    val driver : Driver ) 
+    val driver : Connection )
   extends MasterTableMapping {
 
   override def parseRows ( rows : Stream[String => Any] ) : Option[Any]

@@ -16,7 +16,7 @@ object TestingInstance {
     ( entities : Entity* )
     = new Api {
         protected[sorm] val connection
-          = new ConnectionAdapterSimulator()
+          = new JdbcConnectionSimulator()
               with SaveAdapter
 
         protected[sorm] val mappings

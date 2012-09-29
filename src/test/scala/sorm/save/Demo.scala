@@ -16,7 +16,7 @@ object Demo extends App {
 
 
   val db
-    = new ConnectionAdapterSimulator with SaveAdapter {
+    = new JdbcConnectionSimulator with SaveAdapter {
         val settings
           = Map(
               Reflection[Artist] → EntitySettings(),

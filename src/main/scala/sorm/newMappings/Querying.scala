@@ -12,7 +12,7 @@ trait Querying {
   def containerTableMapping : Option[TableMapping]
   def name : String
   def columns : Stream[ddl.Column]
-  def driver : Driver
+  def driver : Connection
   def bindingsToContainerTable : Stream[(String, String)]
 
   val fetchByContainerPrimaryKey : Map[String, Any] => Option[Any]

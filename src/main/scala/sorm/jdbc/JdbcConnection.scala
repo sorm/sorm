@@ -1,7 +1,94 @@
 package sorm.jdbc
 
 import java.sql.DriverManager
+import sext.Sext._
+import java.sql.{Connection, ResultSet, Statement => JdbcStatement}
+import com.weiglewilczek.slf4s.Logging
 
+class JdbcConnection( protected val connection : Connection ) extends Transactions with Logging {
+  private def logStatement(s : Statement){
+    logger.trace(
+      "Executing statement:\n" +
+      (("sql" -> s.sql) +: s.data.map(_.value).notEmpty.map("data" -> _) ++: Stream())
+        .toMap.valueTreeString
+    )
+  }
+  def executeQuery
+    [ T ]
+    ( s : Statement )
+    ( parse : Stream[Map[String, Any]] => T = (_ : Stream[Map[String, Any]]).map(_.values).toList)
+    : T
+    = {
+      logStatement(s)
+      val js = preparedStatement(s)
+      val rs = js.executeQuery()
+      val r = parse(rs.toStream)
+      rs.close()
+      js.close()
+      r
+    }
+
+  def executeUpdateAndGetGeneratedKeys
+    ( s : Statement )
+    : List[IndexedSeq[Any]]
+    = {
+      logStatement(s)
+      if( s.data.isEmpty ) {
+        val js = connection.createStatement()
+        js.executeUpdate(s.sql, JdbcStatement.RETURN_GENERATED_KEYS)
+        val rs = js.getGeneratedKeys
+        val r = rs.parse()
+        rs.close()
+        js.close()
+        r
+      } else {
+        val js = preparedStatement(s, true)
+        js.executeUpdate()
+        val rs = js.getGeneratedKeys
+        val r = rs.parse()
+        rs.close()
+        js.close()
+        r
+      }
+    }
+
+  def executeUpdate
+    ( s : Statement )
+    : Int
+    = {
+      logStatement(s)
+      if( s.data.isEmpty ){
+        val js = connection.createStatement()
+        val r = js.executeUpdate(s.sql)
+        js.close()
+        r
+      } else {
+        val js = preparedStatement(s)
+        val r = js.executeUpdate()
+        js.close()
+        r
+      }
+    }
+
+  private def preparedStatement
+    ( stmt : Statement,
+      generatedKeys : Boolean = false )
+    = {
+      val s =
+        connection.prepareStatement(
+          stmt.sql,
+          if (generatedKeys) JdbcStatement.RETURN_GENERATED_KEYS
+          else JdbcStatement.NO_GENERATED_KEYS
+        )
+
+      for( (v, i) <- stmt.data.view.zipWithIndex ) {
+        s.set(i + 1, v)
+      }
+
+      s
+    }
+
+}
 object JdbcConnection {
 
   def apply
@@ -28,36 +115,5 @@ object JdbcConnection {
       DriverManager.getConnection(url, user, password)
     }
 
-  sealed trait DbType
-  object DbType {
-
-    case object Mysql extends DbType
-    case object H2 extends DbType
-    case object Hsqldb extends DbType
-    case object Sqlite extends DbType
-    case object Postgres extends DbType
-    case object Oracle extends DbType
-    case object Sqlserver extends DbType
-    case object Derby extends DbType
-    case object Sybase extends DbType
-    case object Db2 extends DbType
-
-    def byUrl
-      ( u : String )
-      : DbType
-      = u match {
-          case u if u.startsWith("jdbc:mysql:") => Mysql
-          case u if u.startsWith("jdbc:h2:") => H2
-          case u if u.startsWith("jdbc:hsqldb:") => Hsqldb
-          case u if u.startsWith("jdbc:sqlite:") => Sqlite
-          case u if u.startsWith("jdbc:postgresql:") => Postgres
-          case u if u.startsWith("jdbc:oracle:") => Oracle
-          case u if u.startsWith("jdbc:sqlserver:") => Sqlserver
-          case u if u.startsWith("jdbc:derby:") => Derby
-          case u if u.startsWith("jdbc:sybase:") => Sybase
-          case u if u.startsWith("jdbc:db2:") => Db2
-        }
-
-  }
 
 }

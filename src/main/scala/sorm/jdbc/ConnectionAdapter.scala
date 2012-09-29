@@ -15,7 +15,7 @@ class ConnectionAdapter( protected val connection : Connection ) extends Transac
   def executeQuery 
     [ T ]
     ( s : Statement )
-    ( parse : ResultSet => T = ((x : ResultSet) => x.parse()) )
+    ( parse : ResultSet => T = ((_ : ResultSet).parse()) )
     : T
     = {
       logStatement(s)

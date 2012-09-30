@@ -1,4 +1,4 @@
-package sorm.newMappings
+package sorm.mappings
 
 
 sealed trait Membership {

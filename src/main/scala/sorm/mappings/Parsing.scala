@@ -1,4 +1,4 @@
-package sorm.newMappings
+package sorm.mappings
 
 import sorm._
 

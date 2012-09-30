@@ -1,4 +1,4 @@
-package sorm.newMappings
+package sorm.mappings
 
 import sext.Sext._
 import sorm._

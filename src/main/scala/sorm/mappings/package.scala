@@ -6,7 +6,7 @@ import sorm._
 import reflection.Reflection
 import core._
 
-package object newMappings {
+package object mappings {
   def ddlName ( string : String )
     : String
     = {

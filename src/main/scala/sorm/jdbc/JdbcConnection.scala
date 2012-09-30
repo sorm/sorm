@@ -4,6 +4,7 @@ import java.sql.DriverManager
 import sext.Sext._
 import java.sql.{Connection, ResultSet, Statement => JdbcStatement}
 import com.weiglewilczek.slf4s.Logging
+import sorm.core.DbType
 
 class JdbcConnection( protected val connection : Connection ) extends Transactions with Logging {
   private def logStatement(s : Statement){

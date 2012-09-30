@@ -1,4 +1,4 @@
-package sorm.jdbc
+package sorm.core
 
 sealed trait DbType
 object DbType {

@@ -11,7 +11,8 @@ trait CompositeMapping extends Mapping {
   def mappings : Stream[Mapping]
   lazy val columns : Stream[Column]
     = mappings flatMap {
-        case m : TableMapping => Stream()
+        case m : MasterTableMapping => m.columnsForContainer
+        case m : SlaveTableMapping => Stream()
         case m : CompositeMapping => m.columns
         case m : ColumnMapping => m.column +: Stream()
       }

@@ -5,7 +5,6 @@ import sext.Sext._
 import sorm._
 import reflection.Reflection
 import core._
-import scala.Some
 import ddl._
 
 sealed trait TableMapping extends CompositeMapping with Querying {
@@ -23,26 +22,12 @@ sealed trait TableMapping extends CompositeMapping with Querying {
   lazy val containedForeignKeys : Stream[ForeignKey]
     = containedTableMappings collect { case m : MasterTableMapping => m.foreignKeyForContainer }
 
-  lazy val table
-    = Table(
-        name
-          = name,
-        columns
-          = columns,
-        primaryKey
-          = primaryKey,
-        uniqueKeys
-          = uniqueKeys,
-        indexes
-          = indexes,
-        foreignKeys
-          = foreignKeys
-      )
+  lazy val table = Table(name, primaryKeyColumns ++: columns, primaryKey, uniqueKeys, indexes, foreignKeys)
 
   lazy val primaryKey = primaryKeyColumns.map(_.name)
 
-  override def valueFromContainerRow ( row : String => Any )
-    = containerTableMapping.map(_.primaryKey.zipBy(row).toMap).flatMap(fetchByContainerPrimaryKey).get
+  override def valueFromContainerRow ( row : String => Any ) : Any
+    = containerTableMapping.get.primaryKey.zipBy(row).toMap as fetchByContainerPrimaryKey
 
 }
 
@@ -54,6 +39,11 @@ trait MasterTableMapping extends TableMapping {
         primaryKey.map(n => memberName + "$" + n -> n),
         ForeignKey.ReferenceOption.Cascade
       )
+  lazy val columnsForContainer : Stream[Column]
+    = primaryKeyColumns.map(c => c.copy(
+        autoIncrement = false,
+        name = memberName + "$" + c.name
+      ))
   lazy val bindingsToContainerTable
     = foreignKeyForContainer.bindings.toStream map (_.swap)
   lazy val foreignKeys = Set() ++ containedForeignKeys

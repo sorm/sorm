@@ -1,24 +1,21 @@
 package sorm.newMappings
 
 import sext.Sext._
-
 import sorm._
 import core._
 import reflection._
-import ddl._
 
 sealed class OptionMapping
   ( val reflection : Reflection,
     val membership : Option[Membership],
     val settings : Map[Reflection, EntitySettings],
-    val driver : Connection )
-  extends CompositeMapping
+    val connection : Connection )
+  extends SlaveTableMapping
   {
 
-  def mappings = item +: Stream()
-
-  lazy val item = Mapping( reflection.generics(0), Membership.OptionItem(this), settings, driver )
-
-  override def valueFromContainerRow(data: String => Any) = item.memberName as data as Option.apply
-
-}
+    lazy val item = Mapping( reflection.generics(0), Membership.OptionItem(this), settings, connection )
+    lazy val primaryKeyColumns = masterTableColumns
+    lazy val mappings = item +: Stream()
+    def parseRows ( rows : Stream[String => Any] )
+      = rows.headOption.map(item.valueFromContainerRow)
+  }

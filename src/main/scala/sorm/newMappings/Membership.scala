@@ -7,12 +7,12 @@ sealed trait Membership {
 
 object Membership {
 
-//  sealed case class RangeFrom
-//    ( parent : RangeMapping )
-//    extends Membership
-//  sealed case class RangeTo
-//    ( parent : RangeMapping )
-//    extends Membership
+  sealed case class RangeFrom
+    ( parent : RangeMapping )
+    extends Membership
+  sealed case class RangeTo
+    ( parent : RangeMapping )
+    extends Membership
   sealed case class SeqIndex
     ( parent : SeqMapping )
     extends Membership
@@ -31,14 +31,14 @@ object Membership {
   sealed case class SeqItem
     ( parent : SeqMapping )
     extends Membership
-//  sealed case class SetItem
-//    ( parent : SetMapping )
-//    extends Membership
-//  sealed case class MapKey
-//    ( parent : MapMapping )
-//    extends Membership
-//  sealed case class MapValue
-//    ( parent : MapMapping )
-//    extends Membership
+  sealed case class SetItem
+    ( parent : SetMapping )
+    extends Membership
+  sealed case class MapKey
+    ( parent : MapMapping )
+    extends Membership
+  sealed case class MapValue
+    ( parent : MapMapping )
+    extends Membership
 
 }

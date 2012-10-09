@@ -4,6 +4,27 @@ object Sql {
 
   sealed trait Sql
 
+  case class Insert
+    ( table : String, columns : Seq[String], values : Seq[Any] )
+    extends Sql
+
+  case class Update
+    ( table : String, exprs : Seq[SetExpression], where : Option[Where] )
+    extends Sql
+
+  case class SetExpression
+    ( column : Column, value : Any )
+    extends Sql
+
+  case class Delete
+    ( table : String, where : Option[Where] )
+    extends Sql
+
+  case class Where
+    ( condition : Condition[WhereObject] )
+    extends Sql
+    
+
   sealed trait Statement
     extends Sql
     with FromObject

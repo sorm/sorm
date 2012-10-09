@@ -10,7 +10,7 @@ import Query._
 
 object Path {
 
-  trait Part
+  sealed trait Part
   object Part {
     case class Dotted ( name : String ) extends Part
     case class Braced ( name : String ) extends Part

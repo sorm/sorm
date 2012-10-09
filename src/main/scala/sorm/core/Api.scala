@@ -43,8 +43,10 @@ trait Api extends Logging with CurrentDateTime {
     [ T <: AnyRef : TypeTag ]
     ( value : T )
     : T with Persisted
-    = connection.saveEntityAndGetIt( value, mapping[T] )
-        .asInstanceOf[T with Persisted]
+    = transaction {
+        connection.saveEntityAndGetIt( value, mapping[T] )
+          .asInstanceOf[T with Persisted]
+      }
 
 
   private def statementAndResultMappings ( q : Query )

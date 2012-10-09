@@ -81,20 +81,6 @@
     </dependency>
   </dependencies>
 
-  <repositories>
-    <repository>
-      <id>typesafe</id>
-      <url>http://typesafe.artifactoryonline.com/typesafe/repo</url>
-    </repository>
-  </repositories>
-
-  <pluginRepositories>
-    <pluginRepository>
-      <id>typesafe</id>
-      <url>http://typesafe.artifactoryonline.com/typesafe/repo</url>
-    </pluginRepository>
-  </pluginRepositories>
-
   <build>
     <plugins>
       <plugin>

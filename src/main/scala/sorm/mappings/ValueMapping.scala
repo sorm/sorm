@@ -10,7 +10,7 @@ class ValueMapping
   ( val reflection : Reflection,
     val membership : Option[Membership],
     val settings : Map[Reflection, EntitySettings],
-    val connection : Connection )
+    val driver : Driver )
   extends ColumnMapping {
 
     lazy val columnType : Column.Type

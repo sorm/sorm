@@ -57,14 +57,14 @@ object Mapping {
     ( reflection : Reflection,
       membership : Option[Membership],
       settings : Map[Reflection, EntitySettings],
-      connection : Connection )
+      driver : Driver )
     : Mapping
     = ???
   def apply
     ( reflection : Reflection,
       membership : Membership,
       settings : Map[Reflection, EntitySettings],
-      connection : Connection )
+      driver : Driver )
     : Mapping 
     = ???
 }

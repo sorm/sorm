@@ -11,7 +11,7 @@ class EntityMapping
   ( val reflection : Reflection, 
     val membership : Option[Membership], 
     val settings : Map[Reflection, EntitySettings],
-    val connection : Connection )
+    val driver : Driver )
   extends MasterTableMapping {
 
   override def parseRows ( rows : Stream[String => Any] ) : Any
@@ -25,12 +25,12 @@ class EntityMapping
         .get
 
   lazy val properties
-    = reflection.properties.map{case (n, r) => n -> Mapping(r, Membership.EntityProperty(n, this), settings, connection)}
+    = reflection.properties.map{case (n, r) => n -> Mapping(r, Membership.EntityProperty(n, this), settings, driver)}
   lazy val mappings // todo: add id
-    = reflection.properties.map{case (n, r) => Mapping(r, Membership.EntityProperty(n, this), settings, connection)}.toStream
+    = reflection.properties.map{case (n, r) => Mapping(r, Membership.EntityProperty(n, this), settings, driver)}.toStream
   lazy val primaryKeyColumns
     = id.column +: Stream()
   lazy val id
-    = new ValueMapping(Reflection[Int], Some(Membership.EntityId(this)), settings, connection)
+    = new ValueMapping(Reflection[Int], Some(Membership.EntityId(this)), settings, driver)
 
 }

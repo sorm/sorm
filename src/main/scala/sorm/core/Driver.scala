@@ -3,17 +3,34 @@ package sorm.core
 import sext.Sext._
 
 import sorm._
-import abstractSql._
 import abstractSql.AbstractSql._
-import jdbc.JdbcValue
-import sql._
+import org.joda.time.DateTime
 
+/**
+ * An abstraction over jdbc connection, instances of which implement sql dialects of different databases
+ */
 trait Driver {
-  def statement ( asql : Statement ) : jdbc.Statement
-    = asql as sql as statement
-  def statement ( sql : Sql.Sql ) : jdbc.Statement
-    = jdbc.Statement(template(sql), data(sql).map(JdbcValue.apply))
-  def sql ( asql : Statement ) : Sql.Statement
-  def template ( sql : Sql.Sql ) : String
-  def data ( sql : Sql.Sql ) : Seq[Any]
+  def query
+    [ T ] 
+    ( asql : Statement ) 
+    ( parse : Stream[String => Any] => T = (_ : Stream[String => Any]).toList )
+    : T
+  def now() : DateTime
+  def dropTables
+    ( tables : Seq[String] )
+  def dropAllTables()
+  def update
+    ( table : String, values : Map[String, Any], pk : Map[String, Any] )
+  def insert
+    ( table : String, values : Map[String, Any] )
+    : Seq[Any]
+  def delete
+    ( table : String, pk : Map[String, Any] )
+}
+object Driver {
+  def apply ( url : String, user : String, password : String )
+    = DbType.byUrl(url) match {
+        case DbType.Mysql => new drivers.Mysql(url, user, password)
+        case DbType.H2 => new drivers.H2(url, user, password)
+      }
 }

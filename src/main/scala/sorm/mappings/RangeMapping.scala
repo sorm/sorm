@@ -9,11 +9,11 @@ sealed class RangeMapping
   ( val reflection : Reflection,
     val membership : Option[Membership],
     val settings : Map[Reflection, EntitySettings],
-    val connection : Connection )
+    val driver : Driver )
   extends CompositeMapping
   {
-    lazy val from = Mapping( Reflection[Int], Membership.RangeFrom(this), settings, connection )
-    lazy val to = Mapping( Reflection[Int], Membership.RangeTo(this), settings, connection )
+    lazy val from = Mapping( Reflection[Int], Membership.RangeFrom(this), settings, driver )
+    lazy val to = Mapping( Reflection[Int], Membership.RangeTo(this), settings, driver )
     lazy val mappings = from +: to +: Stream()
 
     def valueFromContainerRow(data: (String) => Any)

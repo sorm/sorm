@@ -12,7 +12,7 @@ trait Querying {
   def containerTableMapping : Option[TableMapping]
   def name : String
   def columns : Stream[ddl.Column]
-  def connection : Connection
+  def driver : Driver
   def bindingsToContainerTable : Stream[(String, String)]
 
   val fetchByContainerPrimaryKey : Map[String, Any] => Any
@@ -28,7 +28,7 @@ trait Querying {
         map {case (n, v) => Comparison(containerTable.get, n, Equal, v)} 
         reduceOption And
         as ( Select(selectColumns, _) )
-        as ( connection.query(_)(parseRows) )
+        as ( driver.query(_)(parseRows) )
       )
     }
 
@@ -41,7 +41,7 @@ trait Querying {
         map {case (n, v) => Comparison(table, n, Equal, v)} 
         reduceOption And 
         as (Select(columns, _))
-        as (connection.query(_)(parseRows))
+        as (driver.query(_)(parseRows))
       )
     }
 }

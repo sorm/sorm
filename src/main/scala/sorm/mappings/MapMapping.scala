@@ -9,12 +9,12 @@ sealed class MapMapping
   ( val reflection : Reflection,
     val membership : Option[Membership],
     val settings : Map[Reflection, EntitySettings],
-    val connection : Connection )
+    val driver : Driver )
   extends SlaveTableMapping
   {
 
-    lazy val key = Mapping( reflection.generics(0), Membership.MapKey(this), settings, connection )
-    lazy val value = Mapping( reflection.generics(1), Membership.MapValue(this), settings, connection )
+    lazy val key = Mapping( reflection.generics(0), Membership.MapKey(this), settings, driver )
+    lazy val value = Mapping( reflection.generics(1), Membership.MapValue(this), settings, driver )
     lazy val primaryKeyColumns = masterTableColumns :+ hashColumn
     lazy val hashColumn = ddl.Column( "h", ddl.Column.Type.Integer )
     lazy val mappings = key +: value +: Stream()

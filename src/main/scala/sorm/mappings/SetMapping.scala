@@ -9,11 +9,11 @@ class SetMapping
   ( val reflection : Reflection,
     val membership : Option[Membership],
     val settings : Map[Reflection, EntitySettings],
-    val connection : Connection )
+    val driver : Driver )
   extends SlaveTableMapping
   {
 
-    lazy val item = Mapping( reflection.generics(0), Membership.SetItem(this), settings, connection )
+    lazy val item = Mapping( reflection.generics(0), Membership.SetItem(this), settings, driver )
     lazy val primaryKeyColumns = masterTableColumns :+ hashColumn
     lazy val hashColumn = ddl.Column( "h", ddl.Column.Type.Integer )
     lazy val mappings = item +: Stream()

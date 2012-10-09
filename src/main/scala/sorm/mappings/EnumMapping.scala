@@ -10,7 +10,7 @@ sealed class EnumMapping
   ( val reflection : Reflection,
     val membership : Option[Membership],
     val settings : Map[Reflection, EntitySettings],
-    val connection : Connection )
+    val driver : Driver )
   extends ColumnMapping
   {
     private lazy val name = reflection.containerObjectName.get

@@ -1,15 +1,14 @@
-package sorm.create
+package sorm.tableSorters
 
 import sorm._
 import mappings._
-import jdbc._
-import sext.Sext._
 
 object Create {
 
   def tables
     ( ms : Iterable[TableMapping] )
-    = ms.foldLeft( Vector.empty[TableMapping] ){ (q, m) ⇒
+    = ms
+        .foldLeft( Vector.empty[TableMapping] ){ (q, m) ⇒
           def queue
             ( m : TableMapping )
             : Vector[TableMapping]

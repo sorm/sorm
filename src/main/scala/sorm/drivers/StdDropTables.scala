@@ -1,17 +1,12 @@
 package sorm.drivers
 
+import sext.Sext._
 import sorm.jdbc.{JdbcConnection, Statement}
-import sorm.core.SormException
 
 trait StdDropTables {
   protected def connection : JdbcConnection
   protected def quote ( x : String ) : String
-  def dropTables ( tables : Seq[String] ) {
-    tables
-      .view
-      .map("DROP TABLE " + quote(_))
-      .map(Statement(_))
-      .foreach(connection.executeUpdate)
+  def dropTable ( table : String ) {
+    table $ ("DROP TABLE " + quote(_)) $ (Statement(_)) $ connection.executeUpdate
   }
-
 }

@@ -16,8 +16,8 @@ trait Driver {
     ( parse : Stream[String => Any] => T = (_ : Stream[String => Any]).toList )
     : T
   def now() : DateTime
-  def dropTables
-    ( tables : Seq[String] )
+  def dropTable
+    ( table : String )
   def dropAllTables()
   def update
     ( table : String, values : Iterable[(String, Any)], pk : Iterable[(String, Any)] )

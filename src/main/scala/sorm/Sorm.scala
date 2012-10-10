@@ -6,8 +6,7 @@ import persisted._
 import reflection._
 import mappings._
 import jdbc._
-import create._
-import drop._
+import tableSorters._
 import sext.Sext._
 
 import com.weiglewilczek.slf4s.Logging
@@ -86,29 +85,22 @@ object Sorm {
               case e : Throwable =>
                 logger.warn("Couldn't drop all tables.")
             }
-//            for( s <- Create.statements(mappings.values) ){
-//              connection.executeUpdate(s)
-//            }
+            mappings.values $ Create.tables foreach driver.createTable
           case InitMode.DropCreate =>
-            for( s <- Drop.statements(mappings.values) ){
+            mappings.values $ Drop.tables map (_.name) foreach { n =>
               try {
-//                connection.executeUpdate(s)
+                driver.dropTable(n)
               } catch {
                 case e : Throwable =>
-                  logger.warn("Couldn't drop table. " + e.getMessage)
+                  logger.warn("Couldn't drop table `" + n + "`. " + e.getMessage)
               }
             }
-//            for( s <- Create.statements(mappings.values) ){
-//              connection.executeUpdate(s)
-//            }
+            mappings.values $ Create.tables foreach driver.createTable
           case InitMode.Create =>
-//            for( s <- Create.statements(mappings.values) ){
-//              try {
-//                connection.executeUpdate(s)
-//              } catch {
-//                case e : Throwable =>
-//              }
-//            }
+            mappings.values $ Create.tables foreach { t =>
+              try { driver.createTable(t) }
+              catch { case e : Throwable => }
+            }
           case InitMode.DoNothing =>
         }
       }

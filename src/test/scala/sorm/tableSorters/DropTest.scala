@@ -1,4 +1,4 @@
-package sorm.drop
+package sorm.tableSorters
 
 import sorm._
 import core.Driver
@@ -13,7 +13,7 @@ import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
-class Test extends FunSuite with ShouldMatchers {
+class DropTest extends FunSuite with ShouldMatchers {
 
 
   import samples.ArtistModel._

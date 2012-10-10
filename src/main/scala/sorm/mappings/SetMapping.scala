@@ -15,7 +15,7 @@ class SetMapping
 
     lazy val item = Mapping( reflection.generics(0), Membership.SetItem(this), settings, driver )
     lazy val primaryKeyColumns = masterTableColumns :+ hashColumn
-    lazy val hashColumn = ddl.Column( "h", ddl.Column.Type.Integer )
+    lazy val hashColumn = ddl.Column( "h", ddl.ColumnType.Integer )
     lazy val mappings = item +: Stream()
     def parseRows ( rows : Stream[String => Any] )
       = rows.map(item.valueFromContainerRow).toSet

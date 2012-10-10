@@ -15,6 +15,7 @@ class Mysql (url:String, user:String, password:String)
   with StdDropTables
   with StdQuote
   with StdTransaction
+  with StdCreateTable
 {
   def connection = JdbcConnection(url, user, password)
 }

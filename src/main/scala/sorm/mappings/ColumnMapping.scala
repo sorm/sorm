@@ -36,8 +36,7 @@ trait ColumnMapping extends Mapping {
 
   lazy val nullable = false
 
-
-  def columnType : Column.Type
+  def columnType : ColumnType
 
   lazy val autoIncremented : Boolean
     = membership match {

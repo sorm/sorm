@@ -98,17 +98,17 @@ object Sorm {
                   logger.warn("Couldn't drop table. " + e.getMessage)
               }
             }
-            for( s <- Create.statements(mappings.values) ){
+//            for( s <- Create.statements(mappings.values) ){
 //              connection.executeUpdate(s)
-            }
+//            }
           case InitMode.Create =>
-            for( s <- Create.statements(mappings.values) ){
-              try {
+//            for( s <- Create.statements(mappings.values) ){
+//              try {
 //                connection.executeUpdate(s)
-              } catch {
-                case e : Throwable =>
-              }
-            }
+//              } catch {
+//                case e : Throwable =>
+//              }
+//            }
           case InitMode.DoNothing =>
         }
       }

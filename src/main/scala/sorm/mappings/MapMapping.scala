@@ -16,7 +16,7 @@ class MapMapping
     lazy val key = Mapping( reflection.generics(0), Membership.MapKey(this), settings, driver )
     lazy val value = Mapping( reflection.generics(1), Membership.MapValue(this), settings, driver )
     lazy val primaryKeyColumns = masterTableColumns :+ hashColumn
-    lazy val hashColumn = ddl.Column( "h", ddl.Column.Type.Integer )
+    lazy val hashColumn = ddl.Column( "h", ddl.ColumnType.Integer )
     lazy val mappings = key +: value +: Stream()
     def parseRows ( rows : Stream[String => Any] )
       = rows.map(r => key.valueFromContainerRow(r) -> value.valueFromContainerRow(r)).toMap

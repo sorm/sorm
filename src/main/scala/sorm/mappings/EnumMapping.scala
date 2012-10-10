@@ -19,7 +19,7 @@ class EnumMapping
       = reflection.containerObject.get.asInstanceOf[Enumeration].values
           .view.map( v => v.id.toByte -> v ).toMap
     def columnType 
-      = Column.Type.TinyInt
+      = ColumnType.TinyInt
     def valueFromContainerRow ( data : String => Any )
       = data(memberName).asInstanceOf[Byte] as values
     def valuesForContainerTableRow( value : Any )

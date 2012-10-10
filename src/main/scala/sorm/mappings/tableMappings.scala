@@ -37,7 +37,7 @@ trait MasterTableMapping extends TableMapping {
     = ForeignKey(
         tableName,
         primaryKeyColumnNames.map(n => memberName + "$" + n -> n),
-        ForeignKey.ReferenceOption.Cascade
+        ReferenceOption.Cascade
       )
   lazy val columnsForContainer : Stream[Column]
     = primaryKeyColumns.map(c => c.copy(
@@ -57,7 +57,7 @@ trait SlaveTableMapping extends TableMapping {
     = ForeignKey(
         masterTableMapping.tableName,
         masterTableMapping.primaryKeyColumnNames.map(n => "p$" + n -> n),
-        ForeignKey.ReferenceOption.Cascade
+        ReferenceOption.Cascade
       )
   lazy val bindingsToContainerTable = masterTableForeignKey.bindings.toStream
   lazy val foreignKeys = Set() ++ containedForeignKeys + masterTableForeignKey

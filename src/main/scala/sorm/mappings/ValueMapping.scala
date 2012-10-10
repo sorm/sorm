@@ -13,35 +13,35 @@ class ValueMapping
     val driver : Driver )
   extends ColumnMapping {
 
-    lazy val columnType : Column.Type
+    lazy val columnType : ColumnType
       = reflection match {
           case _ if reflection <:< Reflection.apply[String]
             ⇒ if (isKeyPart)
-                Column.Type.VarChar
+                ColumnType.VarChar
               else
-                Column.Type.Text
+                ColumnType.Text
           case _ if reflection <:< Reflection[BigDecimal]
-            ⇒ Column.Type.Decimal
+            ⇒ ColumnType.Decimal
           case _ if reflection <:< Reflection[Boolean]
-            ⇒ Column.Type.Boolean
+            ⇒ ColumnType.Boolean
           case _ if reflection <:< Reflection[Byte]
-            ⇒ Column.Type.TinyInt
+            ⇒ ColumnType.TinyInt
           case _ if reflection <:< Reflection[Short]
-            ⇒ Column.Type.SmallInt
+            ⇒ ColumnType.SmallInt
           case _ if reflection <:< Reflection[Int]
-            ⇒ Column.Type.Integer
+            ⇒ ColumnType.Integer
           case _ if reflection <:< Reflection[Long]
-            ⇒ Column.Type.BigInt
+            ⇒ ColumnType.BigInt
           case _ if reflection <:< Reflection[Float]
-            ⇒ Column.Type.Float
+            ⇒ ColumnType.Float
           case _ if reflection <:< Reflection[Double]
-            ⇒ Column.Type.Double
+            ⇒ ColumnType.Double
           case _ if reflection <:< Reflection[DateTime]
-            ⇒ Column.Type.TimeStamp
+            ⇒ ColumnType.TimeStamp
           case _ if reflection <:< Reflection[LocalTime]
-            ⇒ Column.Type.Time
+            ⇒ ColumnType.Time
           case _ if reflection <:< Reflection[LocalDate]
-            ⇒ Column.Type.Date
+            ⇒ ColumnType.Date
           case _
             ⇒ ???
         }

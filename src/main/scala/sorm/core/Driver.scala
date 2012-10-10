@@ -27,6 +27,7 @@ trait Driver {
   def delete
     ( table : String, pk : Iterable[(String, Any)] )
   def transaction [ T ] ( t : => T ) : T
+  def createTable ( table : ddl.Table )
 }
 object Driver {
   def apply ( url : String, user : String, password : String )

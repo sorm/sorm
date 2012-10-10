@@ -4,27 +4,18 @@ import reflect.basis._
 import sorm._
 import persisted._
 import reflection._
-import save._
-import structure._
-import mapping._
+import mappings._
 import jdbc._
 import query.Query._
 import sext.Sext._
 
-import abstractSql.StandardSqlComposition
-import query.AbstractSqlComposition
-import sql.StandardRendering._
-import resultSet._
 import com.weiglewilczek.slf4s.Logging
 
 trait Api extends Logging with CurrentDateTime {
 
-  protected def connection
-    : JdbcConnection with
-      SaveAdapter
+  protected def driver : Driver
 
-  protected def mappings
-    : Map[Reflection, EntityMapping]
+  protected def mappings : Map[Reflection, EntityMapping]
 
   private def mapping
     [ T : TypeTag ]
@@ -44,21 +35,12 @@ trait Api extends Logging with CurrentDateTime {
     ( value : T )
     : T with Persisted
     = transaction {
-        connection.saveEntityAndGetIt( value, mapping[T] )
-          .asInstanceOf[T with Persisted]
+        mapping[T].save(value).asInstanceOf[T with Persisted]
       }
 
-
-  private def statementAndResultMappings ( q : Query )
-    = {
-      val sql 
-        = StandardSqlComposition.sql(AbstractSqlComposition.resultSetSelect(q))
-      Statement( sql.template, sql.data map JdbcValue.apply ) ->
-      q.mapping.resultSetMappings
-    }
   private def fetch [ T <: AnyRef ] ( q : Query ) : Seq[T with Persisted]
     = {
-      val (stmt, resultSetMappings) = statementAndResultMappings( q )
+//      val (stmt, resultSetMappings) = statementAndResultMappings( q )
 //      connection.executeQuery(stmt)(_.parseInstances(q.mapping, resultSetMappings.view.zipWithIndex.toMap)).asInstanceOf[Seq[T with Persisted]]
       ???
     }
@@ -123,7 +105,7 @@ trait Api extends Logging with CurrentDateTime {
       )
     }
 
-  def transaction [ T ] ( t : => T ) : T = connection.transaction(t)
-  def transaction [ T ] ( t : Api => T ) : T = connection.transaction(t(this))
+  def transaction [ T ] ( t : => T ) : T = driver.transaction(t)
+  def transaction [ T ] ( t : Api => T ) : T = driver.transaction(t(this))
 
 }

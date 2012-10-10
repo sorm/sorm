@@ -10,14 +10,14 @@ trait StdSaving {
   def statement ( sql : Sql ) : jdbc.Statement
   def connection : jdbc.JdbcConnection
   def update 
-    ( table : String, values : Map[String, Any], pk : Map[String, Any] )
+    ( table : String, values : Iterable[(String, Any)], pk : Iterable[(String, Any)] )
     {
       val exprs = values.toStream.map{case (c, v) => SetExpression(Column(c), v)}
       Update(table, exprs, pk $ where) $ statement $ connection.executeUpdate
     }
 
   def insert
-    ( table : String, values : Map[String, Any] )
+    ( table : String, values : Iterable[(String, Any)] )
     : Seq[Any]
     = {
       val (cs, vs) = values.toStream.unzip
@@ -25,11 +25,11 @@ trait StdSaving {
     }
 
   def delete
-    ( table : String, pk : Map[String, Any] )
+    ( table : String, pk : Iterable[(String, Any)] )
     {
       Delete(table, pk $ where) $ statement $ connection.executeUpdate
     }
 
-  private def where ( pk : Map[String, Any] )
-    = pk.view map (_ $ (Column(_) -> Value(_)) $ (Comparison(_, _, Equal) : Condition[WhereObject])) reduceOption (CompositeCondition(_, _, And)) map (Where(_))
+  private def where ( pk : Iterable[(String, Any)] )
+    = pk.view map (_ $$ (Column(_) -> Value(_)) $$ (Comparison(_, _, Equal) : Condition[WhereObject])) reduceOption (CompositeCondition(_, _, And)) map (Where(_))
 }

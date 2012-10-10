@@ -1,21 +1,11 @@
 package sorm.core
 
-import sorm._
-import abstractSql.StandardSqlComposition
-import query.AbstractSqlComposition
-import sql.StandardRendering._
-import persisted._
-import reflection._
-import save._
-import structure._
-import mapping._
-import jdbc._
-import resultSet._
 import sext.Sext._
 
-import query.Query._
+import sorm._
+import mappings._
 
-import com.weiglewilczek.slf4s.Logging
+import query.Query._
 
 class FetchableQuery
   [ T ]

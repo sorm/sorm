@@ -8,7 +8,9 @@ import core._
 import ddl._
 
 trait CompositeMapping extends Mapping {
+
   def mappings : Stream[Mapping]
+
   lazy val columns : Stream[Column]
     = mappings flatMap {
         case m : MasterTableMapping => m.columnsForContainer
@@ -27,6 +29,11 @@ trait CompositeMapping extends Mapping {
         case m : TableMapping => m +: Stream()
         case m : CompositeMapping => m.containedTableMappings
       }
+
+  lazy val deepContainedMappings : Stream[Mapping]
+    = mappings flatMap {
+        case m : CompositeMapping => m +: m.deepContainedMappings
+        case m => m +: Stream()
+      }
+
 }
-
-

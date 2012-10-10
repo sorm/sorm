@@ -14,6 +14,7 @@ class H2 (url:String, user:String, password:String)
   with StdSaving
   with StdDropTables
   with StdQuote
+  with StdTransaction
 {
   def connection = JdbcConnection(url, user, password)
 }

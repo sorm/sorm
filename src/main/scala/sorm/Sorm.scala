@@ -2,12 +2,9 @@ package sorm
 
 import sorm._
 import core._
-import dropAll._
 import persisted._
 import reflection._
-import save._
-import structure._
-import structure.mapping._
+import mappings._
 import jdbc._
 import create._
 import drop._
@@ -41,10 +38,9 @@ object Sorm {
     extends Api
     with Logging
     {
-      protected[sorm] val connection
-        = new JdbcConnection(JdbcConnection(url, user, password))
-            with SaveAdapter
-            with DropAllTablesAdapter
+
+      protected[sorm] val driver
+        = Driver(url, user, password)
 
       protected[sorm] val mappings
         = {
@@ -56,7 +52,7 @@ object Sorm {
                 .toMap
 
           settings.keys
-            .zipBy{ new EntityMapping(None, _, settings) }
+            .zipBy{ new EntityMapping(_, None, settings, driver) }
             .toMap
         }
 
@@ -64,26 +60,10 @@ object Sorm {
       {
         // All referred entities must be registered
         {
-          def nestedEntities
-            ( m : Mapping )
-            : Stream[EntityMapping]
-            = m match {
-                case m : EntityMapping =>
-                  Stream(m)
-                case m : HasChildren =>
-                  m.children.toStream.flatMap{ nestedEntities }
-                case _ =>
-                  Stream()
-              }
-
           mappings.values.foreach{ e =>
-            e.children.flatMap{ nestedEntities }.foreach{ e1 =>
+            e.deepContainedMappings.collect{case m : EntityMapping => m}.foreach{ e1 =>
               if( !mappings.contains(e1.reflection) )
-                throw new ValidationException(
-                  "Entity `" + e1.reflection.name + "` is not registered, " +
-                  "but referred to in `" + e.reflection.name + "`"
-                )
-
+                throw new ValidationException("Entity `" + e1.reflection.name + "` is not registered, " + "but referred to in `" + e.reflection.name + "`")
             }
           }
         }
@@ -92,9 +72,7 @@ object Sorm {
           val reflections = entities.toStream.map{_.reflection}
           val diff = reflections.distinct diff reflections
           if( diff != Stream() )
-            throw new ValidationException(
-              "Reflections registered twice: " + diff.mkString(", ")
-            )
+            throw new ValidationException("Reflections registered twice: " + diff.mkString(", "))
         }
       }
 
@@ -103,30 +81,30 @@ object Sorm {
         initMode match {
           case InitMode.DropAllCreate =>
             try {
-              connection.dropAllTables()
+              driver.dropAllTables()
             } catch {
               case e : Throwable =>
                 logger.warn("Couldn't drop all tables.")
             }
-            for( s <- Create.statements(mappings.values) ){
-              connection.executeUpdate(s)
-            }
+//            for( s <- Create.statements(mappings.values) ){
+//              connection.executeUpdate(s)
+//            }
           case InitMode.DropCreate =>
             for( s <- Drop.statements(mappings.values) ){
               try {
-                connection.executeUpdate(s)
+//                connection.executeUpdate(s)
               } catch {
                 case e : Throwable =>
                   logger.warn("Couldn't drop table. " + e.getMessage)
               }
             }
             for( s <- Create.statements(mappings.values) ){
-              connection.executeUpdate(s)
+//              connection.executeUpdate(s)
             }
           case InitMode.Create =>
             for( s <- Create.statements(mappings.values) ){
               try {
-                connection.executeUpdate(s)
+//                connection.executeUpdate(s)
               } catch {
                 case e : Throwable =>
               }

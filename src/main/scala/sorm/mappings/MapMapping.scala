@@ -5,7 +5,7 @@ import sorm._
 import core._
 import reflection.Reflection
 
-sealed class MapMapping
+class MapMapping
   ( val reflection : Reflection,
     val membership : Option[Membership],
     val settings : Map[Reflection, EntitySettings],
@@ -20,5 +20,24 @@ sealed class MapMapping
     lazy val mappings = key +: value +: Stream()
     def parseRows ( rows : Stream[String => Any] )
       = rows.map(r => key.valueFromContainerRow(r) -> value.valueFromContainerRow(r)).toMap
+
+
+    override def update ( value : Any, masterKey : Stream[Any] ) {
+      driver.delete(tableName, masterTableColumnNames zip masterKey)
+      insert(value, masterKey)
+    }
+
+    override def insert ( v : Any, masterKey : Stream[Any] ) {
+      v.asInstanceOf[Map[_, _]].view
+        .zipWithIndex.foreach{ case ((k, v), i) =>
+          val pk = masterKey :+ i
+          val values = key.valuesForContainerTableRow(k) ++: value.valuesForContainerTableRow(v) ++: (primaryKeyColumnNames zip pk)
+          driver.insert(tableName, values)
+          key.insert(k, pk)
+          value.insert(v, pk)
+        }
+    }
+
+    def valuesForContainerTableRow ( v : Any ) = Stream()
 
   }

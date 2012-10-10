@@ -10,31 +10,32 @@ trait Querying {
   def parseRows ( rows : Stream[String => Any] ) : Any
 
   def containerTableMapping : Option[TableMapping]
-  def name : String
+  def tableName : String
   def columns : Stream[ddl.Column]
   def driver : Driver
   def bindingsToContainerTable : Stream[(String, String)]
+  def primaryKeyColumnNames : Stream[String]
 
   val fetchByContainerPrimaryKey : Map[String, Any] => Any
     = {
       lazy val containerTable : Option[Table]
-        = containerTableMapping map (_.name) map (Table(_))
+        = containerTableMapping map (_.tableName) map (Table(_))
       lazy val table : Table
-        = Table(name, containerTable.map(Parent(_, bindingsToContainerTable)))
-      lazy val selectColumns : Stream[Column]
+        = Table(tableName, containerTable.map(Parent(_, bindingsToContainerTable)))
+      lazy val columns : Stream[Column]
         = columns.map(_.name).map(Column(_, table))
 
       ( _ 
         map {case (n, v) => Comparison(containerTable.get, n, Equal, v)} 
         reduceOption And
-        as ( Select(selectColumns, _) )
+        as ( Select(columns, _) )
         as ( driver.query(_)(parseRows) )
       )
     }
 
   val fetchByPrimaryKey : Map[String, Any] => Any
     = {
-      lazy val table = Table(name, None)
+      lazy val table = Table(tableName, None)
       lazy val columns = this.columns.map(_.name).map(Column(_, table))
 
       ( _ 
@@ -44,4 +45,17 @@ trait Querying {
         as (driver.query(_)(parseRows))
       )
     }
+
+  lazy val abstractSqlTable : Table
+    = Table(tableName, containerTableMapping.map(_.abstractSqlTable).map(Parent(_, bindingsToContainerTable)))
+
+  lazy val primaryKeySelect : Select
+    = {
+      val columns = primaryKeyColumnNames.map(Column(_, abstractSqlTable))
+      Select(
+        expressions = columns,
+        groupBy = columns
+      )
+    }
+
 }

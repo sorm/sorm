@@ -9,7 +9,7 @@ import ddl._
 
 sealed trait TableMapping extends CompositeMapping with Querying {
 
-  def name : String
+  def tableName : String
   def foreignKeys : Set[ForeignKey]
   def primaryKeyColumns : Stream[Column]
 
@@ -22,21 +22,21 @@ sealed trait TableMapping extends CompositeMapping with Querying {
   lazy val containedForeignKeys : Stream[ForeignKey]
     = containedTableMappings collect { case m : MasterTableMapping => m.foreignKeyForContainer }
 
-  lazy val table = Table(name, primaryKeyColumns ++: columns, primaryKey, uniqueKeys, indexes, foreignKeys)
+  lazy val table = Table(tableName, primaryKeyColumns ++: columns distinct, primaryKeyColumnNames, uniqueKeys, indexes, foreignKeys)
 
-  lazy val primaryKey = primaryKeyColumns.map(_.name)
+  lazy val primaryKeyColumnNames = primaryKeyColumns.map(_.name)
 
-  override def valueFromContainerRow ( row : String => Any ) : Any
-    = containerTableMapping.get.primaryKey.zipBy(row).toMap as fetchByContainerPrimaryKey
+  override def valueFromContainerRow ( data : String => Any ) : Any
+    = containerTableMapping.get.primaryKeyColumnNames.zipBy(data).toMap as fetchByContainerPrimaryKey
 
 }
 
 trait MasterTableMapping extends TableMapping {
-  lazy val name = ddlName(reflection.name)
+  lazy val tableName = ddlName(reflection.name)
   lazy val foreignKeyForContainer : ForeignKey
     = ForeignKey(
-        name,
-        primaryKey.map(n => memberName + "$" + n -> n),
+        tableName,
+        primaryKeyColumnNames.map(n => memberName + "$" + n -> n),
         ForeignKey.ReferenceOption.Cascade
       )
   lazy val columnsForContainer : Stream[Column]
@@ -47,20 +47,21 @@ trait MasterTableMapping extends TableMapping {
   lazy val bindingsToContainerTable
     = foreignKeyForContainer.bindings.toStream map (_.swap)
   lazy val foreignKeys = Set() ++ containedForeignKeys
+
 }
 
 trait SlaveTableMapping extends TableMapping {
-  lazy val name = masterTableMapping.name + "$" + memberName
+  lazy val tableName = masterTableMapping.tableName + "$" + memberName
   lazy val masterTableMapping = containerTableMapping.get
   lazy val masterTableForeignKey 
     = ForeignKey(
-        masterTableMapping.name,
-        masterTableMapping.primaryKey.map(n => "p$" + n -> n),
+        masterTableMapping.tableName,
+        masterTableMapping.primaryKeyColumnNames.map(n => "p$" + n -> n),
         ForeignKey.ReferenceOption.Cascade
       )
   lazy val bindingsToContainerTable = masterTableForeignKey.bindings.toStream
   lazy val foreignKeys = Set() ++ containedForeignKeys + masterTableForeignKey
   lazy val masterTableColumns = masterTableMapping.primaryKeyColumns.map(c => c.copy(name = "p$" + c.name, autoIncrement = false))
-
+  lazy val masterTableColumnNames = masterTableColumns.map(_.name)
 }
 

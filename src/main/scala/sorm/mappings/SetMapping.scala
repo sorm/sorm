@@ -20,4 +20,29 @@ class SetMapping
     def parseRows ( rows : Stream[String => Any] )
       = rows.map(item.valueFromContainerRow).toSet
 
+    override def update ( value : Any, masterKey : Stream[Any] ) {
+      driver.delete(tableName, masterTableColumnNames zip masterKey)
+      insert(value, masterKey)
+    }
+
+    override def insert ( value : Any, masterKey : Stream[Any] ) {
+      item match {
+        case item : MasterTableMapping =>
+          value.asInstanceOf[Set[_]].view
+            .zipWithIndex.foreach{ case (v, i) =>
+              val values = (primaryKeyColumnNames zip (masterKey :+ i)) ++: item.valuesForContainerTableRow(v)
+              driver.insert(tableName, values)
+            }
+        case item =>
+          value.asInstanceOf[Set[_]].view
+            .zipWithIndex.foreach{ case (v, i) =>
+              val pk = masterKey :+ i
+              driver.insert(tableName, primaryKeyColumnNames zip pk)
+              item.insert(v, pk)
+            }
+      }
+    }
+
+    def valuesForContainerTableRow ( value : Any ) = Stream()
+
   }

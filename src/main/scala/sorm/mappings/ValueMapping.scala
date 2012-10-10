@@ -46,5 +46,7 @@ class ValueMapping
             ⇒ ???
         }
 
-    def valueFromContainerRow(data: String => Any) = data(memberName)
+    def valueFromContainerRow ( data: String => Any ) = data(memberName)
+
+    def valuesForContainerTableRow( value : Any ) = (memberName -> value) +: Stream()
   }

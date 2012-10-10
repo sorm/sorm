@@ -1,6 +1,6 @@
 package sorm.abstractSql
 
-import sorm.structure.mapping._
+import sorm.mappings._
 import sorm.persisted._
 
 import sorm.abstractSql.AbstractSql._
@@ -44,12 +44,12 @@ object Combinators {
     = restrictingCount( empty(m), m, v, o )
 
   def empty ( m : Mapping ) : Select
-    = m.root.abstractSqlPrimaryKeySelect
+    = m.root.primaryKeySelect
 
   def havingNotEmptyContainer ( m : Mapping ) : Option[Select]
     = m.containerTableMapping.map{ havingCount(_, 0, NotEqual) }
 
-  def including ( m : CollectionMapping, v : Iterable[_] ) : Option[Statement]
+  def including ( m : TableMapping, v : Iterable[_] ) : Option[Statement]
     = {
       val item
         = m match {
@@ -73,7 +73,7 @@ object Combinators {
           = Some(
               Comparison(
                 m.containerTableMapping.get.abstractSqlTable,
-                m.columnName, o, v 
+                m.memberName, o, v
               )
             )
       )
@@ -91,7 +91,7 @@ object Combinators {
               = Some(
                   Comparison(
                     m.containerTableMapping.get.abstractSqlTable,
-                    m.columnName,
+                    m.memberName,
                     Equal,
                     theValue
                   )
@@ -146,7 +146,7 @@ object Combinators {
               = Some(
                   Comparison(
                     m.containerTableMapping.get.abstractSqlTable,
-                    m.columnName,
+                    m.memberName,
                     NotEqual,
                     theValue
                   )
@@ -155,7 +155,7 @@ object Combinators {
                     Some(
                       Comparison(
                         m.containerTableMapping.get.abstractSqlTable,
-                        m.columnName,
+                        m.memberName,
                         Equal,
                         null
                       )

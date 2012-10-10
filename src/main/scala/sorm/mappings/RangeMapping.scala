@@ -5,7 +5,7 @@ import sorm._
 import core._
 import reflection._
 
-sealed class RangeMapping
+class RangeMapping
   ( val reflection : Reflection,
     val membership : Option[Membership],
     val settings : Map[Reflection, EntitySettings],
@@ -18,4 +18,7 @@ sealed class RangeMapping
 
     def valueFromContainerRow(data: (String) => Any)
       = from.valueFromContainerRow(data).asInstanceOf[Int] to to.valueFromContainerRow(data).asInstanceOf[Int]
-}
+    def valuesForContainerTableRow(value: Any) = value match {
+      case value : Range => from.valuesForContainerTableRow(value.start) ++ to.valuesForContainerTableRow(value.end)
+    }
+  }

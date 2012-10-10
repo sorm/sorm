@@ -9,7 +9,7 @@ import sql._, Sql._
 trait StdSqlRendering {
   def statement ( sql : Sql.Sql ) : jdbc.Statement
 //    = jdbc.Statement(template(sql), data(sql).map(JdbcValue.apply))
-    = (sql $ template, sql $ data map JdbcValue.apply) $ jdbc.Statement
+    = (sql $ template, sql $ data map JdbcValue.apply) $$ jdbc.Statement
   protected def quote ( x : String ) : String
   protected def template ( sql : Sql.Sql ) : String
     = sql match {

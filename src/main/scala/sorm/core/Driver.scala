@@ -20,12 +20,13 @@ trait Driver {
     ( tables : Seq[String] )
   def dropAllTables()
   def update
-    ( table : String, values : Map[String, Any], pk : Map[String, Any] )
+    ( table : String, values : Iterable[(String, Any)], pk : Iterable[(String, Any)] )
   def insert
-    ( table : String, values : Map[String, Any] )
+    ( table : String, values : Iterable[(String, Any)] )
     : Seq[Any]
   def delete
-    ( table : String, pk : Map[String, Any] )
+    ( table : String, pk : Iterable[(String, Any)] )
+  def transaction [ T ] ( t : => T ) : T
 }
 object Driver {
   def apply ( url : String, user : String, password : String )

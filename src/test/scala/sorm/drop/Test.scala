@@ -1,9 +1,9 @@
 package sorm.drop
 
 import sorm._
+import core.Driver
 import reflection._
-import structure._
-import mapping._
+import mappings._
 import sext.Sext._
 import util.Random
 
@@ -35,7 +35,7 @@ class Test extends FunSuite with ShouldMatchers {
     )
 
   val mappings
-    = settings.keys.map {r => r -> new EntityMapping(None, r, settings)}.toMap
+    = settings.keys.map {r => r -> new EntityMapping(r, None, settings, Driver("", "", ""))}.toMap
 
 
   test("sort simulation") {

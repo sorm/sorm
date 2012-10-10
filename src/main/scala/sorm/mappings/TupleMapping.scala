@@ -13,13 +13,16 @@ class TupleMapping
     val driver : Driver )
   extends CompositeMapping {
 
-  def mappings
+  @inline def mappings
     = items.toStream
 
   lazy val items
     = reflection.generics.view.zipWithIndex.map { case (r, i) => Mapping(r, Membership.TupleItem(i, this), settings, driver) }.toVector
 
-  override def valueFromContainerRow ( row : String => Any )
+  def valueFromContainerRow ( row : String => Any )
     = reflection instantiate mappings.map(_.valueFromContainerRow(row))
+
+  def valuesForContainerTableRow( value : Any )
+    = mappings.zip(value.asInstanceOf[Product].productIterator.toIterable).flatMap{ case (m, v) => m.valuesForContainerTableRow(v) }
 
 }

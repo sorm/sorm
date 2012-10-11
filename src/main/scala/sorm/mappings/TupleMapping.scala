@@ -22,7 +22,18 @@ class TupleMapping
   def valueFromContainerRow ( row : String => Any )
     = reflection instantiate mappings.map(_.valueFromContainerRow(row))
 
-  def valuesForContainerTableRow( value : Any )
-    = mappings.zip(value.asInstanceOf[Product].productIterator.toIterable).flatMap{ case (m, v) => m.valuesForContainerTableRow(v) }
+  def valuesForContainerTableRow ( value : Any )
+    = itemValues(value).flatMap{ case (m, v) => m.valuesForContainerTableRow(v) }
+
+  private def itemValues ( value : Any )
+    = mappings zip value.asInstanceOf[Product].productIterator.toIterable
+
+  override def update ( value : Any, masterKey : Stream[Any] ) {
+    itemValues(value).foreach(_ $$ (_.update(_, masterKey)))
+  }
+
+  override def insert ( value : Any, masterKey : Stream[Any] ) {
+    itemValues(value).foreach(_ $$ (_.insert(_, masterKey)))
+  }
 
 }

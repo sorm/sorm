@@ -37,10 +37,10 @@ trait Mapping {
             "k"
           case Membership.MapValue(_) =>
             "v"
-          case Membership.RangeFrom(r) =>
-            r.memberName + "$f"
-          case Membership.RangeTo(r) =>
-            r.memberName + "$t"
+          case Membership.RangeStart(r) =>
+            r.memberName + "$s"
+          case Membership.RangeEnd(r) =>
+            r.memberName + "$e"
         }
         .getOrElse("")
 

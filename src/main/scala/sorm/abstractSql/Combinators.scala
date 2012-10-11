@@ -100,7 +100,7 @@ object Combinators {
         case (m : EntityMapping, v : Persisted) =>
           equaling(m.id, v.id)
         case (m : RangeMapping, v : Range ) =>
-          equaling(m.from, v.start) & equaling(m.to, v.end)
+          equaling(m.start, v.start) & equaling(m.end, v.end)
         case (m : TupleMapping, v : Product ) =>
           v.productIterator.zipWithIndex
             .map{ case (v, i) => equaling(m.items(i), v) }
@@ -166,7 +166,7 @@ object Combinators {
         case (m : EntityMapping, v : Persisted) =>
           notEqualing(m.id, v.id)
         case (m : RangeMapping, v : Range ) =>
-          notEqualing(m.from, v.start) | notEqualing(m.to, v.end)
+          notEqualing(m.start, v.start) | notEqualing(m.end, v.end)
         case (m : TupleMapping, v : Product ) =>
           v.productIterator.zipWithIndex
             .map{ case (v, i) => notEqualing(m.items(i), v) }

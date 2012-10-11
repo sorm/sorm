@@ -12,7 +12,6 @@ import query._
 import reflection._
 import mappings._
 import jdbc._
-import create._
 import sext.Sext._
 
 import samples._

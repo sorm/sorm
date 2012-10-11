@@ -23,6 +23,6 @@ class EnumMapping
     def valueFromContainerRow ( data : String => Any )
       = data(memberName).asInstanceOf[Byte] as values
     def valuesForContainerTableRow( value : Any )
-      = value.asInstanceOf[Enumeration#Value] $ (memberName -> _) $ (Stream(_))
+      = value.asInstanceOf[Enumeration#Value] $ dbValues $ (memberName -> _) $ (Stream(_))
 
   }

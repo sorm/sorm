@@ -18,9 +18,9 @@ trait StdSqlRendering {
           ).indent(2)
         case Insert(table, columns, values) =>
           "INSERT INTO " + quote(table) +
-          ( "\n( " + columns.ensuring(_.nonEmpty).map(quote).mkString(", ") + " )" + 
+          ( "\n( " + columns.map(quote).mkString(", ") + " )" +
             "\nVALUES" +
-            "\n( " + values.ensuring(_.nonEmpty).map(_ => "?").mkString(", ") + " )"
+            "\n( " + values.map(_ => "?").mkString(", ") + " )"
           ).indent(2)
         case Update(table, exps, where) =>
           "UPDATE " + quote(table) +

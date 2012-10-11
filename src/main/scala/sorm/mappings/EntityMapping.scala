@@ -22,7 +22,7 @@ class EntityMapping
     = id.column +: Stream()
   lazy val id
     = new ValueMapping(Reflection[Long], Some(Membership.EntityId(this)), settings, driver)
-  override lazy val columns = id.column +: mappingsColumns
+  lazy val generatedColumns = id.column +: Stream()
 
   def parseResultSet(rs: ResultSetView)
     = rs.byNameRowsTraversable.toStream

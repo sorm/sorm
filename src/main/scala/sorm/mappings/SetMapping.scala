@@ -16,8 +16,10 @@ class SetMapping
 
     lazy val item = Mapping( reflection.generics(0), Membership.SetItem(this), settings, driver )
     lazy val primaryKeyColumns = masterTableColumns :+ hashColumn
+    lazy val generatedColumns = primaryKeyColumns
     lazy val hashColumn = ddl.Column( "h", ddl.ColumnType.Integer )
     lazy val mappings = item +: Stream()
+
     def parseResultSet(rs: ResultSetView)
       = rs.byNameRowsTraversable.view.map(item.valueFromContainerRow).toSet
 
@@ -25,6 +27,7 @@ class SetMapping
       driver.delete(tableName, masterTableColumnNames zip masterKey)
       insert(value, masterKey)
     }
+
 
     override def insert ( value : Any, masterKey : Stream[Any] ) {
       item match {

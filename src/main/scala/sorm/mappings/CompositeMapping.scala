@@ -11,14 +11,14 @@ trait CompositeMapping extends Mapping {
 
   def mappings : Stream[Mapping]
 
-  lazy val mappingsColumns : Stream[Column]
+  lazy val compositeColumns : Stream[Column]
     = mappings flatMap {
         case m : MasterTableMapping => m.columnsForContainer
         case m : SlaveTableMapping => Stream()
         case m : CompositeMapping => m.columns
         case m : ColumnMapping => m.column +: Stream()
       }
-  lazy val columns = mappingsColumns
+  lazy val columns = compositeColumns
 
   /**
    * First descendant table mappings

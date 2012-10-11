@@ -17,6 +17,7 @@ class SeqMapping
     lazy val item = Mapping( reflection.generics(0), Membership.SeqItem(this), settings, driver )
     lazy val index = new ValueMapping( Reflection[Int], Some(Membership.SeqIndex(this)), settings, driver )
     lazy val primaryKeyColumns = masterTableColumns :+ index.column
+    lazy val generatedColumns = primaryKeyColumns
     lazy val mappings = item +: Stream()
     def parseResultSet(rs: ResultSetView)
       = rs.byNameRowsTraversable.view.map(item.valueFromContainerRow).toVector

@@ -12,6 +12,8 @@ sealed trait TableMapping extends CompositeMapping with Querying {
   def tableName : String
   def foreignKeys : Set[ForeignKey]
   def primaryKeyColumns : Stream[Column]
+  def generatedColumns : Stream[Column]
+  override lazy val columns = generatedColumns ++: compositeColumns
 
   lazy val uniqueKeys : Set[Seq[String]]
     = settings get reflection map (_.uniqueKeys) getOrElse Set()

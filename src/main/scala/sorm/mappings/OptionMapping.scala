@@ -21,7 +21,7 @@ class OptionMapping
 
 
     def parseResultSet(rs: ResultSetView)
-      = rs.byNameRowsTraversable.view.headOption.map(item.valueFromContainerRow)
+      = rs.byNameRowsTraversable.toStream.headOption.map(item.valueFromContainerRow)
 
     override def update ( value : Any, masterKey : Stream[Any] ) {
       driver.delete(tableName, masterTableColumnNames zip masterKey)

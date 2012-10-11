@@ -19,15 +19,12 @@ trait Querying {
 
   val fetchByContainerPrimaryKey : Map[String, Any] => Any
     = {
-      lazy val containerTable : Option[Table]
-        = containerTableMapping map (_.tableName) map (Table(_))
-      lazy val table : Table
-        = Table(tableName, containerTable.map(Parent(_, bindingsToContainerTable)))
-      lazy val columns : Stream[Column]
-        = this.columns.map(_.name).map(Column(_, table))
+      lazy val table = Table(tableName)
+      lazy val containerTable = containerTableMapping.get.tableName $ (Table(_, Parent(table, bindingsToContainerTable.map(_.swap)) $ Some.apply))
+      lazy val columns = this.columns.map(_.name).map(Column(_, table))
 
       ( _
-        map {case (n, v) => Comparison(containerTable.get, n, Equal, v)} 
+        map {case (n, v) => Comparison(containerTable, n, Equal, v)}
         reduceOption And
         $ ( Select(columns, _) )
         $ ( driver.query(_)(parseResultSet) )

@@ -34,8 +34,10 @@ class DropTest extends FunSuite with ShouldMatchers {
       EntitySettings(indexes = Set(Seq("code")))
     )
 
+  val driver
+    = Driver("jdbc:h2:mem:test", "", "")
   val mappings
-    = settings.keys.map {r => r -> new EntityMapping(r, None, settings, Driver("", "", ""))}.toMap
+    = settings.keys.map {r => r -> new EntityMapping(r, None, settings, driver)}.toMap
 
 
   test("sort simulation") {

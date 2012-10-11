@@ -105,8 +105,12 @@ object Combinators {
           v.productIterator.zipWithIndex
             .map{ case (v, i) => equaling(m.items(i), v) }
             .reduce{_ & _}
-        case (m : OptionMapping, v : Option[_] ) =>
-          equaling(m.item, v.orNull)
+        case (m : OptionMapping, None ) =>
+          havingCount( m, 0 ) &&!
+          havingNotEmptyContainer(m)
+        case (m : OptionMapping, Some(v) ) =>
+          equaling(m.item, v) &&!
+          havingNotEmptyContainer(m)
         case (m : SeqMapping, v : Seq[_]) =>
           def crossingWithIndex
             = v.view.zipWithIndex
@@ -171,8 +175,10 @@ object Combinators {
           v.productIterator.zipWithIndex
             .map{ case (v, i) => notEqualing(m.items(i), v) }
             .reduce{_ | _}
-        case (m : OptionMapping, v : Option[_] ) =>
-          notEqualing(m.item, v.orNull)
+        case (m : OptionMapping, None ) =>
+          havingCount(m, 1)
+        case (m : OptionMapping, Some(v) ) =>
+          notEqualing(m.item, v) |! havingCount(m, 0)
         case (m : SeqMapping, v : Seq[_]) =>
           def disjoint
             = v.view.zipWithIndex

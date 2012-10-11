@@ -21,7 +21,7 @@ class EntityMapping
   lazy val primaryKeyColumns
     = id.column +: Stream()
   lazy val id
-    = new ValueMapping(Reflection[Int], Some(Membership.EntityId(this)), settings, driver)
+    = new ValueMapping(Reflection[Long], Some(Membership.EntityId(this)), settings, driver)
 
   def parseResultSet(rs: ResultSetView)
     = rs.byNameRowsTraversable.view
@@ -64,7 +64,7 @@ class EntityMapping
         case _ =>
           val id = driver.insert(tableName, rowValues).ensuring(_.length == 1).head.asInstanceOf[Long]
           propertyValues.foreach{ case (n, m, v) => m.insert(v, Stream(id)) }
-          Persisted( propertyValues.map(t => t._1 -> t._2).toMap, id, reflection )
+          Persisted( propertyValues.map(t => t._1 -> t._3).toMap, id, reflection )
       }
     }
 

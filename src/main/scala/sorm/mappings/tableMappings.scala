@@ -13,18 +13,15 @@ sealed trait TableMapping extends CompositeMapping with Querying {
   def foreignKeys : Set[ForeignKey]
   def primaryKeyColumns : Stream[Column]
   def generatedColumns : Stream[Column]
-  override lazy val columns = generatedColumns ++: compositeColumns
+  override lazy val tableColumns = generatedColumns ++: mappings.flatMap(_.columnsForContainer)
 
-  lazy val uniqueKeys : Set[Seq[String]]
-    = settings get reflection map (_.uniqueKeys) getOrElse Set()
-
-  lazy val indexes : Set[Seq[String]]
-    = settings get reflection map (_.indexes) getOrElse Set()
+  def uniqueKeys : Set[Seq[String]] = Set()
+  def indexes : Set[Seq[String]] = Set()
 
   lazy val containedForeignKeys : Stream[ForeignKey]
     = containedTableMappings collect { case m : MasterTableMapping => m.foreignKeyForContainer }
 
-  lazy val table = Table(tableName, primaryKeyColumns ++: columns distinct, primaryKeyColumnNames, uniqueKeys, indexes, foreignKeys)
+  lazy val table = Table(tableName, primaryKeyColumns ++: tableColumns distinct, primaryKeyColumnNames, uniqueKeys, indexes, foreignKeys)
 
   lazy val primaryKeyColumnNames = primaryKeyColumns.map(_.name)
 
@@ -41,7 +38,7 @@ trait MasterTableMapping extends TableMapping {
         primaryKeyColumnNames.map(n => memberName + "$" + n -> n),
         ReferenceOption.Cascade
       )
-  lazy val columnsForContainer : Stream[Column]
+  override lazy val columnsForContainer : Stream[Column]
     = primaryKeyColumns.map(c => c.copy(
         autoIncrement = false,
         name = memberName + "$" + c.name
@@ -65,5 +62,6 @@ trait SlaveTableMapping extends TableMapping {
   lazy val foreignKeys = Set() ++ containedForeignKeys + masterTableForeignKey
   lazy val masterTableColumns = masterTableMapping.primaryKeyColumns.map(c => c.copy(name = "p$" + c.name, autoIncrement = false))
   lazy val masterTableColumnNames = masterTableColumns.map(_.name)
+  override def columnsForContainer = Stream()
 }
 

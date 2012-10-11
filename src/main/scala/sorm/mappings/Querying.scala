@@ -12,7 +12,7 @@ trait Querying {
 
   def containerTableMapping : Option[TableMapping]
   def tableName : String
-  def columns : Stream[ddl.Column]
+  def tableColumns : Stream[ddl.Column]
   def driver : Driver
   def bindingsToContainerTable : Stream[(String, String)]
   def primaryKeyColumnNames : Stream[String]
@@ -21,7 +21,7 @@ trait Querying {
     = {
       lazy val table = Table(tableName)
       lazy val containerTable = containerTableMapping.get.tableName $ (Table(_, Parent(table, bindingsToContainerTable.map(_.swap)) $ Some.apply))
-      lazy val columns = this.columns.map(_.name).map(Column(_, table))
+      lazy val columns = this.tableColumns.map(_.name).map(Column(_, table))
 
       ( _
         map {case (n, v) => Comparison(containerTable, n, Equal, v)}
@@ -34,7 +34,7 @@ trait Querying {
   val fetchByPrimaryKey : Map[String, Any] => Any
     = {
       lazy val table = Table(tableName, None)
-      lazy val columns = this.columns.map(_.name).map(Column(_, table))
+      lazy val columns = this.tableColumns.map(_.name).map(Column(_, table))
 
       ( _
         map {case (n, v) => Comparison(table, n, Equal, v)}

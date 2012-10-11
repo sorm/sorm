@@ -69,4 +69,10 @@ class EntityMapping
       }
     }
 
+  override lazy val uniqueKeys
+    = settings get reflection map (_.uniqueKeys) getOrElse Set() map (_ map properties flatMap (_.columnsForContainer.map(_.name))) filter (_.nonEmpty)
+
+  override lazy val indexes
+    = settings get reflection map (_.indexes) getOrElse Set() map (_ map properties flatMap (_.columnsForContainer.map(_.name))) filter (_.nonEmpty)
+
 }

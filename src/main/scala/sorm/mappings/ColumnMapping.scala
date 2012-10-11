@@ -8,31 +8,9 @@ import ddl._
 import org.joda.time._
 
 trait ColumnMapping extends Mapping {
+  def columnsForContainer = column +: Stream()
   lazy val column
     = Column(memberName, columnType, autoIncremented, nullable)
-  lazy val isKeyPart
-    = {
-      def isKeyPart
-        ( m : Mapping )
-        : Boolean
-        = m.membership
-            .map{
-              case Membership.EntityId(_) =>
-                true
-              case Membership.EntityProperty(n, e) =>
-                e.uniqueKeys.view.flatten.exists(_ == n) ||
-                e.indexes.view.flatten.exists(_ == n)
-              case Membership.TupleItem(_, m) =>
-                isKeyPart(m)
-              case Membership.OptionItem(m) =>
-                isKeyPart(m)
-              case _ =>
-                false
-            }
-            .getOrElse(false)
-
-      isKeyPart(this)
-    }
 
   lazy val nullable = false
 

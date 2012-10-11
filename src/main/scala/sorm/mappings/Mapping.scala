@@ -52,7 +52,8 @@ trait Mapping {
   def valuesForContainerTableRow ( value : Any ) : Iterable[(String, Any)]
   def update ( value : Any, masterKey : Stream[Any] ) {}
   def insert ( value : Any, masterKey : Stream[Any] ) {}
-  
+
+  def columnsForContainer : Stream[Column]
 }
 object Mapping {
   def apply

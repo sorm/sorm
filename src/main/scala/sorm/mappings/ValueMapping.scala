@@ -46,6 +46,32 @@ class ValueMapping
             ⇒ ???
         }
 
+    private def isKeyPart
+      = {
+        def isKeyPart
+          ( m : Mapping )
+          : Boolean
+          = m.membership
+              .map{
+                case Membership.EntityId(_) =>
+                  true
+                case Membership.EntityProperty(n, e) =>
+                  val s = e.settings(e.reflection)
+                  s.uniqueKeys.view.flatten.exists(_ == n) ||
+                  s.indexes.view.flatten.exists(_ == n)
+                case Membership.TupleItem(_, m) =>
+                  isKeyPart(m)
+                case Membership.OptionItem(m) =>
+                  isKeyPart(m)
+                case _ =>
+                  false
+              }
+              .getOrElse(false)
+
+        isKeyPart(this)
+      }
+
+
     def valueFromContainerRow ( data: String => Any ) = data(memberName)
 
     def valuesForContainerTableRow( value : Any ) = (memberName -> value) +: Stream()

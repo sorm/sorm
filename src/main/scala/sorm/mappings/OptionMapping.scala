@@ -18,6 +18,8 @@ class OptionMapping
     lazy val primaryKeyColumns = masterTableColumns
     lazy val generatedColumns = primaryKeyColumns
     lazy val mappings = item +: Stream()
+
+
     def parseResultSet(rs: ResultSetView)
       = rs.byNameRowsTraversable.view.headOption.map(item.valueFromContainerRow)
 
@@ -26,20 +28,14 @@ class OptionMapping
       insert(value, masterKey)
     }
 
-    override def insert ( value : Any, masterKey : Stream[Any] ) {
-      item match {
-        case item : MasterTableMapping =>
-          value.asInstanceOf[Option[_]].foreach{ v =>
-            val values = (primaryKeyColumnNames zip masterKey) ++: item.valuesForContainerTableRow(v)
-            driver.insert(tableName, values)
-          }
-        case item =>
-          value.asInstanceOf[Option[_]].foreach{ v =>
-            val pk = masterKey
-            driver.insert(tableName, primaryKeyColumnNames zip pk)
-            item.insert(v, pk)
-          }
-      }
+    override def insert ( v : Any, masterKey : Stream[Any] ) {
+      v.asInstanceOf[Option[_]].view
+        .zipWithIndex.foreach{ case (v, i) =>
+          val pk = masterKey :+ i
+          val values = item.valuesForContainerTableRow(v) ++: (primaryKeyColumnNames zip pk)
+          driver.insert(tableName, values)
+          item.insert(v, pk)
+        }
     }
 
     def valuesForContainerTableRow ( value : Any ) = Stream()

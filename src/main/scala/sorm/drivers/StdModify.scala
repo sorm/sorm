@@ -18,11 +18,14 @@ trait StdModify {
 
   def insert
     ( table : String, values : Iterable[(String, Any)] )
-    : Seq[Any]
-    = {
-      val (cs, vs) = values.toStream.unzip
-      Insert(table, cs, vs) $ statement $ connection.executeUpdateAndGetGeneratedKeys $ (_.head)
+    {
+      values.toStream.unzip $$ (Insert(table, _, _)) $ statement $ connection.executeUpdate
     }
+
+  def insertAndGetGeneratedKeys
+    ( table : String, values : Iterable[(String, Any)] )
+    : Seq[Any]
+    = values.toStream.unzip $$ (Insert(table, _, _)) $ statement $ connection.executeUpdateAndGetGeneratedKeys $ (_.head)
 
   def delete
     ( table : String, pk : Iterable[(String, Any)] )

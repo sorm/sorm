@@ -24,6 +24,8 @@ trait Driver {
     ( table : String, values : Iterable[(String, Any)], pk : Iterable[(String, Any)] )
   def insert
     ( table : String, values : Iterable[(String, Any)] )
+  def insertAndGetGeneratedKeys
+    ( table : String, values : Iterable[(String, Any)] )
     : Seq[Any]
   def delete
     ( table : String, pk : Iterable[(String, Any)] )

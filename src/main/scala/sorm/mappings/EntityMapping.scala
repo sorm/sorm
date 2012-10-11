@@ -63,7 +63,7 @@ class EntityMapping
           propertyValues.foreach{ case (n, m, v) => m.update(v, pk) }
           value
         case _ =>
-          val id = driver.insert(tableName, rowValues).ensuring(_.length == 1).head.asInstanceOf[Long]
+          val id = driver.insertAndGetGeneratedKeys(tableName, rowValues).ensuring(_.length == 1).head.asInstanceOf[Long]
           propertyValues.foreach{ case (n, m, v) => m.insert(v, Stream(id)) }
           Persisted( propertyValues.map(t => t._1 -> t._3).toMap, id, reflection )
       }

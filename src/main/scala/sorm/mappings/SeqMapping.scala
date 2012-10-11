@@ -19,31 +19,23 @@ class SeqMapping
     lazy val primaryKeyColumns = masterTableColumns :+ index.column
     lazy val generatedColumns = primaryKeyColumns
     lazy val mappings = item +: Stream()
+
     def parseResultSet(rs: ResultSetView)
       = rs.byNameRowsTraversable.view.map(item.valueFromContainerRow).toVector
-
 
     override def update ( value : Any, masterKey : Stream[Any] ) {
       driver.delete(tableName, masterTableColumnNames zip masterKey)
       insert(value, masterKey)
     }
 
-    override def insert ( value : Any, masterKey : Stream[Any] ) {
-      item match {
-        case item : MasterTableMapping =>
-          value.asInstanceOf[Seq[_]].view
-            .zipWithIndex.foreach{ case (v, i) =>
-              val values = (primaryKeyColumnNames zip (masterKey :+ i)) ++: item.valuesForContainerTableRow(v)
-              driver.insert(tableName, values)
-            }
-        case item =>
-          value.asInstanceOf[Seq[_]].view
-            .zipWithIndex.foreach{ case (v, i) =>
-              val pk = masterKey :+ i
-              driver.insert(tableName, primaryKeyColumnNames zip pk)
-              item.insert(v, pk)
-            }
-      }
+    override def insert ( v : Any, masterKey : Stream[Any] ) {
+      v.asInstanceOf[Seq[_]].view
+        .zipWithIndex.foreach{ case (v, i) =>
+          val pk = masterKey :+ i
+          val values = item.valuesForContainerTableRow(v) ++: (primaryKeyColumnNames zip pk)
+          driver.insert(tableName, values)
+          item.insert(v, pk)
+        }
     }
 
     def valuesForContainerTableRow ( value : Any ) = Stream()

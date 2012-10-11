@@ -24,7 +24,7 @@ trait Querying {
       lazy val table : Table
         = Table(tableName, containerTable.map(Parent(_, bindingsToContainerTable)))
       lazy val columns : Stream[Column]
-        = columns.map(_.name).map(Column(_, table))
+        = this.columns.map(_.name).map(Column(_, table))
 
       ( _
         map {case (n, v) => Comparison(containerTable.get, n, Equal, v)} 

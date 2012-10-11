@@ -4,6 +4,7 @@ import sext.Sext._
 
 import sorm._
 import abstractSql.AbstractSql._
+import jdbc.ResultSetView
 import org.joda.time.DateTime
 
 /**
@@ -13,7 +14,7 @@ trait Driver {
   def query
     [ T ] 
     ( asql : Statement ) 
-    ( parse : Stream[String => Any] => T = (_ : Stream[String => Any]).toList )
+    ( parse : ResultSetView => T = (_ : ResultSetView).indexedRowsTraversable.toList )
     : T
   def now() : DateTime
   def dropTable

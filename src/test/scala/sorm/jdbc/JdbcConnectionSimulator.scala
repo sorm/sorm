@@ -10,7 +10,7 @@ class JdbcConnectionSimulator
     override def executeQuery
       [ T ]
       ( s : Statement )
-      ( parse : Stream[Map[String, Any]] => T = (_ : Stream[Map[String, Any]]).map(_.values).toList)
+      ( parse : ResultSetView => T = (_ : ResultSetView).indexedRowsTraversable.toList )
       : T
       = {
         println(s.toString)

@@ -3,6 +3,7 @@ package sorm.mappings
 import sext.Sext._
 import sorm._
 import core._
+import jdbc.ResultSetView
 import reflection.Reflection
 
 class SeqMapping
@@ -17,8 +18,8 @@ class SeqMapping
     lazy val index = new ValueMapping( Reflection[Int], Some(Membership.SeqIndex(this)), settings, driver )
     lazy val primaryKeyColumns = masterTableColumns :+ index.column
     lazy val mappings = item +: Stream()
-    def parseRows ( rows : Stream[String => Any] )
-      = rows.map(item.valueFromContainerRow).toVector
+    def parseResultSet(rs: ResultSetView)
+      = rs.byNameRowsTraversable.view.map(item.valueFromContainerRow).toVector
 
 
     override def update ( value : Any, masterKey : Stream[Any] ) {

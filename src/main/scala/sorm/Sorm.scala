@@ -83,7 +83,7 @@ object Sorm {
               driver.dropAllTables()
             } catch {
               case e : Throwable =>
-                logger.warn("Couldn't drop all tables.")
+                logger.warn("Couldn't drop all tables. " + e.getMessage)
             }
             mappings.values $ Create.tables foreach driver.createTable
           case InitMode.DropCreate =>

@@ -12,7 +12,7 @@ object Sandbox extends App {
 
   case class A ( a : Int )
 
-  val db = TestingInstance.h2( Entity[A]() )
+  val db = TestingInstance.mysql( Entity[A]() )
 
   val a = db.save(A( 23 ))
 

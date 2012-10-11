@@ -3,6 +3,7 @@ package sorm.mappings
 import sext.Sext._
 import sorm._
 import core._
+import jdbc.ResultSetView
 import reflection.Reflection
 
 class SetMapping
@@ -17,8 +18,8 @@ class SetMapping
     lazy val primaryKeyColumns = masterTableColumns :+ hashColumn
     lazy val hashColumn = ddl.Column( "h", ddl.ColumnType.Integer )
     lazy val mappings = item +: Stream()
-    def parseRows ( rows : Stream[String => Any] )
-      = rows.map(item.valueFromContainerRow).toSet
+    def parseResultSet(rs: ResultSetView)
+      = rs.byNameRowsTraversable.view.map(item.valueFromContainerRow).toSet
 
     override def update ( value : Any, masterKey : Stream[Any] ) {
       driver.delete(tableName, masterTableColumnNames zip masterKey)

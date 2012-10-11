@@ -17,13 +17,13 @@ class JdbcConnection( protected val connection : Connection ) extends Transactio
   def executeQuery
     [ T ]
     ( s : Statement )
-    ( parse : Stream[Map[String, Any]] => T = (_ : Stream[Map[String, Any]]).map(_.values).toList)
+    ( parse : ResultSetView => T = (_ : ResultSetView).indexedRowsTraversable.toList )
     : T
     = {
       logStatement(s)
       val js = preparedStatement(s)
       val rs = js.executeQuery()
-      val r = parse(rs.toStream)
+      val r = parse(rs)
       rs.close()
       js.close()
       r
@@ -38,7 +38,7 @@ class JdbcConnection( protected val connection : Connection ) extends Transactio
         val js = connection.createStatement()
         js.executeUpdate(s.sql, JdbcStatement.RETURN_GENERATED_KEYS)
         val rs = js.getGeneratedKeys
-        val r = rs.parse()
+        val r = rs.indexedRowsTraversable.toList
         rs.close()
         js.close()
         r
@@ -46,7 +46,7 @@ class JdbcConnection( protected val connection : Connection ) extends Transactio
         val js = preparedStatement(s, true)
         js.executeUpdate()
         val rs = js.getGeneratedKeys
-        val r = rs.parse()
+        val r = rs.indexedRowsTraversable.toList
         rs.close()
         js.close()
         r

@@ -8,7 +8,6 @@ import sql._, Sql._
 
 trait StdSqlRendering {
   def statement ( sql : Sql.Sql ) : jdbc.Statement
-//    = jdbc.Statement(template(sql), data(sql).map(JdbcValue.apply))
     = (sql $ template, sql $ data map JdbcValue.apply) $$ jdbc.Statement
   protected def quote ( x : String ) : String
   protected def template ( sql : Sql.Sql ) : String
@@ -21,13 +20,8 @@ trait StdSqlRendering {
           "INSERT INTO " + quote(table) +
           ( "\n( " + columns.ensuring(_.nonEmpty).map(quote).mkString(", ") + " )" + 
             "\nVALUES" +
-            "\n( " + values.ensuring(_.nonEmpty).map(_ => "?") + " )" 
+            "\n( " + values.ensuring(_.nonEmpty).map(_ => "?").mkString(", ") + " )"
           ).indent(2)
-        // case Update(table, exps, where) =>
-        //   "UPDATE " + quote(table) +
-        //   ( exps.notEmpty.map(_.map(template).mkString(",\n")).map("\nSET " + _.indent(4).trim).getOrElse("") +
-        //     where.map(template).map("\n" + _).getOrElse("")
-        //   ).indent(2)
         case Update(table, exps, where) =>
           "UPDATE " + quote(table) +
           ( "\nSET " + exps.ensuring(_.nonEmpty).map(template).mkString(",\n").indent(4).trim +

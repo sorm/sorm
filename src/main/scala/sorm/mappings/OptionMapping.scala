@@ -3,6 +3,7 @@ package sorm.mappings
 import sext.Sext._
 import sorm._
 import core._
+import jdbc.ResultSetView
 import reflection._
 
 class OptionMapping
@@ -16,8 +17,8 @@ class OptionMapping
     lazy val item = Mapping( reflection.generics(0), Membership.OptionItem(this), settings, driver )
     lazy val primaryKeyColumns = masterTableColumns
     lazy val mappings = item +: Stream()
-    def parseRows ( rows : Stream[String => Any] )
-      = rows.headOption.map(item.valueFromContainerRow)
+    def parseResultSet(rs: ResultSetView)
+      = rs.byNameRowsTraversable.view.headOption.map(item.valueFromContainerRow)
 
     override def update ( value : Any, masterKey : Stream[Any] ) {
       driver.delete(tableName, masterTableColumnNames zip masterKey)

@@ -5,13 +5,12 @@ import sorm.jdbc.JdbcConnection
 
 class Mysql (url:String, user:String, password:String)
   extends Driver
-  with StdConnection
+  with StdQuery
   with StdSqlRendering
   with StdDropAllTables
-  with StdStatement
   with StdAbstractSqlToSql
   with StdNow
-  with StdSaving
+  with StdModify
   with StdDropTables
   with StdQuote
   with StdTransaction

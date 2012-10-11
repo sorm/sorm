@@ -4,7 +4,7 @@ import sext.Sext._
 
 import sorm._
 
-trait StdSaving {
+trait StdModify {
   import sql.Sql._
 
   def statement ( sql : Sql ) : jdbc.Statement
@@ -21,7 +21,7 @@ trait StdSaving {
     : Seq[Any]
     = {
       val (cs, vs) = values.toStream.unzip
-      Insert(table, cs, vs) $ statement $ connection.executeUpdateAndGetGeneratedKeys
+      Insert(table, cs, vs) $ statement $ connection.executeUpdateAndGetGeneratedKeys $ (_.head)
     }
 
   def delete

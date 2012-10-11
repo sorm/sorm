@@ -3,6 +3,7 @@ package sorm.mappings
 import sext.Sext._
 import sorm._
 import core._
+import jdbc.ResultSetView
 import persisted.Persisted
 import reflection.Reflection
 
@@ -22,8 +23,8 @@ class EntityMapping
   lazy val id
     = new ValueMapping(Reflection[Int], Some(Membership.EntityId(this)), settings, driver)
 
-  override def parseRows ( rows : Stream[String => Any] ) : Any
-    = rows
+  def parseResultSet(rs: ResultSetView)
+    = rs.byNameRowsTraversable.view
         .headOption
         .map( row => Persisted(
           properties.mapValues( _.valueFromContainerRow(row) ),

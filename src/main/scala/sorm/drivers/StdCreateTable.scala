@@ -23,7 +23,7 @@ trait StdCreateTable {
         uniqueKeys.map(uniqueKeyDdl) ++:
         foreingKeys.map(foreingKeyDdl).toStream
       "CREATE TABLE " + quote(name) + 
-      ( "( " + statements.mkString(",\n").indent(2).trim + " )" ).indent(2)
+      ( "\n( " + statements.mkString(",\n").indent(2).trim + " )" ).indent(2)
     }
   protected def primaryKeyDdl ( columns : Seq[String] )
     = "PRIMARY KEY (" + columns.view.map(quote).mkString(", ") + ")"

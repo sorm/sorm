@@ -3,11 +3,12 @@ package sorm.mappings
 import sext.Sext._
 import sorm._
 import core._
+import jdbc.ResultSetView
 
 trait Querying {
   import abstractSql.AbstractSql._
 
-  def parseRows ( rows : Stream[String => Any] ) : Any
+  def parseResultSet ( rs : ResultSetView ) : Any
 
   def containerTableMapping : Option[TableMapping]
   def tableName : String
@@ -29,7 +30,7 @@ trait Querying {
         map {case (n, v) => Comparison(containerTable.get, n, Equal, v)} 
         reduceOption And
         as ( Select(columns, _) )
-        as ( driver.query(_)(parseRows) )
+        as ( driver.query(_)(parseResultSet) )
       )
     }
 
@@ -42,7 +43,7 @@ trait Querying {
         map {case (n, v) => Comparison(table, n, Equal, v)} 
         reduceOption And 
         as (Select(columns, _))
-        as (driver.query(_)(parseRows))
+        as (driver.query(_)(parseResultSet))
       )
     }
 

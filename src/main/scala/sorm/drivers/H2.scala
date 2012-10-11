@@ -7,13 +7,12 @@ import sorm.ddl.Table
 
 class H2 (url:String, user:String, password:String)
   extends Driver
-  with StdConnection
+  with StdQuery
   with StdSqlRendering
   with StdDropAllTables
-  with StdStatement
   with StdAbstractSqlToSql
   with StdNow
-  with StdSaving
+  with StdModify
   with StdDropTables
   with StdQuote
   with StdTransaction
@@ -29,6 +28,6 @@ class H2 (url:String, user:String, password:String)
         uniqueKeys.map(uniqueKeyDdl) ++:
         foreingKeys.map(foreingKeyDdl).toStream
       "CREATE TABLE " + quote(name) +
-      ( "( " + statements.mkString(",\n").indent(2).trim + " )" ).indent(2)
+      ( "\n( " + statements.mkString(",\n").indent(2).trim + " )" ).indent(2)
     }
 }

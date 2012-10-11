@@ -10,8 +10,8 @@ import sext.Sext._
 package object jdbc {
 
   implicit def connectionAdapter(x: Connection) = new JdbcConnection(x)
-  implicit def preparedStatementAdapter(x: PreparedStatement) = new PreparedStatementAdapter(x)
-  implicit def resultSetAdapter(x: ResultSet) = new ResultSetAdapter(x)
+  implicit def preparedStatementAdapter(x: PreparedStatement) = new PreparedStatementView(x)
+  implicit def resultSetAdapter(x: ResultSet) = new ResultSetView(x)
 
 
   type JdbcType = Int

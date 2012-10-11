@@ -3,6 +3,7 @@ package sorm.core
 import reflect.basis._
 import sorm._
 import persisted._
+import query.AbstractSqlComposition
 import reflection._
 import mappings._
 import jdbc._
@@ -40,9 +41,8 @@ trait Api extends Logging with CurrentDateTime {
 
   private def fetch [ T <: AnyRef ] ( q : Query ) : Seq[T with Persisted]
     = {
-//      val (stmt, resultSetMappings) = statementAndResultMappings( q )
-//      connection.executeQuery(stmt)(_.parseInstances(q.mapping, resultSetMappings.view.zipWithIndex.toMap)).asInstanceOf[Seq[T with Persisted]]
-      ???
+      val ids = q $ AbstractSqlComposition.primaryKeySelect $ (driver.query(_)(_.byNameRowsTraversable.toList)) $ (_.toStream)
+      ids.map(q.mapping.fetchByPrimaryKey(_).asInstanceOf[T with Persisted])
     }
 
   def all

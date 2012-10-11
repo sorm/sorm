@@ -26,11 +26,11 @@ trait Querying {
       lazy val columns : Stream[Column]
         = columns.map(_.name).map(Column(_, table))
 
-      ( _ 
+      ( _
         map {case (n, v) => Comparison(containerTable.get, n, Equal, v)} 
         reduceOption And
-        as ( Select(columns, _) )
-        as ( driver.query(_)(parseResultSet) )
+        $ ( Select(columns, _) )
+        $ ( driver.query(_)(parseResultSet) )
       )
     }
 
@@ -39,11 +39,11 @@ trait Querying {
       lazy val table = Table(tableName, None)
       lazy val columns = this.columns.map(_.name).map(Column(_, table))
 
-      ( _ 
-        map {case (n, v) => Comparison(table, n, Equal, v)} 
+      ( _
+        map {case (n, v) => Comparison(table, n, Equal, v)}
         reduceOption And 
-        as (Select(columns, _))
-        as (driver.query(_)(parseResultSet))
+        $ (Select(columns, _))
+        $ (driver.query(_)(parseResultSet))
       )
     }
 

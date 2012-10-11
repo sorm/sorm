@@ -14,7 +14,7 @@ class ResultSetView
       = ( 1 to md.getColumnCount ) zipBy md.getColumnType
     private lazy val indexTypeByName : Map[String, (Int, JdbcType)]
       = (1 to md.getColumnCount)
-          .map(i => md.getColumnName(i) -> (i -> md.getColumnType(i)))
+          .map(i => md.getColumnName(i).toLowerCase -> (i -> md.getColumnType(i)))
           .toMap
 
     /**
@@ -36,7 +36,7 @@ class ResultSetView
       = new Traversable[Map[String, Any]] {
           def foreach
             [ U ]
-            ( f : Map[String, Any] => U )
+            ( f : (Map[String, Any]) => U )
             {
               while( rs.next() ){
                 indexTypeByName.map{ case (n, (i, t)) ⇒ n -> value(i, t) } $ f

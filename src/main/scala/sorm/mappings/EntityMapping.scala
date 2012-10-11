@@ -22,9 +22,10 @@ class EntityMapping
     = id.column +: Stream()
   lazy val id
     = new ValueMapping(Reflection[Long], Some(Membership.EntityId(this)), settings, driver)
+  override lazy val columns = id.column +: mappingsColumns
 
   def parseResultSet(rs: ResultSetView)
-    = rs.byNameRowsTraversable.view
+    = rs.byNameRowsTraversable.toStream
         .headOption
         .map( row => Persisted(
           properties.mapValues( _.valueFromContainerRow(row) ),

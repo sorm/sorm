@@ -36,6 +36,24 @@ object AbstractSqlComposition extends Logging {
 //        )
 //      }
 
+  def primaryKeySelect
+    ( query : Query )
+    : AS.Statement
+    = (query.mapping.primaryKeySelect /: query.order.notEmpty){ case (s, o) =>
+        s.copy(
+          order
+            = o.map{ case Order(m, r) =>
+                AS.Order(
+                  m.containerTableMapping.get.abstractSqlTable,
+                  m.memberName,
+                  r
+                )
+              }
+        )
+      } &&!
+      ( limitSelect(query) ++
+        query.where.map{filtersStatement} reduceOption ( _ & _ ) )
+
   def limitSelect
     ( query : Query )
     : Option[AS.Statement]
@@ -69,7 +87,6 @@ object AbstractSqlComposition extends Logging {
           notEqualing(m, v)
 
         case Filter(Larger, m: ValueMapping, v) =>
-          logger.warn("`Larger` filter is not tested")
           comparing( m, AS.Larger, v )
 
         case Filter(LargerOrEqual, m: ValueMapping, v) =>

@@ -28,7 +28,7 @@ class ResultSetView
             ( f : IndexedSeq[Any] => U )
             {
               while( rs.next() ){
-                f( indexTypeSeq.map{ case (i, t) ⇒ rs.value(i, t) } )
+                f( indexTypeSeq.map{ case (i, t) ⇒ value(i, t) } )
               }
             }
         }
@@ -39,11 +39,10 @@ class ResultSetView
             ( f : Map[String, Any] => U )
             {
               while( rs.next() ){
-                indexTypeByName.mapValues(_ $$ value) $ f
+                indexTypeByName.map{ case (n, (i, t)) ⇒ n -> value(i, t) } $ f
               }
             }
         }
-
     /**
      * @see <a href=http://docstore.mik.ua/orelly/java-ent/servlet/ch09_02.htm#ch09-22421>jdbc table
      */

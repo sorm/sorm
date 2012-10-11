@@ -16,5 +16,5 @@ class Mysql (url:String, user:String, password:String)
   with StdTransaction
   with StdCreateTable
 {
-  def connection = JdbcConnection(url, user, password)
+  val connection = JdbcConnection(url, user, password)
 }

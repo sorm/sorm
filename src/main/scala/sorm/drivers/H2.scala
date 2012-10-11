@@ -18,7 +18,7 @@ class H2 (url:String, user:String, password:String)
   with StdTransaction
   with StdCreateTable
 {
-  def connection = JdbcConnection(url, user, password)
+  val connection = JdbcConnection(url, user, password)
   override protected def tableDdl(t: Table) : String
     = {
       val Table(name, columns, primaryKey, uniqueKeys, indexes, foreingKeys) = t

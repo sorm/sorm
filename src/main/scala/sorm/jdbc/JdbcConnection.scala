@@ -113,7 +113,7 @@ object JdbcConnection {
           ???
       }
       //  get it
-      DriverManager.getConnection(url, user, password)
+      DriverManager.getConnection(url, user, password) $ (new JdbcConnection(_))
     }
 
 

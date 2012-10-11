@@ -30,7 +30,7 @@ object ArtistDb {
                Entity[Style](), 
                Entity[Locale]() ),
       url
-        = "jdbc:h2:mem:test",
+        = "jdbc:mysql://localhost/test",
       initMode
         = InitMode.DropAllCreate
     )

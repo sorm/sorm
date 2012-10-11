@@ -22,18 +22,19 @@ class OptionTupleSupportSuite extends FunSuite with ShouldMatchers {
 
   import OptionTupleSupportSuite._
 
+  val db = TestingInstance.mysql(Entity[A]())
 
-  test("saving goes ok"){
+  db.save(A( None ))
+  db.save(A( Some(2 -> None) ))
+  db.save(A( Some(56 -> Some("asdf")) ))
 
-    db.save(A( None ))
-    db.save(A( Some(2 -> None) ))
-    db.save(A( Some(56 -> Some("asdf")) ))
-
-  }
-  test("saved entities are correct"){
-
+  test("top none"){
     db.fetchById[A](1).get.a should be === None
+  }
+  test("deep none"){
     db.fetchById[A](2).get.a should be === Some(2 -> None)
+  }
+  test("deep some"){
     db.fetchById[A](3).get.a should be === Some(56 -> Some("asdf"))
   }
 
@@ -42,10 +43,5 @@ object OptionTupleSupportSuite {
 
   case class A
     ( a : Option[(Int, Option[String])] )
-
-  val db
-    = new Instance( Entity[A]() :: Nil,
-                    "jdbc:h2:mem:test",
-                    initMode = InitMode.DropAllCreate )
 
 }

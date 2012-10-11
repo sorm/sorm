@@ -29,9 +29,9 @@ class OptionMapping
     }
 
     override def insert ( v : Any, masterKey : Stream[Any] ) {
-      v.asInstanceOf[Option[_]].view
-        .zipWithIndex.foreach{ case (v, i) =>
-          val pk = masterKey :+ i
+      v.asInstanceOf[Option[_]]
+        .foreach{ v =>
+          val pk = masterKey
           val values = item.valuesForContainerTableRow(v) ++: (primaryKeyColumnNames zip pk)
           driver.insert(tableName, values)
           item.insert(v, pk)

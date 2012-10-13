@@ -1,6 +1,6 @@
 package sorm.jdbc
 
-import sext.Sext._
+import sext._
 import java.sql.{Statement => JdbcStatement, SQLTransactionRollbackException, Connection, ResultSet}
 import com.weiglewilczek.slf4s.Logging
 import reflect.ClassTag

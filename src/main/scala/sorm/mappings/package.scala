@@ -1,6 +1,6 @@
 package sorm
 
-import sext.Sext._
+import sext._
 
 import sorm._
 import reflection.Reflection

@@ -1,6 +1,6 @@
 package sorm.drivers
 
-import sext.Sext._
+import sext._
 import sorm.core.Driver
 import sorm.jdbc.JdbcConnection
 import sorm.ddl.Table

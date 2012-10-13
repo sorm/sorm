@@ -3,7 +3,7 @@ package sorm.joda
 import org.joda.time._
 
 import sorm._
-import sext.Sext._
+import sext._
 
 object Extensions {
   

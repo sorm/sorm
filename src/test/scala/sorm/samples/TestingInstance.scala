@@ -5,7 +5,7 @@ import core._
 import jdbc._
 import samples._
 import mappings._
-import sext.Sext._
+import sext._
 import Sorm._
 
 object TestingInstance {

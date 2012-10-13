@@ -4,7 +4,7 @@ import sorm._
 import core.Driver
 import reflection._
 import mappings._
-import sext.Sext._
+import sext._
 import util.Random
 
 import org.scalatest.FunSuite

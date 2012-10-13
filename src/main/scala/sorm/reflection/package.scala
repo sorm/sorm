@@ -1,7 +1,7 @@
 package sorm.reflection
 
 import reflect.runtime.universe._
-import sext.Sext._
+import sext._
 import reflect.runtime.currentMirror
 import ScalaApi._
 

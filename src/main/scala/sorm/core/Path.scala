@@ -3,7 +3,7 @@ package sorm.core
 import sorm._
 import query._
 import mappings._
-import sext.Sext._
+import sext._
 
 import Query._
 

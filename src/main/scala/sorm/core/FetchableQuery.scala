@@ -1,6 +1,6 @@
 package sorm.core
 
-import sext.Sext._
+import sext._
 
 import sorm._
 import mappings._

@@ -1,7 +1,7 @@
 package sorm.jdbc
 
 import java.sql.DriverManager
-import sext.Sext._
+import sext._
 import java.sql.{Connection, ResultSet, Statement => JdbcStatement}
 import com.weiglewilczek.slf4s.Logging
 import sorm.core.DbType

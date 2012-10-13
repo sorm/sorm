@@ -77,7 +77,7 @@ object AbstractSql {
 
   sealed case class Table
     ( name : String,
-      parent : Option[Parent] )
+      parent : Option[Parent] = None )
     
 
   sealed case class Parent

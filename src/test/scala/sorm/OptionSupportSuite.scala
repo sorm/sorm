@@ -10,11 +10,8 @@ import core._
 import persisted._
 import query._
 import reflection._
-import save._
-import structure._
-import mapping._
+import mappings._
 import jdbc._
-import create._
 import sext._
 
 import samples._

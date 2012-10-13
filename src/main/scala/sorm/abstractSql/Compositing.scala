@@ -1,10 +1,5 @@
 package sorm.abstractSql
 
-import sorm._
-import structure._
-import mapping._
-import sext._
-
 import AbstractSql._
 
 object Compositing {

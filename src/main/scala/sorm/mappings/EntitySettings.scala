@@ -1,4 +1,4 @@
-package sorm.structure
+package sorm.mappings
 
 sealed case class EntitySettings
   ( indexes       : Set[Seq[String]] = Set.empty,

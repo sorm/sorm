@@ -2,8 +2,7 @@ package sorm.core
 
 import sorm._
 import query._
-import structure._
-import mapping._
+import mappings._
 import sext._
 
 import Query._
@@ -100,9 +99,9 @@ object Path {
         case (host : EntityMapping, (id, r)) =>
           mapping( host.properties(id), r )
         case (host : RangeMapping, ("start", r)) =>
-          mapping( host.from, r )
+          mapping( host.start, r )
         case (host : RangeMapping, ("end", r)) =>
-          mapping( host.to, r )
+          mapping( host.end, r )
         case (host : TupleMapping, (id, remainder)) =>
           "(?<=^_)\\d+(?=$)".r.findFirstIn(id) match {
             case Some(index) =>

@@ -1,6 +1,5 @@
-package sorm.structure
+package sorm.mappings
 
-import mapping._
 
 sealed trait Membership {
   def parent: Mapping
@@ -8,10 +7,10 @@ sealed trait Membership {
 
 object Membership {
 
-  sealed case class RangeFrom
+  sealed case class RangeStart
     ( parent : RangeMapping )
     extends Membership
-  sealed case class RangeTo
+  sealed case class RangeEnd
     ( parent : RangeMapping )
     extends Membership
   sealed case class SeqIndex

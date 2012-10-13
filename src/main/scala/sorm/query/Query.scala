@@ -2,8 +2,7 @@ package sorm.query
 
 import sorm._
 import reflection._
-import structure._
-import mapping._
+import mappings._
 import sext._
 
 object Query {

@@ -1,75 +1,48 @@
 package sorm.jdbc
 
-import collection.mutable.ListBuffer
 import java.sql._
-import org.joda.time._
 
 import sorm._
 import joda.Extensions._
 import sext._
 
-class ResultSetAdapter
+class ResultSetView
   ( rs : ResultSet ) 
   {
+    private lazy val md = rs.getMetaData
+    private lazy val indexTypeSeq : IndexedSeq[(Int, JdbcType)]
+      = ( 1 to md.getColumnCount ) zipBy md.getColumnType
+    private lazy val indexTypeByName : Map[String, (Int, JdbcType)]
+      = (1 to md.getColumnCount)
+          .map(i => md.getColumnName(i).toLowerCase -> (i -> md.getColumnType(i)))
+          .toMap
+
     /**
      * Is preferred to Iterator since not all adapters support the `isLast` test
      * required for its implementation.
      */
-    private def indexedRowsTraversable
+    def indexedRowsTraversable
       = new Traversable[IndexedSeq[Any]] {
-
-          val md 
-            = rs.getMetaData
-
-          val indexTypeSeq : IndexedSeq[(Int, JdbcType)]
-            = ( 1 to md.getColumnCount ) zipBy md.getColumnType
-
           def foreach
             [ U ]
             ( f : IndexedSeq[Any] => U )
             {
-              rs.beforeFirst()
               while( rs.next() ){
-                f(
-                  indexTypeSeq.map{ case (i, t) ⇒ rs.value(i, t) }
-                )
+                f( indexTypeSeq.map{ case (i, t) ⇒ value(i, t) } )
               }
             }
         }
-
-    def parse()
-      = indexedRowsTraversable.toList
-    def parseAndClose()
-      = {
-        val r = indexedRowsTraversable.toList
-        rs.close()
-        r
-      }
-
-    @deprecated("use parseAndClose()")
-    def parseToListsAndClose() 
-      = parseAndClose()
-
-    @deprecated("index based approach is preferred")
-    def parseToMapsAndClose() 
-      = {
-        val b = ListBuffer[Map[String, Any]]()
-
-        val md = rs.getMetaData
-
-        val indexTypeByNameMap =
-          (1 to md.getColumnCount)
-            .map(i => md.getColumnName(i) -> (i -> md.getColumnType(i)))
-            .toMap
-
-        while( rs.next() ){
-          b += indexTypeByNameMap.mapValues{ case (i, t) => value(i, t) }
+    def byNameRowsTraversable
+      = new Traversable[Map[String, Any]] {
+          def foreach
+            [ U ]
+            ( f : (Map[String, Any]) => U )
+            {
+              while( rs.next() ){
+                indexTypeByName.map{ case (n, (i, t)) ⇒ n -> value(i, t) } $ f
+              }
+            }
         }
-
-        rs.close()
-        b.toList
-      }
-
     /**
      * @see <a href=http://docstore.mik.ua/orelly/java-ent/servlet/ch09_02.htm#ch09-22421>jdbc table
      */

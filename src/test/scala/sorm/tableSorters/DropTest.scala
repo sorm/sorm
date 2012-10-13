@@ -1,9 +1,9 @@
-package sorm.drop
+package sorm.tableSorters
 
 import sorm._
+import core.Driver
 import reflection._
-import structure._
-import mapping._
+import mappings._
 import sext._
 import util.Random
 
@@ -13,7 +13,7 @@ import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
-class Test extends FunSuite with ShouldMatchers {
+class DropTest extends FunSuite with ShouldMatchers {
 
 
   import samples.ArtistModel._
@@ -34,8 +34,10 @@ class Test extends FunSuite with ShouldMatchers {
       EntitySettings(indexes = Set(Seq("code")))
     )
 
+  val driver
+    = Driver("jdbc:h2:mem:test", "", "")
   val mappings
-    = settings.keys.map {r => r -> new EntityMapping(None, r, settings)}.toMap
+    = settings.keys.map {r => r -> new EntityMapping(r, None, settings, driver)}.toMap
 
 
   test("sort simulation") {

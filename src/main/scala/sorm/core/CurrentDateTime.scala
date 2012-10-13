@@ -4,15 +4,10 @@ import org.joda.time.DateTime
 import sorm.jdbc._
 
 trait CurrentDateTime {
-  protected def connection : ConnectionAdapter
-  private def fetch() : DateTime
-    = connection
-        .executeQuery(Statement("SELECT NOW()"))()
-        .head.head
-        .asInstanceOf[DateTime]
+  protected def driver : Driver
 
   private lazy val deviation
-    = System.currentTimeMillis - fetch().getMillis
+    = System.currentTimeMillis - driver.now().getMillis
 
   def millis = System.currentTimeMillis - deviation
   /**

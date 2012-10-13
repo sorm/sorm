@@ -1,4 +1,4 @@
-package sorm.structure
+package sorm.mappings
 
 import sorm._
 import reflection._

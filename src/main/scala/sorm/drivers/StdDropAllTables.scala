@@ -1,14 +1,13 @@
-package sorm.dropAll
+package sorm.drivers
 
-import sorm._
-import core.SormException
-import jdbc._
-import sext._
+import sorm.jdbc.{JdbcConnection, Statement}
+import sorm.core.SormException
 
-trait DropAllTablesAdapter extends ConnectionAdapter {
+trait StdDropAllTables {
+  protected def connection: JdbcConnection
   def dropAllTables() {
     def listTables()
-      = executeQuery( Statement("SHOW TABLES") )()
+      = connection.executeQuery( Statement("SHOW TABLES") )()
           .flatten
           .asInstanceOf[List[String]]
 
@@ -16,7 +15,7 @@ trait DropAllTablesAdapter extends ConnectionAdapter {
       ( table : String )
       {
         try {
-          executeUpdate( Statement("DROP TABLE " + table) )
+          connection.executeUpdate( Statement("DROP TABLE " + table) )
         } catch {
           case e : Throwable =>
         }
@@ -35,4 +34,5 @@ trait DropAllTablesAdapter extends ConnectionAdapter {
     }
 
   }
+
 }

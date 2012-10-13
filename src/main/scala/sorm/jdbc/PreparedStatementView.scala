@@ -7,7 +7,7 @@ import sorm._
 import joda.Extensions._
 import sext._
 
-class PreparedStatementAdapter
+class PreparedStatementView
   ( s : PreparedStatement ) 
   {
     /**

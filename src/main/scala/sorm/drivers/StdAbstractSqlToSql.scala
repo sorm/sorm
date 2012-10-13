@@ -1,22 +1,19 @@
-package sorm.abstractSql
+package sorm.drivers
 
-import sorm._
-import sql._
 import sext._
 
-import sql.Compositing._
+import sorm._
+import sql._, Compositing._
+import abstractSql._, AbstractSql._
 
-import AbstractSql._
-
-object StandardSqlComposition {
-
+trait StdAbstractSqlToSql {
   def sql
     ( statement : Statement )
     : Sql.Statement
     = statement match {
-        case Union(l, r) => 
+        case Union(l, r) =>
           Sql.Union( sql(l), sql(r) )
-        case Intersection(l, r) => 
+        case Intersection(l, r) =>
           sql(l) narrow sql(r)
         case s : Select =>
 
@@ -30,16 +27,16 @@ object StandardSqlComposition {
           Sql.Select(
             what
               = s.expressions.toStream
-                  .collect{ 
-                    case Column(n, t) => 
+                  .collect{
+                    case Column(n, t) =>
                       Sql.Column(n, Some(aliases(t)))
                   },
             from
-              = Sql.From(Sql.Table(tables.head.name), 
+              = Sql.From(Sql.Table(tables.head.name),
                          Some(aliases(tables.head))),
             join
               = tables.toStream.tail
-                  .map{ t => 
+                  .map{ t =>
                     Sql.Join(
                       Sql.Table(t.name),
                       Some(aliases(t)),
@@ -54,12 +51,12 @@ object StandardSqlComposition {
               = {
                 def condition ( c : Condition ) : Sql.Condition[Sql.WhereObject]
                   = c match {
-                      case And(l, r) => 
+                      case And(l, r) =>
                         Sql.CompositeCondition( condition(l), condition(r), Sql.And )
-                      case Or(l, r) => 
+                      case Or(l, r) =>
                         Sql.CompositeCondition( condition(l), condition(r), Sql.Or )
                       case Comparison(t, c, Equal, null) =>
-                        Sql.IsNull( 
+                        Sql.IsNull(
                           Sql.Column(c, Some(aliases(t)))
                         )
                       case Comparison(t, c, NotEqual, null) =>
@@ -81,8 +78,8 @@ object StandardSqlComposition {
               },
             groupBy
               = s.groupBy.toStream
-                  .map{ case Column(n, t) => 
-                    Sql.Column(n, Some(aliases(t))) 
+                  .map{ case Column(n, t) =>
+                    Sql.Column(n, Some(aliases(t)))
                   },
             having
               = s.having
@@ -101,7 +98,7 @@ object StandardSqlComposition {
             orderBy
               = s.order
                   .map{ case Order(t, n, r) =>
-                    Sql.OrderBy( Sql.Column(n, Some(aliases(t))), r ) 
+                    Sql.OrderBy( Sql.Column(n, Some(aliases(t))), r )
                   },
             limit
               = s.limit,
@@ -109,5 +106,4 @@ object StandardSqlComposition {
               = s.offset.satisfying{ _ != 0 }
           )
       }
-
 }

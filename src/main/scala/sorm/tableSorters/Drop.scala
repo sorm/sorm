@@ -1,21 +1,12 @@
-package sorm.drop
+package sorm.tableSorters
 
 import sorm._
-import structure._
-import mapping._
+import mappings._
 import jdbc._
 import sorm.ddl.Table
 import sext._
 
 object Drop {
-
-  def ddl
-    ( ms : Iterable[TableMapping] )
-    : String
-    = statements(ms)
-        .map{_.sql + ";"}
-        .mkString("\n")
-
 
   def sort
     ( ts : Stream[Table] )
@@ -49,24 +40,20 @@ object Drop {
 
   def allTables
     ( ms : Iterable[TableMapping] )
-    = ms.flatMap{ m ⇒
+    = ms
+        .flatMap{ m ⇒
           def queue
             ( m : TableMapping )
             : Set[TableMapping]
-            = m.nestedTableMappings.flatMap{queue} + m
+            = m.containedTableMappings.flatMap{queue}.toSet + m
           queue( m )
         }
         .toStream
         .map{ _.table }
         .distinct
 
-  def statements
+  def tables
     ( ms : Iterable[TableMapping] )
-    = allTables(ms)
-        .as{sort}
-        .map{ "DROP TABLE " + _.name }
-        .map{ Statement(_) }
-
-
+    = ms $ allTables $ sort
 
 }

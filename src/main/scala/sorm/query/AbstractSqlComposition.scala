@@ -2,7 +2,7 @@ package sorm.query
 
 import sext._
 
-import sorm.structure.mapping._
+import sorm.mappings._
 import sorm.persisted._
 
 import sorm.abstractSql.{AbstractSql => AS}
@@ -13,42 +13,46 @@ import com.weiglewilczek.slf4s.Logging
 
 object AbstractSqlComposition extends Logging {
 
-  def resultSetSelect
+//  def resultSetSelect
+//    ( query : Query )
+//    : AS.Statement
+//    = selectWithOrder(query) &&!
+//      ( limitSelect(query) ++
+//        query.where.map{filtersStatement} reduceOption ( _ & _ ) )
+//
+//  def selectWithOrder
+//    ( query : Query )
+//    : AS.Select
+//    = (query.mapping.abstractSqlResultSetSelect /: query.order.notEmpty){ case (s, o) =>
+//        s.copy(
+//          order
+//            = o.map{ case Order(m, r) =>
+//                AS.Order(
+//                  m.containerTableMapping.get.abstractSqlTable,
+//                  m.memberName,
+//                  r
+//                )
+//              }
+//        )
+//      }
+
+  def primaryKeySelect
     ( query : Query )
     : AS.Statement
-    = selectWithOrder(query) &&!
-      ( limitSelect(query) ++
-        query.where.map{filtersStatement} reduceOption ( _ & _ ) )
-
-  def selectWithOrder
-    ( query : Query )
-    : AS.Select
-    = (query.mapping.abstractSqlResultSetSelect /: query.order.notEmpty){ case (s, o) =>
+    = (query.mapping.primaryKeySelect /: query.order.notEmpty){ case (s, o) =>
         s.copy(
           order
             = o.map{ case Order(m, r) =>
                 AS.Order(
                   m.containerTableMapping.get.abstractSqlTable,
-                  m.columnName,
+                  m.memberName,
                   r
                 )
               }
         )
-      }
-//    = query.order.notEmpty
-//        .map{ order =>
-//          query.mapping.abstractSqlResultSetSelect
-//            .copy(
-//              order
-//                = order.map{ case Order(m, r) =>
-//                    AS.Order(
-//                      m.containerTableMapping.get.abstractSqlTable,
-//                      m.columnName,
-//                      r
-//                    )
-//                  }
-//            )
-//        }
+      } &&!
+      ( limitSelect(query) ++
+        query.where.map{filtersStatement} reduceOption ( _ & _ ) )
 
   def limitSelect
     ( query : Query )
@@ -56,7 +60,7 @@ object AbstractSqlComposition extends Logging {
     = query
         .satisfying{q => q.limit.nonEmpty || q.offset != 0}
         .map{ q =>
-          q.mapping.root.abstractSqlPrimaryKeySelect
+          q.mapping.root.primaryKeySelect
             .copy(
               limit
                 = q.limit,
@@ -83,7 +87,6 @@ object AbstractSqlComposition extends Logging {
           notEqualing(m, v)
 
         case Filter(Larger, m: ValueMapping, v) =>
-          logger.warn("`Larger` filter is not tested")
           comparing( m, AS.Larger, v )
 
         case Filter(LargerOrEqual, m: ValueMapping, v) =>
@@ -152,8 +155,6 @@ object AbstractSqlComposition extends Logging {
         case Filter(Includes, m: MapMapping, v: Iterable[_]) => 
           logger.warn("`Includes` filter is not tested")
           empty(m) && including(m, v)
-
-        case Filter(HasSize, m: CollectionMapping, v) => ???
 
         case Filter(f, m, v) =>
           throw new Exception(

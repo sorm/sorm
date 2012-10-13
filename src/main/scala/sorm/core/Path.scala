@@ -4,7 +4,7 @@ import sorm._
 import query._
 import structure._
 import mapping._
-import sext.Sext._
+import sext._
 
 import Query._
 

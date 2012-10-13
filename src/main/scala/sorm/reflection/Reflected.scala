@@ -1,7 +1,7 @@
 package sorm.reflection
 
 import sorm._
-import sext.Sext._
+import sext._
 
 //  or InstanceReflection
 class Reflected

@@ -8,7 +8,7 @@ import reflection._
 import structure._
 import mapping._
 import jdbc._
-import sext.Sext._
+import sext._
 
 import com.weiglewilczek.slf4s.Logging
 import sext.OrderedMap

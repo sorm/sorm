@@ -1,6 +1,6 @@
 package sorm.query
 
-import sext.Sext._
+import sext._
 
 import sorm.structure.mapping._
 import sorm.persisted._

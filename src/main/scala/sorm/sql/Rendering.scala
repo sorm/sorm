@@ -1,7 +1,7 @@
 package sorm.sql
 
 import sorm._
-import sext.Sext._
+import sext._
 
 import Sql._
 

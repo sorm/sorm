@@ -7,7 +7,7 @@ import org.scalatest.junit.JUnitRunner
 
 import sorm._
 import core._
-import sext.Sext._
+import sext._
 import Sorm._
 
 import samples._

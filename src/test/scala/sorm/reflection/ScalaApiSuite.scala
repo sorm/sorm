@@ -11,7 +11,7 @@ class ScalaApiSuite extends FunSuite with ShouldMatchers {
 
   import reflect.runtime.universe._
   import reflect.runtime.{currentMirror => mirror}
-  import sext.Sext._
+  import sext._
   import ScalaApi._
 
 

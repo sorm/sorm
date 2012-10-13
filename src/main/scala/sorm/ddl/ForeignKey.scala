@@ -1,7 +1,7 @@
 package sorm.ddl
 
 import sorm._
-import sext.Sext._
+import sext._
 import ForeignKey._
 
 sealed case class ForeignKey

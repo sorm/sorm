@@ -1,7 +1,7 @@
 package sorm.ddl
 
 import sorm._
-import sext.Sext._
+import sext._
 
 sealed case class Column
   ( name : String,

@@ -7,7 +7,7 @@ import samples._
 import save._
 import structure._
 import mapping._
-import sext.Sext._
+import sext._
 import Sorm._
 
 object TestingInstance {

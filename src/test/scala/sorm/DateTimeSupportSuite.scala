@@ -5,7 +5,7 @@ import org.scalatest.matchers.ShouldMatchers
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 
-import sext.Sext._
+import sext._
 
 import samples._
 import org.joda.time.DateTime

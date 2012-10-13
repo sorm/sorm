@@ -11,7 +11,7 @@ import structure.mapping._
 import jdbc._
 import create._
 import drop._
-import sext.Sext._
+import sext._
 
 import com.weiglewilczek.slf4s.Logging
 

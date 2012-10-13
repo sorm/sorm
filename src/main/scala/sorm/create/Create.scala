@@ -4,7 +4,7 @@ import sorm._
 import structure._
 import mapping._
 import jdbc._
-import sext.Sext._
+import sext._
 
 object Create {
 

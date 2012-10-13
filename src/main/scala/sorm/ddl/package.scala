@@ -1,6 +1,6 @@
 package sorm
 
-import sext.Sext._
+import sext._
 
 package object ddl {
 //  def quote ( x : String ) = "`" + x + "`"

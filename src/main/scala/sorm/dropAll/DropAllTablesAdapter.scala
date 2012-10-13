@@ -3,7 +3,7 @@ package sorm.dropAll
 import sorm._
 import core.SormException
 import jdbc._
-import sext.Sext._
+import sext._
 
 trait DropAllTablesAdapter extends ConnectionAdapter {
   def dropAllTables() {

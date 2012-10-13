@@ -11,7 +11,7 @@ import structure._
 import mapping._
 import jdbc._
 import resultSet._
-import sext.Sext._
+import sext._
 
 import query.Query._
 

@@ -2,7 +2,7 @@ package sorm.persisted
 
 import sorm._
 import reflection._
-import sext.Sext._
+import sext._
 import com.weiglewilczek.slf4s.Logging
 
 object PersistedClass extends Logging {

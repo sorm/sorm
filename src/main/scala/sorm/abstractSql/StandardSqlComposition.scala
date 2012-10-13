@@ -2,7 +2,7 @@ package sorm.abstractSql
 
 import sorm._
 import sql._
-import sext.Sext._
+import sext._
 
 import sql.Compositing._
 

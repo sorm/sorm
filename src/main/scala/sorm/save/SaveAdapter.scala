@@ -6,7 +6,7 @@ import mapping._
 import jdbc._
 import save._
 import persisted._
-import sext.Sext._
+import sext._
 
 /**
  * This implementation is based on strict rules about how statements are resolved to whether be Update or Insert. These are:

@@ -36,7 +36,7 @@ class SophisticatedDomainSuite extends FunSuite with ShouldMatchers {
       new Instance(
         Set(
           Entity[Settings](),
-          Entity[Task]( indexes = Set(Seq("opened"), Seq("closed")) ),
+          Entity[Task]( indexed = Set(Seq("opened"), Seq("closed")) ),
           Entity[Album](),
           Entity[Track](),
           Entity[Genre]( unique = Set(Seq("name")) ),
@@ -50,7 +50,7 @@ class SophisticatedDomainSuite extends FunSuite with ShouldMatchers {
   test("Correct instantiation doesn't throw exceptions"){
     new Instance(
       Entity[Settings]() +:
-      Entity[Task]( indexes = Set(Seq("opened"), Seq("closed")) ) +:
+      Entity[Task]( indexed = Set(Seq("opened"), Seq("closed")) ) +:
       Entity[Album]() +:
       Entity[Track]() +:
       Entity[Genre]() +:

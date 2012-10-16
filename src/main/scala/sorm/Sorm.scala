@@ -184,7 +184,7 @@ object Sorm {
   object Entity {
     /**
      * Entity settings. Used for registring entities with the SORM instance.
-     * @param indexes
+     * @param indexed
      * Fields of case class on which the filtering operations will be performed
      * when querying the db. Specifying those may help the DB to perform a little
      * better.
@@ -197,10 +197,10 @@ object Sorm {
      */
     def apply
       [ T : TypeTag ]
-      ( indexes    : Set[Seq[String]] = Set(),
+      ( indexed : Set[Seq[String]] = Set(),
         unique : Set[Seq[String]] = Set() )
       : Entity
-      = Entity(Reflection[T], indexes, unique)
+      = Entity(Reflection[T], indexed, unique)
   }
 
   /**

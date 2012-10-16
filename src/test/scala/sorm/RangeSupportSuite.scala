@@ -22,12 +22,12 @@ class RangeSupportSuite extends FunSuite with ShouldMatchers {
     db.save(A( 9 to 1 ))
   }
   test("saved entities are correct"){
-    db.fetchById[A](1).get.a should equal (2 to 4)
-    db.fetchById[A](2).get.a should equal (9 to 1)
+    db.fetchById[A](1).a should equal (2 to 4)
+    db.fetchById[A](2).a should equal (9 to 1)
   }
   test("equality filter"){
-    db.all[A]
-      .filterEqual("a", 2 to 4)
+    db.access[A]
+      .whereEqual("a", 2 to 4)
       .fetch()
       .map(_.id.toInt)
       .should(
@@ -37,7 +37,7 @@ class RangeSupportSuite extends FunSuite with ShouldMatchers {
   }
   test("0 to 0 range"){
     val a = db.save(A(0 to 0))
-    db.fetchById[A](a.id).get.a should equal (0 to 0)
+    db.fetchById[A](a.id).a should equal (0 to 0)
   }
 
 }

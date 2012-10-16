@@ -119,8 +119,8 @@ Guess what, that's it! We now have an up and running database connection with a 
 ###Now let's fetch some data from our populated database:
 
     //  get an artist by id:
-    db.one[Artist].filterEquals("id", 2).fetch() // will return Nirvana
+    db.access[Artist].whereEquals("id", 2).fetchOne() // will return Nirvana
 
     //  all artists having a style that has `Hard Rock` in a list of its names
-    db.all[Artist].filterEquals("names.value.item.value", "Hard Rock").fetch()
+    db.access[Artist].whereEquals("names.value.item.value", "Hard Rock").fetch()
 

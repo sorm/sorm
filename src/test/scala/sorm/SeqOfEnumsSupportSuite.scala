@@ -25,40 +25,40 @@ class SeqOfEnumsSupportSuite extends FunSuite with ShouldMatchers {
   val a5 = db.save(A(Nil))
 
   test("Equal query"){
-    db.all[A].filterEqual("a", Seq(B.Two)).fetch()
+    db.access[A].whereEqual("a", Seq(B.Two)).fetch()
       .should(
         have size (2) and
         contain (a4)
       )
   }
   test("Equal empty Seq query"){
-    db.all[A].filterEqual("a", Seq()).fetch()
+    db.access[A].whereEqual("a", Seq()).fetch()
       .should(
         contain (a5) and not contain (a4)
       )
   }
   test("Not equals empty Seq query"){
-    db.all[A].filterNotEqual("a", Seq()).fetch()
+    db.access[A].whereNotEqual("a", Seq()).fetch()
       .should(
         not be 'empty and
         not contain (a5)
       )
   }
   test("Not equals query"){
-    db.all[A].filterNotEqual("a", Seq(B.Three)).fetch()
+    db.access[A].whereNotEqual("a", Seq(B.Three)).fetch()
       .should(
         not be 'empty and
         not contain (a3)
       )
   }
   test("Equal inexistent Seq query"){
-    db.all[A].filterEqual("a", Seq(B.Three, B.Three)).fetch()
+    db.access[A].whereEqual("a", Seq(B.Three, B.Three)).fetch()
       .should(
         be ('empty)
       )
   }
   test("Not equals inexistent Seq query"){
-    db.all[A].filterNotEqual("a", Seq(B.Three, B.Three)).fetch()
+    db.access[A].whereNotEqual("a", Seq(B.Three, B.Three)).fetch()
       .should(
         not be ('empty)
       )

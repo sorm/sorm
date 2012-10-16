@@ -22,10 +22,10 @@ class InFilterTest extends FunSuite with ShouldMatchers {
 
 
   test("empty value"){
-    db.one[A].filterIn("a", Seq()).fetch().should(equal(None))
+    db.access[A].whereIn("a", Seq()).fetchOne().should(equal(None))
   }
   test("valid value"){
-    db.one[A].filterIn("a", Seq(2)).fetch().should(equal(Some(a2)))
+    db.access[A].whereIn("a", Seq(2)).fetchOne().should(equal(Some(a2)))
   }
 
 }

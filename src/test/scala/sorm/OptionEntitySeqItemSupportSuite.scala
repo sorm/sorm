@@ -34,14 +34,14 @@ class OptionEntitySeqItemSupportSuite extends FunSuite with ShouldMatchers {
     db.save(A( Seq(None) ))
   }
   test("empty seq"){
-    db.fetchById[A](1).get.seq should be === Seq()
+    db.fetchById[A](1).seq should be === Seq()
   }
   test("seq of none"){
-    db.fetchById[A](4).get.seq should be === Seq(None)
+    db.fetchById[A](4).seq should be === Seq(None)
   }
   test("not empty seqs are correct"){
-    db.fetchById[A](2).get.seq should be === Seq(Some(b1), None, Some(b2))
-    db.fetchById[A](3).get.seq should be === Seq(None, Some(b2))
+    db.fetchById[A](2).seq should be === Seq(Some(b1), None, Some(b2))
+    db.fetchById[A](3).seq should be === Seq(None, Some(b2))
   }
 
 }

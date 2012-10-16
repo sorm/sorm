@@ -30,6 +30,7 @@ class Access [ T <: AnyRef : TypeTag ] ( query : Query, driver : Driver ) {
   def count () : Int 
     = fetchIds().size
 
+  //  todo: implement effective version
   def exists () : Boolean
     = fetchOneId().nonEmpty
 
@@ -47,7 +48,7 @@ class Access [ T <: AnyRef : TypeTag ] ( query : Query, driver : Driver ) {
       offset  : Int           = query.offset )
     = Query(query.mapping, where, order, amount, offset) $ (new Access[T](_, driver))
 
-  def order ( p : String, reverse : Boolean = false )
+  def order ( p : String, reverse : Boolean = false ) : Access[T]
     = query.order.toVector :+ Order(Path.mapping(query.mapping, p), reverse) $ (x => copy(order = x))
 
   def amount ( amount : Int ) = amount $ (Some(_)) $ (x => copy(amount = x))

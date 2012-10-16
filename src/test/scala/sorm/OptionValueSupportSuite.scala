@@ -30,23 +30,23 @@ class OptionValueSupportSuite extends FunSuite with ShouldMatchers {
     db.save(EntityWithValuePropertyInOption(Some(7)))
   }
   test("saved entities are correct"){
-    db.fetchById[EntityWithValuePropertyInOption](1).get.a should be === None
-    db.fetchById[EntityWithValuePropertyInOption](2).get.a should be === Some(3)
-    db.fetchById[EntityWithValuePropertyInOption](3).get.a should be === Some(7)
+    db.fetchById[EntityWithValuePropertyInOption](1).a should be === None
+    db.fetchById[EntityWithValuePropertyInOption](2).a should be === Some(3)
+    db.fetchById[EntityWithValuePropertyInOption](3).a should be === Some(7)
   }
   test("equals filter"){
-    db.one[EntityWithValuePropertyInOption]
-      .filterEqual("a", None).fetch().get.id should be === 1
-    db.one[EntityWithValuePropertyInOption]
-      .filterEqual("a", Some(3)).fetch().get.id should be === 2
+    db.access[EntityWithValuePropertyInOption]
+      .whereEqual("a", None).fetchOne().get.id should be === 1
+    db.access[EntityWithValuePropertyInOption]
+      .whereEqual("a", Some(3)).fetchOne().get.id should be === 2
   }
   test("not equals filter"){
-    db.all[EntityWithValuePropertyInOption]
-      .filterNotEqual("a", None)
+    db.access[EntityWithValuePropertyInOption]
+      .whereNotEqual("a", None)
       .fetch().map{_.id.toInt}.toSet
       .should( not contain (1) and contain (3) and contain (2) )
-    db.all[EntityWithValuePropertyInOption]
-      .filterNotEqual("a", Some(3))
+    db.access[EntityWithValuePropertyInOption]
+      .whereNotEqual("a", Some(3))
       .fetch().map{_.id.toInt}.toSet
       .should( not contain (2) and contain (1) and contain (3) )
   }

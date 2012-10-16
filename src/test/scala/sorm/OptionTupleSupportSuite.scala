@@ -29,13 +29,13 @@ class OptionTupleSupportSuite extends FunSuite with ShouldMatchers {
   db.save(A( Some(56 -> Some("asdf")) ))
 
   test("top none"){
-    db.fetchById[A](1).get.a should be === None
+    db.fetchById[A](1).a should be === None
   }
   test("deep none"){
-    db.fetchById[A](2).get.a should be === Some(2 -> None)
+    db.fetchById[A](2).a should be === Some(2 -> None)
   }
   test("deep some"){
-    db.fetchById[A](3).get.a should be === Some(56 -> Some("asdf"))
+    db.fetchById[A](3).a should be === Some(56 -> Some("asdf"))
   }
 
 }

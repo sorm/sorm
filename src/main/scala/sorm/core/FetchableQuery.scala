@@ -15,14 +15,13 @@ class FetchableQuery
     def fetch() = fetchFunction(query)
 
     private def copy
-      ( kind    : Kind          = query.kind,
-        mapping : TableMapping  = query.mapping,
+      ( mapping : EntityMapping = query.mapping,
         where   : Option[Where] = query.where,
         order   : Seq[Order]    = query.order,
         limit   : Option[Int]   = query.limit,
         offset  : Int           = query.offset )
       = new FetchableQuery[T](
-          Query(kind, mapping, where, order, limit, offset),
+          Query(mapping, where, order, limit, offset),
           fetchFunction
         )
 

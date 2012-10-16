@@ -31,6 +31,8 @@ trait Api extends Logging with CurrentDateTime {
       mapping(Reflection[T].mixinBasis)
     }
 
+  def access [ T <: AnyRef : TypeTag ] = Access[T](mapping, driver)
+
   def save
     [ T <: AnyRef : TypeTag ]
     ( value : T )
@@ -48,14 +50,14 @@ trait Api extends Logging with CurrentDateTime {
   def all
     [ T <: AnyRef : TypeTag ]
     = new FetchableQuery(
-        Query(Kind.Select, mapping[T]),
+        Query(mapping[T]),
         fetch[T]
       )
 
   def one
     [ T <: AnyRef : TypeTag ]
     = new FetchableQuery(
-        Query(Kind.Select, mapping[T], limit = Some(1)),
+        Query(mapping[T], limit = Some(1)),
         ( q : Query ) => fetch[T](q).headOption
       )
 
@@ -64,7 +66,7 @@ trait Api extends Logging with CurrentDateTime {
     = {
       logger.warn("Effective `count` query is not yet implemented. Using ineffective version")
       new FetchableQuery(
-        Query(Kind.Select, mapping[T]),
+        Query(mapping[T]),
         fetch[T] _ andThen (_.size)
       )
     }
@@ -74,7 +76,7 @@ trait Api extends Logging with CurrentDateTime {
     = {
       logger.warn("Effective `exists` query is not yet implemented. Using ineffective version")
       new FetchableQuery(
-        Query(Kind.Select, mapping[T], limit = Some(1)),
+        Query(mapping[T], limit = Some(1)),
         fetch[T] _ andThen (_.nonEmpty)
       )
     }
@@ -95,7 +97,7 @@ trait Api extends Logging with CurrentDateTime {
     = {
       val t = typeTag[T]
       new FetchableQuery(
-        Query(Kind.Select, mapping[T], limit = Some(1)),
+        Query(mapping[T], limit = Some(1)),
         q => transaction {
           fetch[T](q).headOption.map(_.id).map(Persisted(v, _)) match {
             case Some(p) => save(p)(t.asInstanceOf[TypeTag[T with Persisted]])

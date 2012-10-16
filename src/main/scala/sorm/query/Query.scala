@@ -5,11 +5,12 @@ import reflection._
 import mappings._
 import sext._
 
+// todo: get rid of mappings, leave only string queries, delaying the mapping resolution to deeper apis
 object Query {
 
+  //  ideas : introduce FetchQuery, CountQuery, ExistsQuery and Update and Insert - basically, make querying an abstraction for all mapping-oriented manipulations
   sealed case class Query
-    ( kind    : Kind,
-      mapping : TableMapping,
+    ( mapping : EntityMapping,
       where   : Option[Where] = None,
       order   : Seq[Order] = Nil,
       limit   : Option[Int] = None,

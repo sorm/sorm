@@ -26,7 +26,7 @@ class DateTimeSupportSuite extends FunSuite with ShouldMatchers {
 
   test("Api dateTime")(pending)
   test("Larger filter"){
-    db.all[A].filterLarger("a", date.minusSeconds(1)).fetch()
+    db.access[A].whereLarger("a", date.minusSeconds(1)).fetch()
       .should(
         contain(a1) and contain(a2) and not contain(a3) and not contain(a4)
       )

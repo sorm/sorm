@@ -18,7 +18,7 @@ class SophisticatedDomainSuite extends FunSuite with ShouldMatchers {
       Entity[Task]( unique = Set(Seq("opened"), Seq("closed")) )
     )
     db.save(Task(PageType.Album, "", db.dateTime))
-    db.fetchById[Task](1l).get.closed should equal(None)
+    db.fetchById[Task](1l).closed should equal(None)
   }
   test("Unique keys support"){
     val db = TestingInstance.h2(

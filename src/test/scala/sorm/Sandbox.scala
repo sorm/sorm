@@ -17,7 +17,7 @@ object Sandbox extends App {
   val a = db.save(A( 23 ))
 
   db.save(a)
-//  db.overwrite(a.copy(a = 312)).filterEqual("id", 1).fetch()
-//  db.overwrite(A( 123 )).filterEqual("id", 1).fetch()
+//  db.overwrite(a.copy(a = 312)).whereEqual("id", 1).fetch()
+//  db.overwrite(A( 123 )).whereEqual("id", 1).fetch()
 
 }

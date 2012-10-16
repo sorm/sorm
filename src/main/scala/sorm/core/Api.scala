@@ -21,13 +21,13 @@ trait Api extends Logging with CurrentDateTime {
   private def mapping
     [ T : TypeTag ]
     = {
-      def mapping( r : Reflection ) =
-        mappings.get(r)
-          .getOrElse {
-            throw new SormException(
-              "Entity `" + r.name + "` is not registered"
-            )
-          }
+      def mapping( r : Reflection ) 
+        = mappings.get(r)
+            .getOrElse {
+              throw new SormException(
+                "Entity `" + r.name + "` is not registered"
+              )
+            }
       mapping(Reflection[T].mixinBasis)
     }
 

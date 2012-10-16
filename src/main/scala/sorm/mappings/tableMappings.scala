@@ -15,13 +15,13 @@ sealed trait TableMapping extends CompositeMapping with Querying {
   def generatedColumns : Stream[Column]
   override lazy val tableColumns = generatedColumns ++: mappings.flatMap(_.columnsForContainer)
 
-  def uniqueKeys : Set[Seq[String]] = Set()
-  def indexes : Set[Seq[String]] = Set()
+  def uniqueKeysColumnNames : Set[Seq[String]] = Set()
+  def indexesColumnNames : Set[Seq[String]] = Set()
 
   lazy val containedForeignKeys : Stream[ForeignKey]
     = containedTableMappings collect { case m : MasterTableMapping => m.foreignKeyForContainer }
 
-  lazy val table = Table(tableName, primaryKeyColumns ++: tableColumns distinct, primaryKeyColumnNames, uniqueKeys, indexes, foreignKeys)
+  lazy val table = Table(tableName, primaryKeyColumns ++: tableColumns distinct, primaryKeyColumnNames, uniqueKeysColumnNames, indexesColumnNames, foreignKeys)
 
   lazy val primaryKeyColumnNames = primaryKeyColumns.map(_.name)
 

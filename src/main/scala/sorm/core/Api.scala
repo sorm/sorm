@@ -31,7 +31,14 @@ trait Api extends Logging with CurrentDateTime {
       mapping(Reflection[T].mixinBasis)
     }
 
-  def access [ T <: AnyRef : TypeTag ] = Access[T](mapping, driver)
+  def access [ T <: AnyRef : TypeTag ] 
+    = Access[T](mapping, driver)
+
+  def fetchById
+    [ T <: AnyRef : TypeTag ]
+    ( id : Long )
+    : T with Persisted
+    = id $ ("id" -> _) $ (Map(_)) $ (mapping[T].fetchByPrimaryKey(_).asInstanceOf[T with Persisted])
 
   def save
     [ T <: AnyRef : TypeTag ]
@@ -41,71 +48,29 @@ trait Api extends Logging with CurrentDateTime {
         mapping[T].save(value).asInstanceOf[T with Persisted]
       }
 
-  private def fetch [ T <: AnyRef ] ( q : Query ) : Seq[T with Persisted]
-    = {
-      val ids = q $ AbstractSqlComposition.primaryKeySelect $ (driver.query(_)(_.byNameRowsTraversable.toList)) $ (_.toStream)
-      ids.map(q.mapping.fetchByPrimaryKey(_).asInstanceOf[T with Persisted])
-    }
-
-  def all
-    [ T <: AnyRef : TypeTag ]
-    = new FetchableQuery(
-        Query(mapping[T]),
-        fetch[T]
-      )
-
-  def one
-    [ T <: AnyRef : TypeTag ]
-    = new FetchableQuery(
-        Query(mapping[T], limit = Some(1)),
-        ( q : Query ) => fetch[T](q).headOption
-      )
-
-  def count
-    [ T <: AnyRef : TypeTag ]
-    = {
-      logger.warn("Effective `count` query is not yet implemented. Using ineffective version")
-      new FetchableQuery(
-        Query(mapping[T]),
-        fetch[T] _ andThen (_.size)
-      )
-    }
-
-  def exists
-    [ T <: AnyRef : TypeTag ]
-    = {
-      logger.warn("Effective `exists` query is not yet implemented. Using ineffective version")
-      new FetchableQuery(
-        Query(mapping[T], limit = Some(1)),
-        fetch[T] _ andThen (_.nonEmpty)
-      )
-    }
-
-  def fetchById
-    [ T <: AnyRef : TypeTag ]
-    ( id : Long )
-    : Option[T with Persisted]
-    = one[T].filterEqual("id", id).fetch()
-
   /**
-   * Returns a query which when executed either updates the matched result with
-   * the value or just saves the value
+   * Safely saves
+   * @param v
+   * @tparam T
+   * @return
    */
-  def overwrite
+  def saveByUniqueKeys
     [ T <: AnyRef : TypeTag ]
     ( v : T )
-    = {
-      val t = typeTag[T]
-      new FetchableQuery(
-        Query(mapping[T], limit = Some(1)),
-        q => transaction {
-          fetch[T](q).headOption.map(_.id).map(Persisted(v, _)) match {
-            case Some(p) => save(p)(t.asInstanceOf[TypeTag[T with Persisted]])
-            case None => save(v)
+    : T with Persisted
+    = (mapping[T].uniqueKeys.flatten zipBy v.reflected.propertyValue)
+        //  todo: check the unique entities
+        .ensuring(_.nonEmpty, "Type doesn't have unique keys")
+        .foldLeft(access){ case (access, (n, v)) => access.whereEqual(n, v) }
+        .$(access =>
+          transaction {
+            access.fetchOneId()
+              .map(Persisted(v, _))
+              .getOrElse(v)
+              .$(mapping[T].save(_).asInstanceOf[T with Persisted])
           }
-        }
-      )
-    }
+        )
+
 
   def transaction [ T ] ( t : => T ) : T = driver.transaction(t)
   def transaction [ T ] ( t : Api => T ) : T = driver.transaction(t(this))

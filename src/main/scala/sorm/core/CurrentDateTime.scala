@@ -9,10 +9,12 @@ trait CurrentDateTime {
   private lazy val deviation
     = System.currentTimeMillis - driver.now().getMillis
 
+  /**
+   * Current time at DB server in milliseconds. Effectively fetches the date only once to calculate the deviation.
+   */
   def millis = System.currentTimeMillis - deviation
   /**
-   * Current DateTime at DB server. Effectively fetches the date only once to
-   * calculate the deviation.
+   * Current DateTime at DB server. Effectively fetches the date only once to calculate the deviation.
    */
   def dateTime = new DateTime(millis)
 

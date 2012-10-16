@@ -12,28 +12,55 @@ object Access {
   def apply [ T <: AnyRef : TypeTag ] ( mapping : EntityMapping, driver : Driver )
     = new Access[T]( Query(mapping), driver )
 }
+//  alternative titles: QueryApi
 class Access [ T <: AnyRef : TypeTag ] ( query : Query, driver : Driver ) {
 
+  /**
+   * Fetch matching entities from db.
+   * @return A stream of entity instances with [[sorm.persisted.Persisted]] mixed in
+   */
   def fetch () : Stream[T with Persisted]
     = fetchIds().map("id" -> _).map(Map(_)).map(query.mapping.fetchByPrimaryKey(_).asInstanceOf[T with Persisted])
 
+  /**
+   * Fetch ids of matching entities stored in db.
+   * @return A stream of ids
+   */
   def fetchIds () : Stream[Long]
     = query $ AbstractSqlComposition.primaryKeySelect $ (driver.query(_)(_.byNameRowsTraversable.toList)) $ (_.toStream) map (_("id").asInstanceOf[Long])
 
+  /**
+   * Fetch only one entity ensuring that `amount(1)` is applied to the query.
+   * @return An option of entity instance with [[sorm.persisted.Persisted]] mixed in
+   */
   def fetchOne () : Option[T with Persisted]
     = amount(1).fetch().headOption
     
+  /**
+   * Fetch only one id ensuring that `amount(1)` is applied to the query.
+   */
   def fetchOneId () : Option[Long]
     = amount(1).fetchIds().headOption
 
+  /**
+   * Fetch a number of matching entities stored in db.
+   */
   //  todo: implement effective version
   def count () : Int 
     = fetchIds().size
 
+  /**
+   * Fetch a boolean value indicating whether any matching entities are stored in db.
+   */
   //  todo: implement effective version
   def exists () : Boolean
     = fetchOneId().nonEmpty
 
+  /**
+   * Replace all matching entities stored in db with the value provided
+   * @param value A value to replace the existing entities with
+   * @return A list of saved entities with [[sorm.persisted.Persisted]] mixed in
+   */
   def replace ( value : T ) : List[T with Persisted]
     = driver.transaction {
         fetchIds().map(Persisted(value, _)).map(query.mapping.save(_).asInstanceOf[T with Persisted]).toList
@@ -51,10 +78,22 @@ class Access [ T <: AnyRef : TypeTag ] ( query : Query, driver : Driver ) {
   def order ( p : String, reverse : Boolean = false ) : Access[T]
     = query.order.toVector :+ Order(Path.mapping(query.mapping, p), reverse) $ (x => copy(order = x))
 
+  /**
+   * Limit the amount of entities to be fetched
+   */
   def amount ( amount : Int ) = amount $ (Some(_)) $ (x => copy(amount = x))
 
+  /**
+   * Set the amount of first results to skip
+   */
   def offset ( offset : Int ) = offset $ (x => copy(offset = x))
 
+  /**
+   * Return a copy of this `Access` object with a filter generated from DSL.
+   *
+   * Usage of this method should be accompanied with {{import sorm.Sorm.FilterDsl._}}
+   * 
+   */
   def where ( f : ApiFilter.Filter )
     : Access[T]
     = {
@@ -87,6 +126,13 @@ class Access [ T <: AnyRef : TypeTag ] ( query : Query, driver : Driver ) {
     : Access[T]
     = Path.where(query.mapping, p, v, o) $ where
 
+  /**
+   * Return a copy of this `Access` object with an equality filter applied. 
+   * 
+   * @param p A string indicating a path to the property on which to filter
+   * @param v A value to compare with
+   * @return A new instance of `Access` with this filter applied 
+   */
   def whereEqual ( p : String, v : Any )
     = where( p, v, Operator.Equal )
 

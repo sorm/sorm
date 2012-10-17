@@ -37,5 +37,6 @@ object Driver {
     = DbType.byUrl(url) match {
         case DbType.Mysql => new drivers.Mysql(url, user, password)
         case DbType.H2 => new drivers.H2(url, user, password)
+        case _ => throw new SormException("Unsupported db type")
       }
 }

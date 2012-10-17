@@ -13,29 +13,6 @@ import com.weiglewilczek.slf4s.Logging
 
 object AbstractSqlComposition extends Logging {
 
-//  def resultSetSelect
-//    ( query : Query )
-//    : AS.Statement
-//    = selectWithOrder(query) &&!
-//      ( limitSelect(query) ++
-//        query.where.map{filtersStatement} reduceOption ( _ & _ ) )
-//
-//  def selectWithOrder
-//    ( query : Query )
-//    : AS.Select
-//    = (query.mapping.abstractSqlResultSetSelect /: query.order.notEmpty){ case (s, o) =>
-//        s.copy(
-//          order
-//            = o.map{ case Order(m, r) =>
-//                AS.Order(
-//                  m.containerTableMapping.get.abstractSqlTable,
-//                  m.memberName,
-//                  r
-//                )
-//              }
-//        )
-//      }
-
   def primaryKeySelect
     ( query : Query )
     : AS.Statement

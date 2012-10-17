@@ -38,8 +38,13 @@ trait MasterTableMapping extends TableMapping {
         primaryKeyColumnNames.map(n => memberName + "$" + n -> n),
         ReferenceOption.Cascade
       )
+  private lazy val nullable
+    = ancestors
+        .takeWhile(!_.isInstanceOf[TableMapping])
+        .exists(_.isInstanceOf[OptionToNullableMapping])
   override lazy val columnsForContainer : Stream[Column]
     = primaryKeyColumns.map(c => c.copy(
+        nullable = nullable,
         autoIncrement = false,
         name = memberName + "$" + c.name
       ))

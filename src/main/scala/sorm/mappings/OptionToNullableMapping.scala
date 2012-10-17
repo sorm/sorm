@@ -29,11 +29,11 @@ class OptionToNullableMapping
         }
 
     override def update ( value : Any, masterKey : Stream[Any] ) {
-      value.asInstanceOf[T].getOrElse(null) $ (item.update(_, masterKey))
+      value.asInstanceOf[T] foreach (item.update(_, masterKey))
     }
 
     override def insert ( value : Any, masterKey : Stream[Any] ) {
-      value.asInstanceOf[T].getOrElse(null) $ (item.insert(_, masterKey))
+      value.asInstanceOf[T] foreach (item.insert(_, masterKey))
     }
 
 

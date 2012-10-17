@@ -61,7 +61,7 @@ class ValueMapping
                   s.indexes.view.flatten.exists(_ == n)
                 case Membership.TupleItem(_, m) =>
                   isKeyPart(m)
-                case Membership.OptionItem(m) =>
+                case Membership.OptionToTableItem(m) =>
                   isKeyPart(m)
                 case _ =>
                   false

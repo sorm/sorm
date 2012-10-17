@@ -109,7 +109,9 @@ object Path {
             case None =>
               throw new SormException("Unparseable tuple item id `" + id + "` in path `" + path + "` of `" + host + "`")
           }
-        case (host : OptionMapping, ("item", remainder)) =>
+        case (host : OptionToNullableMapping, ("item", remainder)) =>
+          mapping( host.item, remainder )
+        case (host : OptionToTableMapping, ("item", remainder)) =>
           mapping( host.item, remainder )
         case (host : SeqMapping, ("item", remainder)) =>
           mapping( host.item, remainder )

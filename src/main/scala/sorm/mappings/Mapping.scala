@@ -27,7 +27,9 @@ trait Mapping {
             ddlName(name)
           case Membership.TupleItem(index, tuple) =>
             tuple.memberName + "$" + index
-          case Membership.OptionItem(option) =>
+          case Membership.OptionToTableItem(option) =>
+            option.memberName
+          case Membership.OptionToNullableItem(option) =>
             option.memberName
           case Membership.SeqItem(_) =>
             "v"
@@ -75,8 +77,10 @@ object Mapping {
           new MapMapping( reflection, membership, settings, driver )
         case MappingKind.Entity => 
           new EntityMapping( reflection, membership, settings, driver )
-        case MappingKind.Option => 
-          new OptionMapping( reflection, membership, settings, driver )
+        case MappingKind.OptionToTable =>
+          new OptionToTableMapping( reflection, membership, settings, driver )
+        case MappingKind.OptionToNullable =>
+          new OptionToNullableMapping( reflection, membership, settings, driver )
         case MappingKind.Enum =>
           new EnumMapping( reflection, membership, settings, driver )
         case MappingKind.Range =>

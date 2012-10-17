@@ -1,5 +1,6 @@
 package sorm.mappings
 
+import sext._
 import sorm._
 import reflection._
 
@@ -7,18 +8,20 @@ sealed trait MappingKind
 
 object MappingKind {
 
-  case object Enum   extends MappingKind
-  case object Entity extends MappingKind
-  case object Value  extends MappingKind
-  case object Tuple  extends MappingKind
-  case object Option extends MappingKind
-  case object Seq    extends MappingKind
-  case object Set    extends MappingKind
-  case object Map    extends MappingKind
-  case object Range  extends MappingKind
+  case object Enum             extends MappingKind
+  case object Entity           extends MappingKind
+  case object Value            extends MappingKind
+  case object Tuple            extends MappingKind
+  case object OptionToTable    extends MappingKind
+  case object OptionToNullable extends MappingKind
+  case object Seq              extends MappingKind
+  case object Set              extends MappingKind
+  case object Map              extends MappingKind
+  case object Range            extends MappingKind
 
   def apply
     ( reflection : Reflection )
+    : MappingKind
     = reflection match {
         case _
           if reflection <:< Reflection[scala.Range]
@@ -34,7 +37,11 @@ object MappingKind {
           => Map
         case _
           if reflection <:< Reflection[scala.Option[_]]
-          => Option
+          =>
+          if( MappingKind(reflection.generics(0)) $ scala.Seq(Seq, Set, Map, OptionToTable, OptionToNullable).contains )
+            OptionToTable
+          else
+            OptionToNullable
         case _
           if (reflection <:< Reflection[AnyVal])
           || (reflection <:< Reflection[String])

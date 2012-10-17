@@ -12,7 +12,10 @@ trait ColumnMapping extends Mapping {
   lazy val column
     = Column(memberName, columnType, autoIncremented, nullable)
 
-  lazy val nullable = false
+  lazy val nullable
+    = ancestors
+        .takeWhile(!_.isInstanceOf[TableMapping])
+        .exists(_.isInstanceOf[OptionToNullableMapping])
 
   def columnType : ColumnType
 

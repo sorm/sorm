@@ -6,7 +6,7 @@ import core._
 import jdbc.ResultSetView
 import reflection._
 
-class OptionMapping
+class OptionToTableMapping
   ( val reflection : Reflection,
     val membership : Option[Membership],
     val settings : Map[Reflection, EntitySettings],
@@ -14,7 +14,7 @@ class OptionMapping
   extends SlaveTableMapping
   {
 
-    lazy val item = Mapping( reflection.generics(0), Membership.OptionItem(this), settings, driver )
+    lazy val item = Mapping( reflection.generics(0), Membership.OptionToTableItem(this), settings, driver )
     lazy val primaryKeyColumns = masterTableColumns
     lazy val generatedColumns = primaryKeyColumns
     lazy val mappings = item +: Stream()

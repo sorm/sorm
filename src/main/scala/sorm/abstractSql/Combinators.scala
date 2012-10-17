@@ -1,10 +1,12 @@
 package sorm.abstractSql
 
+import sext._
 import sorm.mappings._
 import sorm.persisted._
 
 import sorm.abstractSql.AbstractSql._
 import sorm.abstractSql.Compositing._
+import sorm.core.SormException
 
 object Combinators {
 
@@ -56,6 +58,7 @@ object Combinators {
             case m : SeqMapping => m.item
             case m : SetMapping => m.item
             case m : MapMapping => m.key
+            case _ => throw new SormException("including is unsupported by mapping `" + m + "`")
           }
       v.view
         .map{ equaling(item, _) }
@@ -105,10 +108,12 @@ object Combinators {
           v.productIterator.zipWithIndex
             .map{ case (v, i) => equaling(m.items(i), v) }
             .reduce{_ & _}
-        case (m : OptionMapping, None ) =>
+        case (m : OptionToNullableMapping, v : Option[_] ) =>
+          equaling(m.item, v.orNull)
+        case (m : OptionToTableMapping, None ) =>
           havingCount( m, 0 ) &&!
           havingNotEmptyContainer(m)
-        case (m : OptionMapping, Some(v) ) =>
+        case (m : OptionToTableMapping, Some(v) ) =>
           equaling(m.item, v) &&!
           havingNotEmptyContainer(m)
         case (m : SeqMapping, v : Seq[_]) =>
@@ -175,9 +180,11 @@ object Combinators {
           v.productIterator.zipWithIndex
             .map{ case (v, i) => notEqualing(m.items(i), v) }
             .reduce{_ | _}
-        case (m : OptionMapping, None ) =>
+        case (m : OptionToNullableMapping, v : Option[_] ) =>
+          notEqualing(m.item, v.orNull)
+        case (m : OptionToTableMapping, None ) =>
           havingCount(m, 1)
-        case (m : OptionMapping, Some(v) ) =>
+        case (m : OptionToTableMapping, Some(v) ) =>
           notEqualing(m.item, v) |! havingCount(m, 0)
         case (m : SeqMapping, v : Seq[_]) =>
           def disjoint

@@ -24,7 +24,7 @@ class DateTimeSupportSuite extends FunSuite with ShouldMatchers {
   val a4 = db.save(A(date.minusSeconds(50)))
 
 
-  test("Api dateTime")(pending)
+  test("Api now()")(pending)
   test("Larger filter"){
     db.access[A].whereLarger("a", date.minusSeconds(1)).fetch()
       .should(

@@ -86,6 +86,11 @@ trait Api extends Logging with CurrentDateTime {
           }
         )
 
+  def delete
+    [ T <: AnyRef : TypeTag ]
+    ( value : T )
+    = mapping[T].delete(value)
+
   /**
    * Perform several db-requests in a single transaction. This provides guarantees that nothing will be changed in between the db-requests in multi-treaded applications and that it will roll-back in case of any failure.
    *

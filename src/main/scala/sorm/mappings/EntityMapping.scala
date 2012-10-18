@@ -39,7 +39,7 @@ class EntityMapping
       case value : Persisted =>
         ("id" -> value.id) $ (Stream(_)) $ (tableName -> _) $$ driver.delete
       case _ =>
-        throw new SormException("Attempty to delete an unpersisted entity: " + value)
+        throw new SormException("Attempt to delete an unpersisted entity: " + value)
     }
   }
 

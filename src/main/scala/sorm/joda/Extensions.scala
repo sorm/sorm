@@ -1,9 +1,6 @@
 package sorm.joda
 
 import org.joda.time._
-
-import sorm._
-import core.SormException
 import sext._
 
 object Extensions {
@@ -13,9 +10,7 @@ object Extensions {
   }
 
   implicit class LocalDateToJava ( val self : LocalDate ) extends AnyVal {
-    def toJava
-      = try{ new java.sql.Date( self.year.get - 1900, self.monthOfYear.get - 1, self.dayOfMonth.get ) }
-        catch{ case e : Throwable => throw new SormException("Can't convert " + self + ". " + e.getMessage) }
+    def toJava = self.toDate.getTime $ (new java.sql.Date(_))
   }
 
   implicit class LocalTimeToJava ( val self : LocalTime ) extends AnyVal {

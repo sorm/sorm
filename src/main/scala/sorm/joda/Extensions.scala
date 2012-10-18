@@ -14,7 +14,7 @@ object Extensions {
 
   implicit class LocalDateToJava ( val self : LocalDate ) extends AnyVal {
     def toJava
-      = try{ new java.sql.Date( self.toDateTimeAtStartOfDay.getMillis ) }
+      = try{ new java.sql.Date( self.year.get - 1900, self.monthOfYear.get - 1, self.dayOfMonth.get ) }
         catch{ case e : Throwable => throw new SormException("Can't convert " + self + ". " + e.getMessage) }
   }
 

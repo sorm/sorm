@@ -98,20 +98,8 @@ object JdbcConnection {
       password : String )
     = {
       //  preload driver
-      DbType.byUrl(url) match {
-        case DbType.Mysql =>
-          Class.forName("com.mysql.jdbc.Driver")
-        case DbType.Postgres =>
-          Class.forName("org.postgresql.Driver")
-        case DbType.H2 =>
-          Class.forName("org.h2.Driver")
-        case DbType.Sqlite =>
-          Class.forName("org.sqlite.JDBC")
-        case DbType.Hsqldb =>
-          Class.forName("org.hsqldb.jdbcDriver")
-        case _ =>
-          ???
-      }
+      url $ DbType.byUrl $ DbType.driverClass $ Class.forName
+
       //  get it
       DriverManager.getConnection(url, user, password) $ (new JdbcConnection(_))
     }

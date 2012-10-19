@@ -30,4 +30,14 @@ object DbType {
         case u if u.startsWith("jdbc:db2:") => Db2
       }
 
+  def driverClass
+    ( t : DbType )
+    = t match {
+        case DbType.Mysql    => "com.mysql.jdbc.Driver"
+        case DbType.Postgres => "org.postgresql.Driver"
+        case DbType.H2       => "org.h2.Driver"
+        case DbType.Sqlite   => "org.sqlite.JDBC"
+        case DbType.Hsqldb   => "org.hsqldb.jdbcDriver"
+        case _               => ???
+      }
 }

@@ -14,5 +14,8 @@ object `package` {
       UPPER_CAMEL.to( LOWER_UNDERSCORE, string )
     }
 
+  case class EntitySettings
+    ( indexes       : Set[Seq[String]] = Set.empty,
+      uniqueKeys    : Set[Seq[String]] = Set.empty )
 
 }

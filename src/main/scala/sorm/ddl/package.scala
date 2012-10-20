@@ -1,8 +1,8 @@
-package sorm
+package sorm.ddl
 
 import sext._
 
-package object ddl {
+object `package` {
 
   case class Table
     ( name : String,

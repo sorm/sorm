@@ -1,4 +1,4 @@
-package sorm
+package sorm.mappings
 
 import sext._
 
@@ -6,7 +6,7 @@ import sorm._
 import reflection.Reflection
 import core._
 
-package object mappings {
+object `package` {
   def ddlName ( string : String )
     : String
     = {

@@ -42,6 +42,9 @@ object Sorm {
 
       protected[sorm] val connection = Connection(url, user, password)
 
+      //  Validate entities (must be prior to mappings creation due to possible mappingkind detection errors):
+      entities flatMap Initialization.errors map (new ValidationException(_)) foreach (throw _)
+
       protected[sorm] val mappings
         = {
           val settings
@@ -57,61 +60,15 @@ object Sorm {
         }
 
       // Validate input:
-      {
-        // All referred entities must be registered
-        {
-          mappings.values.foreach{ e =>
-            e.deepContainedMappings.collect{case m : EntityMapping => m}.foreach{ e1 =>
-              if( !mappings.contains(e1.reflection) )
-                throw new ValidationException("Entity `" + e1.reflection.name + "` is not registered, " + "but referred to in `" + e.reflection.name + "`")
-            }
-          }
-        }
-        // No reflection should be registered twice
-        {
-          val reflections = entities.toStream.map{_.reflection}
-          val diff = reflections.distinct diff reflections
-          if( diff != Stream() )
-            throw new ValidationException("Reflections registered twice: " + diff.mkString(", "))
-        }
-      }
+      mappings.values.toStream $ Initialization.errors map (new ValidationException(_)) foreach (throw _)
 
       // Initialize a db schema:
-      {
-        initMode match {
-          case InitMode.DropAllCreate =>
-            try {
-              connection.dropAllTables()
-            } catch {
-              case e : Throwable =>
-                logger.warn("Couldn't drop all tables. " + e.getMessage)
-            }
-            mappings.values $ Create.tables foreach connection.createTable
-          case InitMode.DropCreate =>
-            mappings.values $ Drop.tables map (_.name) foreach { n =>
-              try {
-                connection.dropTable(n)
-              } catch {
-                case e : Throwable =>
-                  logger.warn("Couldn't drop table `" + n + "`. " + e.getMessage)
-              }
-            }
-            mappings.values $ Create.tables foreach connection.createTable
-          case InitMode.Create =>
-            mappings.values $ Create.tables foreach { t =>
-              try { connection.createTable(t) }
-              catch { case e : Throwable => }
-            }
-          case InitMode.DoNothing =>
-        }
-      }
+      Initialization.initializeSchema(mappings.values, connection, initMode)
 
       // Precache persisted classes (required for multithreading)
-      {
-        entities.toStream
-          .map(_.reflection)
-          .foreach(PersistedClass.apply)
-      }
+      entities.toStream
+        .map(_.reflection)
+        .foreach(PersistedClass.apply)
 
     }
 
@@ -119,50 +76,6 @@ object Sorm {
     ( reflection    : Reflection,
       indexes       : Set[Seq[String]],
       uniqueKeys    : Set[Seq[String]] )
-    {
-      //  Validate input:
-      // TODO : should be moved to Instance which in its turn should factor validation out
-      {
-        lazy val descendats
-          = reflection.properties.values
-              .unfold( a => a.notEmpty.map(a => a -> a.flatMap(_.generics)) )
-              .flatten
-
-        descendats
-          .filter(r => r =:= Reflection[Any] || r =:= Reflection[AnyRef] || r =:= Reflection[AnyVal])
-          .foreach(r => throw new ValidationException(s"Specifying general types `Any`, `AnyRef` or `AnyVal` is not allowed."))
-
-        descendats
-          .filter(_ <:< Reflection[TraversableOnce[_]])
-          .filterNot(r =>
-            //  using java class to erase generics
-            r.javaClass == classOf[Seq[_]] ||
-            r.javaClass == classOf[Set[_]] ||
-            r.javaClass == classOf[Map[_, _]] ||
-            r.javaClass == classOf[Range]
-          )
-          .foreach(r =>
-            throw new ValidationException(
-              s"Only general immutable `Seq`, `Set`, `Map` and `Range` are supported traversable types. `$r` detected instead"
-            )
-          )
-
-        ( indexes.view ++ uniqueKeys.view )
-          .flatten
-          .foreach{ p =>
-            if( !reflection.properties.contains(p) )
-              throw new ValidationException(s"Inexistent property: `$p`")
-          }
-
-        ( indexes.view ++ uniqueKeys.view )
-          .foreach{ ps =>
-            if( ps.distinct.size != ps.size )
-              throw new ValidationException(
-                "Not a distinct properties list: `" + ps.mkString(", ") + "`"
-              )
-          }
-      }
-    }
   object Entity {
     /**
      * Entity settings. Used for registring entities with the SORM instance.

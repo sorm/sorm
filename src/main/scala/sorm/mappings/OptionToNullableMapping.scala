@@ -3,6 +3,7 @@ package sorm.mappings
 import sext._
 
 import sorm._
+import connection.Connection
 import core._
 import reflection._
 
@@ -10,12 +11,12 @@ class OptionToNullableMapping
   ( val reflection : Reflection,
     val membership : Option[Membership],
     val settings : Map[Reflection, EntitySettings],
-    val driver : Driver )
+    val connection : Connection )
   extends CompositeMapping
   {
     type T = Option[_]
 
-    lazy val item = Mapping( reflection.generics(0), Membership.OptionToNullableItem(this), settings, driver )
+    lazy val item = Mapping( reflection.generics(0), Membership.OptionToNullableItem(this), settings, connection )
     lazy val mappings = item +: Stream()
 
     def valueFromContainerRow ( row : String => Any )

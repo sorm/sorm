@@ -8,6 +8,7 @@ import mappings._
 import jdbc._
 import tableSorters._
 import sext._
+import connection.Connection
 
 import com.weiglewilczek.slf4s.Logging
 
@@ -38,8 +39,7 @@ object Sorm {
     with Logging
     {
 
-      protected[sorm] val driver
-        = Driver(url, user, password)
+      protected[sorm] val connection = Connection(url, user, password)
 
       protected[sorm] val mappings
         = {
@@ -51,7 +51,7 @@ object Sorm {
                 .toMap
 
           settings.keys
-            .zipBy{ new EntityMapping(_, None, settings, driver) }
+            .zipBy{ new EntityMapping(_, None, settings, connection) }
             .toMap
         }
 
@@ -80,25 +80,25 @@ object Sorm {
         initMode match {
           case InitMode.DropAllCreate =>
             try {
-              driver.dropAllTables()
+              connection.dropAllTables()
             } catch {
               case e : Throwable =>
                 logger.warn("Couldn't drop all tables. " + e.getMessage)
             }
-            mappings.values $ Create.tables foreach driver.createTable
+            mappings.values $ Create.tables foreach connection.createTable
           case InitMode.DropCreate =>
             mappings.values $ Drop.tables map (_.name) foreach { n =>
               try {
-                driver.dropTable(n)
+                connection.dropTable(n)
               } catch {
                 case e : Throwable =>
                   logger.warn("Couldn't drop table `" + n + "`. " + e.getMessage)
               }
             }
-            mappings.values $ Create.tables foreach driver.createTable
+            mappings.values $ Create.tables foreach connection.createTable
           case InitMode.Create =>
             mappings.values $ Create.tables foreach { t =>
-              try { driver.createTable(t) }
+              try { connection.createTable(t) }
               catch { case e : Throwable => }
             }
           case InitMode.DoNothing =>

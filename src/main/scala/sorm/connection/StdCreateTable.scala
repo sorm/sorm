@@ -1,4 +1,4 @@
-package sorm.drivers
+package sorm.connection
 
 import sext._
 import sorm._

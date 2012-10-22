@@ -2,6 +2,7 @@ package sorm.mappings
 
 import sext._
 import sorm._
+import connection.Connection
 import core._
 import jdbc.ResultSetView
 
@@ -13,7 +14,7 @@ trait Querying {
   def containerTableMapping : Option[TableMapping]
   def tableName : String
   def tableColumns : Stream[ddl.Column]
-  def driver : Driver
+  def connection : Connection
   def bindingsToContainerTable : Stream[(String, String)]
   def primaryKeyColumnNames : Stream[String]
 
@@ -27,7 +28,7 @@ trait Querying {
         map {case (n, v) => Comparison(containerTable, n, Equal, v)}
         reduceOption And
         $ ( Select(columns, _) )
-        $ ( driver.query(_)(parseResultSet) )
+        $ ( connection.query(_)(parseResultSet) )
       )
     }
 
@@ -40,7 +41,7 @@ trait Querying {
         map {case (n, v) => Comparison(table, n, Equal, v)}
         reduceOption And 
         $ (Select(columns, _))
-        $ (driver.query(_)(parseResultSet))
+        $ (connection.query(_)(parseResultSet))
       )
     }
 

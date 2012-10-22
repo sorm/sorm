@@ -1,19 +1,20 @@
-package sorm.core
+package sorm.connection
 
 import sext._
+import org.joda.time.DateTime
 
 import sorm._
-import abstractSql.AbstractSql._
-import jdbc.ResultSetView
-import org.joda.time.DateTime
+import sorm.core._
+import sorm.abstractSql.AbstractSql._
+import sorm.jdbc.ResultSetView
 
 /**
  * An abstraction over jdbc connection, instances of which implement sql dialects of different databases
  */
-trait Driver {
+trait Connection {
   def query
-    [ T ] 
-    ( asql : Statement ) 
+    [ T ]
+    ( asql : Statement )
     ( parse : ResultSetView => T = (_ : ResultSetView).indexedRowsTraversable.toList )
     : T
   def now() : DateTime
@@ -32,11 +33,11 @@ trait Driver {
   def transaction [ T ] ( t : => T ) : T
   def createTable ( table : ddl.Table )
 }
-object Driver {
+object Connection {
   def apply ( url : String, user : String, password : String )
     = DbType.byUrl(url) match {
-        case DbType.Mysql => new drivers.Mysql(url, user, password)
-        case DbType.H2 => new drivers.H2(url, user, password)
+        case DbType.Mysql => new connection.Mysql(url, user, password)
+        case DbType.H2 => new connection.H2(url, user, password)
         case _ => throw new SormException("Unsupported db type")
       }
 }

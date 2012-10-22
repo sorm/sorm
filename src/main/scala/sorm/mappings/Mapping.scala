@@ -1,6 +1,7 @@
 package sorm.mappings
 
 import sorm._
+import connection.Connection
 import reflection.Reflection
 import core._
 import scala.Some
@@ -62,37 +63,37 @@ object Mapping {
     ( reflection : Reflection,
       membership : Option[Membership],
       settings : Map[Reflection, EntitySettings],
-      driver : Driver )
+      connection : Connection )
     : Mapping
     = MappingKind( reflection ) match {
         case MappingKind.Value => 
-          new ValueMapping( reflection, membership, settings, driver )
+          new ValueMapping( reflection, membership, settings, connection )
         case MappingKind.Tuple => 
-          new TupleMapping( reflection, membership, settings, driver )
+          new TupleMapping( reflection, membership, settings, connection )
         case MappingKind.Seq => 
-          new SeqMapping( reflection, membership, settings, driver )
+          new SeqMapping( reflection, membership, settings, connection )
         case MappingKind.Set => 
-          new SetMapping( reflection, membership, settings, driver )
+          new SetMapping( reflection, membership, settings, connection )
         case MappingKind.Map => 
-          new MapMapping( reflection, membership, settings, driver )
+          new MapMapping( reflection, membership, settings, connection )
         case MappingKind.Entity => 
-          new EntityMapping( reflection, membership, settings, driver )
+          new EntityMapping( reflection, membership, settings, connection )
         case MappingKind.OptionToTable =>
-          new OptionToTableMapping( reflection, membership, settings, driver )
+          new OptionToTableMapping( reflection, membership, settings, connection )
         case MappingKind.OptionToNullable =>
-          new OptionToNullableMapping( reflection, membership, settings, driver )
+          new OptionToNullableMapping( reflection, membership, settings, connection )
         case MappingKind.Enum =>
-          new EnumMapping( reflection, membership, settings, driver )
+          new EnumMapping( reflection, membership, settings, connection )
         case MappingKind.Range =>
-          new RangeMapping( reflection, membership, settings, driver )
+          new RangeMapping( reflection, membership, settings, connection )
       }
 
   def apply
     ( reflection : Reflection,
       membership : Membership,
       settings : Map[Reflection, EntitySettings],
-      driver : Driver )
+      connection : Connection )
     : Mapping 
-    = apply(reflection, Some(membership), settings, driver)
+    = apply(reflection, Some(membership), settings, connection)
 
 }

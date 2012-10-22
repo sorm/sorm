@@ -2,6 +2,7 @@ package sorm.core
 
 import sext._
 import sorm._
+import connection.Connection
 import mappings._
 import query.AbstractSqlComposition
 import query.Query._
@@ -9,11 +10,11 @@ import persisted._
 import reflect.runtime.universe.TypeTag
 
 object Access {
-  def apply [ T <: AnyRef : TypeTag ] ( mapping : EntityMapping, driver : Driver )
-    = new Access[T]( Query(mapping), driver )
+  def apply [ T <: AnyRef : TypeTag ] ( mapping : EntityMapping, connection : Connection )
+    = new Access[T]( Query(mapping), connection )
 }
 //  alternative titles: QueryApi
-class Access [ T <: AnyRef : TypeTag ] ( query : Query, driver : Driver ) {
+class Access [ T <: AnyRef : TypeTag ] ( query : Query, connection : Connection ) {
 
   /**
    * Fetch matching entities from db.
@@ -27,7 +28,7 @@ class Access [ T <: AnyRef : TypeTag ] ( query : Query, driver : Driver ) {
    * @return A stream of ids
    */
   def fetchIds () : Stream[Long]
-    = query $ AbstractSqlComposition.primaryKeySelect $ (driver.query(_)(_.byNameRowsTraversable.toList)) $ (_.toStream) map (_("id").asInstanceOf[Long])
+    = query $ AbstractSqlComposition.primaryKeySelect $ (connection.query(_)(_.byNameRowsTraversable.toList)) $ (_.toStream) map (_("id").asInstanceOf[Long])
 
   /**
    * Fetch only one entity ensuring that `amount(1)` is applied to the query.
@@ -62,7 +63,7 @@ class Access [ T <: AnyRef : TypeTag ] ( query : Query, driver : Driver ) {
    * @return A list of saved entities with [[sorm.persisted.Persisted]] mixed in
    */
   def replace ( value : T ) : List[T with Persisted]
-    = driver.transaction {
+    = connection.transaction {
         fetchIds().map(Persisted(value, _)).map(query.mapping.save(_).asInstanceOf[T with Persisted]).toList
       }
 
@@ -73,7 +74,7 @@ class Access [ T <: AnyRef : TypeTag ] ( query : Query, driver : Driver ) {
       order   : Seq[Order]    = query.order,
       amount  : Option[Int]   = query.limit,
       offset  : Int           = query.offset )
-    = Query(query.mapping, where, order, amount, offset) $ (new Access[T](_, driver))
+    = Query(query.mapping, where, order, amount, offset) $ (new Access[T](_, connection))
 
   def order ( p : String, reverse : Boolean = false ) : Access[T]
     = query.order.toVector :+ Order(Path.mapping(query.mapping, p), reverse) $ (x => copy(order = x))

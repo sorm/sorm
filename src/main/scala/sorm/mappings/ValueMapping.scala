@@ -1,6 +1,7 @@
 package sorm.mappings
 
 import sorm._
+import connection.Connection
 import core._
 import reflection._
 import ddl._
@@ -10,7 +11,7 @@ class ValueMapping
   ( val reflection : Reflection,
     val membership : Option[Membership],
     val settings : Map[Reflection, EntitySettings],
-    val driver : Driver )
+    val connection : Connection )
   extends ColumnMapping {
 
     lazy val columnType : ColumnType

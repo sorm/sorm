@@ -1,12 +1,11 @@
-package sorm.drivers
+package sorm.connection
 
 import sext._
-import sorm.core.Driver
 import sorm.jdbc.JdbcConnection
 import sorm.ddl.Table
 
 class H2 (url:String, user:String, password:String)
-  extends Driver
+  extends Connection
   with StdQuery
   with StdSqlRendering
   with StdDropAllTables

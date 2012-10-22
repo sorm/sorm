@@ -1,7 +1,6 @@
-package sorm.drivers
+package sorm.connection
 
-import org.joda.time.DateTime
-import sorm.jdbc.{JdbcConnection, Statement}
+import sorm.jdbc.JdbcConnection
 
 trait StdTransaction {
   protected def connection : JdbcConnection

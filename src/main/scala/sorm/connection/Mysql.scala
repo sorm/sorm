@@ -1,10 +1,9 @@
-package sorm.drivers
+package sorm.connection
 
-import sorm.core.Driver
 import sorm.jdbc.JdbcConnection
 
 class Mysql (url:String, user:String, password:String)
-  extends Driver
+  extends Connection
   with StdQuery
   with StdSqlRendering
   with StdDropAllTables

@@ -1,4 +1,4 @@
-package sorm.drivers
+package sorm.connection
 
 import org.joda.time.DateTime
 import sorm.jdbc.{JdbcConnection, Statement}

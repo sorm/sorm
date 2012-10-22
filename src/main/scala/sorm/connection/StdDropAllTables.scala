@@ -1,4 +1,4 @@
-package sorm.drivers
+package sorm.connection
 
 import sorm.jdbc.{JdbcConnection, Statement}
 import sorm.core.SormException

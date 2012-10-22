@@ -2,6 +2,7 @@ package sorm.core
 
 import reflect.basis._
 import sorm._
+import connection.Connection
 import persisted._
 import query.AbstractSqlComposition
 import reflection._
@@ -15,7 +16,7 @@ import org.joda.time.DateTime
 
 trait Api extends Logging {
 
-  protected def driver : Driver
+  protected def connection : Connection
 
   protected def mappings : Map[Reflection, EntityMapping]
 
@@ -39,7 +40,7 @@ trait Api extends Logging {
    * @return The accessor object. An abstraction over all kinds of supported SELECT-queries.
    */
   def access [ T <: AnyRef : TypeTag ] 
-    = Access[T](mapping, driver)
+    = Access[T](mapping, connection)
 
   /**
    * Fetch an existing entity by id. Will throw an exception if the entity doesn't exist. 
@@ -101,7 +102,7 @@ trait Api extends Logging {
    * @tparam T The result of the closure
    * @return The result of the last statement of the passed in closure
    */
-  def transaction [ T ] ( t : => T ) : T = driver.transaction(t)
+  def transaction [ T ] ( t : => T ) : T = connection.transaction(t)
 
   /**
    * Same as the other version with an exception that it passes the current SORM instance as a parameter to the closure. 
@@ -109,13 +110,13 @@ trait Api extends Logging {
    * @tparam T The result of the closure
    * @return The result of the last statement of the passed in closure
    */
-  def transaction [ T ] ( t : Api => T ) : T = driver.transaction(t(this))
+  def transaction [ T ] ( t : Api => T ) : T = connection.transaction(t(this))
 
   /**
    * Current time at DB server in milliseconds. Effectively fetches the date only once to calculate the deviation.
    */
   lazy val nowMillis = {
-    val deviation = System.currentTimeMillis() - driver.now().getMillis
+    val deviation = System.currentTimeMillis() - connection.now().getMillis
     () => System.currentTimeMillis() - deviation
   }
   /**

@@ -2,6 +2,7 @@ package sorm.mappings
 
 import sext._
 import sorm._
+import connection.Connection
 import reflection._
 import ddl._
 import core._
@@ -10,7 +11,7 @@ class EnumMapping
   ( val reflection : Reflection,
     val membership : Option[Membership],
     val settings : Map[Reflection, EntitySettings],
-    val driver : Driver )
+    val connection : Connection )
   extends ColumnMapping
   {
     lazy val dbValues : Map[Enumeration#Value, Byte]

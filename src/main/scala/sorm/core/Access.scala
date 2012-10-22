@@ -21,7 +21,7 @@ class Access [ T <: AnyRef : TypeTag ] ( query : Query, connection : Connection 
    * @return A stream of entity instances with [[sorm.persisted.Persisted]] mixed in
    */
   def fetch () : Stream[T with Persisted]
-    = fetchIds().map("id" -> _).map(Map(_)).map(query.mapping.fetchByPrimaryKey(_).asInstanceOf[T with Persisted])
+    = fetchIds().map("id" -> _).map(Map(_)).map(query.mapping.fetchByPrimaryKey(_, connection).asInstanceOf[T with Persisted])
 
   /**
    * Fetch ids of matching entities stored in db.
@@ -64,7 +64,7 @@ class Access [ T <: AnyRef : TypeTag ] ( query : Query, connection : Connection 
    */
   def replace ( value : T ) : List[T with Persisted]
     = connection.transaction {
-        fetchIds().map(Persisted(value, _)).map(query.mapping.save(_).asInstanceOf[T with Persisted]).toList
+        fetchIds().map(Persisted(value, _)).map(query.mapping.save(_, connection).asInstanceOf[T with Persisted]).toList
       }
 
 

@@ -9,16 +9,15 @@ import reflection._
 class RangeMapping
   ( val reflection : Reflection,
     val membership : Option[Membership],
-    val settings : Map[Reflection, EntitySettings],
-    val connection : Connection )
+    val settings : Map[Reflection, EntitySettings] )
   extends CompositeMapping
   {
-    lazy val start = Mapping( Reflection[Int], Membership.RangeStart(this), settings, connection )
-    lazy val end = Mapping( Reflection[Int], Membership.RangeEnd(this), settings, connection )
+    lazy val start = Mapping( Reflection[Int], Membership.RangeStart(this), settings )
+    lazy val end = Mapping( Reflection[Int], Membership.RangeEnd(this), settings )
     lazy val mappings = start +: end +: Stream()
 
-    def valueFromContainerRow(data: (String) => Any)
-      = start.valueFromContainerRow(data).asInstanceOf[Int] to end.valueFromContainerRow(data).asInstanceOf[Int]
+    def valueFromContainerRow(data: String => Any, c : Connection)
+      = start.valueFromContainerRow(data, c).asInstanceOf[Int] to end.valueFromContainerRow(data, c).asInstanceOf[Int]
     def valuesForContainerTableRow(value: Any) = value match {
       case value : Range => start.valuesForContainerTableRow(value.start) ++ end.valuesForContainerTableRow(value.end)
     }

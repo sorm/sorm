@@ -49,12 +49,12 @@ trait Mapping {
 
 
   //  for parsing
-  def valueFromContainerRow ( data : String => Any ) : Any
+  def valueFromContainerRow ( data : String => Any, connection : Connection ) : Any
 
   //  for saving
   def valuesForContainerTableRow ( value : Any ) : Iterable[(String, Any)]
-  def update ( value : Any, masterKey : Stream[Any] ) {}
-  def insert ( value : Any, masterKey : Stream[Any] ) {}
+  def update ( value : Any, masterKey : Stream[Any], connection : Connection ) {}
+  def insert ( value : Any, masterKey : Stream[Any], connection : Connection ) {}
 
   def columnsForContainer : Stream[Column]
 }
@@ -62,38 +62,36 @@ object Mapping {
   def apply
     ( reflection : Reflection,
       membership : Option[Membership],
-      settings : Map[Reflection, EntitySettings],
-      connection : Connection )
+      settings : Map[Reflection, EntitySettings] )
     : Mapping
     = MappingKind( reflection ) match {
         case MappingKind.Value => 
-          new ValueMapping( reflection, membership, settings, connection )
+          new ValueMapping( reflection, membership, settings )
         case MappingKind.Tuple => 
-          new TupleMapping( reflection, membership, settings, connection )
+          new TupleMapping( reflection, membership, settings )
         case MappingKind.Seq => 
-          new SeqMapping( reflection, membership, settings, connection )
+          new SeqMapping( reflection, membership, settings )
         case MappingKind.Set => 
-          new SetMapping( reflection, membership, settings, connection )
+          new SetMapping( reflection, membership, settings )
         case MappingKind.Map => 
-          new MapMapping( reflection, membership, settings, connection )
+          new MapMapping( reflection, membership, settings )
         case MappingKind.Entity => 
-          new EntityMapping( reflection, membership, settings, connection )
+          new EntityMapping( reflection, membership, settings )
         case MappingKind.OptionToTable =>
-          new OptionToTableMapping( reflection, membership, settings, connection )
+          new OptionToTableMapping( reflection, membership, settings )
         case MappingKind.OptionToNullable =>
-          new OptionToNullableMapping( reflection, membership, settings, connection )
+          new OptionToNullableMapping( reflection, membership, settings )
         case MappingKind.Enum =>
-          new EnumMapping( reflection, membership, settings, connection )
+          new EnumMapping( reflection, membership, settings )
         case MappingKind.Range =>
-          new RangeMapping( reflection, membership, settings, connection )
+          new RangeMapping( reflection, membership, settings )
       }
 
   def apply
     ( reflection : Reflection,
       membership : Membership,
-      settings : Map[Reflection, EntitySettings],
-      connection : Connection )
+      settings : Map[Reflection, EntitySettings] )
     : Mapping 
-    = apply(reflection, Some(membership), settings, connection)
+    = apply(reflection, Some(membership), settings)
 
 }

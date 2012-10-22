@@ -7,9 +7,9 @@ import reflection._
 import mappings._
 import jdbc._
 import tableSorters._
-import sext._
-import connection.Connection
+import connection._
 
+import sext._
 import com.weiglewilczek.slf4s.Logging
 
 import reflect.basis._
@@ -51,7 +51,7 @@ object Sorm {
                 .toMap
 
           settings.keys
-            .zipBy{ new EntityMapping(_, None, settings, connection) }
+            .zipBy{ new EntityMapping(_, None, settings) }
             .toMap
         }
 

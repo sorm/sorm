@@ -51,7 +51,7 @@ trait Api extends Logging {
     [ T <: AnyRef : TypeTag ]
     ( id : Long )
     : T with Persisted
-    = id $ ("id" -> _) $ (Map(_)) $ (mapping[T].fetchByPrimaryKey(_).asInstanceOf[T with Persisted])
+    = id $ ("id" -> _) $ (Map(_)) $ (mapping[T].fetchByPrimaryKey(_, connection).asInstanceOf[T with Persisted])
 
   /**
    * Save the entity. An Abstraction over INSERT and UPDATE-queries. Which one to perform will be decided based on whether the [[sorm.persisted.Persisted]] trait is mixed in the value you provide.
@@ -63,7 +63,7 @@ trait Api extends Logging {
     ( value : T )
     : T with Persisted
     = transaction {
-        mapping[T].save(value).asInstanceOf[T with Persisted]
+        mapping[T].save(value, connection).asInstanceOf[T with Persisted]
       }
 
   /**
@@ -84,14 +84,14 @@ trait Api extends Logging {
             access.fetchOneId()
               .map(Persisted(value, _))
               .getOrElse(value)
-              .$(mapping[T].save(_).asInstanceOf[T with Persisted])
+              .$(mapping[T].save(_, connection).asInstanceOf[T with Persisted])
           }
         )
 
   def delete
     [ T <: AnyRef : TypeTag ]
     ( value : T )
-    = mapping[T].delete(value)
+    = mapping[T].delete(value, connection)
 
   /**
    * Perform several db-requests in a single transaction. This provides guarantees that nothing will be changed in between the db-requests in multi-treaded applications and that it will roll-back in case of any failure.

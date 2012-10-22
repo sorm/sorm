@@ -10,8 +10,7 @@ import core._
 class EnumMapping
   ( val reflection : Reflection,
     val membership : Option[Membership],
-    val settings : Map[Reflection, EntitySettings],
-    val connection : Connection )
+    val settings : Map[Reflection, EntitySettings] )
   extends ColumnMapping
   {
     lazy val dbValues : Map[Enumeration#Value, Byte]
@@ -21,7 +20,7 @@ class EnumMapping
           .view.map( v => v.id.toByte -> v ).toMap
     def columnType 
       = ColumnType.TinyInt
-    def valueFromContainerRow ( data : String => Any )
+    def valueFromContainerRow ( data : String => Any, connection : Connection )
       = data(memberName).asInstanceOf[Byte] as values
     def valuesForContainerTableRow( value : Any )
       = value.asInstanceOf[Enumeration#Value] $ dbValues $ (memberName -> _) $ (Stream(_))

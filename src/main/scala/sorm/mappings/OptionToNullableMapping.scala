@@ -10,18 +10,17 @@ import reflection._
 class OptionToNullableMapping
   ( val reflection : Reflection,
     val membership : Option[Membership],
-    val settings : Map[Reflection, EntitySettings],
-    val connection : Connection )
+    val settings : Map[Reflection, EntitySettings] )
   extends CompositeMapping
   {
     type T = Option[_]
 
-    lazy val item = Mapping( reflection.generics(0), Membership.OptionToNullableItem(this), settings, connection )
+    lazy val item = Mapping( reflection.generics(0), Membership.OptionToNullableItem(this), settings )
     lazy val mappings = item +: Stream()
 
-    def valueFromContainerRow ( row : String => Any )
+    def valueFromContainerRow ( row : String => Any, connection : Connection )
       = if( columnsForContainer.map(_.name).forall(row(_) == null) ) None
-        else item.valueFromContainerRow(row) $ (Some(_))
+        else item.valueFromContainerRow(row, connection) $ (Some(_))
 
     def valuesForContainerTableRow ( value : Any )
       = value match {
@@ -29,12 +28,12 @@ class OptionToNullableMapping
           case None => columnsForContainer.map(_.name -> null)
         }
 
-    override def update ( value : Any, masterKey : Stream[Any] ) {
-      value.asInstanceOf[T] foreach (item.update(_, masterKey))
+    override def update ( value : Any, masterKey : Stream[Any], connection : Connection ) {
+      value.asInstanceOf[T] foreach (item.update(_, masterKey, connection))
     }
 
-    override def insert ( value : Any, masterKey : Stream[Any] ) {
-      value.asInstanceOf[T] foreach (item.insert(_, masterKey))
+    override def insert ( value : Any, masterKey : Stream[Any], connection : Connection ) {
+      value.asInstanceOf[T] foreach (item.insert(_, masterKey, connection))
     }
 
 

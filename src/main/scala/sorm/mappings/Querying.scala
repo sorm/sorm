@@ -9,40 +9,39 @@ import jdbc.ResultSetView
 trait Querying {
   import abstractSql.AbstractSql._
 
-  def parseResultSet ( rs : ResultSetView ) : Any
+  def parseResultSet ( rs : ResultSetView, connection : Connection ) : Any
 
   def containerTableMapping : Option[TableMapping]
   def tableName : String
   def tableColumns : Stream[ddl.Column]
-  def connection : Connection
   def bindingsToContainerTable : Stream[(String, String)]
   def primaryKeyColumnNames : Stream[String]
 
-  val fetchByContainerPrimaryKey : Map[String, Any] => Any
+  val fetchByContainerPrimaryKey : ( Map[String, Any], Connection ) => Any
     = {
       lazy val table = Table(tableName)
       lazy val containerTable = containerTableMapping.get.tableName $ (Table(_, Parent(table, bindingsToContainerTable.map(_.swap)) $ Some.apply))
-      lazy val columns = this.tableColumns.map(_.name).map(Column(_, table))
+      lazy val columns = tableColumns.map(_.name).map(Column(_, table))
 
-      ( _
-        map {case (n, v) => Comparison(containerTable, n, Equal, v)}
-        reduceOption And
-        $ ( Select(columns, _) )
-        $ ( connection.query(_)(parseResultSet) )
-      )
+      ( pk, c ) =>
+        pk
+          .map{case (n, v) => Comparison(containerTable, n, Equal, v)}
+          .reduceOption(And)
+          .$(Select(columns, _))
+          .$(c.query(_)(parseResultSet(_, c)))
     }
 
-  val fetchByPrimaryKey : Map[String, Any] => Any
+  val fetchByPrimaryKey : ( Map[String, Any], Connection ) => Any
     = {
       lazy val table = Table(tableName, None)
-      lazy val columns = this.tableColumns.map(_.name).map(Column(_, table))
+      lazy val columns = tableColumns.map(_.name).map(Column(_, table))
 
-      ( _
-        map {case (n, v) => Comparison(table, n, Equal, v)}
-        reduceOption And 
-        $ (Select(columns, _))
-        $ (connection.query(_)(parseResultSet))
-      )
+      ( pk, c ) =>
+        pk
+          .map{case (n, v) => Comparison(table, n, Equal, v)}
+          .reduceOption(And)
+          .$(Select(columns, _))
+          .$(c.query(_)(parseResultSet(_, c)))
     }
 
   lazy val abstractSqlTable : Table

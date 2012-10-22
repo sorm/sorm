@@ -1,7 +1,6 @@
 package sorm.tableSorters
 
 import sorm._
-import connection.Connection
 import reflection._
 import mappings._
 import sext._
@@ -34,10 +33,8 @@ class DropTest extends FunSuite with ShouldMatchers {
       EntitySettings(indexes = Set(Seq("code")))
     )
 
-  val connection
-    = Connection("jdbc:h2:mem:test", "", "")
   val mappings
-    = settings.keys.map {r => r -> new EntityMapping(r, None, settings, connection)}.toMap
+    = settings.keys.map {r => r -> new EntityMapping(r, None, settings)}.toMap
 
 
   test("sort simulation") {

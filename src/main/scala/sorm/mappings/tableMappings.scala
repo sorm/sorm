@@ -3,6 +3,7 @@ package sorm.mappings
 import sext._
 
 import sorm._
+import connection.Connection
 import reflection.Reflection
 import core._
 import ddl._
@@ -25,8 +26,9 @@ sealed trait TableMapping extends CompositeMapping with Querying {
 
   lazy val primaryKeyColumnNames = primaryKeyColumns.map(_.name)
 
-  override def valueFromContainerRow ( data : String => Any ) : Any
-    = containerTableMapping.get.primaryKeyColumnNames.zipBy(data).toMap as fetchByContainerPrimaryKey
+  override def valueFromContainerRow ( data : String => Any, connection : Connection ) : Any
+    = containerTableMapping.get.primaryKeyColumnNames.zipBy(data).toMap $
+      (fetchByContainerPrimaryKey(_, connection))
 
 }
 

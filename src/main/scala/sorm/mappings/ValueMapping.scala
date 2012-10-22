@@ -10,8 +10,7 @@ import org.joda.time._
 class ValueMapping
   ( val reflection : Reflection,
     val membership : Option[Membership],
-    val settings : Map[Reflection, EntitySettings],
-    val connection : Connection )
+    val settings : Map[Reflection, EntitySettings] )
   extends ColumnMapping {
 
     lazy val columnType : ColumnType
@@ -73,7 +72,7 @@ class ValueMapping
       }
 
 
-    def valueFromContainerRow ( data: String => Any ) = data(memberName)
+    def valueFromContainerRow ( data: String => Any, c : Connection ) = data(memberName)
 
     def valuesForContainerTableRow( value : Any ) = (memberName -> value) +: Stream()
   }

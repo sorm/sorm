@@ -11,8 +11,9 @@ import query.Query._
 import sext._
 
 import com.weiglewilczek.slf4s.Logging
+import org.joda.time.DateTime
 
-trait Api extends Logging with CurrentDateTime {
+trait Api extends Logging {
 
   protected def driver : Driver
 
@@ -109,5 +110,15 @@ trait Api extends Logging with CurrentDateTime {
    * @return The result of the last statement of the passed in closure
    */
   def transaction [ T ] ( t : Api => T ) : T = driver.transaction(t(this))
+
+  private lazy val deviation = System.currentTimeMillis() - driver.now().getMillis
+  /**
+   * Current time at DB server in milliseconds. Effectively fetches the date only once to calculate the deviation.
+   */
+  def nowMillis() = System.currentTimeMillis() - deviation
+  /**
+   * Current DateTime at DB server. Effectively fetches the date only once to calculate the deviation.
+   */
+  def now() = new DateTime(nowMillis())
 
 }

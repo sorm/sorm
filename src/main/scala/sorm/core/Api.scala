@@ -111,11 +111,13 @@ trait Api extends Logging {
    */
   def transaction [ T ] ( t : Api => T ) : T = driver.transaction(t(this))
 
-  private lazy val deviation = System.currentTimeMillis() - driver.now().getMillis
   /**
    * Current time at DB server in milliseconds. Effectively fetches the date only once to calculate the deviation.
    */
-  def nowMillis() = System.currentTimeMillis() - deviation
+  lazy val nowMillis = {
+    val deviation = System.currentTimeMillis() - driver.now().getMillis
+    () => System.currentTimeMillis() - deviation
+  }
   /**
    * Current DateTime at DB server. Effectively fetches the date only once to calculate the deviation.
    */

@@ -1,4 +1,4 @@
-package sorm.core
+package sorm.api
 
 import sext._
 import sorm._

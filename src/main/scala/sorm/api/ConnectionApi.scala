@@ -1,20 +1,18 @@
-package sorm.core
+package sorm.api
 
 import reflect.basis._
 import sorm._
 import connection.Connection
+import core._
 import persisted._
-import query.AbstractSqlComposition
 import reflection._
 import mappings._
-import jdbc._
-import query.Query._
 import sext._
 
 import com.weiglewilczek.slf4s.Logging
 import org.joda.time.DateTime
 
-trait Api extends Logging {
+trait ConnectionApi extends Logging {
 
   protected def connection : Connection
 
@@ -34,7 +32,7 @@ trait Api extends Logging {
     }
 
   /**
-   * Return the [[sorm.core.Access]] object for performing a read-query on a specified entity type. 
+   * Return the [[sorm.api.Access]] object for performing a read-query on a specified entity type.
    * 
    * @tparam T The entity type
    * @return The accessor object. An abstraction over all kinds of supported SELECT-queries.
@@ -67,7 +65,7 @@ trait Api extends Logging {
       }
 
   /**
-   * Saves the entity by overwriting the existing one if one with the matching unique keys exists and creating a new one otherwise. Executing simply [[sorm.core.Api#save]] in situation of unique keys clash would have thrown an exception. Please beware that in case when not all unique keys are matched this method will still throw an exception.
+   * Saves the entity by overwriting the existing one if one with the matching unique keys exists and creating a new one otherwise. Executing simply [[sorm.api.ConnectionApi#save]] in situation of unique keys clash would have thrown an exception. Please beware that in case when not all unique keys are matched this method will still throw an exception.
    * @param value The value to save
    * @return The saved entity instance with a [[sorm.persisted.Persisted]] trait mixed in
    */
@@ -110,7 +108,7 @@ trait Api extends Logging {
    * @tparam T The result of the closure
    * @return The result of the last statement of the passed in closure
    */
-  def transaction [ T ] ( t : Api => T ) : T = connection.transaction(t(this))
+  def transaction [ T ] ( t : ConnectionApi => T ) : T = connection.transaction(t(this))
 
   /**
    * Current time at DB server in milliseconds. Effectively fetches the date only once to calculate the deviation.

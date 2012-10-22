@@ -1,6 +1,7 @@
 package sorm
 
 import sorm._
+import api._
 import core._
 import persisted._
 import reflection._
@@ -35,7 +36,7 @@ object Sorm {
       user : String = "",
       password : String = "",
       initMode : InitMode = InitMode.DoNothing )
-    extends Api
+    extends ConnectionApi
     with Logging
     {
 
@@ -212,7 +213,7 @@ object Sorm {
 
   object FilterDsl {
 
-    import core.ApiFilter._
+    import api.ApiFilter._
 
     implicit class WhereWhere(val a: Filter) extends AnyVal {
       def or(b: Filter) = Or(a, b)

@@ -1,6 +1,7 @@
-package sorm.core
+package sorm.api
 
 import sorm._
+import core._
 import query._
 import mappings._
 import sext._

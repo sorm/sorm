@@ -1,6 +1,6 @@
 package sorm.api
 
-import reflect.basis._
+import reflect.runtime.universe._
 import sorm._
 import connection.Connection
 import core._

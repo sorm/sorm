@@ -95,8 +95,8 @@ object PersistedClass extends Logging {
     ( r : Reflection )
     : Class[T with Persisted]
     = {
-      toolbox.runExpr(
-        toolbox.parseExpr(
+      toolbox.eval(
+        toolbox.parse(
           generateCode(r, generateName())
             .tap{ c => logger.trace("Generating class:\n" + c) }
         )

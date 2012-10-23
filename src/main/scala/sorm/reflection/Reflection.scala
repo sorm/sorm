@@ -41,7 +41,7 @@ class Reflection ( protected val t : Type ) {
   def fullName
     = s.ancestors.foldRight(""){ (s, text) =>
         if( text == "" ) s.decodedName
-        else if( s.owner.kind == "class" ) text + "#" + s.decodedName
+        else if( s.owner.isClass ) text + "#" + s.decodedName
         else text + "." + s.decodedName
       }
   def signature : String
@@ -52,7 +52,7 @@ class Reflection ( protected val t : Type ) {
     : Any
     = t.constructors
         .view
-        .zipBy{ _.params.view.flatten.map{_.decodedName} }
+        .zipBy{ _.paramss.view.flatten.map{_.decodedName} }
         .find{ _._2.toSet == params.keySet }
         .map{ case (c, ps) => s.instantiate( c, ps.map{params} ) }
         .get
@@ -79,7 +79,7 @@ class Reflection ( protected val t : Type ) {
 
   def primaryConstructorArguments
     : List[(String, Reflection)]
-    = t.constructors.head.params.flatten
+    = t.constructors.head.paramss.flatten
         .map{ s => s.decodedName -> Reflection(s.t) }
 
   /**
@@ -92,7 +92,7 @@ class Reflection ( protected val t : Type ) {
       }
 
   def containerObjectName : Option[String]
-    = t.toInstanceOf[TypeRef].map(_.pre.s.decodedName)
+    = t.trying(_.asInstanceOf[TypeRef]).map(_.pre.s.decodedName)
 
   def containerObject : Option[Any]
     = t match {

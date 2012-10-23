@@ -14,7 +14,7 @@ import connection._
 import sext._
 import com.weiglewilczek.slf4s.Logging
 
-import reflect.basis._
+import reflect.runtime.universe._
 
 object Sorm {
 

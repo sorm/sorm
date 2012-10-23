@@ -24,7 +24,8 @@ object Driver {
       def jdbcConnection()
         = {
         val c = DriverManager.getConnection(url, user, password)
-        c.setTransactionIsolation(java.sql.Connection.TRANSACTION_SERIALIZABLE)
+//        completely chokes the performance
+//        c.setTransactionIsolation(java.sql.Connection.TRANSACTION_SERIALIZABLE)
         new JdbcConnection(c)
       }
 

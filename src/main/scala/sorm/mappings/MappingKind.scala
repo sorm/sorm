@@ -2,6 +2,7 @@ package sorm.mappings
 
 import sext._
 import sorm._
+import core.SormException
 import reflection._
 
 sealed trait MappingKind
@@ -79,5 +80,7 @@ object MappingKind {
         case _
           if reflection.isCaseClass
           => Entity
+        case _
+          => throw new SormException("Unsupported type: " + reflection)
       }
 }

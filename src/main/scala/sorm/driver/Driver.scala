@@ -21,7 +21,12 @@ trait Driver {
 object Driver {
   def apply ( url : String, user : String, password : String )
     = {
-      def jdbcConnection() = DriverManager.getConnection(url, user, password) $ (new JdbcConnection(_))
+      def jdbcConnection()
+        = {
+        val c = DriverManager.getConnection(url, user, password)
+        c.setTransactionIsolation(java.sql.Connection.TRANSACTION_SERIALIZABLE)
+        new JdbcConnection(c)
+      }
 
       val dbType = DbType.byUrl(url)
 

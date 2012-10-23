@@ -44,7 +44,7 @@ object Sorm {
 
       def connection ()
         = new ConnectionApi {
-            protected def connection = driver.connection()
+            protected val connection = driver.connection()
             protected def mappings = Instance.this.mappings
           }
 

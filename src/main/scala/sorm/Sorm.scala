@@ -48,6 +48,9 @@ object Sorm {
             protected def mappings = Instance.this.mappings
           }
 
+      def withTmpConnection [ T ] ( f : ConnectionApi => T )
+        = driver.withTmpConnection(c => f(new ConnectionApi { protected def connection = c; protected def mappings = Instance.this.mappings }))
+
       //  Validate entities (must be prior to mappings creation due to possible mappingkind detection errors):
       entities flatMap Initialization.errors map (new ValidationException(_)) foreach (throw _)
 

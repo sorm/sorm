@@ -1,6 +1,6 @@
 package sorm.driver
 
-import sext._
+import sext._, embrace._
 import java.sql.DriverManager
 
 import sorm._

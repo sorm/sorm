@@ -5,7 +5,7 @@ import org.joda.time._
 
 import sorm._
 import joda.Extensions._
-import sext._
+import sext._, embrace._
 
 class PreparedStatementView
   ( s : PreparedStatement ) 

@@ -5,7 +5,7 @@ import jdbc._
 import persisted.Persisted
 import reflection.Reflection
 import samples._
-import sext._
+import sext._, embrace._
 import sorm.Sorm._
 
 object Sandbox extends App {

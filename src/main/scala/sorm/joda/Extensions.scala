@@ -1,7 +1,7 @@
 package sorm.joda
 
 import org.joda.time._
-import sext._
+import sext._, embrace._
 
 object Extensions {
   

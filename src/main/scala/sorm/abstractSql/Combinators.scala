@@ -1,6 +1,6 @@
 package sorm.abstractSql
 
-import sext._
+import sext._, embrace._
 import sorm.mappings._
 import sorm.persisted._
 

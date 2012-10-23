@@ -12,7 +12,7 @@ import query._
 import reflection._
 import mappings._
 import jdbc._
-import sext._
+import sext._, embrace._
 
 import samples._
 import Sorm._

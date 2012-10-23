@@ -1,6 +1,6 @@
 package sorm.ddl
 
-import sext._
+import sext._, embrace._
 
 object `package` {
 

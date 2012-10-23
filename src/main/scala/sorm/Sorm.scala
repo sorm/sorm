@@ -11,7 +11,7 @@ import jdbc._
 import tableSorters._
 import connection._
 
-import sext._
+import sext._, embrace._
 import com.weiglewilczek.slf4s.Logging
 
 import reflect.runtime.universe._

@@ -1,6 +1,6 @@
 package sorm.connection
 
-import sext._
+import sext._, embrace._
 import sorm.jdbc.JdbcConnection
 import sorm.ddl.Table
 

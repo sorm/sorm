@@ -3,7 +3,7 @@ package sorm.query
 import sorm._
 import reflection._
 import mappings._
-import sext._
+import sext._, embrace._
 
 // todo: get rid of mappings, leave only string queries, delaying the mapping resolution to deeper apis
 object Query {

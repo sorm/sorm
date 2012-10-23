@@ -4,7 +4,7 @@ import sorm._
 import core._
 import query._
 import mappings._
-import sext._
+import sext._, embrace._
 
 import Query._
 

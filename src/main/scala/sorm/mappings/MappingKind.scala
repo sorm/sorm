@@ -1,6 +1,6 @@
 package sorm.mappings
 
-import sext._
+import sext._, embrace._
 import sorm._
 import core.SormException
 import reflection._

@@ -5,7 +5,7 @@ import core.SormException
 import java.sql.{ResultSet, PreparedStatement, Connection, Statement => JStatement}
 import org.joda.time._
 
-import sext._
+import sext._, embrace._
 
 object `package` {
 

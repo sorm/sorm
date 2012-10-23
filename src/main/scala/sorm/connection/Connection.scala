@@ -1,6 +1,6 @@
 package sorm.connection
 
-import sext._
+import sext._, embrace._
 import org.joda.time.DateTime
 
 import sorm._

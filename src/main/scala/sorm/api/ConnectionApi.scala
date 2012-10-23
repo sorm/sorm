@@ -7,7 +7,7 @@ import core._
 import persisted._
 import reflection._
 import mappings._
-import sext._
+import sext._, embrace._
 
 import com.weiglewilczek.slf4s.Logging
 import org.joda.time.DateTime

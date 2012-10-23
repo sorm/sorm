@@ -8,7 +8,7 @@ import tableSorters._
 import connection._
 import Sorm._
 
-import sext._
+import sext._, embrace._
 import com.weiglewilczek.slf4s.Logging
 
 object Initialization extends Logging {

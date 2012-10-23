@@ -4,7 +4,7 @@ import java.sql._
 
 import sorm._
 import joda.Extensions._
-import sext._
+import sext._, embrace._
 
 class ResultSetView
   ( rs : ResultSet ) 

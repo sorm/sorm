@@ -4,7 +4,7 @@ import sorm._
 import mappings._
 import jdbc._
 import sorm.ddl.Table
-import sext._
+import sext._, embrace._
 
 object Drop {
 

@@ -4,7 +4,7 @@ import reflect.runtime.universe._
 
 import sorm._
 import reflection._
-import sext._
+import sext._, embrace._
 
 trait Persisted {
   def id: Long

@@ -3,7 +3,7 @@ package sorm.tableSorters
 import sorm._
 import reflection._
 import mappings._
-import sext._
+import sext._, embrace._
 import util.Random
 
 import org.scalatest.FunSuite

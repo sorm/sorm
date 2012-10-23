@@ -117,9 +117,15 @@ trait ConnectionApi extends Logging {
     val deviation = System.currentTimeMillis() - connection.now().getMillis
     () => System.currentTimeMillis() - deviation
   }
+
   /**
    * Current DateTime at DB server. Effectively fetches the date only once to calculate the deviation.
    */
   def now() = new DateTime(nowMillis())
+
+  /**
+   * Close the underlying jdbc connection. Call it when in a running application this connection will not be used anymore. For example when the actor that was using this connection is killed.
+   */
+  def close() = connection.close()
 
 }

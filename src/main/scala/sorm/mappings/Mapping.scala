@@ -57,6 +57,8 @@ trait Mapping {
   def insert ( value : Any, masterKey : Stream[Any], connection : Connection ) {}
 
   def columnsForContainer : Stream[Column]
+
+  override def toString = reflection.name
 }
 object Mapping {
   def apply

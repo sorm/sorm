@@ -11,10 +11,10 @@ import samples._
 import org.joda.time.DateTime
 
 @RunWith(classOf[JUnitRunner])
-class DateTimeSupportSuite extends FunSuite with ShouldMatchers {
-  import sorm.DateTimeSupportSuite._
+class H2DateTimeSupportSuite extends FunSuite with ShouldMatchers {
+  import sorm.H2DateTimeSupportSuite._
 
-  val db = TestingInstance.h2(Sorm.Entity[A]())
+  val db = TestingInstance.h2(Sorm.Entity[A]()).connection()
 
   val date = new DateTime()
 
@@ -37,6 +37,6 @@ class DateTimeSupportSuite extends FunSuite with ShouldMatchers {
   test("Other filters fail")(pending)
 
 }
-object DateTimeSupportSuite {
+object H2DateTimeSupportSuite {
   case class A ( a : DateTime )
 }

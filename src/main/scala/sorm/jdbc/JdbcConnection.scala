@@ -89,6 +89,7 @@ class JdbcConnection( protected val connection : Connection ) extends Transactio
       s
     }
 
+  def close() = connection.close()
 }
 object JdbcConnection {
 

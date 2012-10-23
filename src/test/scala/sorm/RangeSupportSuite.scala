@@ -14,8 +14,7 @@ class RangeSupportSuite extends FunSuite with ShouldMatchers {
 
   import RangeSupportSuite._
 
-  val db
-    = TestingInstance.h2( Entity[A]() )
+  val db = TestingInstance.h2( Entity[A]() ).connection()
 
   test("saving goes ok"){
     db.save(A( 2 to 4 ))

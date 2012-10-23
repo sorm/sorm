@@ -30,14 +30,7 @@ trait Connection {
     : Seq[Any]
   def delete
     ( table : String, pk : Iterable[(String, Any)] )
-  def transaction [ T ] ( t : => T ) : T
+  def transaction [ T ] ( f : => T ) : T
   def createTable ( table : ddl.Table )
-}
-object Connection {
-  def apply ( url : String, user : String, password : String )
-    = DbType.byUrl(url) match {
-        case DbType.Mysql => new connection.Mysql(url, user, password)
-        case DbType.H2 => new connection.H2(url, user, password)
-        case _ => throw new SormException("Unsupported db type")
-      }
+  def close()
 }

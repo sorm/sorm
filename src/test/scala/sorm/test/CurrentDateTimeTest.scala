@@ -8,7 +8,7 @@ import sorm.samples.TestingInstance
 
 @RunWith(classOf[JUnitRunner])
 class CurrentDateTimeTest extends FunSuite with ShouldMatchers {
-  val db = TestingInstance.h2()
+  val db = TestingInstance.h2().connection()
 
   test("should be changing"){
     val a = db.now()

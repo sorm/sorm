@@ -14,7 +14,7 @@ object MultithreadingTest {
 class MultithreadingTest extends FunSuite with ShouldMatchers {
   import MultithreadingTest._
 
-  val db = TestingInstance.mysql(Entity[A](unique = Set() + Seq("a")))
+  val db = TestingInstance.mysql(Entity[A](unique = Set() + Seq("a"))).connection()
 
   val a1 = db.save(A(1))
   val a2 = db.save(A(3))

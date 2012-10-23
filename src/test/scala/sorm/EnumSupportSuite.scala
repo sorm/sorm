@@ -16,7 +16,7 @@ import samples._
 class EnumSupportSuite extends FunSuite with ShouldMatchers {
   import EnumSupportSuite._
 
-  val db = TestingInstance.mysql( Entity[A]() )
+  val db = TestingInstance.mysql( Entity[A]() ).connection()
 
   val a1 = db.save(A(B.One))
   val a2 = db.save(A(B.Two))

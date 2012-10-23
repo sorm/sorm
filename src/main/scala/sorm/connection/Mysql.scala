@@ -2,7 +2,7 @@ package sorm.connection
 
 import sorm.jdbc.JdbcConnection
 
-class Mysql (url:String, user:String, password:String)
+class Mysql (protected val connection : JdbcConnection)
   extends Connection
   with StdQuery
   with StdSqlRendering
@@ -14,6 +14,4 @@ class Mysql (url:String, user:String, password:String)
   with StdQuote
   with StdTransaction
   with StdCreateTable
-{
-  val connection = JdbcConnection(url, user, password)
-}
+  with StdClose

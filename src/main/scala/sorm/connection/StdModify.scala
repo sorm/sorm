@@ -8,7 +8,8 @@ trait StdModify {
   import sql.Sql._
 
   def statement ( sql : Sql ) : jdbc.Statement
-  def connection : jdbc.JdbcConnection
+  protected def connection : jdbc.JdbcConnection
+
   def update 
     ( table : String, values : Iterable[(String, Any)], pk : Iterable[(String, Any)] )
     {

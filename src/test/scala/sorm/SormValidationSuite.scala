@@ -26,11 +26,11 @@ class SormValidationSuite extends FunSuite with ShouldMatchers {
       )
     } should produce [ValidationException]
   }
-  test("Correct instantiation doesn't throw exceptions"){
+  test("Correct instantiation doesnt throw exceptions"){
     new Instance(
       Entity[A]() :: Entity[B]() :: Entity[C]() :: Nil,
       "jdbc:h2:mem:test"
-    )
+    ) should not equal (false)
   }
   test("self reference validation"){
     pending

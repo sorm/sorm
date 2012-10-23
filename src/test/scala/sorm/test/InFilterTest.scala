@@ -14,7 +14,7 @@ import Sorm._
 class InFilterTest extends FunSuite with ShouldMatchers {
   import InFilterTest._
 
-  val db = TestingInstance.h2( Entity[A]() )
+  val db = TestingInstance.h2( Entity[A]() ).connection()
 
   val a1 = db.save(A(1))
   val a2 = db.save(A(2))

@@ -1,5 +1,6 @@
 package sorm
 
+import driver.Driver
 import sorm._
 import api._
 import core._
@@ -36,16 +37,21 @@ object Sorm {
       user : String = "",
       password : String = "",
       initMode : InitMode = InitMode.DoNothing )
-    extends ConnectionApi
-    with Logging
+    extends Logging
     {
 
-      protected[sorm] val connection = Connection(url, user, password)
+      private val driver = Driver(url, user, password)
+
+      def connection ()
+        = new ConnectionApi {
+            protected def connection = driver.connection()
+            protected def mappings = Instance.this.mappings
+          }
 
       //  Validate entities (must be prior to mappings creation due to possible mappingkind detection errors):
       entities flatMap Initialization.errors map (new ValidationException(_)) foreach (throw _)
 
-      protected[sorm] val mappings
+      private val mappings
         = {
           val settings
             = entities.view
@@ -63,7 +69,9 @@ object Sorm {
       mappings.values.toStream $ Initialization.errors map (new ValidationException(_)) foreach (throw _)
 
       // Initialize a db schema:
-      Initialization.initializeSchema(mappings.values, connection, initMode)
+      driver.withTmpConnection{ c =>
+        Initialization.initializeSchema(mappings.values, c, initMode)
+      }
 
       // Precache persisted classes (required for multithreading)
       entities.toStream

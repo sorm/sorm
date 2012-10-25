@@ -27,7 +27,7 @@ object AbstractSqlComposition extends Logging {
                 )
               }
         )
-      } &&!
+      } &&
       ( limitSelect(query) ++
         query.where.map{filtersStatement} reduceOption ( _ & _ ) )
 

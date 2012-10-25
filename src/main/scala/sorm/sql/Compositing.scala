@@ -75,68 +75,7 @@ object Compositing {
             case self : Union => ???
             case self : Select => self
           }
-      /**
-       * Drops orphan joins. Not tested at all
-       */
-      def optimized : Statement
-        = self match {
-            case Union(l, r) => Union(l.optimized, r.optimized)
-            case self : Select =>
-              val refs
-                : Set[String]
-                = {
-                  val whatRefs
-                    = self.what.view collect { case Column(_, Some(r)) ⇒ r }
-                  val fromRef
-                    = self.from.as
-                  val whereRefs
-                    = ???
-                  val groupByRefs
-                    = self.groupBy collect { case Column(_, Some(r)) ⇒ r }
-                  val havingRefs
-                    = ???
 
-                  Set() ++ whatRefs ++ fromRef ++ whereRefs ++ groupByRefs ++ havingRefs
-                }
-
-              def f
-                ( s : Select )
-                : Select
-                = {
-                  val joinRefs
-                    = s.join.view flatMap {
-                        _.on collect { case (_, Column(_, Some(r))) ⇒ r }
-                      }
-
-                  val allRefs
-                    = refs ++ joinRefs
-
-                  val filtered
-                    = s.join filter {
-                        _.as map { allRefs contains _ } getOrElse false
-                      }
-
-                  if( filtered == s.join )
-                    s
-                  else
-                    f( s copy ( join = filtered ) )
-                }
-
-              def withSubSelectsOptimized
-                ( s : Select )
-                = s.copy(
-                      join
-                        = s.join map { j ⇒
-                            j.what match {
-                              case s : Select ⇒ j.copy(s.optimized)
-                              case _ ⇒ j
-                            }
-                          }
-                    )
-
-              withSubSelectsOptimized( f(self) )
-
-        }
     }
 
 

@@ -4,7 +4,7 @@ import sext._, embrace._
 
 import sorm._
 import jdbc._
-import sql.Sql
+import sql._
 
 trait StdQuery {
   protected def connection: JdbcConnection
@@ -18,7 +18,7 @@ trait StdQuery {
     = connection.executeQuery(statement(asql))(parse)
 
   protected def statement(asql: Statement): jdbc.Statement
-    = asql $ sql $ statement
+    = asql $ sql $ Optimization.optimized $ statement
   protected def statement(sql: Sql.Sql): jdbc.Statement
   protected def sql(asql: Statement): Sql.Statement
 

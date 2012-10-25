@@ -31,17 +31,17 @@ class Access [ T <: AnyRef : TypeTag ] ( query : Query, connection : Connection 
     = query $ AbstractSqlComposition.primaryKeySelect $ (connection.query(_)(_.byNameRowsTraversable.toList)) $ (_.toStream) map (_("id").asInstanceOf[Long])
 
   /**
-   * Fetch only one entity ensuring that `amount(1)` is applied to the query.
+   * Fetch only one entity ensuring that `limit(1)` is applied to the query.
    * @return An option of entity instance with [[sorm.persisted.Persisted]] mixed in
    */
   def fetchOne () : Option[T with Persisted]
-    = amount(1).fetch().headOption
+    = limit(1).fetch().headOption
     
   /**
-   * Fetch only one id ensuring that `amount(1)` is applied to the query.
+   * Fetch only one id ensuring that `limit(1)` is applied to the query.
    */
   def fetchOneId () : Option[Long]
-    = amount(1).fetchIds().headOption
+    = limit(1).fetchIds().headOption
 
   /**
    * Fetch a number of matching entities stored in db.
@@ -80,12 +80,12 @@ class Access [ T <: AnyRef : TypeTag ] ( query : Query, connection : Connection 
     = query.order.toVector :+ Order(Path.mapping(query.mapping, p), reverse) $ (x => copy(order = x))
 
   /**
-   * Limit the amount of entities to be fetched
+   * Limit the limit of entities to be fetched
    */
-  def amount ( amount : Int ) = amount $ (Some(_)) $ (x => copy(amount = x))
+  def limit ( amount : Int ) = amount $ (Some(_)) $ (x => copy(amount = x))
 
   /**
-   * Set the amount of first results to skip
+   * Set the limit of first results to skip
    */
   def offset ( offset : Int ) = offset $ (x => copy(offset = x))
 

@@ -53,7 +53,8 @@ object Sql {
       having : Option[Condition[HavingObject]] = None,
       orderBy : Seq[OrderBy] = Nil,
       limit : Option[Int] = None,
-      offset : Option[Int] = None )
+      offset : Option[Int] = None,
+      distinct : Boolean = false )
     extends Sql
     with Statement
 

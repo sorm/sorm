@@ -35,8 +35,8 @@ trait StdSqlRendering {
           "( " + template(l).indent(2).trim + " )\n" +
           "UNION\n" +
           "( " + template(r).indent(2).trim + " )\n"
-        case Select(what, from, join, where, groupBy, having, orderBy, limit, offset) =>
-          "SELECT\n" +
+        case Select(what, from, join, where, groupBy, having, orderBy, limit, offset, distinct) =>
+          "SELECT" + distinct.option(" DISTINCT").mkString + "\n" +
           ( what.view.map{template(_)}.mkString(", ") +
             "\n" + template(from) +
             join
@@ -178,7 +178,7 @@ trait StdSqlRendering {
           v +: Stream()
         case Union(l, r) =>
           data(l) ++: data(r)
-        case Select(what, from, join, where, groupBy, having, orderBy, limit, offset) =>
+        case Select(what, from, join, where, groupBy, having, orderBy, limit, offset, distinct) =>
           ( what ++: from +: join ++: where ++: groupBy ++: having ++:
             orderBy
           ) .view

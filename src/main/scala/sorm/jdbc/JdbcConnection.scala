@@ -3,26 +3,18 @@ package sorm.jdbc
 import java.sql.DriverManager
 import sext._, embrace._
 import java.sql.{Connection, ResultSet, Statement => JdbcStatement}
-import com.weiglewilczek.slf4s.Logging
 import sorm.core.DbType
 
-class JdbcConnection( protected val connection : Connection ) extends Transactions with Logging {
-  private def logStatement(s : Statement){
-    logger.trace(
-      "Executing statement:\n" +
-      (("sql" -> s.sql) +: s.data.map(_.value).notEmpty.map("data" -> _) ++: Stream())
-        .toMap.valueTreeString
-    )
-  }
+class JdbcConnection( protected val connection : Connection ) extends Transactions with JdbcConnectionLogging {
+
   def executeQuery
     [ T ]
     ( s : Statement )
     ( parse : ResultSetView => T = (_ : ResultSetView).indexedRowsTraversable.toList )
     : T
     = {
-      logStatement(s)
       val js = preparedStatement(s)
-      val rs = js.executeQuery()
+      val rs = log(s)(js.executeQuery())
       val r = parse(rs)
       rs.close()
       js.close()
@@ -33,10 +25,9 @@ class JdbcConnection( protected val connection : Connection ) extends Transactio
     ( s : Statement )
     : List[IndexedSeq[Any]]
     = {
-      logStatement(s)
       if( s.data.isEmpty ) {
         val js = connection.createStatement()
-        js.executeUpdate(s.sql, JdbcStatement.RETURN_GENERATED_KEYS)
+        log(s)(js.executeUpdate(s.sql, JdbcStatement.RETURN_GENERATED_KEYS))
         val rs = js.getGeneratedKeys
         val r = rs.indexedRowsTraversable.toList
         rs.close()
@@ -44,7 +35,7 @@ class JdbcConnection( protected val connection : Connection ) extends Transactio
         r
       } else {
         val js = preparedStatement(s, true)
-        js.executeUpdate()
+        log(s)(js.executeUpdate())
         val rs = js.getGeneratedKeys
         val r = rs.indexedRowsTraversable.toList
         rs.close()
@@ -57,15 +48,14 @@ class JdbcConnection( protected val connection : Connection ) extends Transactio
     ( s : Statement )
     : Int
     = {
-      logStatement(s)
       if( s.data.isEmpty ){
         val js = connection.createStatement()
-        val r = js.executeUpdate(s.sql)
+        val r = log(s)(js.executeUpdate(s.sql))
         js.close()
         r
       } else {
         val js = preparedStatement(s)
-        val r = js.executeUpdate()
+        val r = log(s)(js.executeUpdate())
         js.close()
         r
       }

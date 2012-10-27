@@ -21,7 +21,7 @@ class EnumMapping
     def columnType 
       = ColumnType.TinyInt
     def valueFromContainerRow ( data : String => Any, connection : Connection )
-      = data(memberName).asInstanceOf[Byte] as values
+      = data(memberName).asInstanceOf[Byte] $ values
     def valuesForContainerTableRow( value : Any )
       = value.asInstanceOf[Enumeration#Value] $ dbValues $ (memberName -> _) $ (Stream(_))
 

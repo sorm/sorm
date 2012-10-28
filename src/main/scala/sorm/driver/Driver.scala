@@ -13,9 +13,7 @@ trait Driver {
 
   def withTmpConnection [ T ] ( f : Connection => T ) = {
     val c = connection()
-    val r = f(c)
-    c.close()
-    r
+    try { f(c) } finally { c.close() }
   }
 }
 object Driver {

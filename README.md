@@ -6,7 +6,7 @@ SORM is an object-relational mapping framework having elegance, consistency and 
 Currently SORM supports MySQL and H2 databases. Support for other popular DBs is comming.
 
 ##Supported Scala versions
-Scala 2.10.0-RC1 and later
+2.10.0-RC1 and later
 
 ##Getting started
 Let's add a dependency to SORM artifact. In Maven it will look like so: 
@@ -121,7 +121,7 @@ Guess what, that's it! We now have an up and running database with a full schema
 
 ##Diving deeper
 
-For more info please visit our [wiki](wiki).
+For more info please visit the [wiki](https://github.com/nikita-volkov/sorm/wiki) or learn the [API](http://nikita-volkov.github.com/sorm/api/) (you're really interested in the contents of a plain `sorm._` package only).
 
 ##Support
 
@@ -129,8 +129,8 @@ Support will be provided at [StackOverflow](http://stackoverflow.com/). Go ahead
 
 ##Bug-reporting and Tickets
 
-Please post any issues you come across in the [issues](issues) section.
+Please post any issues you come across in the [issues](https://github.com/nikita-volkov/sorm/issues) section.
 
 ##Contribution
     
-It is a very large project, and any kind of contribution is much appreciated. So if you find anything that you think Sorm could evolve on, go ahead and clone and leave your pull requests. Currently, the most wanted updates are drivers for other DBRMs.
+It is a very large project, and any kind of contribution is much appreciated. So if you find anything that you think Sorm could evolve on, go ahead and fork and leave your pull requests. Currently, the most wanted updates are drivers for other DBRMs.

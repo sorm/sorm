@@ -9,6 +9,7 @@ import query.AbstractSqlComposition
 import query.Query._
 import persisted._
 import reflect.runtime.universe.TypeTag
+import core._
 
 object Access {
   def apply [ T <: AnyRef : TypeTag ] ( mapping : EntityMapping, connection : DriverConnection )

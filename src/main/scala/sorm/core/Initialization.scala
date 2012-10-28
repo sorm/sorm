@@ -1,4 +1,4 @@
-package sorm.api
+package sorm.core
 
 import sorm._
 import driver.Driver

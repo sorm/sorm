@@ -14,7 +14,7 @@ import org.joda.time.DateTime
 class MysqlDateTimeSupportSuite extends FunSuite with ShouldMatchers {
   import sorm.MysqlDateTimeSupportSuite._
 
-  val db = TestingInstance.mysql(Sorm.Entity[A]()).connection()
+  val db = TestingInstance.mysql(api.Entity[A]()).connection()
 
   val date = new DateTime()
 

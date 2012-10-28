@@ -92,7 +92,7 @@ class Access [ T <: AnyRef : TypeTag ] ( query : Query, connection : Connection 
   /**
    * Return a copy of this `Access` object with a filter generated from DSL.
    *
-   * Usage of this method should be accompanied with {{import sorm.Sorm.FilterDsl._}}
+   * Usage of this method should be accompanied with {{import sorm.api.FilterDsl._}}
    * 
    */
   def where ( f : ApiFilter.Filter )

@@ -15,7 +15,7 @@ import jdbc._
 import sext._, embrace._
 
 import samples._
-import Sorm._
+import api._
 
 @RunWith(classOf[JUnitRunner])
 class SeqOfSeqsSupportSuite extends FunSuite with ShouldMatchers {

@@ -6,7 +6,7 @@ import mappings._
 import jdbc._
 import tableSorters._
 import connection._
-import Sorm._
+import api._
 
 import sext._, embrace._
 import com.weiglewilczek.slf4s.Logging

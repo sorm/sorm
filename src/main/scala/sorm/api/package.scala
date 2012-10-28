@@ -1,7 +1,7 @@
-package sorm
+package sorm.api
 
-import driver.Driver
 import sorm._
+import driver.Driver
 import api._
 import core._
 import persisted._
@@ -16,7 +16,7 @@ import com.weiglewilczek.slf4s.Logging
 
 import reflect.runtime.universe._
 
-object Sorm {
+object `package` {
 
   class ValidationException ( m : String ) extends SormException(m)
 
@@ -137,7 +137,7 @@ object Sorm {
 
   object FilterDsl {
 
-    import api.ApiFilter._
+    import ApiFilter._
 
     implicit class WhereWhere(val a: Filter) extends AnyVal {
       def or(b: Filter) = Or(a, b)

@@ -14,7 +14,7 @@ import org.joda.time.DateTime
 class H2DateTimeSupportSuite extends FunSuite with ShouldMatchers {
   import sorm.H2DateTimeSupportSuite._
 
-  val db = TestingInstance.h2(Sorm.Entity[A]()).connection()
+  val db = TestingInstance.h2(api.Entity[A]()).connection()
 
   val date = new DateTime()
 

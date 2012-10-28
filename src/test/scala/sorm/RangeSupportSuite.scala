@@ -7,7 +7,7 @@ import org.scalatest.junit.JUnitRunner
 
 
 import samples.TestingInstance
-import Sorm._
+import api._
 
 @RunWith(classOf[JUnitRunner])
 class RangeSupportSuite extends FunSuite with ShouldMatchers {

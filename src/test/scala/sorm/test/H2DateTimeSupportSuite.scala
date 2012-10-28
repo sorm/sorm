@@ -1,4 +1,4 @@
-package sorm
+package sorm.test
 
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
@@ -7,14 +7,15 @@ import org.scalatest.junit.JUnitRunner
 
 import sext._, embrace._
 
+import sorm._
 import samples._
 import org.joda.time.DateTime
 
 @RunWith(classOf[JUnitRunner])
-class MysqlDateTimeSupportSuite extends FunSuite with ShouldMatchers {
-  import sorm.MysqlDateTimeSupportSuite._
+class H2DateTimeSupportSuite extends FunSuite with ShouldMatchers {
+  import H2DateTimeSupportSuite._
 
-  val db = TestingInstance.mysql(api.Entity[A]()).connection()
+  val db = TestingInstance.h2(api.Entity[A]()).connection()
 
   val date = new DateTime()
 
@@ -26,11 +27,10 @@ class MysqlDateTimeSupportSuite extends FunSuite with ShouldMatchers {
 
   test("ConnectionApi now()")(pending)
   test("Larger filter"){
-//  todo: generation of inserted values to drivers, because of how mysql rounds the dates
-//    db.access[A].whereLarger("a", date.minusSeconds(1)).fetch()
-//      .should(
-//        contain(a1) and contain(a2) and not contain(a3) and not contain(a4)
-//      )
+    db.access[A].whereLarger("a", date.minusSeconds(1)).fetch()
+      .should(
+        contain(a1) and contain(a2) and not contain(a3) and not contain(a4)
+      )
   }
   test("Smaller filter")(pending)
   test("Equal filter")(pending)
@@ -38,6 +38,6 @@ class MysqlDateTimeSupportSuite extends FunSuite with ShouldMatchers {
   test("Other filters fail")(pending)
 
 }
-object MysqlDateTimeSupportSuite {
+object H2DateTimeSupportSuite {
   case class A ( a : DateTime )
 }

@@ -1,5 +1,6 @@
-package sorm
+package sorm.test
 
+import sorm._
 import core._
 import jdbc._
 import persisted.Persisted

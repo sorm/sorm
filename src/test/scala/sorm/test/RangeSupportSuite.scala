@@ -1,11 +1,11 @@
-package sorm
+package sorm.test
 
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 
-
+import sorm._
 import samples.TestingInstance
 import api._
 

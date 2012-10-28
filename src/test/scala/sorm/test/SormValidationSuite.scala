@@ -1,12 +1,14 @@
-package sorm
+package sorm.test
 
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 
+import sorm._
 import api._
 import samples._
+import sorm.api.{Entity, Instance}
 
 @RunWith(classOf[JUnitRunner])
 class SormValidationSuite extends FunSuite with ShouldMatchers {

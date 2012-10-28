@@ -1,30 +1,20 @@
 #SORM. A complete abstraction ORM framework for Scala
-SORM is an object-relational mapping framework having simplicity of use and absolute abstraction from relational side at its core principles. It automagically creates database tables, emits queries, inserts, updates and deletes records. This all functionality is presented to the user with a simple API which works on standard Scala's case classes. 
 
-Using SORM there is absolutely no need for the user to know anything about SQL, DDL and what concepts like many-to-many or one-to-many even mean. One can develop an application knowing that database integration will be a trivial step.
-
-##Project status
-Currently the project is in active development. Release of first stable version 0.1.0 is expected in the comming weeks as of September of 2012. 
-
-The framework is already in a perfectly working state and is being heavily use-tested in some private projects, but until the actual release the API is subject to changes and therefore there won't yet be any more documentation than what is in the "Getting started" section.
-
-##Known issues
-* No rows deletion functionality. Comming soon, definitely before release.
-* Memory leak. This is due to Scala 2.10-M7 reflection bug, which is expected to be fixed in the next release.
+SORM is an object-relational mapping framework having elegance, consistency and simplicity at its primary principles. It is absolutely abstracted from relational side automagically creating database tables, emitting queries, inserting, updating and deleting records. This all functionality is presented to the user with a simple API around standard Scala's case classes. 
 
 ##Supported databases
-Currently SORM releases are getting tested against MySQL and H2 databases. Other DBs may also be supported but are yet not guaranteed to be.
+Currently SORM supports MySQL and H2 databases. Support for other popular DBs is comming.
 
-##Future plans
-* Support for other popular DBs
+##Supported Scala versions
+Scala 2.10.0-RC1 and later
 
 ##Getting started
-<!-- Let's add a dependency to SORM artifact. In Maven it will look like so: 
+Let's add a dependency to SORM artifact. In Maven it will look like so: 
 
     <dependency>
       <groupId>com.github.nikita-volkov</groupId>
       <artifactId>sorm</artifactId>
-      <version>0.1.0</version>
+      <version>0.2.0</version>
     </dependency>
 
 For our testing project we will use an in-memory version of H2 database - let's add a dependency for it too:
@@ -35,7 +25,7 @@ For our testing project we will use an in-memory version of H2 database - let's 
       <version>1.3.168</version>
     </dependency>
 
-###Now, to the actual program.  -->
+###Now, to the actual program. 
 Please consider a data model described with these standard case classes:
 
     case class Artist
@@ -52,7 +42,7 @@ Please consider a data model described with these standard case classes:
 
 ###Let's initialize our SORM instance:
   
-    import sorm.Sorm._
+    import sorm._
 
     val db
       = new Instance(
@@ -62,46 +52,49 @@ Please consider a data model described with these standard case classes:
               Entity[Style]() +
               Entity[Locale](),
           url
-            = "jdbc:h2:mem:test"
+            = "jdbc:h2:mem:test",
+          user
+            = "",
+          password
+            = ""
         )
 
 > If you need an explanation with the code above, we create a SORM instance ready to work with objects of types `Artist`, `Style` and `Locale`. That instance connects to an in-memory H2 database without specifying user or password.
 
-Guess what, that's it! We now have an up and running database connection with a full schema structure required for storing our objects already created for us. All that's left to do is put it to use. 
+Guess what, that's it! We now have an up and running database with a full schema structure required for storing our objects already created for us. All that's left to do is put it to use. 
+
+###Let's open a connection to that db:
+
+    val cx = db.connection()
 
 ###Let's populate it with some data:
 
     //  create locales:
-    val ru
-      = db.save( Locale("ru") )
-    val en
-      = db.save( Locale("en") )
+    val ru = cx.save( Locale("ru") )
+    val en = cx.save( Locale("en") )
 
     //  create styles:
-    val rock
-      = db.save( Style( Map( en -> Seq("Rock"),
-                             ru -> Seq("Рок") ) ) )
-    val hardRock
-      = db.save( Style( Map( en -> Seq("Hard Rock"),
-                             ru -> Seq("Тяжёлый рок", "Тяжелый рок") ) ) )
-    val metal
-      = db.save( Style( Map( en -> Seq("Metal"),
-                             ru -> Seq("Метал") ) ) )
-    val grunge
-      = db.save( Style( Map( en -> Seq("Grunge"),
-                             ru -> Seq("Грандж") ) ) )
+    val rock      = cx.save( Style( Map( en -> Seq("Rock"),
+                                         ru -> Seq("Рок") ) ) )
+    val hardRock  = cx.save( Style( Map( en -> Seq("Hard Rock"),
+                                         ru -> Seq("Тяжёлый рок", 
+                                                   "Тяжелый рок") ) ) )
+    val metal     = cx.save( Style( Map( en -> Seq("Metal"),
+                                         ru -> Seq("Метал") ) ) )
+    val grunge    = cx.save( Style( Map( en -> Seq("Grunge"),
+                                         ru -> Seq("Грандж") ) ) )
 
     //  create artists:
-    db.save( Artist( Map( en -> Seq("Metallica"),
+    cx.save( Artist( Map( en -> Seq("Metallica"),
                           ru -> Seq("Металика", "Металлика") ),
                      Set( metal, rock, hardRock ) ) )
-    db.save( Artist( Map( en -> Seq("Nirvana"),
+    cx.save( Artist( Map( en -> Seq("Nirvana"),
                           ru -> Seq("Нирвана") ),
                      Set( rock, hardRock, grunge ) ) )
-    db.save( Artist( Map( en -> Seq("Kino"),
+    cx.save( Artist( Map( en -> Seq("Kino"),
                           ru -> Seq("Кино") ),
                      Set( rock ) ) )
-    db.save( Artist( Map( en -> Seq("The Rolling Stones",
+    cx.save( Artist( Map( en -> Seq("The Rolling Stones",
                                     "Rolling Stones",
                                     "Rolling Stones, The"),
                           ru -> Seq("Ролинг Стоунз",
@@ -109,18 +102,28 @@ Guess what, that's it! We now have an up and running database connection with a 
                                     "Роллинг Стоунс",
                                     "Ролинг Стоунс") ),
                      Set( rock ) ) )
-    db.save( Artist( Map( en -> Seq("Dire Straits"),
+    cx.save( Artist( Map( en -> Seq("Dire Straits"),
                           ru -> Seq("Даэр Стрэйтс") ),
                      Set( rock ) ) )
-    db.save( Artist( Map( en -> Seq("Godsmack"),
+    cx.save( Artist( Map( en -> Seq("Godsmack"),
                           ru -> Seq("Годсмэк") ),
                      Set( metal, hardRock, rock ) ) )
 
 ###Now let's fetch some data from our populated database:
 
     //  get an artist by id:
-    db.access[Artist].whereEquals("id", 2).fetchOne() // will return Nirvana
+    val nirvana
+      = cx.access[Artist].whereEquals("id", 2).fetchOne() // will return Nirvana
 
     //  all artists having a style that has `Hard Rock` in a list of its names
-    db.access[Artist].whereEquals("names.value.item.value", "Hard Rock").fetch()
+    val hardRockArtists
+      = cx.access[Artist].whereEquals("names.value.item.value", "Hard Rock").fetch()
+
+##Support
+
+Support will be provided at [StackOverflow](http://stackoverflow.com/). Go ahead and ask your questions under tag "sorm".
+
+##Contribution
+    
+It is a very large project, and any kind of contribution is much appreciated. So if you find anything that you think Sorm could evolve on, go ahead and clone and leave your pull requests. Currently, the most wanted updates are drivers for other DBRMs.
 

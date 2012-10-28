@@ -3,7 +3,7 @@ package sorm.mappings
 import sext._, embrace._
 
 import sorm._
-import connection.Connection
+import connection.DriverConnection
 import reflection._
 import core._
 
@@ -19,7 +19,7 @@ class TupleMapping
   lazy val items
     = reflection.generics.view.zipWithIndex.map { case (r, i) => Mapping(r, Membership.TupleItem(i, this), settings) }.toVector
 
-  def valueFromContainerRow ( row : String => Any, c : Connection )
+  def valueFromContainerRow ( row : String => Any, c : DriverConnection )
     = reflection instantiate mappings.map(_.valueFromContainerRow(row, c))
 
   def valuesForContainerTableRow ( value : Any )
@@ -28,11 +28,11 @@ class TupleMapping
   private def itemValues ( value : Any )
     = mappings zip value.asInstanceOf[Product].productIterator.toIterable
 
-  override def update ( value : Any, masterKey : Stream[Any], connection : Connection ) {
+  override def update ( value : Any, masterKey : Stream[Any], connection : DriverConnection ) {
     itemValues(value).foreach(_ $$ (_.update(_, masterKey, connection)))
   }
 
-  override def insert ( value : Any, masterKey : Stream[Any], connection : Connection ) {
+  override def insert ( value : Any, masterKey : Stream[Any], connection : DriverConnection ) {
     itemValues(value).foreach(_ $$ (_.insert(_, masterKey, connection)))
   }
 

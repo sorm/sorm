@@ -5,7 +5,7 @@ import sorm.jdbc.JdbcConnection
 import sorm.ddl.Table
 
 class H2 (protected val connection : JdbcConnection)
-  extends Connection
+  extends DriverConnection
   with StdQuery
   with StdSqlRendering
   with StdDropAllTables

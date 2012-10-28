@@ -2,14 +2,14 @@ package sorm.mappings
 
 import sext._, embrace._
 import sorm._
-import connection.Connection
+import connection.DriverConnection
 import core._
 import jdbc.ResultSetView
 
 trait Querying {
   import abstractSql.AbstractSql._
 
-  def parseResultSet ( rs : ResultSetView, connection : Connection ) : Any
+  def parseResultSet ( rs : ResultSetView, connection : DriverConnection ) : Any
 
   def containerTableMapping : Option[TableMapping]
   def tableName : String
@@ -17,7 +17,7 @@ trait Querying {
   def bindingsToContainerTable : Stream[(String, String)]
   def primaryKeyColumnNames : Stream[String]
 
-  val fetchByContainerPrimaryKey : ( Map[String, Any], Connection ) => Any
+  val fetchByContainerPrimaryKey : ( Map[String, Any], DriverConnection ) => Any
     = {
       lazy val table = Table(tableName)
       lazy val containerTable = containerTableMapping.get.tableName $ (Table(_, Parent(table, bindingsToContainerTable.map(_.swap)) $ Some.apply))
@@ -31,7 +31,7 @@ trait Querying {
           .$(c.query(_)(parseResultSet(_, c)))
     }
 
-  val fetchByPrimaryKey : ( Map[String, Any], Connection ) => Any
+  val fetchByPrimaryKey : ( Map[String, Any], DriverConnection ) => Any
     = {
       lazy val table = Table(tableName, None)
       lazy val columns = tableColumns.map(_.name).map(Column(_, table))

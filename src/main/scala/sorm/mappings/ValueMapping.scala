@@ -1,7 +1,7 @@
 package sorm.mappings
 
 import sorm._
-import connection.Connection
+import connection.DriverConnection
 import core._
 import reflection._
 import ddl._
@@ -72,7 +72,7 @@ class ValueMapping
       }
 
 
-    def valueFromContainerRow ( data: String => Any, c : Connection ) = data(memberName)
+    def valueFromContainerRow ( data: String => Any, c : DriverConnection ) = data(memberName)
 
     def valuesForContainerTableRow( value : Any ) = (memberName -> value) +: Stream()
   }

@@ -2,7 +2,7 @@ package sorm.api
 
 import reflect.runtime.universe._
 import sorm._
-import connection.{Connection => DriverConnection}
+import connection.DriverConnection
 import core._
 import persisted._
 import reflection._

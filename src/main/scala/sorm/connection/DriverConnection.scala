@@ -11,7 +11,7 @@ import sorm.jdbc.ResultSetView
 /**
  * An abstraction over jdbc connection, instances of which implement sql dialects of different databases
  */
-trait Connection {
+trait DriverConnection {
   def query
     [ T ]
     ( asql : Statement )

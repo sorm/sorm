@@ -2,7 +2,7 @@ package sorm.mappings
 
 import sext._, embrace._
 import sorm._
-import connection.Connection
+import connection.DriverConnection
 import core._
 import reflection._
 
@@ -16,7 +16,7 @@ class RangeMapping
     lazy val end = Mapping( Reflection[Int], Membership.RangeEnd(this), settings )
     lazy val mappings = start +: end +: Stream()
 
-    def valueFromContainerRow(data: String => Any, c : Connection)
+    def valueFromContainerRow(data: String => Any, c : DriverConnection)
       = start.valueFromContainerRow(data, c).asInstanceOf[Int] to end.valueFromContainerRow(data, c).asInstanceOf[Int]
     def valuesForContainerTableRow(value: Any) = value match {
       case value : Range => start.valuesForContainerTableRow(value.start) ++ end.valuesForContainerTableRow(value.end)

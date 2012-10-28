@@ -1,7 +1,7 @@
 package sorm.mappings
 
 import sorm._
-import connection.Connection
+import connection.DriverConnection
 import reflection.Reflection
 import core._
 import scala.Some
@@ -49,12 +49,12 @@ trait Mapping {
 
 
   //  for parsing
-  def valueFromContainerRow ( data : String => Any, connection : Connection ) : Any
+  def valueFromContainerRow ( data : String => Any, connection : DriverConnection ) : Any
 
   //  for saving
   def valuesForContainerTableRow ( value : Any ) : Iterable[(String, Any)]
-  def update ( value : Any, masterKey : Stream[Any], connection : Connection ) {}
-  def insert ( value : Any, masterKey : Stream[Any], connection : Connection ) {}
+  def update ( value : Any, masterKey : Stream[Any], connection : DriverConnection ) {}
+  def insert ( value : Any, masterKey : Stream[Any], connection : DriverConnection ) {}
 
   def columnsForContainer : Stream[Column]
 

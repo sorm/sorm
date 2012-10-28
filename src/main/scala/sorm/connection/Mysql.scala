@@ -3,7 +3,7 @@ package sorm.connection
 import sorm.jdbc.JdbcConnection
 
 class Mysql (protected val connection : JdbcConnection)
-  extends Connection
+  extends DriverConnection
   with StdQuery
   with StdSqlRendering
   with StdDropAllTables

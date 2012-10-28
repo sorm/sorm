@@ -3,7 +3,7 @@ package sorm.mappings
 import sext._, embrace._
 
 import sorm._
-import connection.Connection
+import connection.DriverConnection
 import core._
 import reflection._
 
@@ -18,7 +18,7 @@ class OptionToNullableMapping
     lazy val item = Mapping( reflection.generics(0), Membership.OptionToNullableItem(this), settings )
     lazy val mappings = item +: Stream()
 
-    def valueFromContainerRow ( row : String => Any, connection : Connection )
+    def valueFromContainerRow ( row : String => Any, connection : DriverConnection )
       = if( columnsForContainer.map(_.name).forall(row(_) == null) ) None
         else item.valueFromContainerRow(row, connection) $ (Some(_))
 
@@ -28,11 +28,11 @@ class OptionToNullableMapping
           case None => columnsForContainer.map(_.name -> null)
         }
 
-    override def update ( value : Any, masterKey : Stream[Any], connection : Connection ) {
+    override def update ( value : Any, masterKey : Stream[Any], connection : DriverConnection ) {
       value.asInstanceOf[T] foreach (item.update(_, masterKey, connection))
     }
 
-    override def insert ( value : Any, masterKey : Stream[Any], connection : Connection ) {
+    override def insert ( value : Any, masterKey : Stream[Any], connection : DriverConnection ) {
       value.asInstanceOf[T] foreach (item.insert(_, masterKey, connection))
     }
 

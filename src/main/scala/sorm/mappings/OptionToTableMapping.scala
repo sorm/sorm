@@ -2,7 +2,7 @@ package sorm.mappings
 
 import sext._, embrace._
 import sorm._
-import connection.Connection
+import connection.DriverConnection
 import core._
 import jdbc.ResultSetView
 import reflection._
@@ -19,15 +19,15 @@ class OptionToTableMapping
     lazy val mappings = item +: Stream()
 
 
-    def parseResultSet(rs: ResultSetView, connection : Connection)
+    def parseResultSet(rs: ResultSetView, connection : DriverConnection)
       = rs.byNameRowsTraversable.toStream.headOption.map(item.valueFromContainerRow(_, connection))
 
-    override def update ( value : Any, masterKey : Stream[Any], connection : Connection ) {
+    override def update ( value : Any, masterKey : Stream[Any], connection : DriverConnection ) {
       connection.delete(tableName, masterTableColumnNames zip masterKey)
       insert(value, masterKey, connection)
     }
 
-    override def insert ( v : Any, masterKey : Stream[Any], connection : Connection ) {
+    override def insert ( v : Any, masterKey : Stream[Any], connection : DriverConnection ) {
       v.asInstanceOf[Option[_]]
         .foreach{ v =>
           val pk = masterKey

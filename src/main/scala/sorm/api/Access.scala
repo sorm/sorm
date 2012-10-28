@@ -3,7 +3,7 @@ package sorm.api
 import sext._, embrace._
 import sorm._
 import api.{Filter => ApiFilter}
-import connection.{Connection => DriverConnection}
+import connection.DriverConnection
 import mappings._
 import query.AbstractSqlComposition
 import query.Query._

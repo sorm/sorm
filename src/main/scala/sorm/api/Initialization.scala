@@ -1,6 +1,7 @@
 package sorm.api
 
 import sorm._
+import driver.Driver
 import reflection._
 import mappings._
 import jdbc._
@@ -54,30 +55,36 @@ object Initialization extends Logging {
         .map("Not a distinct properties list: `" + _.mkString(", ") + "`")
     }
 
-  def initializeSchema ( mappings : Iterable[EntityMapping], connection : Connection, initMode : InitMode ) {
+  def initializeSchema ( mappings : Iterable[EntityMapping], driver : Driver, initMode : InitMode ) {
     initMode match {
       case InitMode.DropAllCreate =>
-        try {
-          connection.dropAllTables()
-        } catch {
-          case e : Throwable =>
-            logger.warn("Couldn't drop all tables. " + e.getMessage)
-        }
-        mappings $ Create.tables foreach connection.createTable
-      case InitMode.DropCreate =>
-        mappings $ Drop.tables map (_.name) foreach { n =>
+        driver.withTmpConnection { connection =>
           try {
-            connection.dropTable(n)
+            connection.dropAllTables()
           } catch {
             case e : Throwable =>
-              logger.warn("Couldn't drop table `" + n + "`. " + e.getMessage)
+              logger.warn("Couldn't drop all tables. " + e.getMessage)
           }
+          mappings $ Create.tables foreach connection.createTable
         }
-        mappings $ Create.tables foreach connection.createTable
+      case InitMode.DropCreate =>
+        driver.withTmpConnection { connection =>
+          mappings $ Drop.tables map (_.name) foreach { n =>
+            try {
+              connection.dropTable(n)
+            } catch {
+              case e : Throwable =>
+                logger.warn("Couldn't drop table `" + n + "`. " + e.getMessage)
+            }
+          }
+          mappings $ Create.tables foreach connection.createTable
+        }
       case InitMode.Create =>
-        mappings $ Create.tables foreach { t =>
-          try { connection.createTable(t) }
-          catch { case e : Throwable => }
+        driver.withTmpConnection { connection =>
+          mappings $ Create.tables foreach { t =>
+            try { connection.createTable(t) }
+            catch { case e : Throwable => }
+          }
         }
       case InitMode.DoNothing =>
     }

@@ -67,9 +67,7 @@ class Instance
     mappings.values.toStream $ Initialization.errors map (new ValidationException(_)) foreach (throw _)
 
     // Initialize a db schema:
-    driver.withTmpConnection{ c =>
-      Initialization.initializeSchema(mappings.values, c, initMode)
-    }
+    Initialization.initializeSchema(mappings.values, driver, initMode)
 
     // Precache persisted classes (required for multithreading)
     entities.toStream

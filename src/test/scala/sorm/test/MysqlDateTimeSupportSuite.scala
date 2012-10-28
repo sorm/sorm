@@ -25,7 +25,7 @@ class MysqlDateTimeSupportSuite extends FunSuite with ShouldMatchers {
   val a4 = db.save(A(date.minusSeconds(50)))
 
 
-  test("ConnectionApi now()")(pending)
+  test("Connection now()")(pending)
   test("Larger filter"){
 //  todo: generation of inserted values to drivers, because of how mysql rounds the dates
 //    db.access[A].whereLarger("a", date.minusSeconds(1)).fetch()

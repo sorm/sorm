@@ -2,7 +2,7 @@ package sorm.api
 
 import reflect.runtime.universe._
 import sorm._
-import connection.Connection
+import connection.{Connection => DriverConnection}
 import core._
 import persisted._
 import reflection._
@@ -12,9 +12,9 @@ import sext._, embrace._
 import com.weiglewilczek.slf4s.Logging
 import org.joda.time.DateTime
 
-trait ConnectionApi extends Logging {
+trait Connection extends Logging {
 
-  protected def connection : Connection
+  protected def connection : DriverConnection
 
   protected def mappings : Map[Reflection, EntityMapping]
 
@@ -65,7 +65,7 @@ trait ConnectionApi extends Logging {
       }
 
   /**
-   * Saves the entity by overwriting the existing one if one with the matching unique keys exists and creating a new one otherwise. Executing simply [[sorm.api.ConnectionApi#save]] in situation of unique keys clash would have thrown an exception. Please beware that in case when not all unique keys are matched this method will still throw an exception.
+   * Saves the entity by overwriting the existing one if one with the matching unique keys exists and creating a new one otherwise. Executing simply [[sorm.api.Connection#save]] in situation of unique keys clash would have thrown an exception. Please beware that in case when not all unique keys are matched this method will still throw an exception.
    * @param value The value to save
    * @return The saved entity instance with a [[sorm.persisted.Persisted]] trait mixed in
    */
@@ -108,7 +108,7 @@ trait ConnectionApi extends Logging {
    * @tparam T The result of the closure
    * @return The result of the last statement of the passed in closure
    */
-  def transaction [ T ] ( t : ConnectionApi => T ) : T = connection.transaction(t(this))
+  def transaction [ T ] ( t : Connection => T ) : T = connection.transaction(t(this))
 
   /**
    * Current time at DB server in milliseconds. Effectively fetches the date only once to calculate the deviation.

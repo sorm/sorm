@@ -3,7 +3,7 @@ package sorm.api
 import sext._, embrace._
 import sorm._
 import api.{Filter => ApiFilter}
-import connection.Connection
+import connection.{Connection => DriverConnection}
 import mappings._
 import query.AbstractSqlComposition
 import query.Query._
@@ -11,11 +11,11 @@ import persisted._
 import reflect.runtime.universe.TypeTag
 
 object Access {
-  def apply [ T <: AnyRef : TypeTag ] ( mapping : EntityMapping, connection : Connection )
+  def apply [ T <: AnyRef : TypeTag ] ( mapping : EntityMapping, connection : DriverConnection )
     = new Access[T]( Query(mapping), connection )
 }
 //  alternative titles: QueryApi
-class Access [ T <: AnyRef : TypeTag ] ( query : Query, connection : Connection ) {
+class Access [ T <: AnyRef : TypeTag ] ( query : Query, connection : DriverConnection ) {
 
   /**
    * Fetch matching entities from db.

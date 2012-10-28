@@ -25,7 +25,7 @@ class H2DateTimeSupportSuite extends FunSuite with ShouldMatchers {
   val a4 = db.save(A(date.minusSeconds(50)))
 
 
-  test("ConnectionApi now()")(pending)
+  test("Connection now()")(pending)
   test("Larger filter"){
     db.access[A].whereLarger("a", date.minusSeconds(1)).fetch()
       .should(

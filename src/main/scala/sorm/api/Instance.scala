@@ -38,13 +38,13 @@ class Instance
     private val driver = Driver(url, user, password)
 
     def connection ()
-      = new ConnectionApi {
+      = new Connection {
           protected val connection = driver.connection()
           protected def mappings = Instance.this.mappings
         }
 
-    def withTmpConnection [ T ] ( f : ConnectionApi => T )
-      = driver.withTmpConnection(c => f(new ConnectionApi { protected def connection = c; protected def mappings = Instance.this.mappings }))
+    def withTmpConnection [ T ] ( f : Connection => T )
+      = driver.withTmpConnection(c => f(new Connection { protected def connection = c; protected def mappings = Instance.this.mappings }))
 
     //  Validate entities (must be prior to mappings creation due to possible mappingkind detection errors):
     entities flatMap Initialization.errors map (new ValidationException(_)) foreach (throw _)

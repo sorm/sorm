@@ -13,7 +13,7 @@ object TestingInstance {
   def simulator
     ( entities : Entity* )
     = ???
-//    = new ConnectionApi {
+//    = new Connection {
 //        protected[sorm] val mappings
 //          = {
 //            val settings

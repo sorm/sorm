@@ -3,7 +3,7 @@ package sorm.mappings
 import sext._, embrace._
 
 import sorm._
-import connection.DriverConnection
+import driver.DriverConnection
 import reflection.Reflection
 import core._
 import ddl._

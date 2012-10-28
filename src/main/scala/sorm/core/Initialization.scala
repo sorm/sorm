@@ -6,7 +6,6 @@ import reflection._
 import mappings._
 import jdbc._
 import tableSorters._
-import connection._
 import api._
 
 import sext._, embrace._

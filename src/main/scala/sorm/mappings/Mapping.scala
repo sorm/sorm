@@ -1,7 +1,7 @@
 package sorm.mappings
 
 import sorm._
-import connection.DriverConnection
+import driver.DriverConnection
 import reflection.Reflection
 import core._
 import scala.Some

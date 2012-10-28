@@ -5,7 +5,6 @@ import java.sql.DriverManager
 
 import sorm._
 import core._
-import connection._
 import jdbc._
 
 trait Driver {

@@ -2,7 +2,7 @@ package sorm.mappings
 
 import sext._, embrace._
 import sorm._
-import connection.DriverConnection
+import driver.DriverConnection
 import core._
 import jdbc.ResultSetView
 import persisted.Persisted

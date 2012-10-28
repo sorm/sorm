@@ -1,4 +1,4 @@
-package sorm.connection
+package sorm.driver
 
 import sext._, embrace._
 import org.joda.time.DateTime

@@ -1,9 +1,6 @@
 package sorm.abstractSql
 
-import sorm._
-import structure._
-import mapping._
-import sext._
+import sext._, embrace._
 
 import AbstractSql._
 
@@ -20,7 +17,14 @@ object Compositing {
             condition
               = ( l.condition ++ r.condition ) reduceOption And,
             having
-              = l.having ++: r.having distinct
+              = l.having ++: r.having distinct,
+            limit
+              = (l.limit, r.limit) match {
+                  case (Some(l), Some(r)) => Seq(l, r).min $ (Some(_))
+                  case (l, r) => l orElse r
+                },
+            offset
+              = Seq(l.offset, r.offset).max
           )
         case (l, r) =>
           Intersection(l, r)
@@ -37,7 +41,14 @@ object Compositing {
             condition
               = ( l.condition ++ r.condition ) reduceOption Or,
             having
-              = l.having ++: r.having distinct
+              = l.having ++: r.having distinct,
+            limit
+              = (l.limit, r.limit) match {
+                  case (Some(l), Some(r)) => Seq(l, r).max $ (Some(_))
+                  case (l, r) => l orElse r
+                },
+            offset
+              = Seq(l.offset, r.offset).min
           )
         case (l, r) =>
           Union(l, r)

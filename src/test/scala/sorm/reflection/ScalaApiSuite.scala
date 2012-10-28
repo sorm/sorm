@@ -11,7 +11,7 @@ class ScalaApiSuite extends FunSuite with ShouldMatchers {
 
   import reflect.runtime.universe._
   import reflect.runtime.{currentMirror => mirror}
-  import sext._
+  import sext._, embrace._
   import ScalaApi._
 
 
@@ -19,7 +19,7 @@ class ScalaApiSuite extends FunSuite with ShouldMatchers {
     typeOf[Artist].constructors should have length (3)
   }
   test("primary constructor") {
-    typeOf[Artist].constructors.head.params.flatten should have length (4)
+    typeOf[Artist].constructors.head.paramss.flatten should have length (4)
   }
   test("javaClass of a local class") {
     typeOf[Artist].javaClass should equal(classOf[Artist])

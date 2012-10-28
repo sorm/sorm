@@ -5,7 +5,7 @@ import org.scalatest.matchers.ShouldMatchers
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import sorm.samples.TestingInstance
-import sorm.Sorm.Entity
+import sorm.Entity
 
 object MultithreadingTest {
   case class A (a : Int)
@@ -14,7 +14,7 @@ object MultithreadingTest {
 class MultithreadingTest extends FunSuite with ShouldMatchers {
   import MultithreadingTest._
 
-  val db = TestingInstance.mysql(Entity[A](unique = Set() + Seq("a")))
+  val db = TestingInstance.mysql(Entity[A](unique = Set() + Seq("a"))).connection()
 
   val a1 = db.save(A(1))
   val a2 = db.save(A(3))
@@ -22,7 +22,7 @@ class MultithreadingTest extends FunSuite with ShouldMatchers {
   val a4 = db.save(A(3000))
 
   test("Parallel queries"){
-    Seq(0,1,2,3).par.flatMap{ i => db.one[A].filterEqual("a", i).fetch() }.seq
+    Seq(0,1,2,3).par.flatMap{ i => db.access[A].whereEqual("a", i).fetchOne() }.seq
       .should(contain(a1) and contain(a3) and not contain(a4))
   }
   test("Parallel saving"){

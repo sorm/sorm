@@ -1,9 +1,7 @@
 package sorm.joda
 
 import org.joda.time._
-
-import sorm._
-import sext._
+import sext._, embrace._
 
 object Extensions {
   
@@ -12,7 +10,7 @@ object Extensions {
   }
 
   implicit class LocalDateToJava ( val self : LocalDate ) extends AnyVal {
-    def toJava = new java.sql.Date( self.toDateMidnight.getMillis )
+    def toJava = self.toDate.getTime $ (new java.sql.Date(_))
   }
 
   implicit class LocalTimeToJava ( val self : LocalTime ) extends AnyVal {

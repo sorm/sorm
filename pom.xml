@@ -6,7 +6,7 @@
 
   <groupId>com.github.nikita-volkov</groupId>
   <artifactId>sorm</artifactId>
-  <version>0.1.0</version>
+  <version>0.2.0</version>
   <packaging>jar</packaging>
 
   <name>SORM</name>
@@ -43,8 +43,13 @@
   <dependencies>
     <dependency>
       <groupId>com.github.nikita-volkov</groupId>
+      <artifactId>embrace</artifactId>
+      <version>0.1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.github.nikita-volkov</groupId>
       <artifactId>sext</artifactId>
-      <version>0.1.0</version>
+      <version>0.2.0</version>
     </dependency>
     <dependency>
       <groupId>joda-time</groupId>
@@ -86,14 +91,8 @@
     </dependency>
     <dependency>
       <groupId>org.scalatest</groupId>
-      <artifactId>scalatest_2.10.0-M7</artifactId>
-      <version>2.0.M4-2.10.0-M7-B1</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.scala-lang</groupId>
-      <artifactId>scala-actors</artifactId>
-      <version>2.10.0-M7</version>
+      <artifactId>scalatest_2.10.0-RC1</artifactId>
+      <version>2.0.M4-2.10.0-RC1-B1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -105,17 +104,17 @@
     <dependency>
       <groupId>org.scala-lang</groupId>
       <artifactId>scala-reflect</artifactId>
-      <version>2.10.0-M7</version>
+      <version>2.10.0-RC1</version>
     </dependency>
     <dependency>
       <groupId>org.scala-lang</groupId>
       <artifactId>scala-library</artifactId>
-      <version>2.10.0-M7</version>
+      <version>2.10.0-RC1</version>
     </dependency>
     <dependency>
       <groupId>org.scala-lang</groupId>
       <artifactId>scala-compiler</artifactId>
-      <version>2.10.0-M7</version>
+      <version>2.10.0-RC1</version>
     </dependency>
   </dependencies>
 
@@ -180,6 +179,9 @@
             </goals>
           </execution>
         </executions>
+        <configuration>
+          <useAgent>true</useAgent>
+        </configuration>
       </plugin>
     </plugins>
   </build>

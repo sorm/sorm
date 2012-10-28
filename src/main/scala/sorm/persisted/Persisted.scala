@@ -1,14 +1,12 @@
 package sorm.persisted
 
-import reflect.basis._
+import reflect.runtime.universe._
 
 import sorm._
 import reflection._
-import sext._
 
-trait Persisted {
-  def id: Long
-}
+import sext._, embrace._
+
 object Persisted {
 
   def apply

@@ -1,17 +1,17 @@
-package sorm
-
-import core.SormException
-import java.sql.{ResultSet, PreparedStatement, Connection, Statement => JStatement}
-import org.joda.time.DateTime
+package sorm.jdbc
 
 import sorm._
-import sext._
+import core.SormException
+import java.sql.{ResultSet, PreparedStatement, Connection, Statement => JStatement}
+import org.joda.time._
 
-package object jdbc {
+import sext._, embrace._
 
-  implicit def connectionAdapter(x: Connection) = new ConnectionAdapter(x)
-  implicit def preparedStatementAdapter(x: PreparedStatement) = new PreparedStatementAdapter(x)
-  implicit def resultSetAdapter(x: ResultSet) = new ResultSetAdapter(x)
+object `package` {
+
+  implicit def connectionAdapter(x: Connection) = new JdbcConnection(x)
+  implicit def preparedStatementAdapter(x: PreparedStatement) = new PreparedStatementView(x)
+  implicit def resultSetAdapter(x: ResultSet) = new ResultSetView(x)
 
 
   type JdbcType = Int
@@ -31,12 +31,24 @@ package object jdbc {
           case _ : Long       => BIGINT
           case _ : Float      => REAL
           case _ : Double     => DOUBLE
+          case _ : LocalDate  => DATE
+          case _ : LocalTime  => TIME
           case _ : DateTime   => TIMESTAMP
           case null           => NULL
           case _              => throw new SormException("Value of unsupported type `" + v.getClass + "`: " + v)
         }
   }
 
+  case class JdbcValue
+    ( value : Any,
+      t : JdbcType )
+  object JdbcValue {
+    def apply ( v : Any ) : JdbcValue = apply(v, JdbcType(v))
+  }
 
+
+  case class Statement
+    ( sql: String,
+      data: Seq[JdbcValue] = Nil )
 
 }

@@ -8,13 +8,12 @@ import org.scalatest.junit.JUnitRunner
 import sorm._
 
 import samples._
-import Sorm._
 
 @RunWith(classOf[JUnitRunner])
 class InFilterTest extends FunSuite with ShouldMatchers {
   import InFilterTest._
 
-  val db = TestingInstance.h2( Entity[A]() )
+  val db = TestingInstance.h2( Entity[A]() ).connection()
 
   val a1 = db.save(A(1))
   val a2 = db.save(A(2))
@@ -22,10 +21,10 @@ class InFilterTest extends FunSuite with ShouldMatchers {
 
 
   test("empty value"){
-    db.one[A].filterIn("a", Seq()).fetch().should(equal(None))
+    db.access[A].whereIn("a", Seq()).fetchOne().should(equal(None))
   }
   test("valid value"){
-    db.one[A].filterIn("a", Seq(2)).fetch().should(equal(Some(a2)))
+    db.access[A].whereIn("a", Seq(2)).fetchOne().should(equal(Some(a2)))
   }
 
 }

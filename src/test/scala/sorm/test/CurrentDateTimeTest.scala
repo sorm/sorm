@@ -8,12 +8,12 @@ import sorm.samples.TestingInstance
 
 @RunWith(classOf[JUnitRunner])
 class CurrentDateTimeTest extends FunSuite with ShouldMatchers {
-  val db = TestingInstance.h2()
+  val db = TestingInstance.h2().connection()
 
   test("should be changing"){
-    val a = db.dateTime
+    val a = db.now()
     Thread.sleep(1500)
-    val b = db.dateTime
+    val b = db.now()
     (b.getMillis - a.getMillis) should be >= 1500l
   }
 }

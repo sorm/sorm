@@ -1,10 +1,11 @@
 package sorm.abstractSql
 
-import sorm.structure.mapping._
-import sorm.persisted._
-
-import sorm.abstractSql.AbstractSql._
-import sorm.abstractSql.Compositing._
+import sext._, embrace._
+import sorm._
+import mappings._
+import core._
+import AbstractSql._
+import Compositing._
 
 object Combinators {
 
@@ -44,18 +45,19 @@ object Combinators {
     = restrictingCount( empty(m), m, v, o )
 
   def empty ( m : Mapping ) : Select
-    = m.root.abstractSqlPrimaryKeySelect
+    = m.root.primaryKeySelect
 
   def havingNotEmptyContainer ( m : Mapping ) : Option[Select]
     = m.containerTableMapping.map{ havingCount(_, 0, NotEqual) }
 
-  def including ( m : CollectionMapping, v : Iterable[_] ) : Option[Statement]
+  def including ( m : TableMapping, v : Iterable[_] ) : Option[Statement]
     = {
       val item
         = m match {
             case m : SeqMapping => m.item
             case m : SetMapping => m.item
             case m : MapMapping => m.key
+            case _ => throw new SormException("including is unsupported by mapping `" + m + "`")
           }
       v.view
         .map{ equaling(item, _) }
@@ -73,7 +75,7 @@ object Combinators {
           = Some(
               Comparison(
                 m.containerTableMapping.get.abstractSqlTable,
-                m.columnName, o, v 
+                m.memberName, o, v
               )
             )
       )
@@ -91,7 +93,7 @@ object Combinators {
               = Some(
                   Comparison(
                     m.containerTableMapping.get.abstractSqlTable,
-                    m.columnName,
+                    m.memberName,
                     Equal,
                     theValue
                   )
@@ -100,13 +102,19 @@ object Combinators {
         case (m : EntityMapping, v : Persisted) =>
           equaling(m.id, v.id)
         case (m : RangeMapping, v : Range ) =>
-          equaling(m.from, v.start) & equaling(m.to, v.end)
+          equaling(m.start, v.start) & equaling(m.end, v.end)
         case (m : TupleMapping, v : Product ) =>
           v.productIterator.zipWithIndex
             .map{ case (v, i) => equaling(m.items(i), v) }
             .reduce{_ & _}
-        case (m : OptionMapping, v : Option[_] ) =>
+        case (m : OptionToNullableMapping, v : Option[_] ) =>
           equaling(m.item, v.orNull)
+        case (m : OptionToTableMapping, None ) =>
+          havingCount( m, 0 ) &&!
+          havingNotEmptyContainer(m)
+        case (m : OptionToTableMapping, Some(v) ) =>
+          equaling(m.item, v) &&!
+          havingNotEmptyContainer(m)
         case (m : SeqMapping, v : Seq[_]) =>
           def crossingWithIndex
             = v.view.zipWithIndex
@@ -146,7 +154,7 @@ object Combinators {
               = Some(
                   Comparison(
                     m.containerTableMapping.get.abstractSqlTable,
-                    m.columnName,
+                    m.memberName,
                     NotEqual,
                     theValue
                   )
@@ -155,7 +163,7 @@ object Combinators {
                     Some(
                       Comparison(
                         m.containerTableMapping.get.abstractSqlTable,
-                        m.columnName,
+                        m.memberName,
                         Equal,
                         null
                       )
@@ -166,13 +174,17 @@ object Combinators {
         case (m : EntityMapping, v : Persisted) =>
           notEqualing(m.id, v.id)
         case (m : RangeMapping, v : Range ) =>
-          notEqualing(m.from, v.start) | notEqualing(m.to, v.end)
+          notEqualing(m.start, v.start) | notEqualing(m.end, v.end)
         case (m : TupleMapping, v : Product ) =>
           v.productIterator.zipWithIndex
             .map{ case (v, i) => notEqualing(m.items(i), v) }
             .reduce{_ | _}
-        case (m : OptionMapping, v : Option[_] ) =>
+        case (m : OptionToNullableMapping, v : Option[_] ) =>
           notEqualing(m.item, v.orNull)
+        case (m : OptionToTableMapping, None ) =>
+          havingCount(m, 1)
+        case (m : OptionToTableMapping, Some(v) ) =>
+          notEqualing(m.item, v) |! havingCount(m, 0)
         case (m : SeqMapping, v : Seq[_]) =>
           def disjoint
             = v.view.zipWithIndex

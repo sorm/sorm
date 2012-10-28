@@ -1,7 +1,86 @@
 package sorm.jdbc
 
 import java.sql.DriverManager
+import sext._, embrace._
+import java.sql.{Connection, ResultSet, Statement => JdbcStatement}
+import sorm.core.DbType
 
+class JdbcConnection( protected val connection : Connection ) extends Transactions with JdbcConnectionLogging {
+
+  def executeQuery
+    [ T ]
+    ( s : Statement )
+    ( parse : ResultSetView => T = (_ : ResultSetView).indexedRowsTraversable.toList )
+    : T
+    = {
+      val js = preparedStatement(s)
+      val rs = log(s)(js.executeQuery())
+      val r = parse(rs)
+      rs.close()
+      js.close()
+      r
+    }
+
+  def executeUpdateAndGetGeneratedKeys
+    ( s : Statement )
+    : List[IndexedSeq[Any]]
+    = {
+      if( s.data.isEmpty ) {
+        val js = connection.createStatement()
+        log(s)(js.executeUpdate(s.sql, JdbcStatement.RETURN_GENERATED_KEYS))
+        val rs = js.getGeneratedKeys
+        val r = rs.indexedRowsTraversable.toList
+        rs.close()
+        js.close()
+        r
+      } else {
+        val js = preparedStatement(s, true)
+        log(s)(js.executeUpdate())
+        val rs = js.getGeneratedKeys
+        val r = rs.indexedRowsTraversable.toList
+        rs.close()
+        js.close()
+        r
+      }
+    }
+
+  def executeUpdate
+    ( s : Statement )
+    : Int
+    = {
+      if( s.data.isEmpty ){
+        val js = connection.createStatement()
+        val r = log(s)(js.executeUpdate(s.sql))
+        js.close()
+        r
+      } else {
+        val js = preparedStatement(s)
+        val r = log(s)(js.executeUpdate())
+        js.close()
+        r
+      }
+    }
+
+  private def preparedStatement
+    ( stmt : Statement,
+      generatedKeys : Boolean = false )
+    = {
+      val s =
+        connection.prepareStatement(
+          stmt.sql,
+          if (generatedKeys) JdbcStatement.RETURN_GENERATED_KEYS
+          else JdbcStatement.NO_GENERATED_KEYS
+        )
+
+      for( (v, i) <- stmt.data.view.zipWithIndex ) {
+        s.set(i + 1, v)
+      }
+
+      s
+    }
+
+  def close() = connection.close()
+}
 object JdbcConnection {
 
   def apply
@@ -10,54 +89,11 @@ object JdbcConnection {
       password : String )
     = {
       //  preload driver
-      DbType.byUrl(url) match {
-        case DbType.Mysql =>
-          Class.forName("com.mysql.jdbc.Driver")
-        case DbType.Postgres =>
-          Class.forName("org.postgresql.Driver")
-        case DbType.H2 =>
-          Class.forName("org.h2.Driver")
-        case DbType.Sqlite =>
-          Class.forName("org.sqlite.JDBC")
-        case DbType.Hsqldb =>
-          Class.forName("org.hsqldb.jdbcDriver")
-        case _ =>
-          ???
-      }
+      url $ DbType.byUrl $ DbType.driverClass $ Class.forName
+
       //  get it
-      DriverManager.getConnection(url, user, password)
+      DriverManager.getConnection(url, user, password) $ (new JdbcConnection(_))
     }
 
-  sealed trait DbType
-  object DbType {
-
-    case object Mysql extends DbType
-    case object H2 extends DbType
-    case object Hsqldb extends DbType
-    case object Sqlite extends DbType
-    case object Postgres extends DbType
-    case object Oracle extends DbType
-    case object Sqlserver extends DbType
-    case object Derby extends DbType
-    case object Sybase extends DbType
-    case object Db2 extends DbType
-
-    def byUrl
-      ( u : String )
-      : DbType
-      = u match {
-          case u if u.startsWith("jdbc:mysql:") => Mysql
-          case u if u.startsWith("jdbc:h2:") => H2
-          case u if u.startsWith("jdbc:hsqldb:") => Hsqldb
-          case u if u.startsWith("jdbc:sqlite:") => Sqlite
-          case u if u.startsWith("jdbc:postgresql:") => Postgres
-          case u if u.startsWith("jdbc:oracle:") => Oracle
-          case u if u.startsWith("jdbc:sqlserver:") => Sqlserver
-          case u if u.startsWith("jdbc:derby:") => Derby
-          case u if u.startsWith("jdbc:sybase:") => Sybase
-          case u if u.startsWith("jdbc:db2:") => Db2
-        }
-
-  }
 
 }

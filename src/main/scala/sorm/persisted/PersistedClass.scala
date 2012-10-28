@@ -2,7 +2,8 @@ package sorm.persisted
 
 import sorm._
 import reflection._
-import sext._
+
+import sext._, embrace._
 import com.weiglewilczek.slf4s.Logging
 
 object PersistedClass extends Logging {
@@ -95,8 +96,8 @@ object PersistedClass extends Logging {
     ( r : Reflection )
     : Class[T with Persisted]
     = {
-      toolbox.runExpr(
-        toolbox.parseExpr(
+      toolbox.eval(
+        toolbox.parse(
           generateCode(r, generateName())
             .tap{ c => logger.trace("Generating class:\n" + c) }
         )

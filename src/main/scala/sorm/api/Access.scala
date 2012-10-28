@@ -70,7 +70,6 @@ class Access [ T <: AnyRef : TypeTag ] ( query : Query, connection : DriverConne
       }
 
 
-
   private def copy
     ( where   : Option[Where] = query.where,
       order   : Seq[Order]    = query.order,
@@ -78,6 +77,9 @@ class Access [ T <: AnyRef : TypeTag ] ( query : Query, connection : DriverConne
       offset  : Int           = query.offset )
     = Query(query.mapping, where, order, amount, offset) $ (new Access[T](_, connection))
 
+  /**
+   * Add an ordering instruction
+   */
   def order ( p : String, reverse : Boolean = false ) : Access[T]
     = query.order.toVector :+ Order(Path.mapping(query.mapping, p), reverse) $ (x => copy(order = x))
 
@@ -102,22 +104,46 @@ class Access [ T <: AnyRef : TypeTag ] ( query : Query, connection : DriverConne
     = {
       def queryWhere (f : ApiFilter.Filter) : Where
         = f match {
-            case ApiFilter.Equal(p, v) => 
-              Path.where( query.mapping, p, v, Operator.Equal)
-            case ApiFilter.NotEqual(p, v) => 
-              Path.where( query.mapping, p, v, Operator.NotEqual)
-            case ApiFilter.Larger(p, v) =>
-              Path.where( query.mapping, p, v, Operator.Larger)
-            case ApiFilter.LargerOrEqual(p, v) =>
-              Path.where( query.mapping, p, v, Operator.LargerOrEqual)
-            case ApiFilter.Smaller(p, v) =>
-              Path.where( query.mapping, p, v, Operator.Smaller)
-            case ApiFilter.SmallerOrEqual(p, v) =>
-              Path.where( query.mapping, p, v, Operator.SmallerOrEqual)
             case ApiFilter.Or(l, r) => 
               Or(queryWhere(l), queryWhere(r))
             case ApiFilter.And(l, r) => 
               And(queryWhere(l), queryWhere(r))
+            case ApiFilter.Equal(p, v) => 
+              Path.where(query.mapping, p, v, Operator.Equal)
+            case ApiFilter.NotEqual(p, v) => 
+              Path.where(query.mapping, p, v, Operator.NotEqual)
+            case ApiFilter.Larger(p, v) =>
+              Path.where(query.mapping, p, v, Operator.Larger)
+            case ApiFilter.LargerOrEqual(p, v) =>
+              Path.where(query.mapping, p, v, Operator.LargerOrEqual)
+            case ApiFilter.Smaller(p, v) =>
+              Path.where(query.mapping, p, v, Operator.Smaller)
+            case ApiFilter.SmallerOrEqual(p, v) =>
+              Path.where(query.mapping, p, v, Operator.SmallerOrEqual)
+            case ApiFilter.Like(p, v) =>
+              Path.where(query.mapping, p, v, Operator.Like) 
+            case ApiFilter.NotLike(p, v) =>
+              Path.where(query.mapping, p, v, Operator.NotLike) 
+            case ApiFilter.Regex(p, v) =>
+              Path.where(query.mapping, p, v, Operator.Regex) 
+            case ApiFilter.NotRegex(p, v) =>
+              Path.where(query.mapping, p, v, Operator.NotRegex) 
+            case ApiFilter.In(p, v) =>
+              Path.where(query.mapping, p, v, Operator.In) 
+            case ApiFilter.NotIn(p, v) =>
+              Path.where(query.mapping, p, v, Operator.NotIn) 
+            case ApiFilter.Contains(p, v) =>
+              Path.where(query.mapping, p, v, Operator.Contains) 
+            case ApiFilter.NotContains(p, v) =>
+              Path.where(query.mapping, p, v, Operator.NotContains) 
+            case ApiFilter.Constitutes(p, v) =>
+              Path.where(query.mapping, p, v, Operator.Constitutes) 
+            case ApiFilter.NotConstitutes(p, v) =>
+              Path.where(query.mapping, p, v, Operator.NotConstitutes) 
+            case ApiFilter.Includes(p, v) =>
+              Path.where(query.mapping, p, v, Operator.Includes) 
+            case ApiFilter.NotIncludes(p, v) =>
+              Path.where(query.mapping, p, v, Operator.NotIncludes) 
           }
       where(queryWhere(f))
     }

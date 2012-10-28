@@ -16,7 +16,18 @@ object FilterDsl {
     def smallerOrEqual(v: Any) = SmallerOrEqual(p, v)
     def larger(v: Any)         = Larger(p, v)
     def largerOrEqual(v: Any)  = LargerOrEqual(p, v)
-    //  todo: add the rest
+    def like(v: Any)           = Like(p, v)           
+    def notLike(v: Any)        = NotLike(p, v)        
+    def regex(v: Any)          = Regex(p, v)          
+    def notRegex(v: Any)       = NotRegex(p, v)       
+    def in(v: Any)             = In(p, v)             
+    def notIn(v: Any)          = NotIn(p, v)          
+    def contains(v: Any)       = Contains(p, v)       
+    def notContains(v: Any)    = NotContains(p, v)    
+    def constitutes(v: Any)    = Constitutes(p, v)    
+    def notConstitutes(v: Any) = NotConstitutes(p, v) 
+    def includes(v: Any)       = Includes(p, v)       
+    def notIncludes(v: Any)    = NotIncludes(p, v)    
   }
 
 }

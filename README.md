@@ -30,15 +30,15 @@ Please consider a data model described with these standard case classes:
 
     case class Artist
       ( names : Map[Locale, Seq[String]],
-        styles : Set[Style] )
+        genres : Set[Genre] )
 
-    case class Style
+    case class Genre
       ( names : Map[Locale, Seq[String]] )
 
     case class Locale
       ( code : String )
 
-> You can see that instead of assigning the `Style` and `Artist` objects with a common `name` property we've decided here to go a bit tougher way to let our application support different locales and to allow it to store different variants of names for the same entity if there exist alternatives. For instance, in the English locale one artist we will store will have three alternative names: "The Rolling Stones", "Rolling Stones" and "Rolling Stones, The".
+> You can see that instead of assigning the `Genre` and `Artist` objects with a common `name` property we've decided here to go a bit tougher way to let our application support different locales and to allow it to store different variants of names for the same entity if there exist alternatives. For instance, in the English locale one artist we will store will have three alternative names: "The Rolling Stones", "Rolling Stones" and "Rolling Stones, The".
 
 ###Let's initialize our SORM instance:
   
@@ -49,7 +49,7 @@ Please consider a data model described with these standard case classes:
           entities
             = Set() +
               Entity[Artist]() +
-              Entity[Style]() +
+              Entity[Genre]() +
               Entity[Locale](),
           url
             = "jdbc:h2:mem:test",
@@ -59,7 +59,7 @@ Please consider a data model described with these standard case classes:
             = ""
         )
 
-> If you need an explanation with the code above, we create a SORM instance ready to work with objects of types `Artist`, `Style` and `Locale`. That instance connects to an in-memory H2 database without specifying user or password.
+> If you need an explanation with the code above, we create a SORM instance ready to work with objects of types `Artist`, `Genre` and `Locale`. That instance connects to an in-memory H2 database without specifying user or password.
 
 Guess what, that's it! We now have an up and running database with a full schema structure required for storing our objects already created for us. All that's left to do is put it to use. 
 
@@ -73,15 +73,15 @@ Guess what, that's it! We now have an up and running database with a full schema
     val ru = cx.save( Locale("ru") )
     val en = cx.save( Locale("en") )
 
-    //  create styles:
-    val rock      = cx.save( Style( Map( en -> Seq("Rock"),
+    //  create genres:
+    val rock      = cx.save( Genre( Map( en -> Seq("Rock"),
                                          ru -> Seq("Рок") ) ) )
-    val hardRock  = cx.save( Style( Map( en -> Seq("Hard Rock"),
+    val hardRock  = cx.save( Genre( Map( en -> Seq("Hard Rock"),
                                          ru -> Seq("Тяжёлый рок", 
                                                    "Тяжелый рок") ) ) )
-    val metal     = cx.save( Style( Map( en -> Seq("Metal"),
+    val metal     = cx.save( Genre( Map( en -> Seq("Metal"),
                                          ru -> Seq("Метал") ) ) )
-    val grunge    = cx.save( Style( Map( en -> Seq("Grunge"),
+    val grunge    = cx.save( Genre( Map( en -> Seq("Grunge"),
                                          ru -> Seq("Грандж") ) ) )
 
     //  create artists:

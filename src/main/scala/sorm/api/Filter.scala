@@ -3,7 +3,7 @@ package sorm.api
 /**
  * A filter declaration which has no knowledge of mapping. For public API
  */
-object ApiFilter {
+object Filter {
 
   sealed trait Filter
   case class Equal ( p : String, v : Any ) extends Filter

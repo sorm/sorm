@@ -2,7 +2,7 @@ package sorm.api
 
 object FilterDsl {
 
-  import ApiFilter._
+  import Filter._
 
   implicit class WhereWhere(val a: Filter) extends AnyVal {
     def or(b: Filter) = Or(a, b)

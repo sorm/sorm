@@ -4,11 +4,10 @@ import reflect.runtime.universe._
 
 import sorm._
 import reflection._
+import api.Persisted
+
 import sext._, embrace._
 
-trait Persisted {
-  def id: Long
-}
 object Persisted {
 
   def apply

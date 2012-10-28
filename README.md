@@ -1,126 +1,69 @@
-#SORM. A complete abstraction ORM framework for Scala
-SORM is an object-relational mapping framework having simplicity of use and absolute abstraction from relational side at its core principles. It automagically creates database tables, emits queries, inserts, updates and deletes records. This all functionality is presented to the user with a simple API which works on standard Scala's case classes. 
+#SORM. A case-classes oriented ORM framework for Scala
 
-Using SORM there is absolutely no need for the user to know anything about SQL, DDL and what concepts like many-to-many or one-to-many even mean. One can develop an application knowing that database integration will be a trivial step.
-
-##Project status
-Currently the project is in active development. Release of first stable version 0.1.0 is expected in the comming weeks as of September of 2012. 
-
-The framework is already in a perfectly working state and is being heavily use-tested in some private projects, but until the actual release the API is subject to changes and therefore there won't yet be any more documentation than what is in the "Getting started" section.
-
-##Known issues
-* No rows deletion functionality. Comming soon, definitely before release.
-* Memory leak. This is due to Scala 2.10-M7 reflection bug, which is expected to be fixed in the next release.
+SORM is an object-relational mapping framework having elegance, consistency and simplicity at its primary principles. It is absolutely abstracted from relational side automagically creating database tables, emitting queries, inserting, updating and deleting records. This all functionality is presented to the user with a simple API around standard Scala's case classes. 
 
 ##Supported databases
-Currently SORM releases are getting tested against MySQL and H2 databases. Other DBs may also be supported but are yet not guaranteed to be.
+Currently SORM supports MySQL and H2 databases. Support for other popular DBs is comming.
 
-##Future plans
-* Support for other popular DBs
+##Supported Scala versions
+2.10.0-RC1 and later
 
-##Getting started
-<!-- Let's add a dependency to SORM artifact. In Maven it will look like so: 
+##Maven support
+
+SORM is distributed in the Maven Central, here's a dependency to the latest release version:
 
     <dependency>
       <groupId>com.github.nikita-volkov</groupId>
       <artifactId>sorm</artifactId>
-      <version>0.1.0</version>
+      <version>0.2.0</version>
     </dependency>
 
-For our testing project we will use an in-memory version of H2 database - let's add a dependency for it too:
+##A quick glance
+Declare a model:
 
-    <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
-      <version>1.3.168</version>
-    </dependency>
+    case class Artist ( name : String, genres : Set[Genre] )
+    case class Genre ( names : String ) 
 
-###Now, to the actual program.  -->
-Please consider a data model described with these standard case classes:
+Create a sorm instance, which automatically generates the schema:
 
-    case class Artist
-      ( names : Map[Locale, Seq[String]],
-        styles : Set[Style] )
-
-    case class Style
-      ( names : Map[Locale, Seq[String]] )
-
-    case class Locale
-      ( code : String )
-
-> You can see that instead of assigning the `Style` and `Artist` objects with a common `name` property we've decided here to go a bit tougher way to let our application support different locales and to allow it to store different variants of names for the same entity if there exist alternatives. For instance, in the English locale one artist we will store will have three alternative names: "The Rolling Stones", "Rolling Stones" and "Rolling Stones, The".
-
-###Let's initialize our SORM instance:
-  
-    import sorm.Sorm._
-
-    val db
-      = new Instance(
-          entities
-            = Set() +
-              Entity[Artist]() +
-              Entity[Style]() +
-              Entity[Locale](),
-          url
-            = "jdbc:h2:mem:test"
+    val db 
+      = new sorm.Instance(
+          entities = Set() + sorm.Entity[Artist]() + sorm.Entity[Style](),
+          url = "jdbc:h2:mem:test",
+          user = "",
+          password = "",
+          initMode = sorm.InitMode.Create
         )
 
-> If you need an explanation with the code above, we create a SORM instance ready to work with objects of types `Artist`, `Style` and `Locale`. That instance connects to an in-memory H2 database without specifying user or password.
+Open a single connection:
+    
+    val cx = db.connection()
 
-Guess what, that's it! We now have an up and running database connection with a full schema structure required for storing our objects already created for us. All that's left to do is put it to use. 
+Store values in a db:
 
-###Let's populate it with some data:
+    val metal = cx.save( Genre("Metal") )
+    val rock = cx.save( Genre("Rock") )
+    cx.save( Artist("Metallica", Set() + metal + rock) )
+    cx.save( Artist("Dire Straits", Set() + rock) )
 
-    //  create locales:
-    val ru
-      = db.save( Locale("ru") )
-    val en
-      = db.save( Locale("en") )
+Retrieve a value from a db:
 
-    //  create styles:
-    val rock
-      = db.save( Style( Map( en -> Seq("Rock"),
-                             ru -> Seq("Рок") ) ) )
-    val hardRock
-      = db.save( Style( Map( en -> Seq("Hard Rock"),
-                             ru -> Seq("Тяжёлый рок", "Тяжелый рок") ) ) )
-    val metal
-      = db.save( Style( Map( en -> Seq("Metal"),
-                             ru -> Seq("Метал") ) ) )
-    val grunge
-      = db.save( Style( Map( en -> Seq("Grunge"),
-                             ru -> Seq("Грандж") ) ) )
+    val metallica = cx.access[Artist].whereEqual("name", "Metallica").fetchOne()
 
-    //  create artists:
-    db.save( Artist( Map( en -> Seq("Metallica"),
-                          ru -> Seq("Металика", "Металлика") ),
-                     Set( metal, rock, hardRock ) ) )
-    db.save( Artist( Map( en -> Seq("Nirvana"),
-                          ru -> Seq("Нирвана") ),
-                     Set( rock, hardRock, grunge ) ) )
-    db.save( Artist( Map( en -> Seq("Kino"),
-                          ru -> Seq("Кино") ),
-                     Set( rock ) ) )
-    db.save( Artist( Map( en -> Seq("The Rolling Stones",
-                                    "Rolling Stones",
-                                    "Rolling Stones, The"),
-                          ru -> Seq("Ролинг Стоунз",
-                                    "Роллинг Стоунз",
-                                    "Роллинг Стоунс",
-                                    "Ролинг Стоунс") ),
-                     Set( rock ) ) )
-    db.save( Artist( Map( en -> Seq("Dire Straits"),
-                          ru -> Seq("Даэр Стрэйтс") ),
-                     Set( rock ) ) )
-    db.save( Artist( Map( en -> Seq("Godsmack"),
-                          ru -> Seq("Годсмэк") ),
-                     Set( metal, hardRock, rock ) ) )
+> You can find a more comprehensive tutorial on the [Wiki](https://github.com/nikita-volkov/sorm/wiki/Tutorial).
 
-###Now let's fetch some data from our populated database:
+##Learn more
 
-    //  get an artist by id:
-    db.access[Artist].whereEquals("id", 2).fetchOne() // will return Nirvana
+For detailed info please visit the [Wiki](https://github.com/nikita-volkov/sorm/wiki) or learn the [API](http://nikita-volkov.github.com/sorm/api/) (you're really interested in the contents of a plain `sorm._` package only).
 
-    //  all artists having a style that has `Hard Rock` in a list of its names
-    db.access[Artist].whereEquals("names.value.item.value", "Hard Rock").fetch()
+##Support
 
+Support is provided at [StackOverflow](http://stackoverflow.com/). Go ahead and ask your questions under a tag "sorm".
+
+##Issues
+
+Please post any issues you come across in the [issues](https://github.com/nikita-volkov/sorm/issues) section.
+
+##Contribution
+    
+It is a very large project, and any kind of contribution is much appreciated. So if you find anything that you think SORM could evolve on, go ahead and fork and leave your pull requests. Currently, the most wanted contributions are drivers for other DBRMs.

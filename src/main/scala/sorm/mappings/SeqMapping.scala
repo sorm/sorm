@@ -2,7 +2,7 @@ package sorm.mappings
 
 import sext._, embrace._
 import sorm._
-import connection.Connection
+import driver.DriverConnection
 import core._
 import jdbc.ResultSetView
 import reflection.Reflection
@@ -20,15 +20,15 @@ class SeqMapping
     lazy val generatedColumns = primaryKeyColumns
     lazy val mappings = item +: Stream()
 
-    def parseResultSet(rs: ResultSetView, c: Connection)
+    def parseResultSet(rs: ResultSetView, c: DriverConnection)
       = rs.byNameRowsTraversable.view.map(item.valueFromContainerRow(_, c)).toVector
 
-    override def update ( value : Any, masterKey : Stream[Any], connection : Connection ) {
+    override def update ( value : Any, masterKey : Stream[Any], connection : DriverConnection ) {
       connection.delete(tableName, masterTableColumnNames zip masterKey)
       insert(value, masterKey, connection)
     }
 
-    override def insert ( v : Any, masterKey : Stream[Any], connection : Connection ) {
+    override def insert ( v : Any, masterKey : Stream[Any], connection : DriverConnection ) {
       v.asInstanceOf[Seq[_]].view
         .zipWithIndex.foreach{ case (v, i) =>
           val pk = masterKey :+ i

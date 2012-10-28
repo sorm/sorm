@@ -5,17 +5,14 @@ import java.sql.DriverManager
 
 import sorm._
 import core._
-import connection._
 import jdbc._
 
 trait Driver {
-  def connection () : Connection
+  def connection () : DriverConnection
 
-  def withTmpConnection [ T ] ( f : Connection => T ) = {
+  def withTmpConnection [ T ] ( f : DriverConnection => T ) = {
     val c = connection()
-    val r = f(c)
-    c.close()
-    r
+    try { f(c) } finally { c.close() }
   }
 }
 object Driver {
@@ -42,7 +39,7 @@ object Driver {
         case DbType.H2 => 
           new Driver {
             val connection = new H2(jdbcConnection())
-            override def withTmpConnection [ T ] ( f : Connection => T ) = f(connection)
+            override def withTmpConnection [ T ] ( f : DriverConnection => T ) = f(connection)
           }
         case _ => throw new SormException("Unsupported db type: " + dbType)
       }

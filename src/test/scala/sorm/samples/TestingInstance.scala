@@ -6,14 +6,13 @@ import jdbc._
 import samples._
 import mappings._
 import sext._, embrace._
-import Sorm._
 
 object TestingInstance {
 
   def simulator
     ( entities : Entity* )
     = ???
-//    = new ConnectionApi {
+//    = new Connection {
 //        protected[sorm] val mappings
 //          = {
 //            val settings

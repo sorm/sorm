@@ -2,7 +2,7 @@ package sorm.mappings
 
 import sext._, embrace._
 import sorm._
-import connection.Connection
+import driver.DriverConnection
 import reflection._
 import ddl._
 import core._
@@ -20,8 +20,8 @@ class EnumMapping
           .view.map( v => v.id.toByte -> v ).toMap
     def columnType 
       = ColumnType.TinyInt
-    def valueFromContainerRow ( data : String => Any, connection : Connection )
-      = data(memberName).asInstanceOf[Byte] as values
+    def valueFromContainerRow ( data : String => Any, connection : DriverConnection )
+      = data(memberName).asInstanceOf[Byte] $ values
     def valuesForContainerTableRow( value : Any )
       = value.asInstanceOf[Enumeration#Value] $ dbValues $ (memberName -> _) $ (Stream(_))
 

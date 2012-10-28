@@ -2,7 +2,7 @@ package sorm.mappings
 
 import sext._, embrace._
 import sorm._
-import connection.Connection
+import driver.DriverConnection
 import core._
 import jdbc.ResultSetView
 import persisted.Persisted
@@ -24,7 +24,7 @@ class EntityMapping
     = new ValueMapping(Reflection[Long], Some(Membership.EntityId(this)), settings)
   lazy val generatedColumns = id.column +: Stream()
 
-  def parseResultSet(rs: ResultSetView, c: Connection)
+  def parseResultSet(rs: ResultSetView, c: DriverConnection)
     = rs.byNameRowsTraversable.toStream
         .headOption
         .map( row => Persisted(
@@ -34,7 +34,7 @@ class EntityMapping
         ) )
         .get
 
-  def delete ( value : Any, connection : Connection ) {
+  def delete ( value : Any, connection : DriverConnection ) {
     value match {
       case value : Persisted =>
         ("id" -> value.id) $ (Stream(_)) $ (tableName -> _) $$ connection.delete
@@ -51,7 +51,7 @@ class EntityMapping
           throw new SormException("Attempt to refer to an unpersisted entity: " + value)
       }
 
-  def save ( value : Any, connection : Connection ) : Persisted
+  def save ( value : Any, connection : DriverConnection ) : Persisted
     = {
       val propertyValues = properties.map{ case (n, m) => (n, m, reflection.propertyValue(n, value.asInstanceOf[AnyRef])) }.toStream
       val rowValues = propertyValues.flatMap{ case (n, m, v) => m.valuesForContainerTableRow(v) }

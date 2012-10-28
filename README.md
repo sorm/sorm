@@ -1,4 +1,4 @@
-#SORM. A complete abstraction ORM framework for Scala
+#SORM. A case-classes oriented ORM framework for Scala
 
 SORM is an object-relational mapping framework having elegance, consistency and simplicity at its primary principles. It is absolutely abstracted from relational side automagically creating database tables, emitting queries, inserting, updating and deleting records. This all functionality is presented to the user with a simple API around standard Scala's case classes. 
 
@@ -119,11 +119,18 @@ Guess what, that's it! We now have an up and running database with a full schema
     val hardRockArtists
       = cx.access[Artist].whereEquals("names.value.item.value", "Hard Rock").fetch()
 
+##Diving deeper
+
+For more info please visit our [wiki](wiki).
+
 ##Support
 
 Support will be provided at [StackOverflow](http://stackoverflow.com/). Go ahead and ask your questions under tag "sorm".
 
+##Bug-reporting and Tickets
+
+Please post any issues you come across in the [issues](issues) section.
+
 ##Contribution
     
 It is a very large project, and any kind of contribution is much appreciated. So if you find anything that you think Sorm could evolve on, go ahead and clone and leave your pull requests. Currently, the most wanted updates are drivers for other DBRMs.
-

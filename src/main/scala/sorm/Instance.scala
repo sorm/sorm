@@ -34,12 +34,18 @@ class Instance
 
     private val driver = Driver(url, user, password)
 
+    /**
+     * Open a new connection to the db and return the API to work with it
+     */
     def connection ()
       = new Connection {
           protected val connection = driver.connection()
           protected def mappings = Instance.this.mappings
         }
 
+    /**
+     * Perform some actions on a connection which will be closed after
+     */
     def withTmpConnection [ T ] ( f : Connection => T )
       = driver.withTmpConnection(c => f(new Connection { protected def connection = c; protected def mappings = Instance.this.mappings }))
 

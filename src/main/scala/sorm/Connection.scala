@@ -103,8 +103,8 @@ trait Connection extends Logging {
   def transaction [ T ] ( t : => T ) : T = connection.transaction(t)
 
   /**
-   * Same as the other version with an exception that it passes the current SORM instance as a parameter to the closure. 
-   * @param t The SORM instance
+   * Same as the other version with an exception that it passes the current connection as a parameter to the closure. 
+   * @param t The current connection
    * @tparam T The result of the closure
    * @return The result of the last statement of the passed in closure
    */

@@ -20,7 +20,7 @@ class Access [ T <: AnyRef : TypeTag ] ( query : Query, connection : DriverConne
 
   /**
    * Fetch matching entities from db.
-   * @return A stream of entity instances with [[sorm.persisted.Persisted]] mixed in
+   * @return A stream of entity instances with [[sorm.Persisted]] mixed in
    */
   def fetch () : Stream[T with Persisted]
     = fetchIds().map("id" -> _).map(Map(_)).map(query.mapping.fetchByPrimaryKey(_, connection).asInstanceOf[T with Persisted])
@@ -34,7 +34,7 @@ class Access [ T <: AnyRef : TypeTag ] ( query : Query, connection : DriverConne
 
   /**
    * Fetch only one entity ensuring that `limit(1)` is applied to the query.
-   * @return An option of entity instance with [[sorm.persisted.Persisted]] mixed in
+   * @return An option of entity instance with [[sorm.Persisted]] mixed in
    */
   def fetchOne () : Option[T with Persisted]
     = limit(1).fetch().headOption
@@ -62,7 +62,7 @@ class Access [ T <: AnyRef : TypeTag ] ( query : Query, connection : DriverConne
   /**
    * Replace all matching entities stored in db with the value provided
    * @param value A value to replace the existing entities with
-   * @return A list of saved entities with [[sorm.persisted.Persisted]] mixed in
+   * @return A list of saved entities with [[sorm.Persisted]] mixed in
    */
   def replace ( value : T ) : List[T with Persisted]
     = connection.transaction {
@@ -96,7 +96,7 @@ class Access [ T <: AnyRef : TypeTag ] ( query : Query, connection : DriverConne
   /**
    * Return a copy of this `Access` object with a filter generated from DSL.
    *
-   * Usage of this method should be accompanied with {{import sorm.FilterDsl._}}
+   * Usage of this method should be accompanied with {{{import sorm.FilterDsl._}}}
    * 
    */
   def where ( f : ApiFilter.Filter )

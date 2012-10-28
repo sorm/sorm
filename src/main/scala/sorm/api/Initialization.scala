@@ -33,26 +33,38 @@ object Initialization extends Logging {
             .unfold( a => a.notEmpty.map(a => a -> a.flatMap(_.generics)) )
             .flatten
 
-      descendats
-        .filter(r => r =:= Reflection[Any] || r =:= Reflection[AnyRef] || r =:= Reflection[AnyVal])
-        .map("Specifying general types `Any`, `AnyRef` or `AnyVal` is not allowed. `" + _.name + "` detected") ++
-      descendats
-        .filter(_ <:< Reflection[TraversableOnce[_]])
-        .filterNot(r =>
-          //  using java class to erase generics
-          r.javaClass == classOf[Seq[_]] ||
-          r.javaClass == classOf[Set[_]] ||
-          r.javaClass == classOf[Map[_, _]] ||
-          r.javaClass == classOf[Range]
-        )
-        .map("Only general immutable `Seq`, `Set`, `Map` and `Range` are supported traversable types. `" + _ + "` detected instead") ++
-      ( e.indexes.toStream ++ e.uniqueKeys )
-        .flatten
-        .filterNot(e.reflection.properties.contains)
-        .map("Inexistent property: `" + _ + "`") ++
-      ( e.indexes.toStream ++ e.uniqueKeys )
-        .filter(ps => ps.distinct.size != ps.size )
-        .map("Not a distinct properties list: `" + _.mkString(", ") + "`")
+      def containsId
+        = e.reflection.properties.keys.exists(_ == "id").option("Property name `id` is not allowed")
+
+      def generalTypes
+        = descendats
+            .filter(r => r =:= Reflection[Any] || r =:= Reflection[AnyRef] || r =:= Reflection[AnyVal])
+            .map("Specifying general types `Any`, `AnyRef` or `AnyVal` is not allowed. `" + _.name + "` detected")
+
+      def traversableTypes
+        = descendats
+            .filter(_ <:< Reflection[TraversableOnce[_]])
+            .filterNot(r =>
+              //  using java class to erase generics
+              r.javaClass == classOf[Seq[_]] ||
+              r.javaClass == classOf[Set[_]] ||
+              r.javaClass == classOf[Map[_, _]] ||
+              r.javaClass == classOf[Range]
+            )
+            .map("Only general immutable `Seq`, `Set`, `Map` and `Range` are supported traversable types. `" + _ + "` detected instead")
+
+      def inexistentPropertiesInKeys
+        = ( e.indexes.toStream ++ e.uniqueKeys )
+            .flatten
+            .filterNot(e.reflection.properties.contains)
+            .map("Inexistent property: `" + _ + "`")
+
+      def notDistinctPropertiesInKeys
+        = ( e.indexes.toStream ++ e.uniqueKeys )
+            .filter(ps => ps.distinct.size != ps.size )
+            .map("Not a distinct properties list: `" + _.mkString(", ") + "`")
+
+      Stream() ++ containsId ++ generalTypes ++ traversableTypes ++ inexistentPropertiesInKeys ++ notDistinctPropertiesInKeys
     }
 
   def initializeSchema ( mappings : Iterable[EntityMapping], driver : Driver, initMode : InitMode ) {

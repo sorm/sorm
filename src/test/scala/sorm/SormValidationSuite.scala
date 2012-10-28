@@ -7,7 +7,6 @@ import org.scalatest.junit.JUnitRunner
 
 import api._
 import samples._
-import sorm.api.ValidationException
 
 @RunWith(classOf[JUnitRunner])
 class SormValidationSuite extends FunSuite with ShouldMatchers {
@@ -16,7 +15,7 @@ class SormValidationSuite extends FunSuite with ShouldMatchers {
   test("`Any` type is not supported"){
     evaluating {
       new Instance(Entity[D]() :: Nil, "jdbc:h2:mem:test")
-    } should produce [ValidationException]
+    } should produce [Instance#ValidationException]
   }
   test("referred entities validation"){
     evaluating {
@@ -24,7 +23,7 @@ class SormValidationSuite extends FunSuite with ShouldMatchers {
         Entity[A]() :: Nil,
         "jdbc:h2:mem:test"
       )
-    } should produce [ValidationException]
+    } should produce [Instance#ValidationException]
   }
   test("Correct instantiation doesnt throw exceptions"){
     new Instance(

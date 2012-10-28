@@ -1,4 +1,4 @@
-package sorm.api
+package sorm
 
 /**
  * A filter declaration which has no knowledge of mapping. For public API

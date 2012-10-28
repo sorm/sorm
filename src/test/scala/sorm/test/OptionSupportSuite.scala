@@ -15,7 +15,6 @@ import jdbc._
 import sext._, embrace._
 
 import samples._
-import api._
 
 @RunWith(classOf[JUnitRunner])
 class OptionSupportSuite extends FunSuite with ShouldMatchers {

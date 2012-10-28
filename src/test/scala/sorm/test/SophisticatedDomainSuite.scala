@@ -6,11 +6,10 @@ import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 
 import sorm._
-import api._
 import samples._
 import org.joda.time.{LocalDate, DateTime}
 import sorm.samples.TestingInstance
-import sorm.api.{InitMode, Instance, Entity}
+import sorm.{Instance, Entity}
 
 @RunWith(classOf[JUnitRunner])
 class SophisticatedDomainSuite extends FunSuite with ShouldMatchers {

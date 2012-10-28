@@ -6,7 +6,6 @@ import jdbc._
 import samples._
 import mappings._
 import sext._, embrace._
-import api._
 
 object TestingInstance {
 

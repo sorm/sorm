@@ -3,7 +3,6 @@ package sorm.abstractSql
 import sext._, embrace._
 import sorm._
 import mappings._
-import api._
 import core._
 import AbstractSql._
 import Compositing._

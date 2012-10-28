@@ -5,7 +5,7 @@ import org.scalatest.matchers.ShouldMatchers
 import sorm.persisted.PersistedSuite._
 import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
-import sorm.api._
+import sorm._
 
 @RunWith(classOf[JUnitRunner])
 class PersistedSuite extends FunSuite with ShouldMatchers {

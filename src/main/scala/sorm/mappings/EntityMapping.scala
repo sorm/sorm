@@ -7,7 +7,6 @@ import core._
 import jdbc.ResultSetView
 import persisted.Persisted
 import reflection.Reflection
-import api._
 
 class EntityMapping 
   ( val reflection : Reflection, 

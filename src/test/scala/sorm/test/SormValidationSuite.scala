@@ -6,9 +6,8 @@ import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 
 import sorm._
-import api._
 import samples._
-import sorm.api.{Entity, Instance}
+import sorm.{Entity, Instance}
 
 @RunWith(classOf[JUnitRunner])
 class SormValidationSuite extends FunSuite with ShouldMatchers {

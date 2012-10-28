@@ -7,7 +7,7 @@ import persisted.Persisted
 import reflection.Reflection
 import samples._
 import sext._, embrace._
-import sorm.api._
+import sorm._
 
 object Sandbox extends App {
 

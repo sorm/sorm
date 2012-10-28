@@ -8,7 +8,6 @@ import org.scalatest.junit.JUnitRunner
 import sorm._
 
 import samples._
-import api._
 
 @RunWith(classOf[JUnitRunner])
 class InFilterTest extends FunSuite with ShouldMatchers {

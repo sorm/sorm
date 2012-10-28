@@ -1,10 +1,11 @@
-package sorm.api
+package sorm
 
 /**
  * The mode for initialization performed when a connection to the db is
  * established on creation of SORM instance.
  */
 sealed trait InitMode
+
 object InitMode {
   /**
    * Wipe out all the contents of the db and generate the tables
@@ -25,4 +26,3 @@ object InitMode {
    */
   case object DoNothing extends InitMode
 }
-

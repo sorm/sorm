@@ -8,7 +8,6 @@ import org.scalatest.junit.JUnitRunner
 import sorm._
 import core._
 import sext._, embrace._
-import api._
 
 import samples._
 

@@ -1,4 +1,4 @@
-package sorm.api
+package sorm
 
 import reflect.runtime.universe._
 import sorm._
@@ -32,7 +32,7 @@ trait Connection extends Logging {
     }
 
   /**
-   * Return the [[sorm.api.Access]] object for performing a read-query on a specified entity type.
+   * Return the [[sorm.Access]] object for performing a read-query on a specified entity type.
    * 
    * @tparam T The entity type
    * @return The accessor object. An abstraction over all kinds of supported SELECT-queries.
@@ -65,7 +65,7 @@ trait Connection extends Logging {
       }
 
   /**
-   * Saves the entity by overwriting the existing one if one with the matching unique keys exists and creating a new one otherwise. Executing simply [[sorm.api.Connection#save]] in situation of unique keys clash would have thrown an exception. Please beware that in case when not all unique keys are matched this method will still throw an exception.
+   * Saves the entity by overwriting the existing one if one with the matching unique keys exists and creating a new one otherwise. Executing simply [[sorm.Connection#save]] in situation of unique keys clash would have thrown an exception. Please beware that in case when not all unique keys are matched this method will still throw an exception.
    * @param value The value to save
    * @return The saved entity instance with a [[sorm.persisted.Persisted]] trait mixed in
    */

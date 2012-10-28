@@ -4,7 +4,6 @@ import reflect.runtime.universe._
 
 import sorm._
 import reflection._
-import api.Persisted
 
 import sext._, embrace._
 

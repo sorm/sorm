@@ -4,7 +4,6 @@ import sorm._
 import core._
 import reflection._
 import sext._, embrace._
-import api._
 
 object ArtistDb {
   

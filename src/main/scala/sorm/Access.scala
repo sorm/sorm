@@ -1,8 +1,8 @@
-package sorm.api
+package sorm
 
 import sext._, embrace._
 import sorm._
-import api.{Filter => ApiFilter}
+import sorm.{Filter => ApiFilter}
 import driver.DriverConnection
 import mappings._
 import query.AbstractSqlComposition
@@ -96,7 +96,7 @@ class Access [ T <: AnyRef : TypeTag ] ( query : Query, connection : DriverConne
   /**
    * Return a copy of this `Access` object with a filter generated from DSL.
    *
-   * Usage of this method should be accompanied with {{import sorm.api.FilterDsl._}}
+   * Usage of this method should be accompanied with {{import sorm.FilterDsl._}}
    * 
    */
   def where ( f : ApiFilter.Filter )

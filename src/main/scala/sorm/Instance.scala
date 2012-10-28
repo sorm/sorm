@@ -1,8 +1,7 @@
-package sorm.api
+package sorm
 
 import sorm._
 import driver.Driver
-import api._
 import core._
 import persisted._
 import reflection._

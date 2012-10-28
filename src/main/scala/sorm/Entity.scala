@@ -1,4 +1,4 @@
-package sorm.api
+package sorm
 
 import sorm._
 import reflection._

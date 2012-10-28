@@ -1,4 +1,4 @@
-package sorm.api
+package sorm
 
 object FilterDsl {
 

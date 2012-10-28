@@ -2,7 +2,6 @@ package sorm.persisted
 
 import sorm._
 import reflection._
-import api.Persisted
 
 import sext._, embrace._
 import com.weiglewilczek.slf4s.Logging

@@ -22,7 +22,7 @@ SORM is distributed in the Maven Central, here's a dependency to the latest rele
 Declare a model:
 
     case class Artist ( name : String, genres : Set[Genre] )
-    case class Genre ( names : String ) 
+    case class Genre ( name : String ) 
 
 Create a sorm instance, which automatically generates the schema:
 

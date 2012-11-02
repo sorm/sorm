@@ -43,7 +43,7 @@ trait Connection extends Logging {
   /**
    * Fetch an existing entity by id. Will throw an exception if the entity doesn't exist. 
    * @param id The id
-   * @return An entity instance with a [[sorm.persisted.Persisted]] trait mixed in
+   * @return An entity instance with a [[sorm.Persisted]] trait mixed in
    */
   def fetchById
     [ T <: AnyRef : TypeTag ]
@@ -52,9 +52,9 @@ trait Connection extends Logging {
     = id $ ("id" -> _) $ (Map(_)) $ (mapping[T].fetchByPrimaryKey(_, connection).asInstanceOf[T with Persisted])
 
   /**
-   * Save the entity. An Abstraction over INSERT and UPDATE-queries. Which one to perform will be decided based on whether the [[sorm.persisted.Persisted]] trait is mixed in the value you provide.
+   * Save the entity. An Abstraction over INSERT and UPDATE-queries. Which one to perform will be decided based on whether the [[sorm.Persisted]] trait is mixed in the value you provide.
    * @param value The value to save
-   * @return The saved entity instance with a [[sorm.persisted.Persisted]] trait mixed in
+   * @return The saved entity instance with a [[sorm.Persisted]] trait mixed in
    */
   def save
     [ T <: AnyRef : TypeTag ]
@@ -67,7 +67,7 @@ trait Connection extends Logging {
   /**
    * Saves the entity by overwriting the existing one if one with the matching unique keys exists and creating a new one otherwise. Executing simply [[sorm.Connection#save]] in situation of unique keys clash would have thrown an exception. Please beware that in case when not all unique keys are matched this method will still throw an exception.
    * @param value The value to save
-   * @return The saved entity instance with a [[sorm.persisted.Persisted]] trait mixed in
+   * @return The saved entity instance with a [[sorm.Persisted]] trait mixed in
    */
   def saveByUniqueKeys
     [ T <: AnyRef : TypeTag ]

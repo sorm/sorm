@@ -15,7 +15,7 @@ import samples._
 class EntityReferredSeveralTimesSuite extends FunSuite with ShouldMatchers {
   import EntityReferredSeveralTimesSuite._
 
-  val db = TestingInstance.h2( Entity[A](), Entity[B]() ).connection()
+  val db = TestingInstance.h2( Entity[A](), Entity[B]() )
 
   val b1 = db.save(B(23))
   val b2 = db.save(B(0))

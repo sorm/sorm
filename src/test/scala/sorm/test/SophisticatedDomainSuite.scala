@@ -18,7 +18,7 @@ class SophisticatedDomainSuite extends FunSuite with ShouldMatchers {
   test("Date not storing None in Mysql bugfix"){
     val db = TestingInstance.mysql(
       Entity[Task]( unique = Set(Seq("opened"), Seq("closed")) )
-    ).connection()
+    )
     db.save(Task(PageType.Album, "", db.now()))
     db.fetchById[Task](1l).closed should equal(None)
   }
@@ -30,7 +30,7 @@ class SophisticatedDomainSuite extends FunSuite with ShouldMatchers {
       Entity[Track](),
       Entity[Genre]( unique = Set(Seq("name")) ),
       Entity[Artist]()
-    ).connection()
+    )
     db.save(Genre("Rock"))
   }
   test("Entities Set in instance parameters cause unregistered entity exception bugfix"){
@@ -46,7 +46,7 @@ class SophisticatedDomainSuite extends FunSuite with ShouldMatchers {
         ),
         "jdbc:h2:mem:test",
         initMode = InitMode.DropAllCreate
-      ).connection()
+      )
     db.save(Genre("Rock"))
   }
   test("Correct instantiation doesn't throw exceptions"){
@@ -70,7 +70,7 @@ class SophisticatedDomainSuite extends FunSuite with ShouldMatchers {
       Entity[Track](),
       Entity[Genre](),
       Entity[Artist]()
-    ).connection()
+    )
     val rock = db.save(Genre("Rock"))
     val hardRock = db.save(Genre("Hard Rock"))
     val pop = db.save(Genre("Pop"))

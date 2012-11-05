@@ -42,6 +42,11 @@
 
   <dependencies>
     <dependency>
+      <groupId>com.mchange</groupId>
+      <artifactId>c3p0</artifactId>
+      <version>0.9.2-pre5</version>
+    </dependency>
+    <dependency>
       <groupId>com.github.nikita-volkov</groupId>
       <artifactId>embrace</artifactId>
       <version>0.1.1</version>

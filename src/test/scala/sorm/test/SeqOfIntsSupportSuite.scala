@@ -75,7 +75,7 @@ class SeqOfIntsSupportSuite extends FunSuite with ShouldMatchers {
 object SeqOfIntsSupportSuite {
   case class A ( a : Seq[Int] )
 
-  val db = TestingInstance.h2( Entity[A]() ).connection()
+  val db = TestingInstance.h2( Entity[A]() )
   db.save(A( Seq() ))
   db.save(A( Seq(2, 9, 3) ))
   db.save(A( Seq(4) ))

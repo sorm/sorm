@@ -13,7 +13,7 @@ import samples._
 class SeqOfEnumsSupportSuite extends FunSuite with ShouldMatchers {
   import SeqOfEnumsSupportSuite._
 
-  val db = TestingInstance.h2( Entity[A]() ).connection()
+  val db = TestingInstance.h2( Entity[A]() )
 
   val a1 = db.save(A(B.Two :: Nil))
   val a2 = db.save(A(B.Two :: B.Two :: B.One :: Nil))

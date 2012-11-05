@@ -14,7 +14,7 @@ class ArtistDbSuite extends FunSuite with ShouldMatchers {
 
   import ArtistDb._
 
-  val db = Db.connection()
+  val db = Db
 
   test("path with index"){
     db.access[Artist]

@@ -1,7 +1,6 @@
 package sorm.core
 
 import sorm._
-import driver.Driver
 import reflection._
 import mappings._
 import jdbc._
@@ -65,10 +64,10 @@ object Initialization extends Logging {
       Stream() ++ containsId ++ generalTypes ++ traversableTypes ++ inexistentPropertiesInKeys ++ notDistinctPropertiesInKeys
     }
 
-  def initializeSchema ( mappings : Iterable[EntityMapping], driver : Driver, initMode : InitMode ) {
+  def initializeSchema ( mappings : Iterable[EntityMapping], connector : Connector, initMode : InitMode ) {
     initMode match {
       case InitMode.DropAllCreate =>
-        driver.withTmpConnection { connection =>
+        connector.withConnection { connection =>
           try {
             connection.dropAllTables()
           } catch {
@@ -78,7 +77,7 @@ object Initialization extends Logging {
           mappings $ Create.tables foreach connection.createTable
         }
       case InitMode.DropCreate =>
-        driver.withTmpConnection { connection =>
+        connector.withConnection { connection =>
           mappings $ Drop.tables map (_.name) foreach { n =>
             try {
               connection.dropTable(n)
@@ -90,7 +89,7 @@ object Initialization extends Logging {
           mappings $ Create.tables foreach connection.createTable
         }
       case InitMode.Create =>
-        driver.withTmpConnection { connection =>
+        connector.withConnection { connection =>
           mappings $ Create.tables foreach { t =>
             try { connection.createTable(t) }
             catch { case e : Throwable => }

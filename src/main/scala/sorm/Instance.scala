@@ -27,7 +27,7 @@ class Instance
     url : String,
     user : String = "",
     password : String = "",
-    initMode : InitMode = InitMode.DoNothing )
+    initMode : InitMode = InitMode.Create )
   extends Logging
   {
     class ValidationException ( m : String ) extends SormException(m)

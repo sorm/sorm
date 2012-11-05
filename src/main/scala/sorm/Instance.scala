@@ -73,9 +73,7 @@ class Instance
     Initialization.initializeSchema(mappings.values, driver, initMode)
 
     // Precache persisted classes (required for multithreading)
-    entities.toStream
-      .map(_.reflection)
-      .foreach(PersistedClass.apply)
+    entities.foreach(_.reflection $ PersistedClass.apply)
 
   }
 

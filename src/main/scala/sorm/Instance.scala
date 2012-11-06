@@ -36,7 +36,7 @@ class Instance
   {
     class ValidationException ( m : String ) extends SormException(m)
 
-    protected def connector = new Connector(url, user, password, poolSize)
+    protected val connector = new Connector(url, user, password, poolSize)
 
     protected def mapping
       [ T : TypeTag ]

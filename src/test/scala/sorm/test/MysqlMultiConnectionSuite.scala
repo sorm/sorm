@@ -15,14 +15,6 @@ class MysqlMultiConnectionSuite extends FunSuite with ShouldMatchers {
 
   test("Entities created on multiple connections arent always sequential"){
     val db = new Instance( Set() + Entity[A](), "jdbc:mysql://localhost/test", poolSize = 14, initMode = InitMode.DropAllCreate )
-    val fs = (1 to 28).map(n => future(db.save(A(n))))
-    val rs = fs.map(Await.result(_, 10 seconds))
-    rs.exists(a => a.id.toInt != a.a) should be (true)
-    rs.exists(a => a.id.toInt == a.a) should be (true)
-  }
-
-  test("Heavy load"){
-    val db = new Instance( Set() + Entity[A](), "jdbc:mysql://localhost/test", poolSize = 14, initMode = InitMode.DropAllCreate )
     val fs = (1 to 2800).map(n => future(db.save(A(n))))
     val rs = fs.map(Await.result(_, 10 seconds))
     rs.exists(a => a.id.toInt != a.a) should be (true)
@@ -31,7 +23,7 @@ class MysqlMultiConnectionSuite extends FunSuite with ShouldMatchers {
 
 //  test("Entities created on a single connection are sequential"){
 //    val db = new Instance( Set() + Entity[A](), "jdbc:mysql://localhost/test", poolSize = 1, initMode = InitMode.DropAllCreate )
-//    val fs = (1 to 28).map(n => future(db.save(A(n))))
+//    val fs = (1 to 2800).map(n => future(db.save(A(n))))
 //    Future.sequence(fs) $ (Await.result(_, 10 seconds))
 //    db.access[A].order("id").fetch().map(_.a).toList should equal(1 to 28)
 //  }

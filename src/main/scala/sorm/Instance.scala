@@ -21,7 +21,8 @@ import com.weiglewilczek.slf4s.Logging
  * @param user A username used for connection
  * @param password A password used for connection
  * @param poolSize A size of connection pool. Determines how many connections
- *                 to the db will be kept. Useful for multithreaded databases.
+ *                 to the db will be kept at max. Useful for multithreaded
+ *                 databases.
  * @param initMode An initialization mode for this instance
  */
 class Instance

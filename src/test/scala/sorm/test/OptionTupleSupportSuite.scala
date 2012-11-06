@@ -21,7 +21,7 @@ class OptionTupleSupportSuite extends FunSuite with ShouldMatchers {
 
   import OptionTupleSupportSuite._
 
-  val db = TestingInstance.mysql(Entity[A]()).connection()
+  val db = TestingInstance.mysql(Entity[A]())
 
   db.save(A( None ))
   db.save(A( Some(2 -> None) ))

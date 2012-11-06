@@ -21,7 +21,7 @@ class OptionEntitySeqItemSupportSuite extends FunSuite with ShouldMatchers {
 
   import OptionEntitySeqItemSupportSuite._
 
-  val db = TestingInstance.mysql(Entity[A](), Entity[B]()).connection()
+  val db = TestingInstance.mysql(Entity[A](), Entity[B]())
 
   val b1 = db.save(B("abc"))
   val b2 = db.save(B("cba"))

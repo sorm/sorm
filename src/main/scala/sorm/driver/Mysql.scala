@@ -14,4 +14,3 @@ class Mysql (protected val connection : JdbcConnection)
   with StdQuote
   with StdTransaction
   with StdCreateTable
-  with StdClose

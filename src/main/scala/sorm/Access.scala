@@ -12,25 +12,33 @@ import reflect.runtime.universe.TypeTag
 import core._
 
 object Access {
-  def apply [ T <: AnyRef : TypeTag ] ( mapping : EntityMapping, connection : DriverConnection )
-    = new Access[T]( Query(mapping), connection )
+  def apply [ T <: AnyRef : TypeTag ] ( mapping : EntityMapping, connector : Connector )
+    = new Access[T]( Query(mapping), connector )
 }
-//  alternative titles: QueryApi
-class Access [ T <: AnyRef : TypeTag ] ( query : Query, connection : DriverConnection ) {
+//  @TODO: rename to Query
+class Access [ T <: AnyRef : TypeTag ] ( query : Query, connector : Connector ) {
 
   /**
    * Fetch matching entities from db.
    * @return A stream of entity instances with [[sorm.Persisted]] mixed in
    */
   def fetch () : Stream[T with Persisted]
-    = fetchIds().map("id" -> _).map(Map(_)).map(query.mapping.fetchByPrimaryKey(_, connection).asInstanceOf[T with Persisted])
+    = fetchIds()
+        .map("id" -> _).map(Map(_))
+        .map{ pk =>
+          connector.withConnection { cx =>
+            query.mapping.fetchByPrimaryKey(pk, cx).asInstanceOf[T with Persisted]
+          }
+        }
 
   /**
    * Fetch ids of matching entities stored in db.
    * @return A stream of ids
    */
   def fetchIds () : Stream[Long]
-    = query $ AbstractSqlComposition.primaryKeySelect $ (connection.query(_)(_.byNameRowsTraversable.toList)) $ (_.toStream) map (_("id").asInstanceOf[Long])
+    = connector.withConnection { cx =>
+        query $ AbstractSqlComposition.primaryKeySelect $ (cx.query(_)(_.byNameRowsTraversable.toList)) $ (_.toStream) map (_("id").asInstanceOf[Long])
+      }
 
   /**
    * Fetch only one entity ensuring that `limit(1)` is applied to the query.
@@ -65,17 +73,18 @@ class Access [ T <: AnyRef : TypeTag ] ( query : Query, connection : DriverConne
    * @return A list of saved entities with [[sorm.Persisted]] mixed in
    */
   def replace ( value : T ) : List[T with Persisted]
-    = connection.transaction {
-        fetchIds().map(Persisted(value, _)).map(query.mapping.save(_, connection).asInstanceOf[T with Persisted]).toList
+    = connector.withConnection { cx =>
+        cx.transaction {
+          fetchIds().map(Persisted(value, _)).map(query.mapping.save(_, cx).asInstanceOf[T with Persisted]).toList
+        }
       }
-
 
   private def copy
     ( where   : Option[Where] = query.where,
       order   : Seq[Order]    = query.order,
       amount  : Option[Int]   = query.limit,
       offset  : Int           = query.offset )
-    = Query(query.mapping, where, order, amount, offset) $ (new Access[T](_, connection))
+    = Query(query.mapping, where, order, amount, offset) $ (new Access[T](_, connector))
 
   /**
    * Add an ordering instruction

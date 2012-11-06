@@ -6,7 +6,7 @@ import org.joda.time.DateTime
 import sorm._
 import sorm.core._
 import sorm.abstractSql.AbstractSql._
-import sorm.jdbc.ResultSetView
+import jdbc.ResultSetView
 
 /**
  * An abstraction over jdbc connection, instances of which implement sql dialects of different databases
@@ -32,5 +32,4 @@ trait DriverConnection {
     ( table : String, pk : Iterable[(String, Any)] )
   def transaction [ T ] ( f : => T ) : T
   def createTable ( table : ddl.Table )
-  def close()
 }

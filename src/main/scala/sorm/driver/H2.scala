@@ -16,7 +16,6 @@ class H2 (protected val connection : JdbcConnection)
   with StdQuote
   with StdTransaction
   with StdCreateTable
-  with StdClose
   {
     override protected def tableDdl(t: Table) : String
       = {

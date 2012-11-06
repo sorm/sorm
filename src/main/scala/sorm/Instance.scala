@@ -1,7 +1,6 @@
 package sorm
 
 import sorm._
-import driver.Driver
 import core._
 import persisted._
 import reflection._
@@ -9,6 +8,7 @@ import mappings._
 import jdbc._
 
 import sext._, embrace._
+import reflect.runtime.universe._
 import com.weiglewilczek.slf4s.Logging
 
 /**
@@ -20,6 +20,9 @@ import com.weiglewilczek.slf4s.Logging
  *            be: `jdbc:mysql://localhost/test`
  * @param user A username used for connection
  * @param password A password used for connection
+ * @param poolSize A size of connection pool. Determines how many connections
+ *                 to the db will be kept at max. Useful for multithreaded
+ *                 databases.
  * @param initMode An initialization mode for this instance
  */
 class Instance
@@ -27,27 +30,26 @@ class Instance
     url : String,
     user : String = "",
     password : String = "",
+    poolSize : Int = 1,
     initMode : InitMode = InitMode.Create )
-  extends Logging
+  extends Api with Logging
   {
     class ValidationException ( m : String ) extends SormException(m)
 
-    private val driver = Driver(url, user, password)
+    protected val connector = new Connector(url, user, password, poolSize)
 
-    /**
-     * Open a new connection to the db and return the API to work with it
-     */
-    def connection ()
-      = new Connection {
-          protected val connection = driver.connection()
-          protected def mappings = Instance.this.mappings
-        }
-
-    /**
-     * Perform some actions on a connection which will be closed after
-     */
-    def withTmpConnection [ T ] ( f : Connection => T )
-      = driver.withTmpConnection(c => f(new Connection { protected def connection = c; protected def mappings = Instance.this.mappings }))
+    protected def mapping
+      [ T : TypeTag ]
+      = {
+        def mapping( r : Reflection )
+          = mappings.get(r)
+              .getOrElse {
+                throw new SormException(
+                  "Entity `" + r.name + "` is not registered"
+                )
+              }
+        mapping(Reflection[T].mixinBasis)
+      }
 
     //  Validate entities (must be prior to mappings creation due to possible mappingkind detection errors):
     entities flatMap Initialization.errors map (new ValidationException(_)) foreach (throw _)
@@ -70,7 +72,7 @@ class Instance
     mappings.values.toStream $ Initialization.errors map (new ValidationException(_)) foreach (throw _)
 
     // Initialize a db schema:
-    Initialization.initializeSchema(mappings.values, driver, initMode)
+    Initialization.initializeSchema(mappings.values, connector, initMode)
 
     // Precache persisted classes (required for multithreading)
     entities.foreach(_.reflection $ PersistedClass.apply)

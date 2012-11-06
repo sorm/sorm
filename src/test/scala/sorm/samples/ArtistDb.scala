@@ -37,7 +37,7 @@ object ArtistDb {
       //  Fill up the db with sample data.
       //  Is placed in the constructor to be executed automatically on initialization of db.
       //  The value names are purposely not hidden anywhere to be accessible for testing purposes
-      val cx = connection()
+      val cx = this
       val ru
         = cx.save( Locale("ru") )
       val en

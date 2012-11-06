@@ -67,7 +67,7 @@ object SeqOfEntitiesSupportSuite {
   case class A ( a : Seq[B] )
   case class B ( a : Int )
 
-  val db = TestingInstance.h2( Entity[A](), Entity[B]() ).connection()
+  val db = TestingInstance.h2( Entity[A](), Entity[B]() )
 
   val b1 = db.save(B(23))
   val b2 = db.save(B(0))

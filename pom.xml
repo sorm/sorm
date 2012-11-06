@@ -101,6 +101,13 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <!-- A workaround for http://youtrack.jetbrains.com/issue/SCL-4865 IntelliJ IDEA bug-->
+      <groupId>org.scala-lang</groupId>
+      <artifactId>scala-actors</artifactId>
+      <version>2.10.0-RC1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.7</version>

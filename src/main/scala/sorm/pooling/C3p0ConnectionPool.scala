@@ -1,11 +1,12 @@
-package sorm.jdbc
+package sorm.pooling
 
 import sext._, embrace._
 import com.mchange.v2.c3p0.ComboPooledDataSource
 
 import sorm.core.DbType
+import sorm.jdbc.JdbcConnection
 
-class C3p0JdbcConnectionPool (dbType: DbType, url: String, user: String, password: String, size: Int) extends ConnectionPool {
+class C3p0ConnectionPool (dbType: DbType, url: String, user: String, password: String, size: Int) extends ConnectionPool {
 
   private val ds = new ComboPooledDataSource()
   ds.setDriverClass(dbType $ DbType.driverClass)

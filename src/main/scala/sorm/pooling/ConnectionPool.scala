@@ -1,6 +1,6 @@
-package sorm.jdbc
+package sorm.pooling
 
-import sext._, embrace._
+import sorm.jdbc.JdbcConnection
 
 trait ConnectionPool {
   protected def fetchConnection () : JdbcConnection

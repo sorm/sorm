@@ -4,6 +4,7 @@ import sorm._
 import core._
 import jdbc._
 import driver._
+import pooling._
 
 import sext._, embrace._
 
@@ -12,7 +13,7 @@ import sext._, embrace._
  */
 class Connector (url: String, user: String, password: String, poolSize: Int) {
   private val dbType = DbType.byUrl(url)
-  private val pool = new C3p0JdbcConnectionPool(dbType, url, user, password, poolSize)
+  private val pool = new C3p0ConnectionPool(dbType, url, user, password, poolSize)
   private def driverConnection ( jdbcConnection : JdbcConnection ) : DriverConnection
     = dbType match {
         case DbType.H2 => new H2(jdbcConnection)

@@ -15,9 +15,6 @@ class C3p0ConnectionPool (dbType: DbType, url: String, user: String, password: S
   ds.setPassword(password)
   ds.setMinPoolSize(1)
   ds.setMaxPoolSize(size)
-//  ds.setMaxStatements(20)
-//  ds.setAcquireIncrement(3)
-//  ds.setStatementCacheNumDeferredCloseThreads(4)
 
   protected def fetchConnection () = ds.getConnection $ (new JdbcConnection(_))
   protected def returnConnection ( c : JdbcConnection ) = c.close()

@@ -23,9 +23,13 @@ class Access [ T <: AnyRef : TypeTag ] ( query : Query, connector : Connector ) 
    * @return A stream of entity instances with [[sorm.Persisted]] mixed in
    */
   def fetch () : Stream[T with Persisted]
-    = connector.withConnection { cx =>
-        fetchIds().map("id" -> _).map(Map(_)).map(query.mapping.fetchByPrimaryKey(_, cx).asInstanceOf[T with Persisted])
-      }
+    = fetchIds()
+        .map("id" -> _).map(Map(_))
+        .map{ pk =>
+          connector.withConnection { cx =>
+            query.mapping.fetchByPrimaryKey(pk, cx).asInstanceOf[T with Persisted]
+          }
+        }
 
   /**
    * Fetch ids of matching entities stored in db.

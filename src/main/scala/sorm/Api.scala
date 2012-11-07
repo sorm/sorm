@@ -14,7 +14,7 @@ import org.joda.time.DateTime
 
 trait Api extends Logging {
 
-  protected def connector : Connector
+  protected val connector : Connector
 
   protected def mapping[ T : TypeTag ] : EntityMapping
 

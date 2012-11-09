@@ -163,57 +163,57 @@ class Access [ T <: AnyRef : TypeTag ] ( query : Query, connector : Connector ) 
    * @return A new instance of `Access` with this filter applied 
    */
   def whereEqual ( p : String, v : Any )
-    = where( p, v, Operator.Equal )
+    = where( p, v, Equal )
 
   def whereNotEqual ( p : String, v : Any )
-    = where( p, v, Operator.NotEqual )
+    = where( p, v, NotEqual )
 
   def whereLarger ( p : String, v : Any )
-    = where( p, v, Operator.Larger )
+    = where( p, v, Larger )
 
   def whereLargerOrEqual ( p : String, v : Any )
-    = where( p, v, Operator.LargerOrEqual )
+    = where( p, v, LargerOrEqual )
 
   def whereSmaller ( p : String, v : Any ) 
-    = where( p, v, Operator.Smaller )
+    = where( p, v, Smaller )
 
   def whereSmallerOrEqual ( p : String, v : Any )
-    = where( p, v, Operator.SmallerOrEqual )
+    = where( p, v, SmallerOrEqual )
 
   def whereLike( p : String, v : Any ) 
-    = where( p, v, Operator.Like )
+    = where( p, v, Like )
 
   def whereNotLike( p : String, v : Any ) 
-    = where( p, v, Operator.NotLike )
+    = where( p, v, NotLike )
 
   def whereRegex( p : String, v : Any ) 
-    = where( p, v, Operator.Regex )
+    = where( p, v, Regex )
 
   def whereNotRegex( p : String, v : Any ) 
-    = where( p, v, Operator.NotRegex )
+    = where( p, v, NotRegex )
 
   def whereIn ( p : String, v : Any ) 
-    = where( p, v, Operator.In )
+    = where( p, v, In )
 
   def whereNotIn ( p : String, v : Any ) 
-    = where( p, v, Operator.NotIn )
+    = where( p, v, NotIn )
 
   def whereContains ( p : String, v : Any ) 
-    = where( p, v, Operator.Contains )
+    = where( p, v, Contains )
 
   def whereNotContains ( p : String, v : Any ) 
-    = where( p, v, Operator.NotContains )
+    = where( p, v, NotContains )
 
   def whereConstitutes ( p : String, v : Any ) 
-    = where( p, v, Operator.Constitutes )
+    = where( p, v, Constitutes )
 
   def whereNotConstitutes ( p : String, v : Any ) 
-    = where( p, v, Operator.NotConstitutes )
+    = where( p, v, NotConstitutes )
 
   def whereIncludes ( p : String, v : Any ) 
-    = where( p, v, Operator.Includes )
+    = where( p, v, Includes )
 
   def whereNotIncludes ( p : String, v : Any ) 
-    = where( p, v, Operator.NotIncludes )
+    = where( p, v, NotIncludes )
 
 }

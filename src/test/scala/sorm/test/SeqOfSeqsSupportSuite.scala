@@ -15,7 +15,6 @@ class SeqOfSeqsSupportSuite extends FunSuite with ShouldMatchers {
   import SeqOfSeqsSupportSuite._
 
   TestingInstances.instances( Set() + Entity[A]() ) foreach { case (db, dbId) =>
-    val db = TestingInstance.h2( Entity[A]() )
     db.save(A( Seq() ))
     db.save(A( Seq( Seq(2, 3), Seq(), Seq(7) ) ))
     db.save(A( Seq( Seq() ) ))

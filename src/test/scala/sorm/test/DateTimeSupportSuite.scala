@@ -17,7 +17,7 @@ class DateTimeSupportSuite extends FunSuite with ShouldMatchers {
 
   TestingInstances.instances(Set() + Entity[A]()).foreach{ case (db, dbId) =>
     //  time rounded to seconds (for mysql compatibility)
-    val date = new DateTime(System.currentTimeMillis() / 1000 * 1000)
+    val date = new DateTime((System.currentTimeMillis() / 1000d).round * 1000)
   
     val a1 = db.save(A(date))
     val a2 = db.save(A(date.plusHours(3)))

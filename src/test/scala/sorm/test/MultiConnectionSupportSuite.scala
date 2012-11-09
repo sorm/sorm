@@ -8,7 +8,6 @@ import org.scalatest.junit.JUnitRunner
 import sext._, embrace._
 import sorm._
 import concurrent._, duration._, ExecutionContext.Implicits._
-import samples.TestingInstance
 
 object MultiConnectionSupportSuite {
   case class A ( a : Int )

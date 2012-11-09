@@ -18,14 +18,14 @@ class EnumSupportSuite extends FunSuite with ShouldMatchers {
     val a3 = db.save(A(B.Three))
     val a4 = db.save(A(B.Two))
     test(dbId + " - Equality query"){
-      db.access[A].whereEqual("a", B.Two).fetch()
+      db.query[A].whereEqual("a", B.Two).fetch()
         .should(
           have size (2) and
           contain (a2)
         )
     }
     test(dbId + " - Not equal query"){
-      db.access[A].whereNotEqual("a", B.Two).fetch()
+      db.query[A].whereNotEqual("a", B.Two).fetch()
         .should(
           not be 'empty and
           contain (a1) and

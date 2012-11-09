@@ -22,7 +22,7 @@ class MultithreadingTest extends FunSuite with ShouldMatchers {
     val a4 = db.save(A(3000))
 
     test(dbId + " - Parallel queries"){
-      Seq(0,1,2,3).par.flatMap{ i => db.access[A].whereEqual("a", i).fetchOne() }.seq
+      Seq(0,1,2,3).par.flatMap{ i => db.query[A].whereEqual("a", i).fetchOne() }.seq
         .should(contain(a1) and contain(a3) and not contain(a4))
     }
     test(dbId + " - Parallel saving"){

@@ -26,11 +26,11 @@ class EntityReferredSeveralTimesSuite extends FunSuite with ShouldMatchers {
     val a4 = db.save(A(b4, Seq(b1)))
 
     test(dbId + " - Matches on other properties must not be included") {
-      db.access[A].whereEqual("b", b2).fetch()
+      db.query[A].whereEqual("b", b2).fetch()
         .should( not contain (a3) and contain (a2) )
     }
     test(dbId + " - Matches on other properties must not be included 2") {
-      db.access[A].whereEqual("bs.item", b4).fetch()
+      db.query[A].whereEqual("bs.item", b4).fetch()
         .should( not contain (a4) )
     }
 

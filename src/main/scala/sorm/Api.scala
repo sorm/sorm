@@ -19,13 +19,13 @@ trait Api extends Logging {
   protected def mapping[ T : TypeTag ] : EntityMapping
 
   /**
-   * Return the [[sorm.Access]] object for performing a read-query on a specified entity type.
+   * Return the [[sorm.Querier]] object for performing a read-query on a specified entity type.
    * 
    * @tparam T The entity type
    * @return The accessor object. An abstraction over all kinds of supported SELECT-queries.
    */
-  def access [ T <: AnyRef : TypeTag ] 
-    = Access[T](mapping, connector)
+  def query [ T <: AnyRef : TypeTag ]
+    = Querier[T](mapping, connector)
 
   /**
    * Fetch an existing entity by id. Will throw an exception if the entity doesn't exist. 
@@ -65,11 +65,11 @@ trait Api extends Logging {
     = (mapping[T].uniqueKeys.flatten zipBy value.reflected.propertyValue)
         //  todo: check the unique entities
         .ensuring(_.nonEmpty, "Type doesn't have unique keys")
-        .foldLeft(access){ case (access, (n, v)) => access.whereEqual(n, v) }
-        .$(access =>
+        .foldLeft(query){ case (q, (n, v)) => q.whereEqual(n, v) }
+        .$(q =>
           connector.withConnection{ cx =>
             cx.transaction {
-              access.fetchOneId()
+              q.fetchOneId()
                 .map(Persisted(value, _))
                 .getOrElse(value)
                 .$(mapping[T].save(_, cx).asInstanceOf[T with Persisted])

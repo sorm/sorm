@@ -18,10 +18,10 @@ class InFilterTest extends FunSuite with ShouldMatchers {
     val a3 = db.save(A(3))
 
     test(dbId + " - empty value"){
-      db.access[A].whereIn("a", Seq()).fetchOne().should(equal(None))
+      db.query[A].whereIn("a", Seq()).fetchOne().should(equal(None))
     }
     test(dbId + " - valid value"){
-      db.access[A].whereIn("a", Seq(2)).fetchOne().should(equal(Some(a2)))
+      db.query[A].whereIn("a", Seq(2)).fetchOne().should(equal(Some(a2)))
     }
 
   }

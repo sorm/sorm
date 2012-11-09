@@ -22,7 +22,7 @@ class SeqOfSeqsSupportSuite extends FunSuite with ShouldMatchers {
     db.save(A( Seq() ))
 
     test(dbId + " - Empty Seq matches empty Seq and not Seq of empty Seq"){
-      db.access[A]
+      db.query[A]
         .whereEqual("a", Seq())
         .fetch().view.map{_.id}.toSet
         .should(
@@ -32,7 +32,7 @@ class SeqOfSeqsSupportSuite extends FunSuite with ShouldMatchers {
         )
     }
     test(dbId + " - An empty item Seq does not match inexistent one"){
-      db.access[A]
+      db.query[A]
         .whereEqual("a.item", Seq())
         .fetch().view.map{_.id}.toSet
         .should(
@@ -41,7 +41,7 @@ class SeqOfSeqsSupportSuite extends FunSuite with ShouldMatchers {
         )
     }
     test(dbId + " - A partially matching seq with container seq containing other seq of same size"){
-      db.access[A]
+      db.query[A]
         .whereEqual("a.item", Seq(2))
         .fetch().view.map{_.id}.toSet
         .should( not contain (2l) )

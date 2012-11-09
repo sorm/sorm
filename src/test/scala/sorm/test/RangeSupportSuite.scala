@@ -22,7 +22,7 @@ class RangeSupportSuite extends FunSuite with ShouldMatchers {
       db.fetchById[A](2).a should equal (9 to 1)
     }
     test(dbId + " - equality filter"){
-      db.access[A]
+      db.query[A]
         .whereEqual("a", 2 to 4)
         .fetch()
         .map(_.id.toInt)

@@ -26,17 +26,17 @@ class OptionValueSupportSuite extends FunSuite with ShouldMatchers {
       db.fetchById[A](3).a should be === Some(7)
     }
     test(dbId + " - equals filter"){
-      db.access[A]
+      db.query[A]
         .whereEqual("a", None).fetchOne().get.id should be === 1
-      db.access[A]
+      db.query[A]
         .whereEqual("a", Some(3)).fetchOne().get.id should be === 2
     }
     test(dbId + " - not equals filter"){
-      db.access[A]
+      db.query[A]
         .whereNotEqual("a", None)
         .fetch().map{_.id.toInt}.toSet
         .should( not contain (1) and contain (3) and contain (2) )
-      db.access[A]
+      db.query[A]
         .whereNotEqual("a", Some(3))
         .fetch().map{_.id.toInt}.toSet
         .should( not contain (2) and contain (1) and contain (3) )

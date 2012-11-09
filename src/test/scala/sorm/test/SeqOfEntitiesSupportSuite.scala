@@ -24,9 +24,9 @@ class SeqOfEntitiesSupportSuite extends FunSuite with ShouldMatchers {
     db.save(A( Seq(b4) ))
 
     def fetchEqualingIds ( value : Seq[_] ) : Set[Long]
-      = db.access[A].whereEqual("a", value).fetch().map{_.id}.toSet
+      = db.query[A].whereEqual("a", value).fetch().map{_.id}.toSet
     def fetchNotEqualingIds ( value : Seq[_] ) : Set[Long]
-      = db.access[A].whereNotEqual("a", value).fetch().map{_.id}.toSet
+      = db.query[A].whereNotEqual("a", value).fetch().map{_.id}.toSet
 
     test(dbId + " - Non matching equals query") {
       fetchEqualingIds( Seq(b5) ) should be === Set()
@@ -50,26 +50,26 @@ class SeqOfEntitiesSupportSuite extends FunSuite with ShouldMatchers {
       fetchEqualingIds( Seq(b2, b3, b1) ) should be === Set()
     }
     test(dbId + " - Equal on empty seq does not include non empty seqs") {
-      db.access[A]
+      db.query[A]
         .whereEqual("a", Seq())
         .fetch().map(_.id.toInt).toSet
         .should( not contain (2) and not contain (4) )
     }
 
     test(dbId + " - Everything matches not equals on inexistent") {
-      db.access[A]
+      db.query[A]
         .whereNotEqual("a", Seq(b5))
         .fetch().map(_.id.toInt).toSet
         .should( contain(1) and contain(2) and contain(3) and contain(4) )
     }
     test(dbId + " - A partially matching item does not get excluded from results on not equals"){
-      db.access[A]
+      db.query[A]
         .whereNotEqual("a", Seq(b1, b3))
         .fetch().map(_.id.toInt).toSet
         .should( contain (2) )
     }
     test(dbId + " - Not equals on empty seq does not return empty seqs") {
-      db.access[A]
+      db.query[A]
         .whereNotEqual("a", Seq())
         .fetch().map(_.id.toInt).toSet
         .should( not contain (1) and not contain (3) )

@@ -21,9 +21,9 @@ class SeqOfIntsSupportSuite extends FunSuite with ShouldMatchers {
     db.save(A( Seq(3) ))
 
     def fetchEqualingIds ( value : Seq[_] ) : Set[Long]
-      = db.access[A].whereEqual("a", value).fetch().map{_.id}.toSet
+      = db.query[A].whereEqual("a", value).fetch().map{_.id}.toSet
     def fetchNotEqualingIds ( value : Seq[_] ) : Set[Long]
-      = db.access[A].whereNotEqual("a", value).fetch().map{_.id}.toSet
+      = db.query[A].whereNotEqual("a", value).fetch().map{_.id}.toSet
 
     test(dbId + " - Non matching equals query") {
       fetchEqualingIds(Seq(10)) should be === Set()

@@ -26,7 +26,7 @@ class DateTimeSupportSuite extends FunSuite with ShouldMatchers {
   
     test(dbId + " - Connection now()")(pending)
     test(dbId + " - Larger filter"){
-      db.access[A].whereLarger("a", date.minusSeconds(1)).fetch()
+      db.query[A].whereLarger("a", date.minusSeconds(1)).fetch()
         .should(
           contain(a1) and contain(a2) and not contain(a3) and not contain(a4)
         )

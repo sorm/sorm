@@ -6,12 +6,6 @@ import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 
 import sorm._
-import core._
-import persisted._
-import query._
-import reflection._
-import mappings._
-import jdbc._
 import sext._, embrace._
 
 @RunWith(classOf[JUnitRunner])
@@ -28,13 +22,13 @@ class OptionEntitySeqItemSupportSuite extends FunSuite with ShouldMatchers {
     val a3 = db.save(A( Seq(None, Some(b2)) ))
     val a4 = db.save(A( Seq(None) ))
 
-    test(dbId + ": empty seq"){
+    test(dbId + " - empty seq"){
       db.fetchById[A](a1.id).seq should be === Seq()
     }
-    test(dbId + ": seq of none"){
+    test(dbId + " - seq of none"){
       db.fetchById[A](a4.id).seq should be === Seq(None)
     }
-    test(dbId + ": not empty seqs are correct"){
+    test(dbId + " - not empty seqs are correct"){
       db.fetchById[A](a2.id).seq should be === Seq(Some(b1), None, Some(b2))
       db.fetchById[A](a3.id).seq should be === Seq(None, Some(b2))
     }

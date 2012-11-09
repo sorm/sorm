@@ -11,11 +11,11 @@ import persisted._
 import reflect.runtime.universe.TypeTag
 import core._
 
-object Querier {
+object QueryApi {
   def apply [ T <: AnyRef : TypeTag ] ( mapping : EntityMapping, connector : Connector )
-    = new Querier[T]( Query(mapping), connector )
+    = new QueryApi[T]( Query(mapping), connector )
 }
-class Querier [ T <: AnyRef : TypeTag ] ( query : Query, connector : Connector ) {
+class QueryApi [ T <: AnyRef : TypeTag ] ( query : Query, connector : Connector ) {
 
   /**
    * Fetch matching entities from db.
@@ -83,12 +83,12 @@ class Querier [ T <: AnyRef : TypeTag ] ( query : Query, connector : Connector )
       order   : Seq[Order]    = query.order,
       amount  : Option[Int]   = query.limit,
       offset  : Int           = query.offset )
-    = Query(query.mapping, where, order, amount, offset) $ (new Querier[T](_, connector))
+    = Query(query.mapping, where, order, amount, offset) $ (new QueryApi[T](_, connector))
 
   /**
    * Add an ordering instruction
    */
-  def order ( p : String, reverse : Boolean = false ) : Querier[T]
+  def order ( p : String, reverse : Boolean = false ) : QueryApi[T]
     = query.order.toVector :+ Order(Path.mapping(query.mapping, p), reverse) $ (x => copy(order = x))
 
   /**
@@ -102,13 +102,13 @@ class Querier [ T <: AnyRef : TypeTag ] ( query : Query, connector : Connector )
   def offset ( offset : Int ) = offset $ (x => copy(offset = x))
 
   /**
-   * Return a copy of this `Querier` object with a filter generated from DSL.
+   * Return a copy of this `QueryApi` object with a filter generated from DSL.
    *
    * Usage of this method should be accompanied with {{{import sorm.FilterDsl._}}}
    * 
    */
   def where ( f : ApiFilter.Filter )
-    : Querier[T]
+    : QueryApi[T]
     = {
       def queryWhere (f : ApiFilter.Filter) : Where
         = {
@@ -147,19 +147,19 @@ class Querier [ T <: AnyRef : TypeTag ] ( query : Query, connector : Connector )
       where(queryWhere(f))
     }
   private def where ( w : Where )
-    : Querier[T]
+    : QueryApi[T]
     = w +: query.where.toList reduceOption And $ (x => copy(where = x))
 
   @inline private def where ( p : String, v : Any, o : Operator )
-    : Querier[T]
+    : QueryApi[T]
     = Path.where(query.mapping, p, v, o) $ where
 
   /**
-   * Return a copy of this `Querier` object with an equality filter applied.
+   * Return a copy of this `QueryApi` object with an equality filter applied.
    * 
    * @param p A string indicating a path to the property on which to filter
    * @param v A value to compare with
-   * @return A new instance of `Querier` with this filter applied
+   * @return A new instance of `QueryApi` with this filter applied
    */
   def whereEqual ( p : String, v : Any )
     = where( p, v, Equal )

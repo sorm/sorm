@@ -25,7 +25,7 @@ class MultiConnectionSupportSuite extends FunSuite with ShouldMatchers with Mult
     }
   }
   withDbs2(Set() + Entity[A](), 1 :: 14 :: Nil){ (db, test) =>
-    test("Entities aren't always stored sequentially") {
+    test("Entities aren't always stored sequentially 2") {
       val fs = (1 to 280).map(n => future(db.save(A(n))))
       val rs = fs.map(Await.result(_, 10 seconds))
       rs.exists(a => a.id.toInt != a.a) should be (true)

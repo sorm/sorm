@@ -6,9 +6,9 @@ import reflection._
 import reflect.runtime.universe._
 
 sealed case class Entity
-  ( reflection    : Reflection,
-    indexes       : Set[Seq[String]],
-    uniqueKeys    : Set[Seq[String]] )
+  ( reflection  : Reflection,
+    indexed     : Set[Seq[String]],
+    unique      : Set[Seq[String]] )
 object Entity {
   /**
    * Entity settings. Used for registring entities with the SORM instance.

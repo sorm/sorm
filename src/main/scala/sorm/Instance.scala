@@ -59,7 +59,7 @@ class Instance
         val settings
           = entities.view
               .map{ e =>
-                e.reflection -> EntitySettings(e.indexes, e.uniqueKeys)
+                e.reflection -> EntitySettings(e.indexed, e.unique)
               }
               .toMap
 

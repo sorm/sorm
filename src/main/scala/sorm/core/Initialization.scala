@@ -51,13 +51,13 @@ object Initialization extends Logging {
             .map("Only general immutable `Seq`, `Set`, `Map` and `Range` are supported traversable types. `" + _ + "` detected instead")
 
       def inexistentPropertiesInKeys
-        = ( e.indexes.toStream ++ e.uniqueKeys )
+        = ( e.indexed.toStream ++ e.unique )
             .flatten
             .filterNot(e.reflection.properties.contains)
             .map("Inexistent property: `" + _ + "`")
 
       def notDistinctPropertiesInKeys
-        = ( e.indexes.toStream ++ e.uniqueKeys )
+        = ( e.indexed.toStream ++ e.unique )
             .filter(ps => ps.distinct.size != ps.size )
             .map("Not a distinct properties list: `" + _.mkString(", ") + "`")
 

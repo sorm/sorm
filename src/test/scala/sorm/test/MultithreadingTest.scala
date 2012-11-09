@@ -4,8 +4,8 @@ import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
-import sorm.samples.TestingInstance
-import sorm.Entity
+
+import sorm._
 
 object MultithreadingTest {
   case class A (a : Int)
@@ -15,8 +15,6 @@ class MultithreadingTest extends FunSuite with ShouldMatchers {
   import MultithreadingTest._
 
   TestingInstances.instances( Set() + Entity[A]() ) foreach { case (db, dbId) =>
-
-    val db = TestingInstance.mysql(Entity[A](unique = Set() + Seq("a")))
 
     val a1 = db.save(A(1))
     val a2 = db.save(A(3))

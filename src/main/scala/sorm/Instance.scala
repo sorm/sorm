@@ -77,6 +77,5 @@ class Instance
     // Precache persisted classes (required for multithreading)
     entities.foreach(_.reflection $ PersistedClass.apply)
 
-    override def toString = url
-}
+  }
 

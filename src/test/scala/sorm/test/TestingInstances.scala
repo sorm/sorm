@@ -1,6 +1,7 @@
 package sorm.test
 
 import sorm._, core._
+import sext._, embrace._
 
 object TestingInstances {
   private def url ( t : DbType )
@@ -23,9 +24,6 @@ object TestingInstances {
       poolSizes : Seq[Int] = 1 :: 6 :: Nil,
       dbTypes : Seq[DbType] = DbType.Mysql :: DbType.H2 :: Nil )
     : Stream[(Instance, String)]
-    = for { dbType <- dbTypes.toStream ; poolSize <- poolSizes }
-      yield {
-        val id = name(dbType) + ":" + poolSize
-        instance(entities, dbType, poolSize) -> id
-      }
+    = dbTypes.toStream.flatMap(t => poolSizes.map(t -> _))
+        .map{ case (t, s) => instance(entities, t, s) -> (name(t) + ":" + s) }
 }

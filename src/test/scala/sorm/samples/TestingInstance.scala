@@ -40,4 +40,7 @@ object TestingInstance {
     ( entities : Entity* )
     = new Instance( entities, "jdbc:hsqldb:mem:testdb", initMode = InitMode.DropCreate)
 
+  def all
+    ( entities : Entity* )
+    = Set() + h2(entities : _*) + mysql(entities : _*)
 }

@@ -13,39 +13,41 @@ class OptionValueSupportSuite extends FunSuite with ShouldMatchers {
 
   import OptionValueSupportSuite._
 
-  val db = TestingInstance.h2( Entity[EntityWithValuePropertyInOption]() )
+  TestingInstances.instances(Set() + Entity[A]()) foreach { case (db, dbId) =>
 
-  test("saving goes ok"){
-    db.save(EntityWithValuePropertyInOption(None))
-    db.save(EntityWithValuePropertyInOption(Some(3)))
-    db.save(EntityWithValuePropertyInOption(Some(7)))
-  }
-  test("saved entities are correct"){
-    db.fetchById[EntityWithValuePropertyInOption](1).a should be === None
-    db.fetchById[EntityWithValuePropertyInOption](2).a should be === Some(3)
-    db.fetchById[EntityWithValuePropertyInOption](3).a should be === Some(7)
-  }
-  test("equals filter"){
-    db.access[EntityWithValuePropertyInOption]
-      .whereEqual("a", None).fetchOne().get.id should be === 1
-    db.access[EntityWithValuePropertyInOption]
-      .whereEqual("a", Some(3)).fetchOne().get.id should be === 2
-  }
-  test("not equals filter"){
-    db.access[EntityWithValuePropertyInOption]
-      .whereNotEqual("a", None)
-      .fetch().map{_.id.toInt}.toSet
-      .should( not contain (1) and contain (3) and contain (2) )
-    db.access[EntityWithValuePropertyInOption]
-      .whereNotEqual("a", Some(3))
-      .fetch().map{_.id.toInt}.toSet
-      .should( not contain (2) and contain (1) and contain (3) )
+    test(dbId + " - saving goes ok"){
+      db.save(A(None))
+      db.save(A(Some(3)))
+      db.save(A(Some(7)))
+    }
+    test(dbId + " - saved entities are correct"){
+      db.fetchById[A](1).a should be === None
+      db.fetchById[A](2).a should be === Some(3)
+      db.fetchById[A](3).a should be === Some(7)
+    }
+    test(dbId + " - equals filter"){
+      db.access[A]
+        .whereEqual("a", None).fetchOne().get.id should be === 1
+      db.access[A]
+        .whereEqual("a", Some(3)).fetchOne().get.id should be === 2
+    }
+    test(dbId + " - not equals filter"){
+      db.access[A]
+        .whereNotEqual("a", None)
+        .fetch().map{_.id.toInt}.toSet
+        .should( not contain (1) and contain (3) and contain (2) )
+      db.access[A]
+        .whereNotEqual("a", Some(3))
+        .fetch().map{_.id.toInt}.toSet
+        .should( not contain (2) and contain (1) and contain (3) )
+    }
+    
   }
 
 }
 object OptionValueSupportSuite {
 
-  case class EntityWithValuePropertyInOption
+  case class A
     ( a : Option[Int] )
 
 }

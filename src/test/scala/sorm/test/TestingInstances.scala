@@ -9,7 +9,8 @@ object TestingInstances {
         case DbType.H2 => "jdbc:h2:mem:test"
         case DbType.Mysql => "jdbc:mysql://localhost/test"
         case DbType.Sqlite => "jdbc:sqlite::memory:"
-        case DbType.Hsqldb => "jdbc:hsqldb:mem:testdb"
+        case DbType.Hsqldb => "jdbc:hsqldb:mem:test"
+        case DbType.Derby => "jdbc:derby:memory:test;create=true"
         case _ => ???
       }
 

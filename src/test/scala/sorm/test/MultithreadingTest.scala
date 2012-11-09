@@ -14,18 +14,22 @@ object MultithreadingTest {
 class MultithreadingTest extends FunSuite with ShouldMatchers {
   import MultithreadingTest._
 
-  val db = TestingInstance.mysql(Entity[A](unique = Set() + Seq("a")))
+  TestingInstances.instances( Set() + Entity[A]() ) foreach { case (db, dbId) =>
 
-  val a1 = db.save(A(1))
-  val a2 = db.save(A(3))
-  val a3 = db.save(A(0))
-  val a4 = db.save(A(3000))
+    val db = TestingInstance.mysql(Entity[A](unique = Set() + Seq("a")))
 
-  test("Parallel queries"){
-    Seq(0,1,2,3).par.flatMap{ i => db.access[A].whereEqual("a", i).fetchOne() }.seq
-      .should(contain(a1) and contain(a3) and not contain(a4))
-  }
-  test("Parallel saving"){
-    pending
+    val a1 = db.save(A(1))
+    val a2 = db.save(A(3))
+    val a3 = db.save(A(0))
+    val a4 = db.save(A(3000))
+
+    test(dbId + " - Parallel queries"){
+      Seq(0,1,2,3).par.flatMap{ i => db.access[A].whereEqual("a", i).fetchOne() }.seq
+        .should(contain(a1) and contain(a3) and not contain(a4))
+    }
+    test(dbId + " - Parallel saving"){
+      pending
+    }
+
   }
 }

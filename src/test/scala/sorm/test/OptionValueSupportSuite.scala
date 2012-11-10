@@ -14,32 +14,30 @@ class OptionValueSupportSuite extends FunSuite with ShouldMatchers {
   import OptionValueSupportSuite._
 
   TestingInstances.instances(Set() + Entity[A]()) foreach { case (db, dbId) =>
+    val a1 = db.save(A(None))
+    val a2 = db.save(A(Some(3)))
+    val a3 = db.save(A(Some(7)))
 
-    test(dbId + " - saving goes ok"){
-      db.save(A(None))
-      db.save(A(Some(3)))
-      db.save(A(Some(7)))
-    }
     test(dbId + " - saved entities are correct"){
-      db.fetchById[A](1).a should be === None
-      db.fetchById[A](2).a should be === Some(3)
-      db.fetchById[A](3).a should be === Some(7)
+      db.fetchById[A](a1.id).a should be === None
+      db.fetchById[A](a2.id).a should be === Some(3)
+      db.fetchById[A](a3.id).a should be === Some(7)
     }
     test(dbId + " - equals filter"){
       db.query[A]
-        .whereEqual("a", None).fetchOne().get.id should be === 1
+        .whereEqual("a", None).fetchOne().get should be === a1
       db.query[A]
-        .whereEqual("a", Some(3)).fetchOne().get.id should be === 2
+        .whereEqual("a", Some(3)).fetchOne().get should be === a2
     }
     test(dbId + " - not equals filter"){
       db.query[A]
         .whereNotEqual("a", None)
-        .fetch().map{_.id.toInt}.toSet
-        .should( not contain (1) and contain (3) and contain (2) )
+        .fetch().toSet
+        .should( not contain (a1) and contain (a3) and contain (a2) )
       db.query[A]
         .whereNotEqual("a", Some(3))
-        .fetch().map{_.id.toInt}.toSet
-        .should( not contain (2) and contain (1) and contain (3) )
+        .fetch().toSet
+        .should( not contain (a2) and contain (a1) and contain (a3) )
     }
     
   }

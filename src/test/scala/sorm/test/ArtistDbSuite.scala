@@ -90,7 +90,7 @@ class ArtistDbSuite extends FunSuite with ShouldMatchers {
       pending
     }
     test(dbId + " - Ordering"){
-      db.query[Artist].order("id", true).fetch().map(_.id) should equal (6::5::4::3::2::1::Nil)
+      db.query[Artist].order("id", true).fetch().map(_.id) should equal (godsmack.id :: direStraits.id :: rollingStones.id :: kino.id :: nirvana.id :: metallica.id :: Nil)
     }
     test(dbId + " - Contains"){
       pending
@@ -113,12 +113,12 @@ class ArtistDbSuite extends FunSuite with ShouldMatchers {
         .toSet should be === Set("Metallica", "Nirvana", "Godsmack")
     }
     test(dbId + " - Results have correct id property"){
-      db.query[Artist].fetchOne().map{_.id} should be === Some(1)
+      db.query[Artist].fetchOne().map{_.id} should be === Some(metallica.id)
     }
     test(dbId + " - Query by id"){
-      db.query[Artist].whereEqual("id", 1).fetchOne()
+      db.query[Artist].whereEqual("id", metallica.id).fetchOne()
         .map{_.names.values.head.head}.get should be === "Metallica"
-      db.query[Artist].whereEqual("id", 3).fetchOne()
+      db.query[Artist].whereEqual("id", kino.id).fetchOne()
         .map{_.names.values.head.head}.get should be === "Kino"
     }
   }

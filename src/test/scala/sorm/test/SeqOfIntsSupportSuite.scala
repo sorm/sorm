@@ -14,34 +14,30 @@ class SeqOfIntsSupportSuite extends FunSuite with ShouldMatchers {
   import SeqOfIntsSupportSuite._
 
   TestingInstances.instances( Set() + Entity[A]() ) foreach { case (db, dbId) =>
-    db.save(A( Seq() ))
-    db.save(A( Seq(2, 9, 3) ))
-    db.save(A( Seq(4) ))
-    db.save(A( Seq() ))
-    db.save(A( Seq(3) ))
+    val a1 = db.save(A( Seq() ))
+    val a2 = db.save(A( Seq(2, 9, 3) ))
+    val a3 = db.save(A( Seq(4) ))
+    val a4 = db.save(A( Seq() ))
+    val a5 = db.save(A( Seq(3) ))
 
-    def fetchEqualingIds ( value : Seq[_] ) : Set[Long]
-      = db.query[A].whereEqual("a", value).fetch().map{_.id}.toSet
-    def fetchNotEqualingIds ( value : Seq[_] ) : Set[Long]
-      = db.query[A].whereNotEqual("a", value).fetch().map{_.id}.toSet
 
     test(dbId + " - Non matching equals query") {
-      fetchEqualingIds(Seq(10)) should be === Set()
+      db.query[A].whereEqual("a", Seq(10)).fetch() should be ('empty)
     }
     test(dbId + " - Partially matching equals query") {
-      fetchEqualingIds(Seq(2, 9)) should be === Set()
-      fetchEqualingIds(Seq(9)) should be === Set()
-      fetchEqualingIds(Seq(3)) should be === Set(5l)
-      fetchEqualingIds(Seq(9, 3)) should be === Set()
+      db.query[A].whereEqual("a", Seq(2, 9)).fetch() should be ('empty)
+      db.query[A].whereEqual("a", Seq(9)).fetch() should be ('empty)
+      db.query[A].whereEqual("a", Seq(3)).fetch() should contain (a5)
+      db.query[A].whereEqual("a", Seq(9, 3)).fetch() should be ('empty)
     }
     test(dbId + " - Empty seq equals query") {
-      fetchEqualingIds(Seq()) should be === Set(1l, 4l)
+      db.query[A].whereEqual("a", Seq()).fetch() should (contain(a1) and contain(a4))
     }
     test(dbId + " - Same seq equals query") {
-      fetchEqualingIds(Seq(2, 9, 3)) should be === Set(2l)
+      db.query[A].whereEqual("a", Seq(2, 9, 3)).fetch() should equal (Seq(a2))
     }
     test(dbId + " - Differently ordered seq") {
-      fetchEqualingIds(Seq(9, 2, 3)) should be === Set()
+      db.query[A].whereEqual("a", Seq(9, 2, 3)).fetch() should be ('empty)
     }
     test(dbId + " - Equal on smaller size") {
       pending
@@ -52,32 +48,32 @@ class SeqOfIntsSupportSuite extends FunSuite with ShouldMatchers {
 
 
     test(dbId + " - Not equals on seq of same size"){
-      fetchNotEqualingIds(Seq(10)) should ( contain (3l) and contain (5l) )
-      fetchNotEqualingIds(Seq(12,3,4)) should contain (2l)
+      db.query[A].whereNotEqual("a", Seq(10)).fetch() should ( contain (a3) and contain (a5) )
+      db.query[A].whereNotEqual("a", Seq(12,3,4)).fetch() should contain (a2)
     }
     test(dbId + " - Not equals on partially matching seq"){
-      fetchNotEqualingIds(Seq(3)) should contain (2l)
-      fetchNotEqualingIds(Seq(2, 9)) should contain (2l)
+      db.query[A].whereNotEqual("a", Seq(3)).fetch() should contain (a2)
+      db.query[A].whereNotEqual("a", Seq(2, 9)).fetch() should contain (a2)
     }
     test(dbId + " - Not equals on totally matching seq"){
-      fetchNotEqualingIds(Seq(2,9,3)) should not contain (2l)
+      db.query[A].whereNotEqual("a", Seq(2,9,3)).fetch() should not (contain(a2))
     }
     test(dbId + " - Not equals on empty seq"){
-      fetchNotEqualingIds(Seq())
+      db.query[A].whereNotEqual("a", Seq()).fetch()
         .should(
-          contain (2l) and contain(3l) and contain(5l) and
-          not contain(1l) and not contain(4l)
+          contain (a2) and contain(a3) and contain(a5) and
+          not contain(a1) and not contain(a4)
         )
     }
     test(dbId + " - Not equals on single item seq"){
-      fetchNotEqualingIds(Seq(4)) should not contain(3l)
+      db.query[A].whereNotEqual("a", Seq(4)).fetch() should not (contain(a3))
     }
     test(dbId + " - Totally unmatching not equals query"){
-      fetchNotEqualingIds(Seq(10)) should (
-          contain (1l) and
-          contain (2l) and
-          contain (3l) and
-          contain (4l)
+      db.query[A].whereNotEqual("a", Seq(10)).fetch() should (
+          contain (a1) and
+          contain (a2) and
+          contain (a3) and
+          contain (a4)
         )
     }
   }

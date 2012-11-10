@@ -8,7 +8,7 @@ trait StdDropAllTables {
   protected def quote ( a : String ) : String
   def dropAllTables() {
     def listTables()
-      = connection.executeQuery( Statement("SHOW TABLES") )()
+      = connection.executeQuery( Statement(showTablesSql) )()
           .flatten
           .asInstanceOf[List[String]]
 
@@ -35,5 +35,6 @@ trait StdDropAllTables {
     }
 
   }
+  protected def showTablesSql : String = "SHOW TABLES"
 
 }

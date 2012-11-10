@@ -56,7 +56,7 @@ class ResultSetView
           = t match {
               case CHAR | VARCHAR     => rs.getString(i)
               case LONGVARCHAR        => rs.getString(i)
-              case NUMERIC | DECIMAL  => rs.getBigDecimal(i)
+              case NUMERIC | DECIMAL  => rs.getBigDecimal(i) $ (new BigDecimal(_))
               case BIT                => rs.getBoolean(i)
               case TINYINT            => rs.getByte(i)
               case SMALLINT           => rs.getShort(i)

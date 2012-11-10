@@ -1,0 +1,16 @@
+package sorm.driver
+
+import sorm.jdbc.JdbcConnection
+
+class Postgres (protected val connection : JdbcConnection)
+  extends DriverConnection
+  with StdQuery
+  with StdSqlRendering
+  with StdDropAllTables
+  with StdAbstractSqlToSql
+  with StdNow
+  with StdModify
+  with StdDropTables
+  with StdQuote
+  with StdTransaction
+  with StdCreateTable

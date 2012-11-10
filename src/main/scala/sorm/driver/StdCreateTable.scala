@@ -17,11 +17,13 @@ trait StdCreateTable {
     = {
       val Table(name, columns, primaryKey, uniqueKeys, indexes, foreingKeys) = t
       val statements = 
-        columns.map(columnDdl) ++:
-        primaryKey.$(primaryKeyDdl) +: 
-        indexes.map(indexDdl) ++:
-        uniqueKeys.map(uniqueKeyDdl) ++:
-        foreingKeys.map(foreingKeyDdl).toStream
+        ( columns.map(columnDdl) ++:
+          primaryKey.$(primaryKeyDdl) +:
+          indexes.map(indexDdl) ++:
+          uniqueKeys.map(uniqueKeyDdl) ++:
+          foreingKeys.map(foreingKeyDdl).toStream
+        ) .filter(_.nonEmpty)
+
       "CREATE TABLE " + quote(name) + 
       ( "\n( " + statements.mkString(",\n").indent(2).trim + " )" ).indent(2)
     }

@@ -18,6 +18,7 @@ class Connector (url: String, user: String, password: String, poolSize: Int) {
     = dbType match {
         case DbType.H2 => new H2(jdbcConnection)
         case DbType.Mysql => new Mysql(jdbcConnection)
+        case DbType.Hsqldb => new Hsqldb(jdbcConnection)
         case _ => ???
       }
   

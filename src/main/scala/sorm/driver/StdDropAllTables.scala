@@ -5,6 +5,7 @@ import sorm.core.SormException
 
 trait StdDropAllTables {
   protected def connection: JdbcConnection
+  protected def quote ( a : String ) : String
   def dropAllTables() {
     def listTables()
       = connection.executeQuery( Statement("SHOW TABLES") )()
@@ -15,7 +16,7 @@ trait StdDropAllTables {
       ( table : String )
       {
         try {
-          connection.executeUpdate( Statement("DROP TABLE " + table) )
+          connection.executeUpdate( Statement("DROP TABLE " + quote(table)) )
         } catch {
           case e : Throwable =>
         }

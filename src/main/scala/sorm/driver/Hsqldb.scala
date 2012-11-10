@@ -26,8 +26,6 @@ class Hsqldb (protected val connection : JdbcConnection)
   override protected def template(sql: Sql) = {
     import sorm.sql.Sql._
     sql match {
-      case Insert(table, columns, values) if columns.isEmpty =>
-        "INSERT INTO " + quote(table) + " VALUES (DEFAULT)"
       case Comparison(Value(l : Boolean), Value(r : Boolean), o) =>
         if ( o == Equal && l == r || o == NotEqual && l != r ) "TRUE"
         else "FALSE"

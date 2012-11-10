@@ -16,6 +16,8 @@ trait StdSqlRendering {
           "DELETE FROM " + quote(table) +
           ( where.map(template).map("\n" + _).getOrElse("") 
           ).indent(2)
+        case Insert(table, columns, values) if columns.isEmpty && values.isEmpty =>
+          "INSERT INTO " + quote(table) + " VALUES (DEFAULT)"
         case Insert(table, columns, values) =>
           "INSERT INTO " + quote(table) +
           ( "\n( " + columns.map(quote).mkString(", ") + " )" +

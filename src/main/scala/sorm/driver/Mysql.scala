@@ -1,6 +1,7 @@
 package sorm.driver
 
-import sorm.jdbc.JdbcConnection
+import sorm._, ddl._, jdbc._
+import sext._, embrace._
 
 class Mysql (protected val connection : JdbcConnection)
   extends DriverConnection
@@ -14,3 +15,14 @@ class Mysql (protected val connection : JdbcConnection)
   with StdQuote
   with StdTransaction
   with StdCreateTable
+{
+
+  override protected def columnTypeDdl ( t : ColumnType )
+    = {
+      import ColumnType._
+      t match {
+        case Text => "LONGTEXT"
+        case _ => super.columnTypeDdl(t)
+      }
+    }
+}

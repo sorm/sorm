@@ -69,7 +69,7 @@ trait StdCreateTable {
         case VarChar => "VARCHAR(255)"
         case Double => "DOUBLE"
         case Float => "FLOAT"
-        case Text => "MEDIUMTEXT"
+        case Text => "CLOB"
         case BigInt => "BIGINT"
         case Boolean => "TINYINT(1)"
         case Decimal => "DECIMAL"

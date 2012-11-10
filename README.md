@@ -15,7 +15,7 @@ SORM is distributed in the Maven Central, here's a dependency to the latest rele
     <dependency>
       <groupId>com.github.nikita-volkov</groupId>
       <artifactId>sorm</artifactId>
-      <version>0.2.0</version>
+      <version>0.3.0-SNAPSHOT</version>
     </dependency>
 
 ##A quick glance

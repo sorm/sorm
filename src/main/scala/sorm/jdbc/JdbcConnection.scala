@@ -13,8 +13,9 @@ class JdbcConnection( protected val connection : Connection ) extends Transactio
     ( parse : ResultSetView => T = (_ : ResultSetView).indexedRowsTraversable.toList )
     : T
     = {
+      logStatement(s)
       val js = preparedStatement(s)
-      val rs = log(s)(js.executeQuery())
+      val rs = executeLoggingBenchmark(js.executeQuery())
       val r = parse(rs)
       rs.close()
       js.close()
@@ -25,9 +26,10 @@ class JdbcConnection( protected val connection : Connection ) extends Transactio
     ( s : Statement )
     : List[IndexedSeq[Any]]
     = {
+      logStatement(s)
       if( s.data.isEmpty ) {
         val js = connection.createStatement()
-        log(s)(js.executeUpdate(s.sql, JdbcStatement.RETURN_GENERATED_KEYS))
+        executeLoggingBenchmark(js.executeUpdate(s.sql, JdbcStatement.RETURN_GENERATED_KEYS))
         val rs = js.getGeneratedKeys
         val r = rs.indexedRowsTraversable.toList
         rs.close()
@@ -35,7 +37,7 @@ class JdbcConnection( protected val connection : Connection ) extends Transactio
         r
       } else {
         val js = preparedStatement(s, true)
-        log(s)(js.executeUpdate())
+        executeLoggingBenchmark(js.executeUpdate())
         val rs = js.getGeneratedKeys
         val r = rs.indexedRowsTraversable.toList
         rs.close()
@@ -48,14 +50,15 @@ class JdbcConnection( protected val connection : Connection ) extends Transactio
     ( s : Statement )
     : Int
     = {
+      logStatement(s)
       if( s.data.isEmpty ){
         val js = connection.createStatement()
-        val r = log(s)(js.executeUpdate(s.sql))
+        val r = executeLoggingBenchmark(js.executeUpdate(s.sql))
         js.close()
         r
       } else {
         val js = preparedStatement(s)
-        val r = log(s)(js.executeUpdate())
+        val r = executeLoggingBenchmark(js.executeUpdate())
         js.close()
         r
       }

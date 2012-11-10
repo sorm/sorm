@@ -82,6 +82,7 @@
       <artifactId>slf4j-simple</artifactId>
       <version>1.6.6</version>
     </dependency>
+
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
@@ -94,6 +95,7 @@
       <version>5.1.19</version>
       <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>org.scalatest</groupId>
       <artifactId>scalatest_2.10.0-RC1</artifactId>

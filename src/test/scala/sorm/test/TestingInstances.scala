@@ -11,6 +11,7 @@ object TestingInstances {
         case DbType.Sqlite => "jdbc:sqlite::memory:"
         case DbType.Hsqldb => "jdbc:hsqldb:mem:test"
         case DbType.Derby => "jdbc:derby:memory:test;create=true"
+        case DbType.Postgres => "jdbc:postgresql:test"
         case _ => ???
       }
 
@@ -18,7 +19,12 @@ object TestingInstances {
     = t.toString
 
   private def instance ( entities : Traversable[Entity], t : DbType, poolSize : Int )
-    = new Instance(entities, url(t), poolSize = poolSize, initMode = InitMode.DropAllCreate)
+    = t match {
+        case DbType.Postgres =>
+          new Instance(entities, url(t), "test", poolSize = poolSize, initMode = InitMode.DropAllCreate)
+        case _ =>
+          new Instance(entities, url(t), poolSize = poolSize, initMode = InitMode.DropAllCreate)
+      }
 
   def instances
     ( entities : Traversable[Entity],

@@ -8,14 +8,13 @@ import sext._, embrace._
 //  TODO: 
 //    - get rid of mappings, leave only string queries, delaying the mapping resolution to deeper apis
 //    - introduce FetchQuery, CountQuery, ExistsQuery and Update and Insert - basically, make querying an abstraction for all mapping-oriented manipulations
+sealed case class Query
+  ( mapping : EntityMapping,
+    where   : Option[Query.Where] = None,
+    order   : Seq[Query.Order] = Nil,
+    limit   : Option[Int] = None,
+    offset  : Int = 0 )
 object Query {
-
-  sealed case class Query
-    ( mapping : EntityMapping,
-      where   : Option[Where] = None,
-      order   : Seq[Order] = Nil,
-      limit   : Option[Int] = None,
-      offset  : Int = 0 )
 
   trait Kind
   object Kind {

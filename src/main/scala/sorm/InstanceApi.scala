@@ -109,4 +109,5 @@ trait InstanceApi extends Logging {
    */
   def now() = new DateTime(nowMillis())
 
+  def close() = connector.close()
 }

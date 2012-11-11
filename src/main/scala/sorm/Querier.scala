@@ -2,7 +2,6 @@ package sorm
 
 import sext._, embrace._
 import sorm._
-import sorm.{Filter => PathFilter}
 import driver.DriverConnection
 import mappings._
 import query.AbstractSqlComposition
@@ -11,10 +10,6 @@ import persisted._
 import reflect.runtime.universe.TypeTag
 import core._
 
-object Querier {
-  def apply [ T <: AnyRef : TypeTag ] ( mapping : EntityMapping, connector : Connector )
-    = new Querier[T]( Query(mapping), connector )
-}
 class Querier [ T <: AnyRef : TypeTag ] ( query : Query, connector : Connector ) {
 
   /**
@@ -104,41 +99,41 @@ class Querier [ T <: AnyRef : TypeTag ] ( query : Query, connector : Connector )
   /**
    * Return a copy of this `Querier` object with a filter generated from DSL.
    *
-   * Usage of this method should be accompanied with {{{import sorm.FilterDsl._}}}
+   * Usage of this method should be accompanied with {{{import sorm.QuerierDsl._}}}
    * 
    */
-  def where ( f : PathFilter )
+  def where ( f : Querier.Filter )
     : Querier[T]
     = {
-      def queryWhere (f : PathFilter) : Where
+      def queryWhere (f : Querier.Filter) : Where
         = {
           def pvo
             = f match {
-                case PathFilter.Equal(p, v)          => (p, v, Equal)
-                case PathFilter.NotEqual(p, v)       => (p, v, NotEqual)
-                case PathFilter.Larger(p, v)         => (p, v, Larger)
-                case PathFilter.LargerOrEqual(p, v)  => (p, v, LargerOrEqual)
-                case PathFilter.Smaller(p, v)        => (p, v, Smaller)
-                case PathFilter.SmallerOrEqual(p, v) => (p, v, SmallerOrEqual)
-                case PathFilter.Like(p, v)           => (p, v, Like) 
-                case PathFilter.NotLike(p, v)        => (p, v, NotLike) 
-                case PathFilter.Regex(p, v)          => (p, v, Regex) 
-                case PathFilter.NotRegex(p, v)       => (p, v, NotRegex) 
-                case PathFilter.In(p, v)             => (p, v, In) 
-                case PathFilter.NotIn(p, v)          => (p, v, NotIn) 
-                case PathFilter.Contains(p, v)       => (p, v, Contains) 
-                case PathFilter.NotContains(p, v)    => (p, v, NotContains) 
-                case PathFilter.Constitutes(p, v)    => (p, v, Constitutes) 
-                case PathFilter.NotConstitutes(p, v) => (p, v, NotConstitutes) 
-                case PathFilter.Includes(p, v)       => (p, v, Includes) 
-                case PathFilter.NotIncludes(p, v)    => (p, v, NotIncludes) 
+                case Querier.Equal(p, v)          => (p, v, Equal)
+                case Querier.NotEqual(p, v)       => (p, v, NotEqual)
+                case Querier.Larger(p, v)         => (p, v, Larger)
+                case Querier.LargerOrEqual(p, v)  => (p, v, LargerOrEqual)
+                case Querier.Smaller(p, v)        => (p, v, Smaller)
+                case Querier.SmallerOrEqual(p, v) => (p, v, SmallerOrEqual)
+                case Querier.Like(p, v)           => (p, v, Like) 
+                case Querier.NotLike(p, v)        => (p, v, NotLike) 
+                case Querier.Regex(p, v)          => (p, v, Regex) 
+                case Querier.NotRegex(p, v)       => (p, v, NotRegex) 
+                case Querier.In(p, v)             => (p, v, In) 
+                case Querier.NotIn(p, v)          => (p, v, NotIn) 
+                case Querier.Contains(p, v)       => (p, v, Contains) 
+                case Querier.NotContains(p, v)    => (p, v, NotContains) 
+                case Querier.Constitutes(p, v)    => (p, v, Constitutes) 
+                case Querier.NotConstitutes(p, v) => (p, v, NotConstitutes) 
+                case Querier.Includes(p, v)       => (p, v, Includes) 
+                case Querier.NotIncludes(p, v)    => (p, v, NotIncludes) 
                 case _ => throw new SormException("No operator for filter `" + f + "`")
 
               }
           f match {
-            case PathFilter.Or(l, r) => 
+            case Querier.Or(l, r) => 
               Or(queryWhere(l), queryWhere(r))
-            case PathFilter.And(l, r) => 
+            case Querier.And(l, r) => 
               And(queryWhere(l), queryWhere(r))
             case _ =>
               pvo match { case (p, v, o) => Path.where(query.mapping, p, v, o) }
@@ -214,5 +209,39 @@ class Querier [ T <: AnyRef : TypeTag ] ( query : Query, connector : Connector )
 
   def whereNotIncludes ( p : String, v : Any ) 
     = where( p, v, NotIncludes )
+
+}
+object Querier {
+  def apply [ T <: AnyRef : TypeTag ] ( mapping : EntityMapping, connector : Connector )
+    = new Querier[T]( Query(mapping), connector )
+
+  sealed trait Filter
+  case class Or ( l : Filter, r : Filter ) extends Filter
+  case class And ( l : Filter, r : Filter ) extends Filter
+
+  case class Equal ( p : String, v : Any ) extends Filter
+  case class NotEqual ( p : String, v : Any ) extends Filter
+  case class Larger ( p : String, v : Any ) extends Filter
+  case class LargerOrEqual ( p : String, v : Any ) extends Filter
+  case class Smaller ( p : String, v : Any ) extends Filter
+  case class SmallerOrEqual ( p : String, v : Any ) extends Filter
+  case class Like ( p : String, v : Any ) extends Filter
+  case class NotLike ( p : String, v : Any ) extends Filter
+  case class Regex ( p : String, v : Any ) extends Filter
+  case class NotRegex ( p : String, v : Any ) extends Filter
+  case class In ( p : String, v : Any ) extends Filter
+  case class NotIn ( p : String, v : Any ) extends Filter
+  case class Contains ( p : String, v : Any ) extends Filter
+  case class NotContains ( p : String, v : Any ) extends Filter
+  /**
+   * Makes part of a collection
+   */
+  case class Constitutes ( p : String, v : Any ) extends Filter
+  case class NotConstitutes ( p : String, v : Any ) extends Filter
+  /**
+   * Includes a collection
+   */
+  case class Includes ( p : String, v : Any ) extends Filter
+  case class NotIncludes ( p : String, v : Any ) extends Filter
 
 }

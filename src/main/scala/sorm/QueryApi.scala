@@ -36,7 +36,7 @@ class QueryApi [ T <: AnyRef : TypeTag ] ( query : Query, connector : Connector 
    */
   def fetchIds () : Stream[Long]
     = connector.withConnection { cx =>
-        query $ AbstractSqlComposition.primaryKeySelect $ (cx.query(_)(_.byNameRowsTraversable.toList)) $ (_.toStream) map (_("id").asInstanceOf[Long])
+        query $ AbstractSqlComposition.primaryKeySelect $ (cx.query(_)(_.byNameRowsTraversable.toList)) $ (_.toStream) map (_("id") $ Util.toLong)
       }
 
   /**

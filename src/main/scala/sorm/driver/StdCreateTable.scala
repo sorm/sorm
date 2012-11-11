@@ -57,8 +57,8 @@ trait StdCreateTable {
     }
   protected def columnDdl ( c : Column )
     = quote(c.name) + " " + columnTypeDdl(c.t) +
-      ( if( c.nullable ) " NULL" else " NOT NULL" ) +
-      ( if( c.autoIncrement ) " AUTO_INCREMENT" else "" )
+      c.autoIncrement.option(" AUTO_INCREMENT").mkString +
+      c.nullable.option(" NULL").getOrElse(" NOT NULL")
   protected def columnTypeDdl ( t : ColumnType )
     = {
       import ColumnType._

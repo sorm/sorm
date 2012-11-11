@@ -5,7 +5,7 @@ import sorm._
 import driver.DriverConnection
 import mappings._
 import query.AbstractSqlComposition
-import query.Query._, Operator._
+import query.Query._
 import persisted._
 import reflect.runtime.universe.TypeTag
 import core._

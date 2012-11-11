@@ -32,7 +32,7 @@ class Instance
     password : String = "",
     poolSize : Int = 1,
     initMode : InitMode = InitMode.Create )
-  extends InstanceApi with Logging
+  extends Api with Logging
   {
     class ValidationException ( m : String ) extends SormException(m)
 

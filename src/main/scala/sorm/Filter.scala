@@ -1,11 +1,8 @@
 package sorm
 
-/**
- * A filter declaration which has no knowledge of mapping. For public API
- */
+sealed trait Filter
 object Filter {
 
-  sealed trait Filter
   case class Or ( l : Filter, r : Filter ) extends Filter
   case class And ( l : Filter, r : Filter ) extends Filter
 

@@ -94,7 +94,7 @@ object Instance {
         }
 
     /**
-     * Saves the entity by overwriting the existing one if one with the matching unique keys exists and creating a new one otherwise. Executing simply [[sorm.InstanceApi#save]] in a situation of unique keys clash would have thrown an exception. Beware that in case when not all unique keys are matched this method will still throw an exception.
+     * Saves the entity by overwriting the existing one if one with the matching unique keys exists and creating a new one otherwise. Executing simply [[sorm.Instance.Api#save]] in a situation of unique keys clash would have thrown an exception. Beware that in case when not all unique keys are matched this method will still throw an exception.
      * @param value The value to save
      * @return The saved entity instance with a [[sorm.Persisted]] trait mixed in
      */

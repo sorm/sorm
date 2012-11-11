@@ -25,7 +25,7 @@ class ValueMapping
           case _ if reflection <:< Reflection[Boolean]
             ⇒ ColumnType.Boolean
           case _ if reflection <:< Reflection[Byte]
-            ⇒ ColumnType.TinyInt
+            ⇒ ColumnType.SmallInt //  postgres dissuport of tinyint workaround
           case _ if reflection <:< Reflection[Short]
             ⇒ ColumnType.SmallInt
           case _ if reflection <:< Reflection[Int]

@@ -29,7 +29,7 @@ class EntityMapping
         .headOption
         .map( row => Persisted(
           properties.mapValues( _.valueFromContainerRow(row, c) ),
-          row("id").asInstanceOf[Long],
+          row("id") $ Util.toLong,
           reflection
         ) )
         .get

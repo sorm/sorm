@@ -1,13 +1,14 @@
 package sorm
 
 import sext._, embrace._
+import reflect.runtime.universe._
+
 import sorm._
-import driver.DriverConnection
 import mappings._
+import query._
 import query.AbstractSqlComposition
 import query.Query._
 import persisted._
-import reflect.runtime.universe.TypeTag
 import core._
 
 class Querier [ T <: AnyRef : TypeTag ] ( query : Query, connector : Connector ) {

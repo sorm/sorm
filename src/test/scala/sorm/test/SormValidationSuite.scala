@@ -15,7 +15,7 @@ class SormValidationSuite extends FunSuite with ShouldMatchers {
 
   test("`Any` type is not supported"){
     evaluating {
-      new Instance(Entity[D]() :: Nil, "jdbc:h2:mem:test")
+      new Instance(Entity[D]() :: Nil, "jdbc:h2:mem:test").close()
     } should produce [Instance#ValidationException]
   }
   test("referred entities validation"){
@@ -23,14 +23,14 @@ class SormValidationSuite extends FunSuite with ShouldMatchers {
       new Instance(
         Entity[A]() :: Nil,
         "jdbc:h2:mem:test"
-      )
+      ).close()
     } should produce [Instance#ValidationException]
   }
   test("Correct instantiation doesnt throw exceptions"){
     new Instance(
       Entity[A]() :: Entity[B]() :: Entity[C]() :: Nil,
       "jdbc:h2:mem:test"
-    ) should not equal (false)
+    ).close()
   }
   test("self reference validation"){
     pending

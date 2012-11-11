@@ -1,6 +1,6 @@
 package sorm.test
 
-import org.scalatest.FunSuite
+import org.scalatest.{SequentialNestedSuiteExecution, FunSuite}
 import org.scalatest.matchers.ShouldMatchers
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
@@ -9,10 +9,11 @@ import sorm._
 import sext._, embrace._
 
 @RunWith(classOf[JUnitRunner])
-class EnumSupportSuite extends FunSuite with ShouldMatchers {
+class EnumSupportSuite extends FunSuite with ShouldMatchers with MultiInstanceSuite {
   import EnumSupportSuite._
 
-  TestingInstances.instances(Set() + Entity[A]()).foreach{ case (db, dbId) =>
+  def entities = Set() + Entity[A]()
+  instancesAndIds foreach { case (db, dbId) =>
     val a1 = db.save(A(B.One))
     val a2 = db.save(A(B.Two))
     val a3 = db.save(A(B.Three))

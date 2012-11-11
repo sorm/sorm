@@ -9,10 +9,11 @@ import sorm._
 import sext._, embrace._
 
 @RunWith(classOf[JUnitRunner])
-class EntityReferredSeveralTimesSuite extends FunSuite with ShouldMatchers {
+class EntityReferredSeveralTimesSuite extends FunSuite with ShouldMatchers with MultiInstanceSuite {
   import EntityReferredSeveralTimesSuite._
 
-  TestingInstances.instances( Set() + Entity[A]() + Entity[B]() ) foreach { case (db, dbId) =>
+  def entities = Set() + Entity[A]() + Entity[B]()
+  instancesAndIds foreach { case (db, dbId) =>
 
     val b1 = db.save(B(23))
     val b2 = db.save(B(0))

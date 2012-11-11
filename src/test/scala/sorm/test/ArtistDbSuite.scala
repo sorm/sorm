@@ -22,11 +22,13 @@ object ArtistDbSuite {
 
 }
 @RunWith(classOf[JUnitRunner])
-class ArtistDbSuite extends FunSuite with ShouldMatchers {
+class ArtistDbSuite extends FunSuite with ShouldMatchers with MultiInstanceSuite {
 
   import ArtistDbSuite._
 
-  TestingInstances.instances(Set() + Entity[Artist]() + Entity[Style]() + Entity[Locale]()) foreach { case (db, dbId) =>
+  def entities = Set() + Entity[Artist]() + Entity[Style]() + Entity[Locale]()
+
+  instancesAndIds foreach { case (db, dbId) =>
     val ru 
       = db.save( Locale("ru") )
     val en

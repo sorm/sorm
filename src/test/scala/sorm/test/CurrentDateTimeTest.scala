@@ -9,9 +9,10 @@ import sorm._
 import sext._, embrace._
 
 @RunWith(classOf[JUnitRunner])
-class CurrentDateTimeTest extends FunSuite with ShouldMatchers {
+class CurrentDateTimeTest extends FunSuite with ShouldMatchers with MultiInstanceSuite {
   
-  TestingInstances.instances(Set()) foreach { case (db, dbId) =>
+  def entities = Set()
+  instancesAndIds foreach { case (db, dbId) =>
     test(dbId + " - should be changing"){
       val a = db.now()
       Thread.sleep(1500)

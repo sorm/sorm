@@ -13,10 +13,12 @@ object MultiConnectionSupportSuite {
   case class A ( a : Int )
 }
 @RunWith(classOf[JUnitRunner])
-class MultiConnectionSupportSuite extends FunSuite with ShouldMatchers {
+class MultiConnectionSupportSuite extends FunSuite with ShouldMatchers with MultiInstanceSuite {
   import MultiConnectionSupportSuite._
 
-  TestingInstances.instances(Set() + Entity[A](), 1 :: 14 :: Nil) foreach { case (db, dbId) =>
+  override def entities = Entity[A]() :: Nil
+  override def poolSizes = 1 :: 14 :: Nil
+  instancesAndIds foreach { case (db, dbId) =>
     test(dbId + " - Entities aren't always stored sequentially"){
       val fs = (1 to 140).map(n => future(db.save(A(n))))
       val rs = fs.map(Await.result(_, 10 seconds)).sortBy(_.id)

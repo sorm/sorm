@@ -18,4 +18,6 @@ class C3p0ConnectionPool (dbType: DbType, url: String, user: String, password: S
 
   protected def fetchConnection () = ds.getConnection $ (new JdbcConnection(_))
   protected def returnConnection ( c : JdbcConnection ) = c.close()
+
+  def close() = ds.close()
 }

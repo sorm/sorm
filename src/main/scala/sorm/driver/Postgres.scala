@@ -26,6 +26,8 @@ class Postgres (protected val connection : JdbcConnection)
       import ColumnType._
       t match {
         case Text => "TEXT"
+        case Boolean => "BOOLEAN"
+        case TinyInt => "SMALLINT"
         case _ => super.columnTypeDdl(t)
       }
     }

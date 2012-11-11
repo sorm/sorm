@@ -3,7 +3,10 @@
 SORM is an object-relational mapping framework having elegance, consistency and simplicity at its primary principles. It is absolutely abstracted from relational side automagically creating database tables, emitting queries, inserting, updating and deleting records. This all functionality is presented to the user with a simple API around standard Scala's case classes. 
 
 ##Supported databases
-Currently SORM supports H2, MySQL and HSQLDB databases. Support for other popular DBs is comming.
+* MySQL
+* PostgreSQL
+* H2
+* HSQLDB
 
 ##Supported Scala versions
 2.10.0-RC1 and later

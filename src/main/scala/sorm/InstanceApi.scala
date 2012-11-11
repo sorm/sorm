@@ -77,6 +77,11 @@ trait InstanceApi extends Logging {
           }
         )
 
+  /**
+   * Delete a persisted entity
+   * @param value The entity
+   * @tparam T The entity
+   */
   def delete
     [ T <: AnyRef : TypeTag ]
     ( value : T )
@@ -109,5 +114,8 @@ trait InstanceApi extends Logging {
    */
   def now() = new DateTime(nowMillis())
 
+  /**
+   * Free all the underlying resources. Useful in multi-instance tests
+   */
   def close() = connector.close()
 }

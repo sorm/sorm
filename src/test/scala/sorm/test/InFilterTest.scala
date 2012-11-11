@@ -1,6 +1,6 @@
 package sorm.test
 
-import org.scalatest.FunSuite
+import org.scalatest.{BeforeAndAfterAll, FunSuite}
 import org.scalatest.matchers.ShouldMatchers
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
@@ -8,10 +8,12 @@ import org.scalatest.junit.JUnitRunner
 import sorm._
 
 @RunWith(classOf[JUnitRunner])
-class InFilterTest extends FunSuite with ShouldMatchers {
+class InFilterTest extends FunSuite with ShouldMatchers with MultiInstanceSuite {
   import InFilterTest._
 
-  TestingInstances.instances( Set() + Entity[A]() ) foreach { case (db, dbId) =>
+  def entities = Set() + Entity[A]()
+
+  instancesAndIds foreach { case (db, dbId) =>
 
     val a1 = db.save(A(1))
     val a2 = db.save(A(2))
@@ -25,6 +27,7 @@ class InFilterTest extends FunSuite with ShouldMatchers {
     }
 
   }
+
 }
 object InFilterTest {
 

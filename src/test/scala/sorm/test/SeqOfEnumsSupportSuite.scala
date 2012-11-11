@@ -10,10 +10,11 @@ import sorm._
 import samples._
 
 @RunWith(classOf[JUnitRunner])
-class SeqOfEnumsSupportSuite extends FunSuite with ShouldMatchers {
+class SeqOfEnumsSupportSuite extends FunSuite with ShouldMatchers with MultiInstanceSuite {
   import SeqOfEnumsSupportSuite._
 
-  TestingInstances.instances( Set() + Entity[A]() ) foreach { case (db, dbId) =>
+  def entities =  Set() + Entity[A]()
+  instancesAndIds foreach { case (db, dbId) =>
 
     val a1 = db.save(A(B.Two :: Nil))
     val a2 = db.save(A(B.Two :: B.Two :: B.One :: Nil))

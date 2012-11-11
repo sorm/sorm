@@ -8,11 +8,12 @@ import org.scalatest.junit.JUnitRunner
 import sorm._
 
 @RunWith(classOf[JUnitRunner])
-class RangeSupportSuite extends FunSuite with ShouldMatchers {
+class RangeSupportSuite extends FunSuite with ShouldMatchers with MultiInstanceSuite {
 
   import RangeSupportSuite._
 
-  TestingInstances.instances( Set() + Entity[A]() ) foreach { case (db, dbId) =>
+  def entities =  Set() + Entity[A]()
+  instancesAndIds foreach { case (db, dbId) =>
 
     val a1 = db.save(A( 2 to 4 ))
     val a2 = db.save(A( 9 to 1 ))

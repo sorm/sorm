@@ -11,10 +11,11 @@ object MultithreadingTest {
   case class A (a : Int)
 }
 @RunWith(classOf[JUnitRunner])
-class MultithreadingTest extends FunSuite with ShouldMatchers {
+class MultithreadingTest extends FunSuite with ShouldMatchers with MultiInstanceSuite {
   import MultithreadingTest._
 
-  TestingInstances.instances( Set() + Entity[A]() ) foreach { case (db, dbId) =>
+  def entities =  Set() + Entity[A]()
+  instancesAndIds foreach { case (db, dbId) =>
 
     val a1 = db.save(A(1))
     val a2 = db.save(A(3))

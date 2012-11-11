@@ -9,9 +9,10 @@ import sorm._
 import sext._, embrace._
 
 @RunWith(classOf[JUnitRunner])
-class OptionSupportSuite extends FunSuite with ShouldMatchers {
+class OptionSupportSuite extends FunSuite with ShouldMatchers with MultiInstanceSuite {
   import OptionSupportSuite._
 
+  def entities = Entity[EntityWithOptionInOption]() :: Nil
 
 }
 object OptionSupportSuite {

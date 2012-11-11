@@ -9,11 +9,12 @@ import sorm._
 import sext._, embrace._
 
 @RunWith(classOf[JUnitRunner])
-class OptionTupleSupportSuite extends FunSuite with ShouldMatchers {
+class OptionTupleSupportSuite extends FunSuite with ShouldMatchers with MultiInstanceSuite {
 
   import OptionTupleSupportSuite._
 
-  TestingInstances.instances(Set() + Entity[A]()) foreach { case (db, dbId) =>
+  def entities = Set() + Entity[A]()
+  instancesAndIds foreach { case (db, dbId) =>
     val a1 = db.save(A( None ))
     val a2 = db.save(A( Some(2 -> None) ))
     val a3 = db.save(A( Some(56 -> Some("asdf")) ))

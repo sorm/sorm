@@ -19,13 +19,13 @@ trait InstanceApi extends Logging {
   protected def mapping[ T : TypeTag ] : EntityMapping
 
   /**
-   * Return the [[sorm.QueryApi]] object for performing a read-query on a specified entity type.
+   * Return the [[sorm.Querier]] object for performing a read-query on a specified entity type.
    * 
    * @tparam T The entity type
    * @return The accessor object. An abstraction over all kinds of supported SELECT-queries.
    */
   def query [ T <: AnyRef : TypeTag ]
-    = QueryApi[T](mapping, connector)
+    = Querier[T](mapping, connector)
 
   /**
    * Fetch an existing entity by id. Will throw an exception if the entity doesn't exist. 

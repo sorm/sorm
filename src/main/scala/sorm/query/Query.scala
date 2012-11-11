@@ -36,7 +36,7 @@ object Query {
   sealed case class Or
     ( left : Where,
       right : Where )
-      extends Composite
+    extends Composite
 
   sealed case class Filter
     ( operator : Operator,

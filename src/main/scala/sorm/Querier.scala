@@ -100,7 +100,7 @@ class Querier [ T <: AnyRef : TypeTag ] ( query : Query, connector : Connector )
   /**
    * Return a copy of this `Querier` object with a filter generated from DSL.
    *
-   * Usage of this method should be accompanied with {{{import sorm.QuerierDsl._}}}
+   * Usage of this method should be accompanied with {{{import sorm.Dsl._}}}
    * 
    */
   def where ( f : Querier.Filter )

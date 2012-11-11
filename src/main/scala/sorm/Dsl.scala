@@ -1,15 +1,15 @@
 package sorm
 
-object QuerierDsl {
+object Dsl {
 
   import Querier._
 
-  implicit class QuerierDslFilter(val a: Filter) extends AnyVal {
+  implicit class DslFilter(val a: Filter) extends AnyVal {
     def or(b: Filter) = Or(a, b)
     def and(b: Filter) = And(a, b)
   }
 
-  implicit class QuerierDslString(val p: String) extends AnyVal {
+  implicit class DslString(val p: String) extends AnyVal {
     def equal(v: Any)          = Equal(p, v)
     def notEqual(v: Any)       = NotEqual(p, v)
     def smaller(v: Any)        = Smaller(p, v)

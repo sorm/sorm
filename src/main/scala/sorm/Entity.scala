@@ -11,7 +11,7 @@ sealed case class Entity
     unique      : Set[Seq[String]] )
 object Entity {
   /**
-   * Entity settings. Used for registring entities with the SORM instance.
+   * Entity settings. Used for registering entities with the SORM instance.
    * @param indexed
    * Fields of case class on which the filtering operations will be performed
    * when querying the db. Specifying those may help the DB to perform a little

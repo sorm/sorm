@@ -3,7 +3,7 @@ package sorm.driver
 import sorm._, ddl._, jdbc._
 import sext._
 import org.joda.time.DateTime
-import sql.Sql.Sql
+import sql.Sql
 
 class Hsqldb (protected val connection : JdbcConnection)
   extends DriverConnection

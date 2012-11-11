@@ -19,7 +19,7 @@ trait StdQuery {
 
   protected def statement(asql: Statement): jdbc.Statement
     = asql $ sql $ Optimization.optimized $ statement
-  protected def statement(sql: Sql.Sql): jdbc.Statement
+  protected def statement(sql: Sql): jdbc.Statement
   protected def sql(asql: Statement): Sql.Statement
 
 }

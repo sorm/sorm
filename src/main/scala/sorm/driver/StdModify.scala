@@ -3,9 +3,9 @@ package sorm.driver
 import sext._, embrace._
 
 import sorm._
+import sql._, Sql._
 
 trait StdModify {
-  import sql.Sql._
 
   def statement ( sql : Sql ) : jdbc.Statement
   protected def connection : jdbc.JdbcConnection

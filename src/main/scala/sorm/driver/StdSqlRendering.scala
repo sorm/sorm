@@ -7,10 +7,10 @@ import jdbc._
 import sql._, Sql._
 
 trait StdSqlRendering {
-  def statement ( sql : Sql.Sql ) : jdbc.Statement
+  def statement ( sql : Sql ) : jdbc.Statement
     = (sql $ template, sql $ data map JdbcValue.apply) $$ jdbc.Statement
   protected def quote ( x : String ) : String
-  protected def template ( sql : Sql.Sql ) : String
+  protected def template ( sql : Sql ) : String
     = sql match {
         case Delete(table, where) =>
           "DELETE FROM " + quote(table) +
@@ -166,7 +166,7 @@ trait StdSqlRendering {
         case NotIn =>
           "NOT IN"
       }
-  protected def data ( sql : Sql.Sql ) : Stream[Any]
+  protected def data ( sql : Sql ) : Stream[Any]
     = sql match {
         case Delete(table, where) =>
           where.toStream.flatMap(data)

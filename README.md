@@ -27,4 +27,4 @@ SORM is distributed in the Maven Central, here's a dependency to the latest rele
 
 ##Contribution
 
-Any kind of contribution is much appreciated. If you find anything that you think SORM could evolve on, go ahead and [fork it](https://github.com/nikita-volkov/sorm)! 
+Any kind of contribution is much appreciated. If you find anything that you think SORM could evolve on, go ahead and fork it! 

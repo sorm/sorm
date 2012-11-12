@@ -6,20 +6,13 @@ import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 
 import sorm._
-import core._
-import persisted._
-import query._
-import reflection._
-import mappings._
-import jdbc._
 import sext._, embrace._
 
-import samples._
-
 @RunWith(classOf[JUnitRunner])
-class OptionSupportSuite extends FunSuite with ShouldMatchers {
+class OptionSupportSuite extends FunSuite with ShouldMatchers with MultiInstanceSuite {
   import OptionSupportSuite._
 
+  def entities = Entity[EntityWithOptionInOption]() :: Nil
 
 }
 object OptionSupportSuite {

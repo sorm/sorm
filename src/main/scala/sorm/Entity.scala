@@ -6,12 +6,12 @@ import reflection._
 import reflect.runtime.universe._
 
 sealed case class Entity
-  ( reflection    : Reflection,
-    indexes       : Set[Seq[String]],
-    uniqueKeys    : Set[Seq[String]] )
+  ( reflection  : Reflection,
+    indexed     : Set[Seq[String]],
+    unique      : Set[Seq[String]] )
 object Entity {
   /**
-   * Entity settings. Used for registring entities with the SORM instance.
+   * Entity settings. Used for registering entities with the SORM instance.
    * @param indexed
    * Fields of case class on which the filtering operations will be performed
    * when querying the db. Specifying those may help the DB to perform a little

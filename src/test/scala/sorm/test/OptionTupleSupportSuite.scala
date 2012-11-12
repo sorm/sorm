@@ -6,35 +6,28 @@ import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 
 import sorm._
-import core._
-import persisted._
-import query._
-import reflection._
-import mappings._
-import jdbc._
 import sext._, embrace._
 
-import samples._
-
 @RunWith(classOf[JUnitRunner])
-class OptionTupleSupportSuite extends FunSuite with ShouldMatchers {
+class OptionTupleSupportSuite extends FunSuite with ShouldMatchers with MultiInstanceSuite {
 
   import OptionTupleSupportSuite._
 
-  val db = TestingInstance.mysql(Entity[A]()).connection()
+  def entities = Set() + Entity[A]()
+  instancesAndIds foreach { case (db, dbId) =>
+    val a1 = db.save(A( None ))
+    val a2 = db.save(A( Some(2 -> None) ))
+    val a3 = db.save(A( Some(56 -> Some("asdf")) ))
 
-  db.save(A( None ))
-  db.save(A( Some(2 -> None) ))
-  db.save(A( Some(56 -> Some("asdf")) ))
-
-  test("top none"){
-    db.fetchById[A](1).a should be === None
-  }
-  test("deep none"){
-    db.fetchById[A](2).a should be === Some(2 -> None)
-  }
-  test("deep some"){
-    db.fetchById[A](3).a should be === Some(56 -> Some("asdf"))
+    test(dbId + " - top none"){
+      db.fetchById[A](a1.id).a should be === None
+    }
+    test(dbId + " - deep none"){
+      db.fetchById[A](a2.id).a should be === Some(2 -> None)
+    }
+    test(dbId + " - deep some"){
+      db.fetchById[A](a3.id).a should be === Some(56 -> Some("asdf"))
+    }
   }
 
 }

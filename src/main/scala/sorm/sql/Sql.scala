@@ -1,8 +1,7 @@
 package sorm.sql
 
+sealed trait Sql
 object Sql {
-
-  sealed trait Sql
 
   case class Insert
     ( table : String, columns : Seq[String], values : Seq[Any] )

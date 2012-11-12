@@ -17,11 +17,13 @@ trait StdCreateTable {
     = {
       val Table(name, columns, primaryKey, uniqueKeys, indexes, foreingKeys) = t
       val statements = 
-        columns.map(columnDdl) ++:
-        primaryKey.$(primaryKeyDdl) +: 
-        indexes.map(indexDdl) ++:
-        uniqueKeys.map(uniqueKeyDdl) ++:
-        foreingKeys.map(foreingKeyDdl).toStream
+        ( columns.map(columnDdl) ++:
+          primaryKey.$(primaryKeyDdl) +:
+          indexes.map(indexDdl) ++:
+          uniqueKeys.map(uniqueKeyDdl) ++:
+          foreingKeys.map(foreingKeyDdl).toStream
+        ) .filter(_.nonEmpty)
+
       "CREATE TABLE " + quote(name) + 
       ( "\n( " + statements.mkString(",\n").indent(2).trim + " )" ).indent(2)
     }
@@ -55,8 +57,8 @@ trait StdCreateTable {
     }
   protected def columnDdl ( c : Column )
     = quote(c.name) + " " + columnTypeDdl(c.t) +
-      ( if( c.nullable ) " NULL" else " NOT NULL" ) +
-      ( if( c.autoIncrement ) " AUTO_INCREMENT" else "" )
+      c.autoIncrement.option(" AUTO_INCREMENT").mkString +
+      c.nullable.option(" NULL").getOrElse(" NOT NULL")
   protected def columnTypeDdl ( t : ColumnType )
     = {
       import ColumnType._
@@ -69,7 +71,7 @@ trait StdCreateTable {
         case VarChar => "VARCHAR(255)"
         case Double => "DOUBLE"
         case Float => "FLOAT"
-        case Text => "MEDIUMTEXT"
+        case Text => "CLOB"
         case BigInt => "BIGINT"
         case Boolean => "TINYINT(1)"
         case Decimal => "DECIMAL"

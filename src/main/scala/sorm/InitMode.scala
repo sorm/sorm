@@ -1,11 +1,10 @@
 package sorm
 
 /**
- * The mode for initialization performed when a connection to the db is
- * established on creation of SORM instance.
+ * A mode for initialization performed when a connection to db gets established
+ * on creation of a SORM instance.
  */
 sealed trait InitMode
-
 object InitMode {
   /**
    * Wipe out all the contents of the db and generate the tables

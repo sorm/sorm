@@ -105,15 +105,7 @@ object PersistedClass extends Logging {
     }
 
   private val cache
-    = new collection.mutable.HashMap[Reflection, Class[_ <: Persisted]] {
-        override def default
-          ( k : Reflection )
-          = {
-            val v = createClass(k)
-            update(k, v)
-            v
-          }
-      }
+    = memo( createClass(_ : Reflection) )
   def apply
     ( r : Reflection )
     = cache(r.mixinBasis)

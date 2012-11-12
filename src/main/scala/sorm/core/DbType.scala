@@ -38,6 +38,7 @@ object DbType {
         case DbType.H2       => "org.h2.Driver"
         case DbType.Sqlite   => "org.sqlite.JDBC"
         case DbType.Hsqldb   => "org.hsqldb.jdbcDriver"
+        case DbType.Derby    => "org.apache.derby.jdbc.EmbeddedDriver"
         case _               => ???
       }
 }

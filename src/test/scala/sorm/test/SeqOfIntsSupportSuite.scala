@@ -10,80 +10,76 @@ import sorm._
 import samples._
 
 @RunWith(classOf[JUnitRunner])
-class SeqOfIntsSupportSuite extends FunSuite with ShouldMatchers {
-
+class SeqOfIntsSupportSuite extends FunSuite with ShouldMatchers with MultiInstanceSuite {
   import SeqOfIntsSupportSuite._
 
-  test("Non matching equals query") {
-    fetchEqualingIds(Seq(10)) should be === Set()
-  }
-  test("Partially matching equals query") {
-    fetchEqualingIds(Seq(2, 9)) should be === Set()
-    fetchEqualingIds(Seq(9)) should be === Set()
-    fetchEqualingIds(Seq(3)) should be === Set(5l)
-    fetchEqualingIds(Seq(9, 3)) should be === Set()
-  }
-  test("Empty seq equals query") {
-    fetchEqualingIds(Seq()) should be === Set(1l, 4l)
-  }
-  test("Same seq equals query") {
-    fetchEqualingIds(Seq(2, 9, 3)) should be === Set(2l)
-  }
-  test("Differently ordered seq") {
-    fetchEqualingIds(Seq(9, 2, 3)) should be === Set()
-  }
-  test("Equal on smaller size") {
-    pending
-  }
-  test("Equal on bigger size") {
-    pending
-  }
+  def entities =  Set() + Entity[A]()
+  instancesAndIds foreach { case (db, dbId) =>
+    val a1 = db.save(A( Seq() ))
+    val a2 = db.save(A( Seq(2, 9, 3) ))
+    val a3 = db.save(A( Seq(4) ))
+    val a4 = db.save(A( Seq() ))
+    val a5 = db.save(A( Seq(3) ))
 
 
-  test("Not equals on seq of same size"){
-    fetchNotEqualingIds(Seq(10)) should ( contain (3l) and contain (5l) )
-    fetchNotEqualingIds(Seq(12,3,4)) should contain (2l)
-  }
-  test("Not equals on partially matching seq"){
-    fetchNotEqualingIds(Seq(3)) should contain (2l)
-    fetchNotEqualingIds(Seq(2, 9)) should contain (2l)
-  }
-  test("Not equals on totally matching seq"){
-    fetchNotEqualingIds(Seq(2,9,3)) should not contain (2l)
-  }
-  test("Not equals on empty seq"){
-    fetchNotEqualingIds(Seq())
-      .should(
-        contain (2l) and contain(3l) and contain(5l) and
-        not contain(1l) and not contain(4l)
-      )
-  }
-  test("Not equals on single item seq"){
-    fetchNotEqualingIds(Seq(4)) should not contain(3l)
-  }
-  test("Totally unmatching not equals query"){
-    fetchNotEqualingIds(Seq(10)) should (
-        contain (1l) and
-        contain (2l) and
-        contain (3l) and
-        contain (4l)
-      )
-  }
+    test(dbId + " - Non matching equals query") {
+      db.query[A].whereEqual("a", Seq(10)).fetch() should be ('empty)
+    }
+    test(dbId + " - Partially matching equals query") {
+      db.query[A].whereEqual("a", Seq(2, 9)).fetch() should be ('empty)
+      db.query[A].whereEqual("a", Seq(9)).fetch() should be ('empty)
+      db.query[A].whereEqual("a", Seq(3)).fetch() should contain (a5)
+      db.query[A].whereEqual("a", Seq(9, 3)).fetch() should be ('empty)
+    }
+    test(dbId + " - Empty seq equals query") {
+      db.query[A].whereEqual("a", Seq()).fetch() should (contain(a1) and contain(a4))
+    }
+    test(dbId + " - Same seq equals query") {
+      db.query[A].whereEqual("a", Seq(2, 9, 3)).fetch() should equal (Seq(a2))
+    }
+    test(dbId + " - Differently ordered seq") {
+      db.query[A].whereEqual("a", Seq(9, 2, 3)).fetch() should be ('empty)
+    }
+    test(dbId + " - Equal on smaller size") {
+      pending
+    }
+    test(dbId + " - Equal on bigger size") {
+      pending
+    }
 
+
+    test(dbId + " - Not equals on seq of same size"){
+      db.query[A].whereNotEqual("a", Seq(10)).fetch() should ( contain (a3) and contain (a5) )
+      db.query[A].whereNotEqual("a", Seq(12,3,4)).fetch() should contain (a2)
+    }
+    test(dbId + " - Not equals on partially matching seq"){
+      db.query[A].whereNotEqual("a", Seq(3)).fetch() should contain (a2)
+      db.query[A].whereNotEqual("a", Seq(2, 9)).fetch() should contain (a2)
+    }
+    test(dbId + " - Not equals on totally matching seq"){
+      db.query[A].whereNotEqual("a", Seq(2,9,3)).fetch() should not (contain(a2))
+    }
+    test(dbId + " - Not equals on empty seq"){
+      db.query[A].whereNotEqual("a", Seq()).fetch()
+        .should(
+          contain (a2) and contain(a3) and contain(a5) and
+          not contain(a1) and not contain(a4)
+        )
+    }
+    test(dbId + " - Not equals on single item seq"){
+      db.query[A].whereNotEqual("a", Seq(4)).fetch() should not (contain(a3))
+    }
+    test(dbId + " - Totally unmatching not equals query"){
+      db.query[A].whereNotEqual("a", Seq(10)).fetch() should (
+          contain (a1) and
+          contain (a2) and
+          contain (a3) and
+          contain (a4)
+        )
+    }
+  }
 
 }
 object SeqOfIntsSupportSuite {
   case class A ( a : Seq[Int] )
-
-  val db = TestingInstance.h2( Entity[A]() ).connection()
-  db.save(A( Seq() ))
-  db.save(A( Seq(2, 9, 3) ))
-  db.save(A( Seq(4) ))
-  db.save(A( Seq() ))
-  db.save(A( Seq(3) ))
-
-  def fetchEqualingIds ( value : Seq[_] ) : Set[Long]
-    = db.access[A].whereEqual("a", value).fetch().map{_.id}.toSet
-  def fetchNotEqualingIds ( value : Seq[_] ) : Set[Long]
-    = db.access[A].whereNotEqual("a", value).fetch().map{_.id}.toSet
 }

@@ -55,12 +55,12 @@ object Path {
           QFilter(operator, host, value)
         case (host : MapMapping, Part.Braced(key) +: tail) =>
           And(
-            QFilter(Operator.Equal, host.key, key),
+            QFilter(Equal, host.key, key),
             where(host.value, tail, value, operator)
           )
         case (host : SeqMapping, Part.Braced(index) +: tail) =>
           And(
-            QFilter(Operator.Equal, host.index, index.toInt),
+            QFilter(Equal, host.index, index.toInt),
             where(host.item, tail, value, operator)
           )
         //  virtual properties should not be supported until a general api is developed

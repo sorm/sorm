@@ -2,7 +2,7 @@
 
 SORM is a purely Scala-oriented object-relational mapping framework designed to eliminate boilerplate and maximize productivity. It is absolutely abstracted from relational side automatically creating database tables, emitting queries, inserting, updating and deleting records. This all functionality is presented to the user with a simple API around standard Scala's case classes. 
 
-For more info, tutorials and documentation please visit the [official site](sorm-framework.org).
+For more info, tutorials and documentation please visit the [official site](http://sorm-framework.org).
 
 ##Supported databases
 

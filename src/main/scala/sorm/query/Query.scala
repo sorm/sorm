@@ -5,7 +5,8 @@ import reflection._
 import mappings._
 import sext._, embrace._
 
-//  TODO: 
+//  in future it should be used as instructions on what to fetch, thus becoming an internal lingua for queries, a frontend abstraction over abstractSql and etc.
+//  TODO:
 //    - get rid of mappings, leave only string queries, delaying the mapping resolution to deeper apis
 //    - introduce FetchQuery, CountQuery, ExistsQuery and Update and Insert - basically, make querying an abstraction for all mapping-oriented manipulations
 sealed case class Query

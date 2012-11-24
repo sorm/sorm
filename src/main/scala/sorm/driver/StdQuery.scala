@@ -15,7 +15,14 @@ trait StdQuery {
     ( asql : Statement )
     ( parse : ResultSetView => T = (_ : ResultSetView).indexedRowsTraversable.toList )
     : T
-    = connection.executeQuery(statement(asql))(parse)
+    = query(statement(asql))(parse)
+  def query
+    [ T ]
+    ( s : jdbc.Statement )
+    ( parse : ResultSetView => T = (_ : ResultSetView).indexedRowsTraversable.toList )
+    : T
+    = connection.executeQuery(s)(parse)
+
 
   protected def statement(asql: Statement): jdbc.Statement
     = asql $ sql $ Optimization.optimized $ statement

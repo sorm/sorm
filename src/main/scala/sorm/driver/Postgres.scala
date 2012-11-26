@@ -16,6 +16,15 @@ class Postgres (protected val connection : JdbcConnection)
   with StdTransaction
   with StdCreateTable
 {
+  override def createTable(table: Table) {
+    super.createTable(table)
+    table.indexes.foreach{
+      createIndexDdl(table.name, _) $ (Statement(_)) $ connection.executeUpdate
+    }
+  }
+  protected def createIndexDdl( table: String, columns: Seq[String] ): String
+    = "CREATE INDEX ON " + quote(table) + " (" + columns.view.map(quote).mkString(", ") + ")"
+  override protected def indexDdl(columns: Seq[String]) = ""
   override protected def showTablesSql
     = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'"
   override protected def columnDdl(c: Column)
@@ -26,7 +35,6 @@ class Postgres (protected val connection : JdbcConnection)
       import ColumnType._
       t match {
         case Text => "TEXT"
-        case Boolean => "BOOLEAN"
         case TinyInt => "SMALLINT"
         case _ => super.columnTypeDdl(t)
       }

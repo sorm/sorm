@@ -19,7 +19,7 @@ trait StdCreateTable {
       val statements = 
         ( columns.map(columnDdl) ++:
           primaryKey.$(primaryKeyDdl) +:
-          indexes.map(indexDdl) ++:
+          indexes.map(indexDdl).filter(_.nonEmpty) ++:
           uniqueKeys.map(uniqueKeyDdl) ++:
           foreingKeys.map(foreingKeyDdl).toStream
         ) .filter(_.nonEmpty)
@@ -73,7 +73,7 @@ trait StdCreateTable {
         case Float => "FLOAT"
         case Text => "CLOB"
         case BigInt => "BIGINT"
-        case Boolean => "TINYINT(1)"
+        case Boolean => "BOOLEAN"
         case Decimal => "DECIMAL"
         case SmallInt => "SMALLINT"
         case TinyInt => "TINYINT"

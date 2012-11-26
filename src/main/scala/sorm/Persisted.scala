@@ -28,7 +28,7 @@ package sorm
  * }}}
  * When you fetch it from the db:
  * {{{
- * val artist = Db.access[Artist].whereEqual("name", "Metallica").fetchOne().get
+ * val artist = Db.query[Artist].whereEqual("name", "Metallica").fetchOne().get
  * }}}
  * When you make a copy of an already persisted entity:
  * {{{

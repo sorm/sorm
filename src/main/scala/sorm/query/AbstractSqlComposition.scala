@@ -75,19 +75,15 @@ object AbstractSqlComposition extends Logging {
           comparing( m, AS.SmallerOrEqual, v )
 
         case Filter(Like, m: ValueMapping, v) => 
-          logger.warn("`Like` filter is not tested")
           comparing( m, AS.Like, v )
 
         case Filter(NotLike, m: ValueMapping, v) => 
-          logger.warn("`NotLike` filter is not tested")
           comparing( m, AS.NotLike, v )
 
         case Filter(Regex, m: ValueMapping, v) => 
-          logger.warn("`Regex` filter is not tested")
           comparing( m, AS.Regexp, v )
 
         case Filter(NotRegex, m: ValueMapping, v) =>
-          logger.warn("`NotRegexp` filter is not tested")
           comparing( m, AS.NotRegexp, v )
 
         case Filter(In, m, v: Iterable[_]) => 
@@ -95,20 +91,16 @@ object AbstractSqlComposition extends Logging {
           else everFalse(m)
 
         case Filter(NotIn, m, v: Iterable[_]) => 
-          logger.warn("`NotIn` filter is not tested")
           if( v.nonEmpty ) v.map(notEqualing(m, _)).reduce(_ & _)
           else everTrue(m)
 
         case Filter(Contains, m: SeqMapping, v) => 
-          logger.warn("`Contains` filter is not tested")
           empty(m) && including(m, Iterable(v)) 
 
         case Filter(Contains, m: SetMapping, v) => 
-          logger.warn("`Contains` filter is not tested")
           empty(m) && including(m, Iterable(v)) 
 
         case Filter(Contains, m: MapMapping, v) => 
-          logger.warn("`Contains` filter is not tested")
           empty(m) && including(m, Iterable(v)) 
 
         case Filter(Constitutes, m: SeqMapping, v) => ???
@@ -118,15 +110,12 @@ object AbstractSqlComposition extends Logging {
         case Filter(Constitutes, m: MapMapping, v) => ???
 
         case Filter(Includes, m: SeqMapping, v: Iterable[_]) => 
-          logger.warn("`Includes` filter is not tested")
           empty(m) && including(m, v)
 
         case Filter(Includes, m: SetMapping, v: Iterable[_]) => 
-          logger.warn("`Includes` filter is not tested")
           empty(m) && including(m, v)
 
         case Filter(Includes, m: MapMapping, v: Iterable[_]) => 
-          logger.warn("`Includes` filter is not tested")
           empty(m) && including(m, v)
 
         case Filter(f, m, v) =>

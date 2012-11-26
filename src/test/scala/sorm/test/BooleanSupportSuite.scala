@@ -20,6 +20,10 @@ class BooleanSupportSuite extends FunSuite with ShouldMatchers with MultiInstanc
       db.query[A].order("id").fetch().map(_.boo)
         .should(equal(seq))
     }
+    test(dbId + " - filtering"){
+      db.query[A].whereEqual("boo", true).fetch()
+        .should(have('size(seq.count(_ == true))))
+    }
   }
 }
 object BooleanSupportSuite {

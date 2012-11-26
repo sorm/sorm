@@ -1,7 +1,7 @@
 package sorm.driver
 
 import sorm._, ddl._, jdbc._
-import sext._
+import sext._, embrace._
 import org.joda.time.DateTime
 import sql.Sql
 
@@ -18,6 +18,16 @@ class Hsqldb (protected val connection : JdbcConnection)
   with StdTransaction
   with StdCreateTable
 {
+  override def createTable(table: Table) {
+    super.createTable(table)
+    table.indexes.view.zipWithIndex.foreach{ case (cols, i) =>
+      createIndexDdl(table.name, cols, table.name + "_idx_" + i) $
+      (Statement(_)) $
+      connection.executeUpdate
+    }
+  }
+  protected def createIndexDdl( table: String, columns: Seq[String], name: String ): String
+    = "CREATE INDEX " + quote(name) + " ON " + quote(table) + " (" + columns.view.map(quote).mkString(", ") + ")"
   override protected def indexDdl(columns: Seq[String]) = ""
   override protected def columnDdl(c: Column)
     = quote(c.name) + " " + columnTypeDdl(c.t) +

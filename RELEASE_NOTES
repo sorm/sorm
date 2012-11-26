@@ -3,6 +3,7 @@
   - Selecting objects using plain SQL feature (Issue #1)
   - HSQLDB creating tables with boolean type fix
   - PostgreSQL and HSQLDB creating tables with indexes error fix
+  - Support for creating indexes on H2
 
 0.3.0 
 First public release

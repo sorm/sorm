@@ -1,7 +1,7 @@
 package sorm.driver
 
 import sext._, embrace._
-import sorm.jdbc.JdbcConnection
+import sorm.jdbc.{Statement, JdbcConnection}
 import sorm.ddl.Table
 
 class H2 (protected val connection : JdbcConnection)
@@ -17,6 +17,14 @@ class H2 (protected val connection : JdbcConnection)
   with StdTransaction
   with StdCreateTable
   {
+    override def createTable(table: Table) {
+      super.createTable(table)
+      table.indexes.foreach{
+        createIndexDdl(table.name, _) $ (Statement(_)) $ connection.executeUpdate
+      }
+    }
+    protected def createIndexDdl( table: String, columns: Seq[String] ): String
+      = "CREATE INDEX ON " + quote(table) + " (" + columns.view.map(quote).mkString(", ") + ")"
     override protected def tableDdl(t: Table) : String
       = {
         val Table(name, columns, primaryKey, uniqueKeys, indexes, foreingKeys) = t

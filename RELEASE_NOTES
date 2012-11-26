@@ -1,4 +1,4 @@
-0.3.2-SNAPSHOT
+0.3.2
   - Fix for order clauses error of PostgreSQL, HSQLDB and H2
 
 0.3.1

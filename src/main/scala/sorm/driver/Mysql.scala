@@ -2,6 +2,7 @@ package sorm.driver
 
 import sorm._, ddl._, jdbc._
 import sext._, embrace._
+import sql.Sql
 
 class Mysql (protected val connection : JdbcConnection)
   extends DriverConnection
@@ -25,4 +26,5 @@ class Mysql (protected val connection : JdbcConnection)
         case _ => super.columnTypeDdl(t)
       }
     }
+  override protected def postProcessSql(sql: Sql.Statement) = sql
 }

@@ -18,7 +18,7 @@ object TestingInstances {
   private def name ( t : DbType )
     = t.toString
 
-  private def instance ( entities : Traversable[Entity], t : DbType, poolSize : Int )
+  def instance ( entities : Traversable[Entity], t : DbType, poolSize : Int = 1 )
     = t match {
         case DbType.Postgres =>
           new Instance(entities, url(t), "test", poolSize = poolSize, initMode = InitMode.DropAllCreate)

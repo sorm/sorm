@@ -16,6 +16,7 @@ class Postgres (protected val connection : JdbcConnection)
   with StdTransaction
   with StdCreateTable
 {
+  override protected def indexDdl(columns: Seq[String]) = ""
   override protected def showTablesSql
     = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'"
   override protected def columnDdl(c: Column)

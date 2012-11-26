@@ -19,7 +19,7 @@ trait StdCreateTable {
       val statements = 
         ( columns.map(columnDdl) ++:
           primaryKey.$(primaryKeyDdl) +:
-          indexes.map(indexDdl) ++:
+          indexes.map(indexDdl).filter(_.nonEmpty) ++:
           uniqueKeys.map(uniqueKeyDdl) ++:
           foreingKeys.map(foreingKeyDdl).toStream
         ) .filter(_.nonEmpty)

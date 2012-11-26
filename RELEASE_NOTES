@@ -1,6 +1,7 @@
 
 0.3.1
-  - Selecting objects using plain SQL (Issue #1)
+  - Selecting objects using plain SQL feature (Issue #1)
+  - HSQLDB creating tables with boolean type fix
 
 0.3.0 
 First public release

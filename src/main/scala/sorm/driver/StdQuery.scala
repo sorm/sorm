@@ -25,8 +25,40 @@ trait StdQuery {
 
 
   protected def statement(asql: Statement): jdbc.Statement
-    = asql $ sql $ Optimization.optimized $ statement
+    = asql $ sql $ postProcessSql $ Optimization.optimized $ statement
   protected def statement(sql: Sql): jdbc.Statement
   protected def sql(asql: Statement): Sql.Statement
+  protected def postProcessSql(sql: Sql.Statement): Sql.Statement = {
+    def includeOrderInWhat(sql: Sql.Select) = {
+      val orderByColumns = sql.orderBy.map(_.what)
+      val whatColumns = sql.what.collect{ case c: Sql.Column => c }
+      val columnsToAdd = orderByColumns.diff(whatColumns)
+      sql.copy(
+        what = sql.what ++ columnsToAdd,
+        groupBy = 
+          if( sql.what.diff(sql.groupBy) == Nil )
+            sql.groupBy ++ columnsToAdd
+          else
+            sql.groupBy
+      )
+    }
+
+    def processSelects( sql: Sql.Statement, f: Sql.Select => Sql.Select )
+      : Sql.Statement
+      = sql match {
+          case Sql.Union(l, r) =>
+            Sql.Union(processSelects(l, f), processSelects(r, f))
+          case s: Sql.Select =>
+            f(s).copy(
+              join = s.join.map{
+                case j @ Sql.Join(what: Sql.Statement, _, _, _) =>
+                  j.copy(processSelects(what, f))
+                case j => j
+              }
+            )
+        }
+
+    processSelects(sql, includeOrderInWhat)
+  }
 
 }

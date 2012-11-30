@@ -1,4 +1,4 @@
-0.3.3-SNAPSHOT
+0.3.3
   - Change PostreSQL ids 32-bit to 64-bit (as with other DBs)
   - 2.10.0-RC3 Scala dependency
 

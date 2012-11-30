@@ -1,4 +1,5 @@
 0.3.3-SNAPSHOT
+  - Change PostreSQL ids 32-bit to 64-bit (as with other DBs)
 
 0.3.2
   - Fix for order clauses error of PostgreSQL, HSQLDB and H2

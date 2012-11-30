@@ -13,7 +13,7 @@ For more info, tutorials and documentation please visit the [official site](http
 
 ##Supported Scala versions
 
-2.10.0-RC1, 2.10.0-RC2
+2.10.0-RC1, 2.10.0-RC2, 2.10.0-RC3
 
 ##Maven
 
@@ -22,7 +22,7 @@ SORM is distributed in the Maven Central, here's a dependency to the latest rele
     <dependency>
       <groupId>com.github.nikita-volkov</groupId>
       <artifactId>sorm</artifactId>
-      <version>0.3.2</version>
+      <version>0.3.3</version>
     </dependency>
 
 ##Contribution

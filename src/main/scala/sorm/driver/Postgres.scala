@@ -29,7 +29,7 @@ class Postgres (protected val connection : JdbcConnection)
     = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'"
   override protected def columnDdl(c: Column)
     = if ( !c.autoIncrement ) super.columnDdl(c)
-      else quote(c.name) + " SERIAL" + c.nullable.option(" NULL").getOrElse(" NOT NULL")
+      else quote(c.name) + " BIGSERIAL" + c.nullable.option(" NULL").getOrElse(" NOT NULL")
   override protected def columnTypeDdl ( t : ColumnType )
     = {
       import ColumnType._
@@ -41,5 +41,5 @@ class Postgres (protected val connection : JdbcConnection)
     }
   //  dirty: implies that the only thing returned is an id column
   override def insertAndGetGeneratedKeys(table: String, values: Iterable[(String, Any)])
-    = super.insertAndGetGeneratedKeys(table, values).take(1).map(_.asInstanceOf[Int].toLong)
+    = super.insertAndGetGeneratedKeys(table, values).take(1)
 }

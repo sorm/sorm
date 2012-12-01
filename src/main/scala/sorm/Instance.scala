@@ -178,15 +178,18 @@ object Instance {
     /**
      * Current time at DB server in milliseconds. Effectively fetches the date only once to calculate the deviation.
      */
-    lazy val nowMillis = connector.withConnection { cx =>
-      val deviation = System.currentTimeMillis() - cx.now().getMillis
-      () => System.currentTimeMillis() - deviation
-    }
+    @deprecated ("now().getMillis should be used instead")
+    def nowMillis() = now().getMillis
 
     /**
      * Current DateTime at DB server. Effectively fetches the date only once to calculate the deviation.
      */
-    def now() = new DateTime(nowMillis())
+    @deprecated ("appears to be redundant since DateTime already stores timezone information")
+    lazy val now = {
+      val base = connector.withConnection(_.now())
+      val systemBase = System.currentTimeMillis()
+      () => base.plusMillis((System.currentTimeMillis() - systemBase).toInt)
+    }
 
     /**
      * Free all the underlying resources. Useful in multi-instance tests

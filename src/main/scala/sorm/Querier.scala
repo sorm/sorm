@@ -88,12 +88,12 @@ class Querier [ T <: AnyRef : TypeTag ] ( query : Query, connector : Connector )
     = query.order.toVector :+ Order(Path.mapping(query.mapping, p), reverse) $ (x => copy(order = x))
 
   /**
-   * Limit the limit of entities to be fetched
+   * Limit the amount of entities to be fetched
    */
   def limit ( amount : Int ) = amount $ (Some(_)) $ (x => copy(amount = x))
 
   /**
-   * Set the limit of first results to skip
+   * Set the amount of first results to skip
    */
   def offset ( offset : Int ) = offset $ (x => copy(offset = x))
 

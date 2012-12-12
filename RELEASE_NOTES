@@ -1,3 +1,6 @@
+0.3.5-SNAPSHOT
+  - 2.10.0-RC5 Scala dependency
+  
 0.3.4
   - now() timezone fix
 

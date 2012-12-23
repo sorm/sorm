@@ -10,13 +10,13 @@ import sorm._
 @RunWith(classOf[JUnitRunner])
 class PersistedSuite extends FunSuite with ShouldMatchers {
 
-  test("Same persisted ids make otherwise equaling objects have different hashcodes") {
+  test("Different persisted ids make otherwise equaling objects have different hashcodes") {
     Persisted(Genre("a"), 1).hashCode should not equal(Persisted(Genre("a"), 2).hashCode)
   }
-  test("Same persisted ids make otherwise equaling objects unequal") {
+  test("Different persisted ids make otherwise equaling objects unequal") {
     Persisted(Genre("a"), 1) should not equal(Persisted(Genre("a"), 2))
   }
-  test("Same persisted ids keep otherwise equaling objects equal") {
+  test("Same persisted ids keep equaling objects equal") {
     Persisted(Genre("a"), 1) should equal(Persisted(Genre("a"), 1))
   }
   test("all is fine") {

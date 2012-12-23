@@ -13,24 +13,20 @@ trait ConnectionPool extends Logging {
     = {
       val thread = Thread.currentThread()
       logger.trace("Opening a withConnection block on thread " + thread)
-      openConnectionByThread.get(thread) match {
+      synchronized { openConnectionByThread.get(thread) } match {
         case Some(cx) =>
           f(cx)
         case None =>
           logger.trace("Fetching a connection to thread " + thread)
           val cx = fetchConnection()
-          synchronized {
-            openConnectionByThread.update(thread, cx)
-          }
-          logger.trace(openConnectionByThread.size + " connections currently fetched")
+          synchronized { openConnectionByThread.update(thread, cx) }
+          logger.trace(synchronized { openConnectionByThread.size } + " connections currently fetched")
           try f(cx)
           finally {
             logger.trace("Returning a connection from thread " + thread)
-            synchronized {
-              openConnectionByThread.remove(thread)
-            }
+            synchronized { openConnectionByThread.remove(thread) }
             returnConnection(cx)
-            logger.trace(openConnectionByThread.size + " connections currently fetched")
+            logger.trace(synchronized { openConnectionByThread.size } + " connections currently fetched")
           }
       }
     }

@@ -1,3 +1,7 @@
+0.3.5
+  - 2.10.0 Scala dependency
+  - Pool unsynchronized internal map read fix (https://github.com/nikita-volkov/sorm/issues/8)
+  
 0.3.4
   - now() timezone fix
 
@@ -9,7 +13,7 @@
   - Fix for order clauses error of PostgreSQL, HSQLDB and H2
 
 0.3.1
-  - Selecting objects using plain SQL feature (Issue #1)
+  - Selecting objects using plain SQL feature (https://github.com/nikita-volkov/sorm/issues/1)
   - HSQLDB creating tables with boolean type fix
   - PostgreSQL and HSQLDB creating tables with indexes error fix
   - Support for creating indexes on H2

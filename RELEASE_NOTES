@@ -1,4 +1,4 @@
-0.3.6-SNAPSHOT
+0.3.6
   - Fix BigDecimal support (#12)
   - Fix Guava dependency (#11) 
   

@@ -46,6 +46,7 @@ object MappingKind {
         case _
           if (reflection <:< Reflection[AnyVal])
           || (reflection <:< Reflection[String])
+          || (reflection <:< Reflection[BigDecimal])
           || (reflection <:< Reflection[org.joda.time.DateTime])
           || (reflection <:< Reflection[org.joda.time.LocalDate])
           || (reflection <:< Reflection[org.joda.time.LocalTime])

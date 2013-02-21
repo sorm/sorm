@@ -74,7 +74,7 @@ trait StdCreateTable {
         case Text => "CLOB"
         case BigInt => "BIGINT"
         case Boolean => "BOOLEAN"
-        case Decimal => "DECIMAL"
+        case Decimal => "DECIMAL(65,30)"
         case SmallInt => "SMALLINT"
         case TinyInt => "TINYINT"
       }

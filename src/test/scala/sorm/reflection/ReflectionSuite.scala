@@ -33,6 +33,10 @@ class ReflectionSuite extends FunSuite with ShouldMatchers {
 //    println(isMixedIn(tag[Artist with Mixin].tpe))
 //    properties(tag[Artist with Mixin].tpe) should equal (properties(tag[Artist].tpe))
 //  }
+  test("propertyValue of Persisted"){
+    import sorm.persisted._
+    Reflection[Genre].propertyValue("name", Persisted(Genre("A"), 1)) should equal ("A")
+  }
   test("Generics have effect on hashCode"){
     Reflection[Seq[Int]].hashCode should not equal(Reflection[Seq[Any]].hashCode)
   }

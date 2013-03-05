@@ -62,15 +62,15 @@ class Reflection ( protected val t : Type ) {
     : Any
     = s.instantiate(t.constructors.head, params)
 
-
-  private lazy val javaMethodsByName
-    = t.javaClass.getMethods.groupBy{_.getName}
-
   def propertyValue
     ( name : String,
       instance : AnyRef )
     : Any
-    = javaMethodsByName(name).head.invoke( instance )
+    = {
+      val instanceReflection = mirror.reflect(instance)
+      val fieldSymbol = instanceReflection.symbol.toType.member(newTermName(name)).asTerm
+      instanceReflection.reflectField(fieldSymbol).get
+    }
 
   def propertyValues
     ( instance : AnyRef )

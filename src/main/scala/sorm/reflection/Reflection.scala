@@ -66,11 +66,7 @@ class Reflection ( protected val t : Type ) {
     ( name : String,
       instance : AnyRef )
     : Any
-    = {
-      val instanceReflection = mirror.reflect(instance)
-      val fieldSymbol = instanceReflection.symbol.toType.member(newTermName(name)).asTerm
-      instanceReflection.reflectField(fieldSymbol).get
-    }
+    = instance.getClass.getMethods.find(_.getName == name).get.invoke(instance)
 
   def propertyValues
     ( instance : AnyRef )

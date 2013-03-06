@@ -62,15 +62,11 @@ class Reflection ( protected val t : Type ) {
     : Any
     = s.instantiate(t.constructors.head, params)
 
-
-  private lazy val javaMethodsByName
-    = t.javaClass.getMethods.groupBy{_.getName}
-
   def propertyValue
     ( name : String,
       instance : AnyRef )
     : Any
-    = javaMethodsByName(name).head.invoke( instance )
+    = instance.getClass.getMethods.find(_.getName == name).get.invoke(instance)
 
   def propertyValues
     ( instance : AnyRef )

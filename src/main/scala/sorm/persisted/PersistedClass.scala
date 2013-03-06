@@ -9,10 +9,7 @@ import com.weiglewilczek.slf4s.Logging
 object PersistedClass extends Logging {
 
   import reflect.runtime.universe._
-  import reflect.runtime.{currentMirror => mirror}
   import scala.tools.reflect.ToolBox
-
-  private lazy val toolbox = mirror.mkToolBox()
 
   private var generateNameCounter = 0
   private def generateName() 
@@ -96,6 +93,9 @@ object PersistedClass extends Logging {
     ( r : Reflection )
     : Class[T with Persisted]
     = {
+      val mirror = runtimeMirror(Thread.currentThread().getContextClassLoader)
+      val toolbox = mirror.mkToolBox()
+
       toolbox.eval(
         toolbox.parse(
           generateCode(r, generateName())

@@ -1,3 +1,6 @@
+0.3.7
+  - Fix Play Framework compatibility (#10)
+
 0.3.6
   - Fix BigDecimal support (#12)
   - Fix Guava dependency (#11) 

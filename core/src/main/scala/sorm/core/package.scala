@@ -1,53 +1,45 @@
 package sorm.core
+
+import language.experimental.macros
+import reflect.runtime.universe._
+import reflect.macros.Context
+
 object `package` {
-
-  import language.experimental.macros
-  import reflect.runtime.universe._
-  import reflect.macros.Context
-
 
   sealed trait Persisted {
     val id : Long
   }
 
-  sealed trait Index[ SiteT, FieldsT ] {
+  sealed trait Key[ SiteT, FieldsT ] {
     /**
      * 
      */
-    val symbols : Seq[Symbol]
+    val symbols : Seq[ Symbol ]
+    // TODO: implement hashCode and eq
   }
 
   sealed trait Entity[ A ] {
     def toPersisted( value : A, id : Long ) : A with Persisted
+    // TODO: implement hashCode and eq
   }
 
-  def entityMacro
-    [ A : c.WeakTypeTag ]
-    ( c : Context )
-    ()
-    : c.Expr[Entity[A]]
-    = {
-      import c.universe._
-      ???
-    }
-
-  def indexMacro
-    [ SiteT : c.WeakTypeTag, FieldsT : c.WeakTypeTag ]
-    ( c : Context )
-    ( f : c.Expr[ SiteT => FieldsT ] )
-    : c.Expr[ Index[ SiteT, FieldsT ] ]
-    = ??? 
-
   /**
-   * Exports of this module into the public API (`sorm._`)
+   * Exports of this module into the public API, e.g. `sorm._`.
    */
   trait Exports {
 
-    def entity[ A ]() : Entity[ A ] = macro entityMacro[ A ]
+    type Persisted = sorm.core.Persisted
 
-    def index[ SiteT, FieldsT ]( f : SiteT => FieldsT ) : Index[ SiteT, FieldsT ]
-      = macro indexMacro[ SiteT, FieldsT ]
+    def entity[ A ]
+      ( indexed : Set[ Key[ A, _ ] ], unique : Set[ Key[ A, _ ] ] ) 
+      : Entity[ A ] 
+      = macro Macros.entity[ A ]
+
+    def key[ SiteT, FieldsT ]( f : SiteT => FieldsT ) 
+      : Key[ SiteT, FieldsT ]
+      = macro Macros.key[ SiteT, FieldsT ]
 
   }
 
 }
+

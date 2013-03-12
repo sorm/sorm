@@ -14,12 +14,12 @@
 
   <name>SORM</name>
   <description>An ORM framework for Scala</description>
-  <url>http://www.github.com/nikita-volkov/sorm</url>
+  <url>http://www.github.com/sorm/sorm</url>
 
   <licenses>
     <license>
       <name>MIT/X11</name>
-      <url>http://www.github.com/nikita-volkov/sorm/LICENSE</url>
+      <url>http://www.github.com/sorm/sorm/LICENSE</url>
     </license>
   </licenses>
 
@@ -32,9 +32,9 @@
   </developers>
 
   <scm>
-    <connection>scm:git:git@github.com:nikita-volkov/sorm.git</connection>
-    <url>scm:git:git@github.com:nikita-volkov/sorm.git</url>
-    <developerConnection>scm:git:git@github.com:nikita-volkov/sorm.git</developerConnection>
+    <connection>scm:git:git@github.com:sorm/sorm.git</connection>
+    <url>scm:git:git@github.com:sorm/sorm.git</url>
+    <developerConnection>scm:git:git@github.com:sorm/sorm.git</developerConnection>
   </scm>
 
   <parent>

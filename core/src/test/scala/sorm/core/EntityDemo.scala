@@ -2,12 +2,12 @@ package sorm.core
 
 object EntityDemo extends App {
 
-  // Having this class
+  // Having this class:
   case class A( a : Int, b : String )
 
-  // triggering the macro conversion with the following
-  // entity[ A ]( Set(), Set() )
-  // should result in
+  // triggering the macro conversion with the following:
+  // val e = entity[ A ]( Set(), Set() )
+  // should result in:
   val e = new Entity[ A ]{
     val indexed : Set[ Key[ A ] ] = Set()
     val unique : Set[ Key[ A ] ] = Set()

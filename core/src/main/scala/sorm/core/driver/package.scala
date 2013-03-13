@@ -9,9 +9,10 @@ trait Driver {
    * Unparsed result returned after executing the instructions, which should
    * be fed into the parser.
    */
-  type ExecutorResult
+  type ResultSource
   val preCompiler : PreCompiler[ ExecutorInstructions ]
-  val executor : Executor[ ExecutorInstructions, ExecutorResult ]
+  val executor : Executor[ ExecutorInstructions, ResultSource ]
+  val parser : Parser[ ResultSource ]
 
   type Connection
   val connector : Connector[ Connection ]
@@ -29,15 +30,13 @@ trait PreCompiler[ Output ] {
  * @tparam ResultSource In case of JDBC should be a ResultSet
  */
 trait Executor[ Instructions, ResultSource ] {
-  val parser : Parser[ ResultSource ]
-  final def execute[ Result ]( instructions : Instructions ) : Result = {
-    val resultSource = openResultSource( instructions )
-    val result = parser.parse( resultSource )
-    closeResultSource( resultSource )
-    result
-  }
-  protected def openResultSource( instructions : Instructions ) : ResultSource
-  protected def closeResultSource( resultSource : ResultSource ) : Unit
+  /**
+   * Delegates the composition with parser to a containing component
+   */
+  def withResultSource[ Result ]
+    ( instructions : Instructions )
+    ( f : ResultSource => Result )
+    : Result
 }
 
 /**

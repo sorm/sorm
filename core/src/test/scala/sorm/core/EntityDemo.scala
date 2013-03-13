@@ -36,11 +36,14 @@ object EntityDemo extends App {
         }
   }
 
-
+  // Tests
   val value = A( 2, "ABC" )
-
+  
+  // Has the id prooperty and its set appropriately:
   assert(e.toPersisted(value, 1).id == 1)
+  // A copy retains the id property:
   assert(e.toPersisted(value, 2).copy(50).id == 2)
+  // A copy correctly updates properties:
   assert(e.toPersisted(value, 3).copy(50).a == 50)
 
 }

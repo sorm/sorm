@@ -12,7 +12,6 @@ trait Driver {
   type ExecutorResult
   val preCompiler : PreCompiler[ ExecutorInstructions ]
   val executor : Executor[ ExecutorInstructions, ExecutorResult ]
-  val parser : Parser[ ExecutorResult ]
 
   type Connection
   val connector : Connector[ Connection ]
@@ -26,12 +25,26 @@ trait PreCompiler[ Output ] {
 
 }
 
-trait Parser[ Input ] {
-
+/**
+ * @tparam ResultSource In case of JDBC should be a ResultSet
+ */
+trait Executor[ Instructions, ResultSource ] {
+  val parser : Parser[ ResultSource ]
+  final def execute[ Result ]( instructions : Instructions ) : Result = {
+    val resultSource = openResultSource( instructions )
+    val result = parser.parse( resultSource )
+    closeResultSource( resultSource )
+    result
+  }
+  protected def openResultSource( instructions : Instructions ) : ResultSource
+  protected def closeResultSource( resultSource : ResultSource ) : Unit
 }
 
-trait Executor[ Instructions, Result ] {
-  
+/**
+ * @tparam Input In case of JDBC should be a ResultSet
+ */
+trait Parser[ Input ] {
+  def parse[ Output ]( input : Input ) : Output
 }
 
 trait Connector[ Connection ] {

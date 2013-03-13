@@ -10,11 +10,12 @@ trait Driver {
    * be fed into the parser.
    */
   type ExecutorResult
-  val preCompiler : PreCompiler[ExecutorInstructions]
-  val executor : Executor[ExecutorInstructions, ExecutorResult]
-  val parser : Parser[ExecutorResult]
+  val preCompiler : PreCompiler[ ExecutorInstructions ]
+  val executor : Executor[ ExecutorInstructions, ExecutorResult ]
+  val parser : Parser[ ExecutorResult ]
 
-  val connector : Connector
+  type Connection
+  val connector : Connector[ Connection ]
 }
 
 // A driver part executed by macros on compile time, which transforms the 
@@ -33,6 +34,6 @@ trait Executor[ Instructions, Result ] {
   
 }
 
-trait Connector {
-  def withConnection[ ResultT ]( f : Connection => ResultT ) : ResultT
+trait Connector[ Connection ] {
+  def withConnection[ Result ]( f : Connection => Result ) : Result
 }

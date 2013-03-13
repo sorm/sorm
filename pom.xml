@@ -10,7 +10,7 @@
   <packaging>jar</packaging>
 
   <name>SORM</name>
-  <description>A functional boilerplate-free ORM for Scala</description>
+  <description>A functional boilerplate-free Scala ORM</description>
   <url>http://www.github.com/sorm/sorm</url>
 
   <licenses>

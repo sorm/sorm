@@ -20,7 +20,7 @@ For more info, tutorials and documentation please visit the [official site](http
 SORM is distributed in the Maven Central, here's a dependency to the latest release version:
 
     <dependency>
-      <groupId>com.github.nikita-volkov</groupId>
+      <groupId>org.sorm-framework</groupId>
       <artifactId>sorm</artifactId>
       <version>0.3.8-SNAPSHOT</version>
     </dependency>

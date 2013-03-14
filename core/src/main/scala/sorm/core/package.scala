@@ -50,6 +50,10 @@ trait Exports {
 
   type Persisted = sorm.core.Persisted
 
+  /**
+   * The macro conversion should just proxy the `indexed` and `unique`
+   * parameters.
+   */
   def entity[ T ]
     ( indexed : Set[ Key[ T ] ],
       unique : Set[ Key[ T ] ] )

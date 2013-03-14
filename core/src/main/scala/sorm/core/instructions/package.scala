@@ -31,7 +31,7 @@ case class Limit[ A, B, C ]
 
 case class Order[ A, B, C, D ]
   ( subRef : SubRef[ A, B ], reverse : Boolean, tail : Select[ A, C, D ] )
-  extends Select[ A, (B, C), D ]
+  extends Select[ A, (Boolean, C), D ]
 
 
 sealed trait SubRef[ Entity, Result ]
@@ -39,7 +39,7 @@ sealed trait SubRef[ Entity, Result ]
 sealed trait SubRefs[ Entity, Result ]
 
 case class SubRefsValue[ A, B, C ]
-  ( subRef : SubRef[ A, B ], tail : SubRefs[ A, C ])
+  ( subRef : SubRef[ A, B ], tail : SubRefs[ A, C ] )
   extends SubRefs[ A, (B, C) ]
 
 case class SubRefsNil[ A ] extends SubRefs[ A, Unit ]

@@ -38,14 +38,8 @@ sealed trait SubRef[ Entity, Result ]
 
 sealed trait SubRefs[ Entity, Result ]
 
-case class SubRefs1[ A, B ]
-  ( a : SubRef[ A, B ] ) 
-  extends SubRefs[ A, B ]
-
-case class SubRefs2[ A, B, C ]
-  ( a : SubRef[ A, B ], b : SubRef[ A, C ] ) 
+case class SubRefsValue[ A, B, C ]
+  ( subRef : SubRef[ A, B ], tail : SubRefs[ A, C ])
   extends SubRefs[ A, (B, C) ]
 
-case class SubRefs3[ A, B, C, D ]
-  ( a : SubRef[ A, B ], b : SubRef[ A, C ], c : SubRef[ A, D ] ) 
-  extends SubRefs[ A, (B, C, D) ]
+case class SubRefsNil[ A ] extends SubRefs[ A, Unit ]

@@ -11,7 +11,7 @@ object EntityDemo extends App {
   val e = new Entity[ A ]{
     val indexed : Set[ Key[ A ] ] = Set()
     val unique : Set[ Key[ A ] ] = Set()
-    def toPersisted( value : A, idValue : Long )
+    def mixinPersisted( value : A, idValue : Long )
       = new A( value.a, value.b ) with Persisted {
           val id = idValue
           // a copy of `A` with `Persisted` mixed in
@@ -19,7 +19,7 @@ object EntityDemo extends App {
             ( a : Int = a, 
               b : String = b ) 
             : A with Persisted 
-            = toPersisted( A(a, b), id )
+            = mixinPersisted( A(a, b), id )
           // product elements of `A` prepended with `id`
           override def productElement( n : Int ) : Any = n match {
             case 0 => id
@@ -40,10 +40,10 @@ object EntityDemo extends App {
   val value = A( 2, "ABC" )
   
   // Has the id prooperty and its set appropriately:
-  assert(e.toPersisted(value, 1).id == 1)
+  assert(e.mixinPersisted(value, 1).id == 1)
   // A copy retains the id property:
-  assert(e.toPersisted(value, 2).copy(50).id == 2)
+  assert(e.mixinPersisted(value, 2).copy(50).id == 2)
   // A copy correctly updates properties:
-  assert(e.toPersisted(value, 3).copy(50).a == 50)
+  assert(e.mixinPersisted(value, 3).copy(50).a == 50)
 
 }

@@ -18,12 +18,12 @@ trait Persisted {
 /**
  * The target for macro-conversion. The plan is that instances of this type
  * become constructors of the parameter type mixed in with Persisted by means of
- * the generated `toPersisted` method by a macro.
+ * the generated `mixinPersisted` method by a macro.
  */
 trait Entity[ T ] {
   val indexed : Set[ Key[ T ] ]
   val unique : Set[ Key[ T ] ]
-  def toPersisted( value : T, idValue : Long ) : T with Persisted 
+  def mixinPersisted( value : T, idValue : Long ) : T with Persisted 
 }
 
 

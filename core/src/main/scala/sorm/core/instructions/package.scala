@@ -2,15 +2,18 @@ package sorm.core.instructions
 
 // sealed trait Instruction[ Input, Output ]
 
-sealed trait Select[ ReferenceEntity, Input, Output ]
+sealed trait Value[ ReferenceEntity, Input, Output ]
 
-case class Entity[ Output ] extends Select[ Output, Unit, Output ]
+sealed trait Select[ ReferenceEntity, Input, Output ]
+  extends Value[ ReferenceEntity, Input, Output ]
+
+case class SelectEntity[ Output ] extends Select[ Output, Unit, Output ]
 
 case class SelectSubRefs[ Entity, SubRefsResult ]
   ( subRefs : SubRefs[ Entity, SubRefsResult ] )
   extends Select[ Entity, Unit, SubRefsResult ]
 
-case class Input[ A, B ]( value : B ) extends Select[ A, B, B ]
+case class Input[ A, B ]( value : B ) extends Value[ A, B, B ]
 
 
 sealed trait Filter
@@ -20,7 +23,7 @@ sealed trait Filter
 case class Equals
   [ Entity, ValueInput, ValueOutput, TailInput, TailOutput ]
   ( subRef : SubRef[ Entity, ValueOutput ], 
-    value : Select[ Entity, ValueInput, ValueOutput ],
+    value : Value[ Entity, ValueInput, ValueOutput ],
     tail : Select[ Entity, TailInput, TailOutput ] )
   extends Filter[ Entity, (ValueInput, TailInput), TailOutput ]
 

@@ -66,20 +66,6 @@ case class Order
     tail : Select[ Entity, TailInput, Output ] )
   extends Select[ Entity, (OrdersInput, TailInput), Output ]
 
-sealed trait Orders[ Entity, Input ]
-
-case class OrdersNil
-  [ Entity ]
-  extends Orders[ Entity, Unit ]
-
-case class OrdersItem
-  [ Entity, TailInput ]
-  ( subRef : SubRef[ Entity, _ ], 
-    reverse : Boolean, 
-    tail : Orders[ Entity, TailInput ] )
-  extends Orders[ Entity, (Boolean, TailInput) ]
-
-
 
 sealed trait Filter
   [ Entity, Input, Output ]

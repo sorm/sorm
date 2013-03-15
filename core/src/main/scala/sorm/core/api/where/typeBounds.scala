@@ -2,8 +2,8 @@
  * Driver-specific operations support type-bounds. 
  *
  * E.g., there's no way to implement a `regex` operator in CouchDB, so with 
- * help of driver-specific type support the `regex` operator will get 
- * protected from being used at compile time.
+ * help of driver-specific type support the `regex` operator will get statically
+ * protected from being used.
  */
 package sorm.core.api.where
 

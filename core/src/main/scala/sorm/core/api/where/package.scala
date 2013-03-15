@@ -5,7 +5,8 @@ import sorm.core.subRef._
 import language.experimental.macros
 
 /**
- * `.where( _.exists( _.genres, _.equals( _.name, "metal" ) ) )
+ * The stuff that drives these expressions:
+ * `.where( _.exists( _.genres, _.equals( _.name, "jazz" ) ) )`
  *
  * @tparam Driver The driver, for which the instruction is to be composed.
  * Needed for statically checking Driver's support for type-specific operations.

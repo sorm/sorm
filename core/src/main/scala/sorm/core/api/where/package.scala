@@ -7,6 +7,8 @@ import language.experimental.macros
 /**
  * `.where( _.exists( _.genres, _.equals( _.name, "metal" ) ) )
  *
+ * @tparam Driver The driver, for which the instruction is to be composed.
+ * Needed for statically checking Driver's support for type-specific operations.
  * @tparam Entity The context entity. Required for `_.field` references.
  * In case of SQL this also defines the main table, to which others are to be 
  * joined.
@@ -17,47 +19,51 @@ import language.experimental.macros
  * @param input All the input values for generated instructions.
  */
 class WhereComposer
-  [ Entity, Input ]
+  [ Driver, Entity, Input ]
   ( val instructions : Instructions.Filters[ Entity, Input ],
     val input : Input )
   {
+    type DriverEqualsSupport[ T ] = EqualsSupport[ Driver, T ]
+    type DriverNotLargerSupport[ T ] = NotLargerSupport[ Driver, T ]
+    type DriverRegexSupport[ T ] = RegexSupport[ Driver, T ]
+    type DriverExistsSupport[ T ] = ExistsSupport[ Driver, T ]
 
     def equals
       [ Value ]
       ( ref : Entity => Value,
         value : Value )
-      : WhereComposer[ Entity, (Value, Input) ]
-      = macro Macros.equals[ Entity, Value, Input ]
+      : WhereComposer[ Driver, Entity, (Value, Input) ]
+      = macro Macros.equals[ Driver, Entity, Value, Input ]
 
     def equalsImpl
-      [ Value : EqualsSupport ]
+      [ Value : DriverEqualsSupport ]
       ( ref : SubRef[ Entity, Value ],
         value : Value )
-      : WhereComposer[ Entity, (Value, Input) ]
+      : WhereComposer[ Driver, Entity, (Value, Input) ]
       = comparison( ref, Instructions.Equal, false, value )
 
     def notLargerImpl
-      [ Value : NotLargerSupport ]
+      [ Value : DriverNotLargerSupport ]
       ( ref : SubRef[ Entity, Value ],
         value : Value )
-      : WhereComposer[ Entity, (Value, Input) ]
+      : WhereComposer[ Driver, Entity, (Value, Input) ]
       = comparison( ref, Instructions.Larger, true, value )
       
     def regexImpl
-      [ Value : RegexSupport ]
+      [ Value : DriverRegexSupport ]
       ( ref : SubRef[ Entity, Value ],
         value : Value )
-      : WhereComposer[ Entity, (Value, Input) ]
+      : WhereComposer[ Driver, Entity, (Value, Input) ]
       = comparison( ref, Instructions.Regex, false, value )
 
     def existsImpl
-      [ Value <: Traversable[ ValueItem ] : ExistsSupport,
+      [ Value <: Traversable[ ValueItem ] : DriverExistsSupport,
         ValueItem,
         SubInput ]
       ( ref : SubRef[ Entity, Value ], 
-        where : WhereComposer[ ValueItem, Unit ] => 
-                WhereComposer[ ValueItem, SubInput ] )
-      : WhereComposer[ Entity, (SubInput, Input) ]
+        where : WhereComposer[ Driver, ValueItem, Unit ] => 
+                WhereComposer[ Driver, ValueItem, SubInput ] )
+      : WhereComposer[ Driver, Entity, (SubInput, Input) ]
       = ???
 
     /**
@@ -69,7 +75,7 @@ class WhereComposer
         operator : Instructions.Operator,
         negative : Boolean,
         value : Value )
-      : WhereComposer[ Entity, (Value, Input) ]
+      : WhereComposer[ Driver, Entity, (Value, Input) ]
       = {
         val newInstructions = Instructions.Comparison(
           ref,
@@ -89,32 +95,30 @@ private object Macros {
   import reflect.macros.Context
 
   def equals
-    [ Entity : c.WeakTypeTag, 
+    [ Driver,
+      Entity : c.WeakTypeTag, 
       Value : c.WeakTypeTag,
       Input ]
     ( c : Context )
     ( ref : c.Expr[ Entity => Value ],
       value : c.Expr[ Value ] )
-    : c.Expr[ WhereComposer[ Entity, (Value, Input) ] ]
+    : c.Expr[ WhereComposer[ Driver, Entity, (Value, Input) ] ]
     = ???
 
 }
 
-trait EqualsSupport[ T ]
-trait NotLargerSupport[ T ]
-trait RegexSupport[ T ]
-trait ExistsSupport[ T ]
+/**
+ * Driver-specific operations support type-bounds. 
+ *
+ * E.g., there's no way to implement a `regex` operator in CouchDB, so with 
+ * help of driver-specific type support the `regex` operator will get 
+ * protected from being used at compile time.
+ */
+trait EqualsSupport[ Driver, T ]
+trait NotLargerSupport[ Driver, T ]
+trait RegexSupport[ Driver, T ]
+trait ExistsSupport[ Driver, T ]
 
 trait Exports {
-  /**
-   * Operations support instances
-   * 
-   * Should probably be moved to drivers, as some drivers may or may not provide
-   * support for certain operations on certain types. E.g., there's no way to 
-   * implement a `regex` operator in CouchDB, so with help of driver-specific 
-   * type support the `regex` operator will get protected from being used at 
-   * compile time.
-   */
-  implicit object IntEqualsSupport extends EqualsSupport[Int]
 
 }

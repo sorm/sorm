@@ -77,4 +77,19 @@ case class Filter
   extends Select[ Entity, (FiltersInput, TailInput), Output ]
 
 
+case class Insert
+  [ Entity, Input ]
+  ( input : SubRefs[ Entity, Input ] )
+  extends Instruction[ Entity, Input, Unit ]
+  
+case class Update
+  [ Entity, Input, FiltersInput ]
+  ( input : SubRefs[ Entity, Input ],
+    filters : Filters[ Entity, FiltersInput ] )
+  extends Instruction[ Entity, (Input, FiltersInput), Unit ]
+  
+case class Delete
+  [ Entity, FiltersInput ]
+  ( filters : Filters[ Entity, FiltersInput ] )
+  extends Instruction[ Entity, FiltersInput, Unit ]
 

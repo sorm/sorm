@@ -21,21 +21,28 @@ class WhereComposer
       = macro Macros.equals[ Entity, Value, Input ]
 
     def equalsImpl
-      [ Value ]
+      [ Value : EqualsSupport ]
       ( ref : SubRef[ Entity, Value ],
         value : Value )
       : WhereComposer[ Entity, (Value, Input) ]
       = comparison( ref, Instructions.Equal, false, value )
 
     def notLargerImpl
-      [ Value <: Comparable[ Value ] ]
+      [ Value : NotLargerSupport ]
       ( ref : SubRef[ Entity, Value ],
         value : Value )
       : WhereComposer[ Entity, (Value, Input) ]
       = comparison( ref, Instructions.Larger, true, value )
       
+    def regexImpl
+      [ Value : RegexSupport ]
+      ( ref : SubRef[ Entity, Value ],
+        value : Value )
+      : WhereComposer[ Entity, (Value, Input) ]
+      = comparison( ref, Instructions.Regex, false, value )
+
     def existsImpl
-      [ Value <: Traversable[ ValueItem ],
+      [ Value <: Traversable[ ValueItem ] : ExistsSupport,
         ValueItem,
         SubInput ]
       ( ref : SubRef[ Entity, Value ], 
@@ -84,7 +91,21 @@ private object Macros {
 
 }
 
-trait Exports {
+trait EqualsSupport[ T ]
+trait NotLargerSupport[ T ]
+trait RegexSupport[ T ]
+trait ExistsSupport[ T ]
 
+trait Exports {
+  /**
+   * Operations support instances
+   * 
+   * Should probably be moved to drivers, as some drivers may or may not provide
+   * support for certain operations on certain types. E.g., there's no way to 
+   * implement a `regex` operator in CouchDB, so with help of driver-specific 
+   * type support the `regex` operator will get protected from being used at 
+   * compile time.
+   */
+  implicit object IntEqualsSupport extends EqualsSupport[Int]
 
 }

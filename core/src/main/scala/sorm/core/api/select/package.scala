@@ -14,8 +14,9 @@ import sorm.core.subRef._
  * instructions.
  */
 class SelectComposer
-  [ Driver, Entity, Input, Output ]
-  ( val instructions : Instructions.Select[ Entity, Input, Output ],
+  [ Driver <: DriverSelectSupport, Entity, Input, Output ]
+  ( val driver : Driver,
+    val instructions : Instructions.Select[ Entity, Input, Output ],
     val input : Input )
   {
 
@@ -32,6 +33,7 @@ class SelectComposer
         reverse : Boolean )
       : SelectComposer[ Driver, Entity, Input, Output ]
       = new SelectComposer(
+          driver,
           Instructions.Order(
             ref,
             reverse,
@@ -41,4 +43,19 @@ class SelectComposer
         )
 
   }
+
+trait InstanceSelectSupport[ Driver <: DriverSelectSupport ] {
+
+  val driver : Driver
+
+  def select
+    [ Entity ] 
+    : SelectComposer[ Driver, Entity, Unit, Seq[ Entity ] ]
+    = new SelectComposer( driver, Instructions.OutputEntity[ Entity ](), Unit )
+
+}
+
+trait DriverSelectSupport {
+  
+}
 

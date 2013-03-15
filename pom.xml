@@ -10,10 +10,11 @@
   <packaging>pom</packaging>
   <modules>
     <module>core</module>
+    <module>mysql</module>
   </modules>
 
   <name>SORM</name>
-  <description>A functional boilerplate-free ORM for Scala</description>
+  <description>A functional boilerplate-free Scala ORM</description>
   <url>http://www.github.com/sorm/sorm</url>
 
   <licenses>
@@ -138,11 +139,6 @@
     <dependency>
       <groupId>org.scala-lang</groupId>
       <artifactId>scala-library</artifactId>
-      <version>2.10.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.scala-lang</groupId>
-      <artifactId>scala-compiler</artifactId>
       <version>2.10.0</version>
     </dependency>
   </dependencies>

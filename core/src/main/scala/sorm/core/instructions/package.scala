@@ -35,7 +35,7 @@ case class OutputValue
  */
 case class OutputEntity
   [ Entity ] 
-  extends Select[ Entity, Unit, Entity ]
+  extends Select[ Entity, Unit, Seq[ Entity ] ]
 
 /**
  * Output just the specific sub-fields of the entity.
@@ -43,7 +43,7 @@ case class OutputEntity
 case class OutputSubRefs
   [ Entity, SubRefsOutput ]
   ( subRefs : SubRefs[ Entity, SubRefsOutput ] )
-  extends Select[ Entity, Unit, SubRefsOutput ]
+  extends Select[ Entity, Unit, Seq[ SubRefsOutput ] ]
 
 case class Limit
   [ Entity, TailInput, Output ]

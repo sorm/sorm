@@ -61,11 +61,10 @@ case class Offset
  * `ORDER BY a, b DESC, c`.
  */
 case class Order
-  [ Entity, OrdersInput, TailInput, Output ]
-  ( orders : Orders[ Entity, OrdersInput ],
+  [ Entity, TailInput, Output ]
+  ( orders : Orders[ Entity ],
     tail : Select[ Entity, TailInput, Output ] )
-  extends Select[ Entity, (OrdersInput, TailInput), Output ]
-
+  extends Select[ Entity, TailInput, Output ]
 
 sealed trait Filter
   [ Entity, Input, Output ]

@@ -2,15 +2,15 @@ package sorm.core.instructions
 
 import sorm.core.subRef._
 
-sealed trait Orders[ Entity, Input ]
+sealed trait Orders[ Entity ]
 
 case class OrdersNil
   [ Entity ]
-  extends Orders[ Entity, Unit ]
+  extends Orders[ Entity ]
 
 case class OrdersItem
-  [ Entity, TailInput ]
+  [ Entity ]
   ( subRef : SubRef[ Entity, _ ], 
     reverse : Boolean, 
-    tail : Orders[ Entity, TailInput ] )
-  extends Orders[ Entity, (Boolean, TailInput) ]
+    tail : Orders[ Entity ] )
+  extends Orders[ Entity ]

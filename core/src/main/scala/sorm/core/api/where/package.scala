@@ -25,18 +25,15 @@ class WhereComposer
       ( ref : SubRef[ Entity, Value ],
         value : Value )
       : WhereComposer[ Entity, (Value, Input) ]
-      = {
-        val newInstructions = Instructions.Comparison(
-          ref,
-          Instructions.OutputValue[ Entity, Value ](),
-          Instructions.Equal,
-          false,
-          instructions
-        )
-        val newInput = (value, input)
-        new WhereComposer( newInstructions, newInput )
-      }
+      = comparison( ref, Instructions.Equal, false, value )
 
+    def notLargerImpl
+      [ Value <: Comparable[ Value ] ]
+      ( ref : SubRef[ Entity, Value ],
+        value : Value )
+      : WhereComposer[ Entity, (Value, Input) ]
+      = comparison( ref, Instructions.Larger, true, value )
+      
     def existsImpl
       [ Value <: Traversable[ ValueItem ],
         ValueItem,
@@ -47,6 +44,27 @@ class WhereComposer
       : WhereComposer[ Entity, (SubInput, Input) ]
       = ???
 
+    /**
+     * A helper
+     */
+    private def comparison
+      [ Value ]
+      ( ref : SubRef[ Entity, Value ],
+        operator : Instructions.Operator,
+        negative : Boolean,
+        value : Value )
+      : WhereComposer[ Entity, (Value, Input) ]
+      = {
+        val newInstructions = Instructions.Comparison(
+          ref,
+          Instructions.OutputValue[ Entity, Value ](),
+          operator,
+          negative,
+          instructions
+        )
+        val newInput = (value, input)
+        new WhereComposer( newInstructions, newInput )
+      }
   }
 
 private object Macros {

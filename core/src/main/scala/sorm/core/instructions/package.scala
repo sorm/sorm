@@ -73,7 +73,7 @@ case class OrderItem
 
 case class Filter
   [ Entity, FiltersInput, TailInput, Output ]
-  ( filters : Filters[ Entity, FiltersInput ])
+  ( filters : Filters[ Entity, FiltersInput ] )
   extends Select[ Entity, (FiltersInput, TailInput), Output ]
 
 

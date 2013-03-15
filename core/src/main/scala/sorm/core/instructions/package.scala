@@ -62,9 +62,14 @@ case class Offset
  */
 case class Order
   [ Entity, TailInput, Output ]
-  ( orders : Orders[ Entity ],
+  ( orders : Seq[ OrderItem[ Entity ] ],
     tail : Select[ Entity, TailInput, Output ] )
   extends Select[ Entity, TailInput, Output ]
+
+case class OrderItem
+  [ Entity ]
+  ( subRef : SubRef[ Entity, _ ], 
+    reverse : Boolean )
 
 case class Filter
   [ Entity, FiltersInput, TailInput, Output ]

@@ -7,10 +7,10 @@
  */
 package sorm.core.api.where
 
-trait EqualsSupport[ Driver, T ]
-trait NotLargerSupport[ Driver, T ]
-trait RegexSupport[ Driver, T ]
-trait ExistsSupport[ Driver, T ]
+trait EqualsSupport[ Driver, -T ]
+trait NotLargerSupport[ Driver, -T ]
+trait RegexSupport[ Driver, -T ]
+trait ExistsSupport[ Driver, -T ]
 
 trait DriverSpecificOperationsSupport[ Driver ] {
   type DriverEqualsSupport[ T ] = EqualsSupport[ Driver, T ]

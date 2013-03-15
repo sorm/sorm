@@ -66,15 +66,10 @@ case class Order
     tail : Select[ Entity, TailInput, Output ] )
   extends Select[ Entity, TailInput, Output ]
 
-sealed trait Filter
-  [ Entity, Input, Output ]
-  extends Select[ Entity, Input, Output ]
+case class Filter
+  [ Entity, FiltersInput, TailInput, Output ]
+  ( filters : Filters[ Entity, FiltersInput ])
+  extends Select[ Entity, (FiltersInput, TailInput), Output ]
 
-case class Equals
-  [ Entity, ValueOutput, ValueInput, TailInput, Output ]
-  ( subRef : SubRef[ Entity, ValueOutput ],
-    value : Select[ Entity, ValueInput, ValueOutput ],
-    tail : Select[ Entity, TailInput, Output ] )
-  extends Filter[ Entity, (ValueInput, TailInput), Output ]
 
 

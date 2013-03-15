@@ -22,11 +22,8 @@ class WhereComposer
   [ Driver, Entity, Input ]
   ( val instructions : Instructions.Filters[ Entity, Input ],
     val input : Input )
+  extends DriverSpecificOperationsSupport[ Driver ]
   {
-    type DriverEqualsSupport[ T ] = EqualsSupport[ Driver, T ]
-    type DriverNotLargerSupport[ T ] = NotLargerSupport[ Driver, T ]
-    type DriverRegexSupport[ T ] = RegexSupport[ Driver, T ]
-    type DriverExistsSupport[ T ] = ExistsSupport[ Driver, T ]
 
     def equals
       [ Value ]
@@ -106,18 +103,6 @@ private object Macros {
     = ???
 
 }
-
-/**
- * Driver-specific operations support type-bounds. 
- *
- * E.g., there's no way to implement a `regex` operator in CouchDB, so with 
- * help of driver-specific type support the `regex` operator will get 
- * protected from being used at compile time.
- */
-trait EqualsSupport[ Driver, T ]
-trait NotLargerSupport[ Driver, T ]
-trait RegexSupport[ Driver, T ]
-trait ExistsSupport[ Driver, T ]
 
 trait Exports {
 

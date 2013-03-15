@@ -6,6 +6,15 @@ import language.experimental.macros
 
 /**
  * `.where( _.exists( _.genres, _.equals( _.name, "metal" ) ) )
+ *
+ * @tparam Entity The context entity. Required for `_.field` references.
+ * In case of SQL this also defines the main table, to which others are to be 
+ * joined.
+ * @tparam Input The composed type of all input values for the generated 
+ * instructions.
+ * @param instructions Driver-agnostic instructions which are then to be 
+ * compiled to driver-specific ones and cached.
+ * @param input All the input values for generated instructions.
  */
 class WhereComposer
   [ Entity, Input ]

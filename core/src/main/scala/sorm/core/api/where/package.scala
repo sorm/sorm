@@ -55,14 +55,16 @@ class WhereComposer
       = comparison( ref, Instructions.Regex, false, value )
 
     def existsImpl
-      [ Value <: Traversable[ ValueItem ] : DriverExistsSupport,
+      [ Value[ ValueItem ] <: Traversable[ ValueItem ],
         ValueItem,
         SubInput ]
-      ( ref : SubRef[ Entity, Value ], 
-        where : WhereComposer[ Driver, ValueItem, Unit ] => 
+      ( ref : SubRef[ Entity, Value[ ValueItem ] ] ) 
+      ( where : WhereComposer[ Driver, ValueItem, Unit ] => 
                 WhereComposer[ Driver, ValueItem, SubInput ] )
+      ( implicit support : DriverExistsSupport[ Value[ ValueItem ] ] )
       : WhereComposer[ Driver, Entity, (SubInput, Input) ]
       = ???
+
 
     /**
      * A helper

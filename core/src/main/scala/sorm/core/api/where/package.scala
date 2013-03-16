@@ -33,28 +33,39 @@ class WhereComposer
       : WhereComposer[ Driver, Entity, (Value, Input) ]
       = macro Macros.equals[ Driver, Entity, Value, Input ]
 
-    def equalsImpl
+    def equals
       [ Value : DriverEqualsSupport ]
       ( ref : SubRef[ Entity, Value ],
         value : Value )
       : WhereComposer[ Driver, Entity, (Value, Input) ]
       = comparison( ref, Instructions.Equal, false, value )
 
-    def notLargerImpl
+    def notLarger
       [ Value : DriverNotLargerSupport ]
       ( ref : SubRef[ Entity, Value ],
         value : Value )
       : WhereComposer[ Driver, Entity, (Value, Input) ]
       = comparison( ref, Instructions.Larger, true, value )
       
-    def regexImpl
+    def regex
       [ Value : DriverRegexSupport ]
       ( ref : SubRef[ Entity, Value ],
         value : Value )
       : WhereComposer[ Driver, Entity, (Value, Input) ]
       = comparison( ref, Instructions.Regex, false, value )
 
-    def existsImpl
+    def exists
+      [ Value[ ValueItem ] <: Traversable[ ValueItem ],
+        ValueItem,
+        SubInput ]
+      ( ref : Entity => Value[ ValueItem ] )
+      ( where : WhereComposer[ Driver, ValueItem, Unit ] => 
+                WhereComposer[ Driver, ValueItem, SubInput ] )
+      ( implicit support : DriverExistsSupport[ Value[ ValueItem ] ] )
+      : WhereComposer[ Driver, Entity, (SubInput, Input) ]
+      = ???
+
+    def exists
       [ Value[ ValueItem ] <: Traversable[ ValueItem ],
         ValueItem,
         SubInput ]

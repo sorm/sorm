@@ -104,7 +104,7 @@ private object Macros {
   /**
    * Expands an `Entity => Value` function from a `ref` parameter to a value
    * `SubRef[ Entity, Value ]`, then passes it to an overloaded version of
-   * the macro-triggering function.
+   * the macro-triggering method.
    */
   def equals
     [ Driver,

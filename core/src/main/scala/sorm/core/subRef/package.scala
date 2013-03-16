@@ -1,11 +1,20 @@
 package sorm.core.subRef
 
-sealed trait SubRef[ Entity, Result ]
+import reflect.runtime.universe._
 
-sealed trait SubRefs[ Entity, Result ]
+case class SubRef
+  [ Entity, Value ]
+  ( entitySymbol : Symbol,
+    valueSymbol : Symbol )
 
-case class SubRefsValue[ A, B, C ]
-  ( subRef : SubRef[ A, B ], tail : SubRefs[ A, C ] )
+
+sealed trait SubRefs
+  [ Entity, Value ]
+
+case class SubRefsValue
+  [ A, B, C ]
+  ( subRef : SubRef[ A, B ], 
+    tail : SubRefs[ A, C ] )
   extends SubRefs[ A, (B, C) ]
 
 case class SubRefsNil[ A ] extends SubRefs[ A, Unit ]

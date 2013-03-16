@@ -76,10 +76,6 @@ class WhereComposer
       : WhereComposer[ Driver, Entity, (SubInput, Input) ]
       = ???
 
-
-    /**
-     * A helper
-     */
     private def comparison
       [ Value ]
       ( ref : SubRef[ Entity, Value ],
@@ -105,6 +101,11 @@ private object Macros {
   import reflect.runtime.universe._
   import reflect.macros.Context
 
+  /**
+   * Expands an `Entity => Value` function from a `ref` parameter to a value
+   * `SubRef[ Entity, Value ]`, then passes it to an overloaded version of
+   * the macro-triggering function.
+   */
   def equals
     [ Driver,
       Entity : c.WeakTypeTag, 

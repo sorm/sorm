@@ -11,14 +11,11 @@ object Demo extends App {
 
   val db = new MysqlInstance
 
-  val artistGenresRef : SubRef[ Artist, Set[ Genre ] ] = ???
-  val genreNameRef : SubRef[ Genre, String ] = ???
-
   val instructions = 
     db.select[ Artist ]
       .where( 
-        _.existsImpl( artistGenresRef )(
-          _.equalsImpl( genreNameRef, "sldkjf" )
+        _.exists( _.genres )(
+          _.equals( _.name, "lkdsjf" )
         )
       )
 

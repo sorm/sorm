@@ -37,12 +37,18 @@ trait Driver {
    * @param instructions
    * @return Parsed result
    */
-  final def execute[ Result ]( instructions : Instructions ) : Result = {
-    val compiledInstructions = memoizedCompiler.compile( instructions )
-    connector.withConnection(
-      executor.withResultResource( compiledInstructions, _ )( parser.parse )
-    )
-  }
+  final def execute
+    [ Input, Result ]
+    ( instructions : Instructions, input : Input )
+    : Result 
+    = {
+      val compiledInstructions = memoizedCompiler.compile( instructions )
+      connector.withConnection(
+        executor.withResultResource
+          ( compiledInstructions, input, _ )
+          ( parser.parse )
+      )
+    }
 
   /**
    * Trigger asynchronous execution and parsing of driver-agnostic instructions
@@ -53,8 +59,8 @@ trait Driver {
    * @return A future of parsed result
    */
   final def executeAsync
-    [ Result ]
-    ( instructions : Instructions )
+    [ Input, Result ]
+    ( instructions : Instructions, input : Input )
     : concurrent.Future[ Result ]
     = ???
 
@@ -84,8 +90,8 @@ trait Executor[ Instructions, Connection, ResultResource ] {
    * In case of JDBC this method should handle the proper closing of 
    * `ResultSet`.
    */
-  def withResultResource[ Result ]
-    ( instructions : Instructions, connection : Connection )
+  def withResultResource[ Input, Result ]
+    ( instructions : Instructions, input : Input, connection : Connection )
     ( f : ResultResource => Result )
     : Result
 }

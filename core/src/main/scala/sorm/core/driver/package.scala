@@ -1,29 +1,27 @@
 package sorm.core.driver
 
-/**
- * The driver-agnostic instructions. 
- * 
- * TODO: replace with import of a specific implementation, when it's ready.
- */
-trait Instructions
 
 trait Driver {
   /**
-   * The instructions compiled to the lowest stage. In case of JDBC these should
-   * be Statements.
+   * Driver-agnostic instructions to be compiled and cached.
+   */
+  type Instructions
+  /**
+   * Result of compiling `Instructions` to the lowest driver-specific state. In
+   * case of JDBC it should be something like `PreparedStatement`.
    */
   type CompiledInstructions
   /**
-   * Unparsed result returned after executing the instructions, which should
-   * be fed into the parser.
+   * Unparsed result returned after executing the instructions, which gets fed
+   * to the parser.
    */
   type ResultResource
   /**
-   * A JDBC or an HTTP connection to the database.
+   * Connection to database, e.g. JDBC or HTTP.
    */
   type Connection
 
-  val compiler : Compiler[ CompiledInstructions ]
+  val compiler : Compiler[ Instructions, CompiledInstructions ]
   val executor : Executor[ CompiledInstructions, Connection, ResultResource ]
   val parser : Parser[ ResultResource ]
   val connector : Connector[ Connection ]
@@ -66,8 +64,8 @@ trait Driver {
  * 
  * In case of JDBC drivers it makes sense to produce SQL with it.
  */
-trait Compiler[ Output ] {
-  def compile( instructions : Instructions ) : Output
+trait Compiler[ Input, Output ] {
+  def compile( input : Input ) : Output
 }
 
 /**

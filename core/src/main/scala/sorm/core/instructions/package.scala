@@ -55,21 +55,12 @@ case class Offset
   ( tail : Select[ Entity, TailInput, Output ] )
   extends Select[ Entity, (Int, TailInput), Output ]
 
-
-/**
- * A sequence of instructions ordered by priority, as in SQL's 
- * `ORDER BY a, b DESC, c`.
- */
 case class Order
   [ Entity, TailInput, Output ]
-  ( orders : Seq[ OrderItem[ Entity ] ],
+  ( subRef : SubRef[ Entity, _ ],
+    reverse : Boolean,
     tail : Select[ Entity, TailInput, Output ] )
   extends Select[ Entity, TailInput, Output ]
-
-case class OrderItem
-  [ Entity ]
-  ( subRef : SubRef[ Entity, _ ], 
-    reverse : Boolean )
 
 case class Filter
   [ Entity, FiltersInput, TailInput, Output ]

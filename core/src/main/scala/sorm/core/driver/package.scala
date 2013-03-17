@@ -42,6 +42,20 @@ trait Driver {
     )
   }
 
+  /**
+   * Trigger asynchronous execution and parsing of driver-agnostic instructions
+   * and return a [[scala.concurrent.Future]] of parsed result.
+   *
+   * @tparam Result
+   * @param instructions
+   * @return A future of parsed result
+   */
+  final def executeAsync
+    [ Result ]
+    ( instructions : Instructions )
+    : concurrent.Future[ Result ]
+    = ???
+
 }
 
 /**

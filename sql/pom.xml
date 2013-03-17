@@ -9,23 +9,20 @@
     <artifactId>sorm</artifactId>
     <version>0.4.0-SNAPSHOT</version>
   </parent>
-  
+
   <groupId>org.sorm-framework</groupId>
-  <artifactId>mysql</artifactId>
+  <artifactId>sql</artifactId>
   <version>0.4.0-SNAPSHOT</version>
   <packaging>jar</packaging>
+
+  <description>Common components for all relational drivers</description>
 
   <dependencies>
     <dependency>
       <groupId>org.sorm-framework</groupId>
-      <artifactId>sql</artifactId>
+      <artifactId>core</artifactId>
       <version>0.4.0-SNAPSHOT</version>
     </dependency>
-    <dependency>
-      <groupId>mysql</groupId>
-      <artifactId>mysql-connector-java</artifactId>
-      <version>5.1.19</version>
-    </dependency>
   </dependencies>
-  
+
 </project>

@@ -10,6 +10,7 @@
   <packaging>pom</packaging>
   <modules>
     <module>core</module>
+    <module>sql</module>
     <module>mysql</module>
   </modules>
 

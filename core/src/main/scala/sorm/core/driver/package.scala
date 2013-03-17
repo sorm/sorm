@@ -7,13 +7,16 @@ trait Driver {
    */
   type Instructions
   /**
-   * Result of compiling `Instructions` to the lowest driver-specific state. In
-   * case of JDBC it should be something like `PreparedStatement`.
+   * Result of compiling `Instructions` to the lowest driver-specific state.
+   *
+   * In case of JDBC it should be something like `PreparedStatement`.
    */
   type CompiledInstructions
   /**
    * Unparsed result returned after executing the instructions, which gets fed
    * to the parser.
+   *
+   * In case of JDBC should be something like `ResultSet`.
    */
   type ResultResource
   /**

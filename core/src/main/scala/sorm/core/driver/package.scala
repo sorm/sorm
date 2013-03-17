@@ -26,6 +26,7 @@ trait Driver {
   val parser : Parser[ ResultResource ]
   val connector : Connector[ Connection ]
 
+  private val memoizedCompiler = new MemoizedCompiler( compiler )
   /**
    * Execute driver-agnostic instructions and get the parsed result.
    *
@@ -34,7 +35,7 @@ trait Driver {
    * @return Parsed result
    */
   final def execute[ Result ]( instructions : Instructions ) : Result = {
-    val compiledInstructions = compiler.compile( instructions )
+    val compiledInstructions = memoizedCompiler.compile( instructions )
     connector.withConnection(
       executor.withResultResource( compiledInstructions, _ )( parser.parse )
     )
@@ -99,3 +100,21 @@ trait Parser[ Input ] {
 trait Connector[ Connection ] {
   def withConnection[ Result ]( f : Connection => Result ) : Result
 }
+
+private class MemoizedCompiler
+  [ Input, Output ]
+  ( compiler : Compiler[ Input, Output ] )
+  {
+    /**
+     * A WeakHashMap will release cache members if memory tightens.
+     */
+    private val cache = new collection.mutable.WeakHashMap[ Input, Output ]
+
+    /**
+     * A memoized `compiler.compile`.
+     */
+    def compile( input : Input ) =
+      cache.getOrElseUpdate( input,
+        compiler.compile( input )
+      )
+  }

@@ -64,7 +64,8 @@ case class Order
 
 case class Filter
   [ Entity, FiltersInput, TailInput, Output ]
-  ( filters : Filters[ Entity, FiltersInput ] )
+  ( filters : Filters[ Entity, FiltersInput ],
+    tail : Select[ Entity, TailInput, Output ] )
   extends Select[ Entity, (FiltersInput, TailInput), Output ]
 
 

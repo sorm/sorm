@@ -28,6 +28,13 @@ trait Driver {
   val parser : Parser[ ResultResource ]
   val connector : Connector[ Connection ]
 
+  /**
+   * Execute driver-agnostic instructions and get the parsed result.
+   *
+   * @tparam Result
+   * @param instructions
+   * @return Parsed result
+   */
   final def execute[ Result ]( instructions : Instructions ) : Result = {
     val compiledInstructions = compiler.compile( instructions )
     connector.withConnection(

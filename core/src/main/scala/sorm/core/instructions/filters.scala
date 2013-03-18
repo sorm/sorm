@@ -18,11 +18,24 @@ case class Fork
 case class Comparison
   [ Entity, ValueOutput, ValueInput, TailInput ]
   ( subRef : SubRef[ Entity, ValueOutput ],
-    value : Select[ Entity, ValueInput, ValueOutput ],
+    value : Reference[ Entity, ValueInput, ValueOutput ],
     operator : Operator,
     negative : Boolean,
     tail : Filters[ Entity, TailInput ] )
   extends Filters[ Entity, (ValueInput, TailInput) ]
+
+
+sealed trait Reference
+  [ Entity, Input, Output ]
+
+case class ReferenceSelect
+  [ Entity, Input, Output ]
+  ( select : Select[ Entity, Input, Output ] )
+  extends Reference[ Entity, Input, Output ]
+
+case class ReferenceValue
+  [ Entity, Value ]
+  extends Reference[ Entity, Value, Value ]
 
 
 sealed trait Operator

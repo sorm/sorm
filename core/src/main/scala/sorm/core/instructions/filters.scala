@@ -9,14 +9,7 @@ case class FiltersNil
   [ Entity ]
   extends Filters[ Entity, Unit ]
 
-case class Or
-  [ Entity, Input1, Input2, TailInput ]
-  ( a : Filters[ Entity, Input1 ],
-    b : Filters[ Entity, Input2 ],
-    tail : Filters[ Entity, TailInput] )
-  extends Filters[ Entity, (Input1, Input2, TailInput) ]
-
-case class And
+case class Fork
   [ Entity, Input1, Input2, TailInput ]
   ( a : Filters[ Entity, Input1 ],
     b : Filters[ Entity, Input2 ],

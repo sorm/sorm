@@ -10,11 +10,10 @@ case class FiltersNil
   extends Filters[ Entity, Unit ]
 
 case class Fork
-  [ Entity, Input1, Input2, TailInput ]
-  ( a : Filters[ Entity, Input1 ],
-    b : Filters[ Entity, Input2 ],
-    tail : Filters[ Entity, TailInput] )
-  extends Filters[ Entity, (Input1, Input2, TailInput) ]
+  [ Entity, HeadInput, TailInput ]
+  ( head : Filters[ Entity, HeadInput ],
+    tail : Filters[ Entity, TailInput ] )
+  extends Filters[ Entity, (HeadInput, TailInput) ]
 
 case class Comparison
   [ Entity, ValueOutput, ValueInput, TailInput ]

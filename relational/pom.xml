@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.sorm-framework</groupId>
+    <artifactId>sorm</artifactId>
+    <version>0.4.0-SNAPSHOT</version>
+  </parent>
+
+  <groupId>org.sorm-framework</groupId>
+  <artifactId>relational</artifactId>
+  <version>0.4.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <description>Common components for all relational drivers</description>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.sorm-framework</groupId>
+      <artifactId>core</artifactId>
+      <version>0.4.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>13.0.1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.mchange</groupId>
+      <artifactId>c3p0</artifactId>
+      <version>0.9.2-pre5</version>
+    </dependency>
+  </dependencies>
+
+</project>

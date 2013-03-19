@@ -24,13 +24,6 @@ sealed trait Select
   extends Instruction[ Entity, Input, Output ]
 
 /**
- * An edge-node that instructs to just proxy the input value.
- */
-case class OutputValue
-  [ Entity, Value ]
-  extends Select[ Entity, Value, Value ]
-
-/**
  * Output the whole entity without consuming any input.
  */
 case class OutputEntity

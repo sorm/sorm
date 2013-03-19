@@ -9,28 +9,33 @@ case class FiltersNil
   [ Entity ]
   extends Filters[ Entity, Unit ]
 
-case class Or
-  [ Entity, Input1, Input2, TailInput ]
-  ( a : Filters[ Entity, Input1 ],
-    b : Filters[ Entity, Input2 ],
-    tail : Filters[ Entity, TailInput] )
-  extends Filters[ Entity, (Input1, Input2, TailInput) ]
-
-case class And
-  [ Entity, Input1, Input2, TailInput ]
-  ( a : Filters[ Entity, Input1 ],
-    b : Filters[ Entity, Input2 ],
-    tail : Filters[ Entity, TailInput] )
-  extends Filters[ Entity, (Input1, Input2, TailInput) ]
+case class Fork
+  [ Entity, HeadInput, TailInput ]
+  ( head : Filters[ Entity, HeadInput ],
+    tail : Filters[ Entity, TailInput ] )
+  extends Filters[ Entity, (HeadInput, TailInput) ]
 
 case class Comparison
   [ Entity, ValueOutput, ValueInput, TailInput ]
   ( subRef : SubRef[ Entity, ValueOutput ],
-    value : Select[ Entity, ValueInput, ValueOutput ],
+    value : ReferenceValue[ Entity, ValueInput, ValueOutput ],
     operator : Operator,
     negative : Boolean,
     tail : Filters[ Entity, TailInput ] )
   extends Filters[ Entity, (ValueInput, TailInput) ]
+
+
+sealed trait ReferenceValue
+  [ Entity, Input, Output ]
+
+case class ReferenceValueSelect
+  [ Entity, Input, Output ]
+  ( select : Select[ Entity, Input, Output ] )
+  extends ReferenceValue[ Entity, Input, Output ]
+
+case class ReferenceValueInput
+  [ Entity, Value ]
+  extends ReferenceValue[ Entity, Value, Value ]
 
 
 sealed trait Operator

@@ -86,7 +86,7 @@ class WhereComposer
       = {
         val newInstructions = Instructions.Comparison(
           ref,
-          Instructions.OutputValue[ Entity, Value ](),
+          Instructions.ReferenceValueInput[ Entity, Value ](),
           operator,
           negative,
           instructions

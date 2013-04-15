@@ -1,4 +1,6 @@
 0.3.8-SNAPSHOT
+  - Move to "org.sorm-framework" Maven group
+  - 2.10.1 Scala dependency
 
 0.3.7
   - Fix Play Framework compatibility (#10)

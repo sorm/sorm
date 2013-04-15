@@ -184,7 +184,6 @@ object Instance {
     /**
      * Current DateTime at DB server. Effectively fetches the date only once to calculate the deviation.
      */
-    @deprecated ("appears to be redundant since DateTime already stores timezone information")
     lazy val now = {
       val base = connector.withConnection(_.now())
       val systemBase = System.currentTimeMillis()

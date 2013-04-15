@@ -1,4 +1,4 @@
-package sorm.test
+package sorm.test.types
 
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
@@ -8,6 +8,7 @@ import org.scalatest.junit.JUnitRunner
 import sorm._
 
 import samples._
+import sorm.test.MultiInstanceSuite
 
 @RunWith(classOf[JUnitRunner])
 class SeqOfIntsSupportSuite extends FunSuite with ShouldMatchers with MultiInstanceSuite {

@@ -1,4 +1,4 @@
-package sorm.test
+package sorm.test.types
 
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
@@ -10,6 +10,7 @@ import sext._, embrace._
 import sorm._
 import samples._
 import org.joda.time.DateTime
+import sorm.test.MultiInstanceSuite
 
 @RunWith(classOf[JUnitRunner])
 class DateTimeSupportSuite extends FunSuite with ShouldMatchers with MultiInstanceSuite {

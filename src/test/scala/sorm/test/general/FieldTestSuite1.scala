@@ -1,4 +1,4 @@
-package sorm.test
+package sorm.test.general
 
 import org.scalatest.{SequentialNestedSuiteExecution, FunSuite}
 import org.scalatest.matchers.ShouldMatchers
@@ -9,6 +9,7 @@ import sorm._
 import core.DbType
 import sext._, embrace._
 import org.joda.time._
+import sorm.test.TestingInstances
 
 @RunWith(classOf[JUnitRunner])
 class FieldTestSuite1 extends FunSuite with ShouldMatchers with SequentialNestedSuiteExecution {

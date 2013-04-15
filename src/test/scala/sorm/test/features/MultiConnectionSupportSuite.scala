@@ -1,4 +1,4 @@
-package sorm.test
+package sorm.test.features
 
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
@@ -8,6 +8,7 @@ import org.scalatest.junit.JUnitRunner
 import sext._, embrace._
 import sorm._
 import concurrent._, duration._, ExecutionContext.Implicits._
+import sorm.test.MultiInstanceSuite
 
 object MultiConnectionSupportSuite {
   case class A ( a : Int )

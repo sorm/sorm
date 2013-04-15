@@ -1,4 +1,4 @@
-package sorm.test
+package sorm.test.features
 
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
 import org.scalatest.matchers.ShouldMatchers
@@ -6,6 +6,7 @@ import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 
 import sorm._
+import sorm.test.MultiInstanceSuite
 
 @RunWith(classOf[JUnitRunner])
 class InFilterTest extends FunSuite with ShouldMatchers with MultiInstanceSuite {

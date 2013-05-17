@@ -2,20 +2,31 @@ package sorm.core.subRef
 
 import reflect.runtime.universe._
 
+
+
 /**
  * A reference from a context type to its subfield. E.g., `context.field` or 
  * `context.field.field` and so on.
- *
+ * 
  * @tparam Context A type of the context object.
- * @tparam Value A type of the referred value.
- * @param contextSymbol A symbol of a context object.
- * @param valueSymbol A symbol of the referred object. Must have the 
- * `contextSymbol` in its `owner`s chain.
+ * @tparam Value A type of the referred end-value.
+ * @param contextType A type object of the context object. 
+ * @param subFieldSymbols A list of symbols representing the chain of subfields.
+ * 
+ * @example
+ *   For example, a reference `a.b.c` should be represented as follows:
+ *   {{{
+ *   SubRef
+ *     [ <Type of `a`>, <Type of `c`> ]
+ *     ( <Type of `a`>, List( <Symbol of field `b` of type of `a`>,
+ *                            <Symbol of field `c` of type of `a.b`> ) )
+ *   }}}
  */
 case class SubRef
   [ Context, Value ]
-  ( contextSymbol : Symbol,
-    valueSymbol : Symbol )
+  ( contextType : Type,
+    subFieldSymbols : List[ Symbol ] )
+
 
 
 sealed trait SubRefs

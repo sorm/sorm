@@ -6,7 +6,7 @@ import language.experimental.macros
 
 /**
  * The stuff that drives these expressions:
- * `.where( _.exists( _.genres, _.equals( _.name, "jazz" ) ) )`
+ * `.where( _.exists( _.genres )( _.equals( _.name, "jazz" ) ) )`
  *
  * @tparam Driver The driver, for which the instruction is to be composed.
  * Needed for statically checking Driver's support for type-specific operations.
@@ -105,6 +105,22 @@ private object Macros {
    * Expands an `Entity => Value` function from a `ref` parameter to a value
    * `SubRef[ Entity, Value ]`, then passes it to an overloaded version of
    * the macro-triggering method.
+   *
+   * @example
+   *   {{{
+   *     .equals( _.genre.name, "Jazz" )
+   *   }}}
+   *   gets expanded into
+   *   {{{
+   *     .equals( SubRef( <Type of Genre>,
+   *                      List( <Symbol of "genre" field of type Genre>,
+   *                            <Symbol of "name" field of a type of field
+   *                              "genre" of the Genre type> ),
+   *              "Jazz" )
+   *   }}}
+   * 
+   * SubRef's context type value should be generated from the passed in `Entity`
+   * type-parameter.
    */
   def equals
     [ Driver,

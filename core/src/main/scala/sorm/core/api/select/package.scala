@@ -13,7 +13,7 @@ import sorm.core.subRef._
  * @tparam Input The composed type of all input values for the generated 
  * instructions.
  */
-class SelectComposer
+class SelectComposition
   [ Driver <: DriverSelectSupport, Entity, Input, Output ]
   ( val driver : Driver,
     val instructions : Instructions.Select[ Entity, Input, Output ],
@@ -22,9 +22,9 @@ class SelectComposer
 
     def where
       [ FiltersInput ]
-      ( filters : Where.WhereComposer[ Driver, Entity, Unit ] =>
-                  Where.WhereComposer[ Driver, Entity, FiltersInput ] )
-      : SelectComposer[ Driver, Entity, (FiltersInput, Input), Output ]
+      ( filters : Where.WhereComposition[ Driver, Entity, Unit ] =>
+                  Where.WhereComposition[ Driver, Entity, FiltersInput ] )
+      : SelectComposition[ Driver, Entity, (FiltersInput, Input), Output ]
       = ???
 
     /**
@@ -34,15 +34,15 @@ class SelectComposer
      * @param support An implicit evidence of a driver support for ordering
      *                by values of presented Value type.
      * @tparam Value Type of referred value.
-     * @return New SelectComposer.
+     * @return New SelectComposition.
      */
     def order
       [ Value ]
       ( ref : SubRef[ Entity, Value ],
         reverse : Boolean )
       ( implicit support : OrderSupport[ Driver, Value ] )
-      : SelectComposer[ Driver, Entity, Input, Output ]
-      = new SelectComposer(
+      : SelectComposition[ Driver, Entity, Input, Output ]
+      = new SelectComposition(
           driver,
           Instructions.Order(
             ref,
@@ -66,8 +66,8 @@ trait InstanceSelectSupport[ Driver <: DriverSelectSupport ] {
 
   def select
     [ Entity ]
-    : SelectComposer[ Driver, Entity, Unit, Seq[ Entity ] ]
-    = new SelectComposer( driver, Instructions.OutputEntity[ Entity ](), Unit )
+    : SelectComposition[ Driver, Entity, Unit, Seq[ Entity ] ]
+    = new SelectComposition( driver, Instructions.OutputEntity[ Entity ](), Unit )
 
 }
 

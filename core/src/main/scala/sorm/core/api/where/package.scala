@@ -19,7 +19,7 @@ import language.experimental.macros
  * compiled to driver-specific ones and cached.
  * @param input All the input values for generated instructions.
  */
-class WhereComposer
+class WhereComposition
   [ Driver, Entity, Input ]
   ( val instructions : Instructions.Filters[ Entity, Input ],
     val input : Input )
@@ -30,28 +30,28 @@ class WhereComposer
       [ Value ]
       ( ref : Entity => Value,
         value : Value )
-      : WhereComposer[ Driver, Entity, (Value, Input) ]
+      : WhereComposition[ Driver, Entity, (Value, Input) ]
       = macro Macros.equals[ Driver, Entity, Value, Input ]
 
     def equals
       [ Value : DriverEqualsSupport ]
       ( ref : SubRef[ Entity, Value ],
         value : Value )
-      : WhereComposer[ Driver, Entity, (Value, Input) ]
+      : WhereComposition[ Driver, Entity, (Value, Input) ]
       = comparison( ref, Instructions.Equal, false, value )
 
     def notLarger
       [ Value : DriverNotLargerSupport ]
       ( ref : SubRef[ Entity, Value ],
         value : Value )
-      : WhereComposer[ Driver, Entity, (Value, Input) ]
+      : WhereComposition[ Driver, Entity, (Value, Input) ]
       = comparison( ref, Instructions.Larger, true, value )
       
     def regex
       [ Value : DriverRegexSupport ]
       ( ref : SubRef[ Entity, Value ],
         value : Value )
-      : WhereComposer[ Driver, Entity, (Value, Input) ]
+      : WhereComposition[ Driver, Entity, (Value, Input) ]
       = comparison( ref, Instructions.Regex, false, value )
 
     def exists
@@ -59,10 +59,10 @@ class WhereComposer
         ValueItem,
         SubInput ]
       ( ref : Entity => Value[ ValueItem ] )
-      ( where : WhereComposer[ Driver, ValueItem, Unit ] => 
-                WhereComposer[ Driver, ValueItem, SubInput ] )
+      ( where : WhereComposition[ Driver, ValueItem, Unit ] =>
+                WhereComposition[ Driver, ValueItem, SubInput ] )
       ( implicit support : DriverExistsSupport[ Value[ ValueItem ] ] )
-      : WhereComposer[ Driver, Entity, (SubInput, Input) ]
+      : WhereComposition[ Driver, Entity, (SubInput, Input) ]
       = ???
 
     def exists
@@ -70,10 +70,10 @@ class WhereComposer
         ValueItem,
         SubInput ]
       ( ref : SubRef[ Entity, Value[ ValueItem ] ] ) 
-      ( where : WhereComposer[ Driver, ValueItem, Unit ] => 
-                WhereComposer[ Driver, ValueItem, SubInput ] )
+      ( where : WhereComposition[ Driver, ValueItem, Unit ] =>
+                WhereComposition[ Driver, ValueItem, SubInput ] )
       ( implicit support : DriverExistsSupport[ Value[ ValueItem ] ] )
-      : WhereComposer[ Driver, Entity, (SubInput, Input) ]
+      : WhereComposition[ Driver, Entity, (SubInput, Input) ]
       = ???
 
     private def comparison
@@ -82,7 +82,7 @@ class WhereComposer
         operator : Instructions.Operator,
         negative : Boolean,
         value : Value )
-      : WhereComposer[ Driver, Entity, (Value, Input) ]
+      : WhereComposition[ Driver, Entity, (Value, Input) ]
       = {
         val newInstructions = Instructions.Comparison(
           ref,
@@ -92,7 +92,7 @@ class WhereComposer
           instructions
         )
         val newInput = (value, input)
-        new WhereComposer( newInstructions, newInput )
+        new WhereComposition( newInstructions, newInput )
       }
   }
 
@@ -130,7 +130,7 @@ private object Macros {
     ( c : Context )
     ( ref : c.Expr[ Entity => Value ],
       value : c.Expr[ Value ] )
-    : c.Expr[ WhereComposer[ Driver, Entity, (Value, Input) ] ]
+    : c.Expr[ WhereComposition[ Driver, Entity, (Value, Input) ] ]
     = ???
 
 }

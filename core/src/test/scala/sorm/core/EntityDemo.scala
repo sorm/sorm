@@ -9,7 +9,9 @@ object EntityDemo extends App {
   // val e = entity[ A ]( Set(), Set() )
   // should result in:
   val e = new Entity[ A ]{
+    // the value is taken from here: `entity[ A ]( Set(), -> Set() <- )`
     val indexed : Set[ Key[ A ] ] = Set()
+    // the value is taken from here: `entity[ A ]( -> Set() <-, Set() )`
     val unique : Set[ Key[ A ] ] = Set()
     def mixinPersisted( value : A, idValue : Long )
       = new A( value.a, value.b ) with Persisted {

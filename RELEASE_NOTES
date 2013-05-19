@@ -1,4 +1,4 @@
-0.3.8-SNAPSHOT
+0.3.8
   - Move to "org.sorm-framework" Maven group
   - 2.10.1 Scala dependency
 

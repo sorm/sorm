@@ -6,10 +6,12 @@ import reflect.macros.Context
 
 
 /**
- * A list of field symbols of a single entity, representing an abstraction over
- * a database index. 
+ * A list of references from a single entity, representing an abstraction over
+ * a database index.
+ *
+ * TODO: to provide a concrete implementation.
  */
-case class Key[ EntityT ]( symbols : Seq[ Symbol ] )
+trait Key[ EntityT ]
 
 trait Persisted {
   val id : Long

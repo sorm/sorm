@@ -4,19 +4,19 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.github.nikita-volkov</groupId>
+  <groupId>org.sorm-framework</groupId>
   <artifactId>sorm</artifactId>
-  <version>0.3.7</version>
+  <version>0.3.8</version>
   <packaging>jar</packaging>
 
   <name>SORM</name>
-  <description>An ORM framework for Scala</description>
-  <url>http://www.github.com/nikita-volkov/sorm</url>
+  <description>A functional boilerplate-free Scala ORM</description>
+  <url>http://www.github.com/sorm/sorm</url>
 
   <licenses>
     <license>
       <name>MIT/X11</name>
-      <url>http://www.github.com/nikita-volkov/sorm/LICENSE</url>
+      <url>http://www.github.com/sorm/sorm/LICENSE</url>
     </license>
   </licenses>
 
@@ -29,9 +29,9 @@
   </developers>
 
   <scm>
-    <connection>scm:git:git@github.com:nikita-volkov/sorm.git</connection>
-    <url>scm:git:git@github.com:nikita-volkov/sorm.git</url>
-    <developerConnection>scm:git:git@github.com:nikita-volkov/sorm.git</developerConnection>
+    <connection>scm:git:git@github.com:sorm/sorm.git</connection>
+    <url>scm:git:git@github.com:sorm/sorm.git</url>
+    <developerConnection>scm:git:git@github.com:sorm/sorm.git</developerConnection>
   </scm>
 
   <parent>
@@ -130,17 +130,17 @@
     <dependency>
       <groupId>org.scala-lang</groupId>
       <artifactId>scala-reflect</artifactId>
-      <version>2.10.0</version>
+      <version>2.10.1</version>
     </dependency>
     <dependency>
       <groupId>org.scala-lang</groupId>
       <artifactId>scala-library</artifactId>
-      <version>2.10.0</version>
+      <version>2.10.1</version>
     </dependency>
     <dependency>
       <groupId>org.scala-lang</groupId>
       <artifactId>scala-compiler</artifactId>
-      <version>2.10.0</version>
+      <version>2.10.1</version>
     </dependency>
   </dependencies>
 
@@ -149,7 +149,7 @@
       <plugin>
         <groupId>net.alchim31.maven</groupId>
         <artifactId>scala-maven-plugin</artifactId>
-        <version>3.1.0</version>
+        <version>3.1.2</version>
         <configuration>
           <recompileMode>incremental</recompileMode>
           <useZincServer>true</useZincServer>

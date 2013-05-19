@@ -1,4 +1,4 @@
-package sorm.test
+package sorm.test.features
 
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers

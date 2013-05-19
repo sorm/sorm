@@ -1,4 +1,4 @@
-package sorm.test
+package sorm.test.types
 
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
@@ -7,6 +7,7 @@ import org.scalatest.junit.JUnitRunner
 
 import sext._, embrace._
 import sorm._
+import sorm.test.MultiInstanceSuite
 
 
 object BigDecimalSupportSuite {

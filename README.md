@@ -22,7 +22,7 @@ SORM is distributed in the Maven Central, here's a dependency to the latest rele
     <dependency>
       <groupId>org.sorm-framework</groupId>
       <artifactId>sorm</artifactId>
-      <version>0.3.8-SNAPSHOT</version>
+      <version>0.3.8</version>
     </dependency>
 
 ##Contribution

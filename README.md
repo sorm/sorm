@@ -17,7 +17,7 @@ For more info, tutorials and documentation please visit the [official site](http
 
 ##Maven
 
-SORM is distributed in the Maven Central, here's a dependency to the latest release version:
+SORM is distributed in Maven Central, here's a dependency to the latest release version:
 
     <dependency>
       <groupId>org.sorm-framework</groupId>
@@ -25,6 +25,6 @@ SORM is distributed in the Maven Central, here's a dependency to the latest rele
       <version>0.3.8</version>
     </dependency>
 
-##Contribution
+##SBT
 
-Any kind of contribution is much appreciated. If you find anything that you think SORM could evolve on, go ahead and fork it! 
+    libraryDependencies += "org.sorm-framework" % "sorm" % "0.3.8"

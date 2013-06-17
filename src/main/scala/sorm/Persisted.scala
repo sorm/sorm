@@ -36,5 +36,6 @@ package sorm
  * }}}
  */
 trait Persisted {
-  def id: Long
+  def id : Long
+  def demixinPersisted[ T ] : T
 }

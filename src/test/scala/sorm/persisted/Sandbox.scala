@@ -14,4 +14,5 @@ object Sandbox extends App {
   val p = Persisted(artist, 4)
 
   println(p)
+  println(p.demixinPersisted)
 }

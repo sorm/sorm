@@ -55,8 +55,8 @@ object PersistedClass extends Logging {
         "{\n" +
         (
           "type T = " + r.signature + "\n" +
-          "override def demixinPersisted[ T ] : T\n" +
-          ( "= new " + r.signature + "(" + oldArgNames.mkString(", ") + ").asInstanceOf[T]" ).indent(2) + "\n" +
+          "override def mixoutPersisted[ T ]\n" +
+          ( "= ( id, new " + r.signature + "(" + oldArgNames.mkString(", ") + ").asInstanceOf[T] )" ).indent(2) + "\n" +
           "override def copy\n" +
           ( "( " + 
             copyMethodArgSignatures.mkString(",\n").indent(2).trim + 

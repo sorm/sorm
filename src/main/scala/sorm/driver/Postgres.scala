@@ -16,6 +16,7 @@ class Postgres (protected val connection : JdbcConnection)
   with StdTransaction
   with StdCreateTable
 {
+  override protected def quote ( x : String ) = "\"" + x + "\""
   override def createTable(table: Table) {
     super.createTable(table)
     table.indexes.foreach{

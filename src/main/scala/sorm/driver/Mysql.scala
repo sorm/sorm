@@ -18,6 +18,7 @@ class Mysql (protected val connection : JdbcConnection)
   with StdCreateTable
 {
 
+  override protected def quote ( x : String ) = "`" + x + "`"
   override protected def columnTypeDdl ( t : ColumnType )
     = {
       import ColumnType._

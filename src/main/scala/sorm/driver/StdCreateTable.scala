@@ -5,9 +5,7 @@ import sorm._
 import ddl._
 import jdbc._
 
-trait StdCreateTable {
-  protected def quote ( x : String ) : String
-  protected def connection : JdbcConnection
+trait StdCreateTable { self: StdConnection with StdQuote =>
   def createTable ( table : Table ) {
     table $ statement $ connection.executeUpdate
   }

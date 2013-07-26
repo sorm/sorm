@@ -6,9 +6,7 @@ import sorm._
 import jdbc._
 import sql._
 
-trait StdQuery {
-  protected def connection: JdbcConnection
-
+trait StdQuery { self: StdConnection with StdStatement =>
   import abstractSql.AbstractSql._
   def query
     [ T ]
@@ -26,7 +24,6 @@ trait StdQuery {
 
   protected def statement(asql: Statement): jdbc.Statement
     = asql $ sql $ postProcessSql $ Optimization.optimized $ statement
-  protected def statement(sql: Sql): jdbc.Statement
   protected def sql(asql: Statement): Sql.Statement
   protected def postProcessSql(sql: Sql.Statement): Sql.Statement = {
     def includeOrderInWhat(sql: Sql.Select) = {

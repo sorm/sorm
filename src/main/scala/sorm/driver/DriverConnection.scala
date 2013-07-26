@@ -23,6 +23,7 @@ trait DriverConnection {
     ( parse : ResultSetView => T = (_ : ResultSetView).indexedRowsTraversable.toList )
     : T
   def now() : DateTime
+  def listTables(): List[String]
   def dropTable
     ( table : String )
   def dropAllTables()

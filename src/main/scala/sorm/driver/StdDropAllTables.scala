@@ -3,15 +3,8 @@ package sorm.driver
 import sorm.jdbc.{JdbcConnection, Statement}
 import sorm.core.SormException
 
-trait StdDropAllTables {
-  protected def connection: JdbcConnection
-  protected def quote ( a : String ) : String
+trait StdDropAllTables { self: StdConnection with StdListTables with StdQuote =>
   def dropAllTables() {
-    def listTables()
-      = connection.executeQuery( Statement(showTablesSql) )()
-          .flatten
-          .asInstanceOf[List[String]]
-
     def tryToDrop
       ( table : String )
       {
@@ -35,6 +28,4 @@ trait StdDropAllTables {
     }
 
   }
-  protected def showTablesSql : String = "SHOW TABLES"
-
 }

@@ -78,7 +78,9 @@ object Initialization extends Logging {
         }
       case InitMode.DropCreate =>
         connector.withConnection { connection =>
-          mappings $ Drop.tables map (_.name) foreach { n =>
+          val tables = connection.listTables().toSet
+
+          mappings $ Drop.tables map (_.name) filter tables.contains foreach { n =>
             try {
               connection.dropTable(n)
             } catch {
@@ -90,10 +92,9 @@ object Initialization extends Logging {
         }
       case InitMode.Create =>
         connector.withConnection { connection =>
-          mappings $ Create.tables foreach { t =>
-            try { connection.createTable(t) }
-            catch { case e : Throwable => }
-          }
+          val tables = connection.listTables().toSet
+
+          mappings $ Create.tables filterNot { t => tables.contains(t.name) } foreach connection.createTable
         }
       case InitMode.DoNothing =>
     }

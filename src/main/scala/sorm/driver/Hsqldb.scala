@@ -7,16 +7,19 @@ import sql.Sql
 
 class Hsqldb (protected val connection : JdbcConnection)
   extends DriverConnection
-  with StdQuery
-  with StdSqlRendering
-  with StdDropAllTables
-  with StdAbstractSqlToSql
-  with StdNow
-  with StdModify
-  with StdDropTables
-  with StdQuote
+  with StdConnection
   with StdTransaction
+  with StdAbstractSqlToSql
+  with StdQuote
+  with StdSqlRendering
+  with StdStatement
+  with StdQuery
+  with StdModify
   with StdCreateTable
+  with StdListTables
+  with StdDropTables
+  with StdDropAllTables
+  with StdNow
 {
   override def createTable(table: Table) {
     super.createTable(table)

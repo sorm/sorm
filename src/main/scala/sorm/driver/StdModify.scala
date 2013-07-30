@@ -5,10 +5,7 @@ import sext._, embrace._
 import sorm._
 import sql._, Sql._
 
-trait StdModify {
-
-  def statement ( sql : Sql ) : jdbc.Statement
-  protected def connection : jdbc.JdbcConnection
+trait StdModify { self: StdConnection with StdStatement =>
 
   def update 
     ( table : String, values : Iterable[(String, Any)], pk : Iterable[(String, Any)] )

@@ -22,9 +22,9 @@ SORM is distributed in Maven Central, here's a dependency to the latest release 
     <dependency>
       <groupId>org.sorm-framework</groupId>
       <artifactId>sorm</artifactId>
-      <version>0.3.9-SNAPSHOT</version>
+      <version>0.3.9</version>
     </dependency>
 
 ##SBT
 
-    libraryDependencies += "org.sorm-framework" % "sorm" % "0.3.9-SNAPSHOT"
+    libraryDependencies += "org.sorm-framework" % "sorm" % "0.3.9"

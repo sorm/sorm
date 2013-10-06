@@ -1,6 +1,10 @@
 language: scala
 scala:
+  - 2.10.3
+  - 2.10.2
   - 2.10.1
   - 2.10.0
 before_script:
   - psql -c 'create database test;' -U postgres
+install: 
+  mvn install -DskipTests=true -Dgpg.skip=true

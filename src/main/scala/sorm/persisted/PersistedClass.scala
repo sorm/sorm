@@ -39,8 +39,11 @@ object PersistedClass extends Logging {
             n + " : " + r.signature + " = " + n
           }
 
+      val oldArgNames
+        = sourceArgs.map{ _._1 }
+
       val newArgNames
-        = "id" +: sourceArgs.map{ _._1 }.toList
+        = "id" +: oldArgNames
 
 
       "class " + name + "\n" +
@@ -50,7 +53,11 @@ object PersistedClass extends Logging {
         " )\n" +
         "with " + Reflection[Persisted].signature + "\n" + 
         "{\n" +
-        ( "override def copy\n" +
+        (
+          "type T = " + r.signature + "\n" +
+          "override def mixoutPersisted[ T ]\n" +
+          ( "= ( id, new " + r.signature + "(" + oldArgNames.mkString(", ") + ").asInstanceOf[T] )" ).indent(2) + "\n" +
+          "override def copy\n" +
           ( "( " + 
             copyMethodArgSignatures.mkString(",\n").indent(2).trim + 
             " )\n" +

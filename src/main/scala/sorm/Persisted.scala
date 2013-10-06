@@ -36,5 +36,13 @@ package sorm
  * }}}
  */
 trait Persisted {
-  def id: Long
+  def id : Long
+  /**
+   * Decompose an object of type `T with Persisted` into an id and and object of
+   * type `T`.
+   *
+   * @tparam T The type of object `Persisted` was mixed into
+   * @return A tuple of id and the object object it was mixed into
+   */
+  def mixoutPersisted[ T ] : ( Long, T )
 }

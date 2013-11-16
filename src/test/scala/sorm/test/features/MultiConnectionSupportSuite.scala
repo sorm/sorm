@@ -21,7 +21,7 @@ class MultiConnectionSupportSuite extends FunSuite with ShouldMatchers with Mult
   override def poolSizes = 1 :: 14 :: Nil
   instancesAndIds foreach { case (db, dbId) =>
     test(dbId + " - Entities aren't always stored sequentially"){
-      val fs = (1 to 140).map(n => future(db.save(A(n))))
+      val fs = (1 to 200).map(n => future(db.save(A(n))))
       val rs = fs.map(Await.result(_, 10 seconds)).sortBy(_.id)
       rs should not be ('empty)
       rs.map(_.id) should not equal (rs.map(_.a.toLong))

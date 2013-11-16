@@ -1,4 +1,8 @@
-0.3.9-SNAPSHOT
+0.3.9
+  - `mixoutPersisted`
+  - Initialization error reporting fix
+  - Fix multithreading (#26)
+  - 2.10.3 Scala dependency
 
 0.3.8
   - Move to "org.sorm-framework" Maven group

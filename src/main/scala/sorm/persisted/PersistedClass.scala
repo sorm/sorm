@@ -100,7 +100,7 @@ object PersistedClass extends Logging {
     ( r : Reflection )
     : Class[T with Persisted]
     = {
-      val mirror = currentMirror
+      val mirror = runtimeMirror(Thread.currentThread().getContextClassLoader)
       val toolbox = mirror.mkToolBox()
 
       toolbox.eval(
@@ -111,30 +111,28 @@ object PersistedClass extends Logging {
       ) .asInstanceOf[Class[T with Persisted]]
     }
 
-  private def currentClassLoader
-    = Thread.currentThread().getContextClassLoader
+  private val cache = new {
+    private def currentClassLoader
+      = Thread.currentThread().getContextClassLoader
 
-  private def currentMirror
-    = scala.reflect.runtime.universe.runtimeMirror(currentClassLoader)
+    private var cachedClassLoader
+      = currentClassLoader
 
-  private var cachedClassLoader
-    = currentClassLoader
+    private val _cache
+      = new collection.mutable.WeakHashMap[Reflection, Class[_ <: Persisted]]
 
-  private val _cache
-    = new collection.mutable.WeakHashMap[Reflection, Class[_ <: Persisted]]
+    def apply(r: Reflection)
+      = {
+        val classLoader = currentClassLoader
+        if(classLoader != cachedClassLoader) {
+          logger.debug("Classloader changed, discarding PersistedClass cache")
+          cachedClassLoader = classLoader
+          _cache.clear()
+        }
 
-  private def cache(r: Reflection)
-    = {
-      val classLoader = currentClassLoader
-      if(classLoader != cachedClassLoader) {
-        logger.debug("Classloader changed, discarding PersistedClass cache")
-        cachedClassLoader = classLoader
-        _cache.clear()
+        synchronized { _cache.getOrElseUpdate( r, createClass(r) ) }
       }
-
-      synchronized { _cache.getOrElseUpdate( r, createClass(r) ) }
-    }
-
+  }
 
   def apply
     ( r : Reflection )

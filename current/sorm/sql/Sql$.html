@@ -1,0 +1,1010 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>Sql - SORM 0.3.10-SNAPSHOT API - sorm.sql.Sql</title>
+          <meta name="description" content="Sql - SORM 0.3.10 - SNAPSHOT API - sorm.sql.Sql" />
+          <meta name="keywords" content="Sql SORM 0.3.10 SNAPSHOT API sorm.sql.Sql" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../index.html';
+            var hash = 'sorm.sql.Sql$';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <a href="Sql.html" title="Go to companion"><img src="../../lib/object_to_trait_big.png" /></a>
+        <p id="owner"><a href="../package.html" class="extype" name="sorm">sorm</a>.<a href="package.html" class="extype" name="sorm.sql">sql</a></p>
+        <h1><a href="Sql.html" title="Go to companion">Sql</a></h1>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Sql</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="sorm.sql.Sql"><span>Sql</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="sorm.sql.Sql.AllColumns" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AllColumnsextendsSqlwithSql.WhatObjectwithSql.GroupByObjectwithSql.CountObjectwithProductwithSerializable"></a>
+      <a id="AllColumns:AllColumns"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$AllColumns.html"><span class="name">AllColumns</span></a><span class="params">(<span name="table">table: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>)</span><span class="result"> extends <a href="Sql.html" class="extype" name="sorm.sql.Sql">Sql</a> with <a href="Sql$$WhatObject.html" class="extype" name="sorm.sql.Sql.WhatObject">WhatObject</a> with <a href="Sql$$GroupByObject.html" class="extype" name="sorm.sql.Sql.GroupByObject">GroupByObject</a> with <a href="Sql$$CountObject.html" class="extype" name="sorm.sql.Sql.CountObject">CountObject</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.Column" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ColumnextendsSqlwithSql.WhatObjectwithSql.WhereObjectwithSql.HavingObjectwithSql.GroupByObjectwithSql.CountObjectwithProductwithSerializable"></a>
+      <a id="Column:Column"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$Column.html"><span class="name">Column</span></a><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="table">table: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>)</span><span class="result"> extends <a href="Sql.html" class="extype" name="sorm.sql.Sql">Sql</a> with <a href="Sql$$WhatObject.html" class="extype" name="sorm.sql.Sql.WhatObject">WhatObject</a> with <a href="Sql$$WhereObject.html" class="extype" name="sorm.sql.Sql.WhereObject">WhereObject</a> with <a href="Sql$$HavingObject.html" class="extype" name="sorm.sql.Sql.HavingObject">HavingObject</a> with <a href="Sql$$GroupByObject.html" class="extype" name="sorm.sql.Sql.GroupByObject">GroupByObject</a> with <a href="Sql$$CountObject.html" class="extype" name="sorm.sql.Sql.CountObject">CountObject</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.Comparison" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Comparison[T&lt;:sorm.sql.Sql]extendsSql.Condition[T]withProductwithSerializable"></a>
+      <a id="Comparison[T&lt;:Sql]:Comparison[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$Comparison.html"><span class="name">Comparison</span></a><span class="tparams">[<span name="T">T &lt;: <a href="Sql.html" class="extype" name="sorm.sql.Sql">Sql</a></span>]</span><span class="params">(<span name="left">left: <span class="extype" name="sorm.sql.Sql.Comparison.T">T</span></span>, <span name="right">right: <span class="extype" name="sorm.sql.Sql.Comparison.T">T</span></span>, <span name="operator">operator: <a href="Sql$$ComparisonOperator.html" class="extype" name="sorm.sql.Sql.ComparisonOperator">ComparisonOperator</a></span>)</span><span class="result"> extends <a href="Sql$$Condition.html" class="extype" name="sorm.sql.Sql.Condition">Condition</a>[<span class="extype" name="sorm.sql.Sql.Comparison.T">T</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.ComparisonOperator" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ComparisonOperatorextendsSql"></a>
+      <a id="ComparisonOperator:ComparisonOperator"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$ComparisonOperator.html"><span class="name">ComparisonOperator</span></a><span class="result"> extends <a href="Sql.html" class="extype" name="sorm.sql.Sql">Sql</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.CompositeCondition" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CompositeCondition[T&lt;:sorm.sql.Sql]extendsSql.Condition[T]withProductwithSerializable"></a>
+      <a id="CompositeCondition[T&lt;:Sql]:CompositeCondition[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$CompositeCondition.html"><span class="name">CompositeCondition</span></a><span class="tparams">[<span name="T">T &lt;: <a href="Sql.html" class="extype" name="sorm.sql.Sql">Sql</a></span>]</span><span class="params">(<span name="left">left: <a href="Sql$$Condition.html" class="extype" name="sorm.sql.Sql.Condition">Condition</a>[<span class="extype" name="sorm.sql.Sql.CompositeCondition.T">T</span>]</span>, <span name="right">right: <a href="Sql$$Condition.html" class="extype" name="sorm.sql.Sql.Condition">Condition</a>[<span class="extype" name="sorm.sql.Sql.CompositeCondition.T">T</span>]</span>, <span name="operator">operator: <a href="Sql$$CompositeOperator.html" class="extype" name="sorm.sql.Sql.CompositeOperator">CompositeOperator</a></span>)</span><span class="result"> extends <a href="Sql$$Condition.html" class="extype" name="sorm.sql.Sql.Condition">Condition</a>[<span class="extype" name="sorm.sql.Sql.CompositeCondition.T">T</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.CompositeOperator" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="CompositeOperatorextendsSql"></a>
+      <a id="CompositeOperator:CompositeOperator"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$CompositeOperator.html"><span class="name">CompositeOperator</span></a><span class="result"> extends <a href="Sql.html" class="extype" name="sorm.sql.Sql">Sql</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.Condition" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Condition[T&lt;:sorm.sql.Sql]extendsSql"></a>
+      <a id="Condition[T&lt;:Sql]:Condition[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$Condition.html"><span class="name">Condition</span></a><span class="tparams">[<span name="T">T &lt;: <a href="Sql.html" class="extype" name="sorm.sql.Sql">Sql</a></span>]</span><span class="result"> extends <a href="Sql.html" class="extype" name="sorm.sql.Sql">Sql</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.Count" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CountextendsSqlwithSql.WhatObjectwithSql.HavingObjectwithSql.GroupByObjectwithProductwithSerializable"></a>
+      <a id="Count:Count"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$Count.html"><span class="name">Count</span></a><span class="params">(<span name="what">what: <span class="extype" name="scala.Seq">Seq</span>[<a href="Sql$$CountObject.html" class="extype" name="sorm.sql.Sql.CountObject">CountObject</a>]</span>, <span name="distinct">distinct: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result"> extends <a href="Sql.html" class="extype" name="sorm.sql.Sql">Sql</a> with <a href="Sql$$WhatObject.html" class="extype" name="sorm.sql.Sql.WhatObject">WhatObject</a> with <a href="Sql$$HavingObject.html" class="extype" name="sorm.sql.Sql.HavingObject">HavingObject</a> with <a href="Sql$$GroupByObject.html" class="extype" name="sorm.sql.Sql.GroupByObject">GroupByObject</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.CountObject" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="CountObjectextendsSql"></a>
+      <a id="CountObject:CountObject"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$CountObject.html"><span class="name">CountObject</span></a><span class="result"> extends <a href="Sql.html" class="extype" name="sorm.sql.Sql">Sql</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.Delete" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DeleteextendsSqlwithProductwithSerializable"></a>
+      <a id="Delete:Delete"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$Delete.html"><span class="name">Delete</span></a><span class="params">(<span name="table">table: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="where">where: <span class="extype" name="scala.Option">Option</span>[<a href="Sql$$Where.html" class="extype" name="sorm.sql.Sql.Where">Where</a>]</span>)</span><span class="result"> extends <a href="Sql.html" class="extype" name="sorm.sql.Sql">Sql</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.From" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FromextendsSqlwithProductwithSerializable"></a>
+      <a id="From:From"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$From.html"><span class="name">From</span></a><span class="params">(<span name="what">what: <a href="Sql$$FromObject.html" class="extype" name="sorm.sql.Sql.FromObject">FromObject</a></span>, <span name="as">as: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>)</span><span class="result"> extends <a href="Sql.html" class="extype" name="sorm.sql.Sql">Sql</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.FromObject" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="FromObjectextendsSql"></a>
+      <a id="FromObject:FromObject"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$FromObject.html"><span class="name">FromObject</span></a><span class="result"> extends <a href="Sql.html" class="extype" name="sorm.sql.Sql">Sql</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.GroupByObject" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="GroupByObjectextendsSql"></a>
+      <a id="GroupByObject:GroupByObject"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$GroupByObject.html"><span class="name">GroupByObject</span></a><span class="result"> extends <a href="Sql.html" class="extype" name="sorm.sql.Sql">Sql</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.HavingObject" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="HavingObjectextendsSql"></a>
+      <a id="HavingObject:HavingObject"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$HavingObject.html"><span class="name">HavingObject</span></a><span class="result"> extends <a href="Sql.html" class="extype" name="sorm.sql.Sql">Sql</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.Insert" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="InsertextendsSqlwithProductwithSerializable"></a>
+      <a id="Insert:Insert"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$Insert.html"><span class="name">Insert</span></a><span class="params">(<span name="table">table: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="columns">columns: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="values">values: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Any">Any</span>]</span>)</span><span class="result"> extends <a href="Sql.html" class="extype" name="sorm.sql.Sql">Sql</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.IsNull" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IsNull[T&lt;:sorm.sql.Sql]extendsSql.Condition[T]withProductwithSerializable"></a>
+      <a id="IsNull[T&lt;:Sql]:IsNull[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$IsNull.html"><span class="name">IsNull</span></a><span class="tparams">[<span name="T">T &lt;: <a href="Sql.html" class="extype" name="sorm.sql.Sql">Sql</a></span>]</span><span class="params">(<span name="what">what: <span class="extype" name="sorm.sql.Sql.IsNull.T">T</span></span>, <span name="negative">negative: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result"> extends <a href="Sql$$Condition.html" class="extype" name="sorm.sql.Sql.Condition">Condition</a>[<span class="extype" name="sorm.sql.Sql.IsNull.T">T</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.Join" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="JoinextendsSqlwithProductwithSerializable"></a>
+      <a id="Join:Join"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$Join.html"><span class="name">Join</span></a><span class="params">(<span name="what">what: <a href="Sql$$JoinObject.html" class="extype" name="sorm.sql.Sql.JoinObject">JoinObject</a></span>, <span name="as">as: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="on">on: <span class="extype" name="scala.Seq">Seq</span>[(<a href="Sql$$Column.html" class="extype" name="sorm.sql.Sql.Column">Column</a>, <a href="Sql$$Column.html" class="extype" name="sorm.sql.Sql.Column">Column</a>)] = <span class="symbol">immutable.this.Nil</span></span>, <span name="kind">kind: <a href="Sql$$JoinKind.html" class="extype" name="sorm.sql.Sql.JoinKind">JoinKind</a> = <span class="symbol">Sql.this.JoinKind.Left</span></span>)</span><span class="result"> extends <a href="Sql.html" class="extype" name="sorm.sql.Sql">Sql</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.JoinKind" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="JoinKindextendsAnyRef"></a>
+      <a id="JoinKind:JoinKind"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$JoinKind.html"><span class="name">JoinKind</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.JoinObject" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="JoinObjectextendsSql"></a>
+      <a id="JoinObject:JoinObject"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$JoinObject.html"><span class="name">JoinObject</span></a><span class="result"> extends <a href="Sql.html" class="extype" name="sorm.sql.Sql">Sql</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.OrderBy" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="OrderByextendsSqlwithProductwithSerializable"></a>
+      <a id="OrderBy:OrderBy"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$OrderBy.html"><span class="name">OrderBy</span></a><span class="params">(<span name="what">what: <a href="Sql$$Column.html" class="extype" name="sorm.sql.Sql.Column">Column</a></span>, <span name="desc">desc: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result"> extends <a href="Sql.html" class="extype" name="sorm.sql.Sql">Sql</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.Select" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SelectextendsSqlwithSql.StatementwithProductwithSerializable"></a>
+      <a id="Select:Select"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$Select.html"><span class="name">Select</span></a><span class="params">(<span name="what">what: <span class="extype" name="scala.Seq">Seq</span>[<a href="Sql$$WhatObject.html" class="extype" name="sorm.sql.Sql.WhatObject">WhatObject</a>]</span>, <span name="from">from: <a href="Sql$$From.html" class="extype" name="sorm.sql.Sql.From">From</a></span>, <span name="join">join: <span class="extype" name="scala.Seq">Seq</span>[<a href="Sql$$Join.html" class="extype" name="sorm.sql.Sql.Join">Join</a>] = <span class="symbol">immutable.this.Nil</span></span>, <span name="where">where: <span class="extype" name="scala.Option">Option</span>[<a href="Sql$$Condition.html" class="extype" name="sorm.sql.Sql.Condition">Condition</a>[<a href="Sql$$WhereObject.html" class="extype" name="sorm.sql.Sql.WhereObject">WhereObject</a>]] = <span class="symbol">scala.None</span></span>, <span name="groupBy">groupBy: <span class="extype" name="scala.Seq">Seq</span>[<a href="Sql$$GroupByObject.html" class="extype" name="sorm.sql.Sql.GroupByObject">GroupByObject</a>] = <span class="symbol">immutable.this.Nil</span></span>, <span name="having">having: <span class="extype" name="scala.Option">Option</span>[<a href="Sql$$Condition.html" class="extype" name="sorm.sql.Sql.Condition">Condition</a>[<a href="Sql$$HavingObject.html" class="extype" name="sorm.sql.Sql.HavingObject">HavingObject</a>]] = <span class="symbol">scala.None</span></span>, <span name="orderBy">orderBy: <span class="extype" name="scala.Seq">Seq</span>[<a href="Sql$$OrderBy.html" class="extype" name="sorm.sql.Sql.OrderBy">OrderBy</a>] = <span class="symbol">immutable.this.Nil</span></span>, <span name="limit">limit: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Int">Int</span>] = <span class="symbol">scala.None</span></span>, <span name="offset">offset: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Int">Int</span>] = <span class="symbol">scala.None</span></span>, <span name="distinct">distinct: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result"> extends <a href="Sql.html" class="extype" name="sorm.sql.Sql">Sql</a> with <a href="Sql$$Statement.html" class="extype" name="sorm.sql.Sql.Statement">Statement</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.SetExpression" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SetExpressionextendsSqlwithProductwithSerializable"></a>
+      <a id="SetExpression:SetExpression"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$SetExpression.html"><span class="name">SetExpression</span></a><span class="params">(<span name="column">column: <a href="Sql$$Column.html" class="extype" name="sorm.sql.Sql.Column">Column</a></span>, <span name="value">value: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result"> extends <a href="Sql.html" class="extype" name="sorm.sql.Sql">Sql</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.Statement" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="StatementextendsSqlwithSql.FromObjectwithSql.JoinObject"></a>
+      <a id="Statement:Statement"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$Statement.html"><span class="name">Statement</span></a><span class="result"> extends <a href="Sql.html" class="extype" name="sorm.sql.Sql">Sql</a> with <a href="Sql$$FromObject.html" class="extype" name="sorm.sql.Sql.FromObject">FromObject</a> with <a href="Sql$$JoinObject.html" class="extype" name="sorm.sql.Sql.JoinObject">JoinObject</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.Table" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TableextendsSqlwithSql.FromObjectwithSql.JoinObjectwithProductwithSerializable"></a>
+      <a id="Table:Table"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$Table.html"><span class="name">Table</span></a><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="Sql.html" class="extype" name="sorm.sql.Sql">Sql</a> with <a href="Sql$$FromObject.html" class="extype" name="sorm.sql.Sql.FromObject">FromObject</a> with <a href="Sql$$JoinObject.html" class="extype" name="sorm.sql.Sql.JoinObject">JoinObject</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.Union" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="UnionextendsSqlwithSql.StatementwithProductwithSerializable"></a>
+      <a id="Union:Union"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$Union.html"><span class="name">Union</span></a><span class="params">(<span name="left">left: <a href="Sql$$Statement.html" class="extype" name="sorm.sql.Sql.Statement">Statement</a></span>, <span name="right">right: <a href="Sql$$Statement.html" class="extype" name="sorm.sql.Sql.Statement">Statement</a></span>)</span><span class="result"> extends <a href="Sql.html" class="extype" name="sorm.sql.Sql">Sql</a> with <a href="Sql$$Statement.html" class="extype" name="sorm.sql.Sql.Statement">Statement</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.Update" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="UpdateextendsSqlwithProductwithSerializable"></a>
+      <a id="Update:Update"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$Update.html"><span class="name">Update</span></a><span class="params">(<span name="table">table: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="exprs">exprs: <span class="extype" name="scala.Seq">Seq</span>[<a href="Sql$$SetExpression.html" class="extype" name="sorm.sql.Sql.SetExpression">SetExpression</a>]</span>, <span name="where">where: <span class="extype" name="scala.Option">Option</span>[<a href="Sql$$Where.html" class="extype" name="sorm.sql.Sql.Where">Where</a>]</span>)</span><span class="result"> extends <a href="Sql.html" class="extype" name="sorm.sql.Sql">Sql</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.Value" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ValueextendsSqlwithSql.WhereObjectwithSql.HavingObjectwithProductwithSerializable"></a>
+      <a id="Value:Value"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$Value.html"><span class="name">Value</span></a><span class="params">(<span name="value">value: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result"> extends <a href="Sql.html" class="extype" name="sorm.sql.Sql">Sql</a> with <a href="Sql$$WhereObject.html" class="extype" name="sorm.sql.Sql.WhereObject">WhereObject</a> with <a href="Sql$$HavingObject.html" class="extype" name="sorm.sql.Sql.HavingObject">HavingObject</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.WhatObject" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="WhatObjectextendsSql"></a>
+      <a id="WhatObject:WhatObject"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$WhatObject.html"><span class="name">WhatObject</span></a><span class="result"> extends <a href="Sql.html" class="extype" name="sorm.sql.Sql">Sql</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.Where" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="WhereextendsSqlwithProductwithSerializable"></a>
+      <a id="Where:Where"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$Where.html"><span class="name">Where</span></a><span class="params">(<span name="condition">condition: <a href="Sql$$Condition.html" class="extype" name="sorm.sql.Sql.Condition">Condition</a>[<a href="Sql$$WhereObject.html" class="extype" name="sorm.sql.Sql.WhereObject">WhereObject</a>]</span>)</span><span class="result"> extends <a href="Sql.html" class="extype" name="sorm.sql.Sql">Sql</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.WhereObject" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="WhereObjectextendsSql"></a>
+      <a id="WhereObject:WhereObject"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$WhereObject.html"><span class="name">WhereObject</span></a><span class="result"> extends <a href="Sql.html" class="extype" name="sorm.sql.Sql">Sql</a></span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:AnyRef):Boolean"></a>
+      <a id="!=(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:AnyRef):Boolean"></a>
+      <a id="==(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="sorm.sql.Sql.And" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="And"></a>
+      <a id="And:And"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$And$.html"><span class="name">And</span></a><span class="result"> extends <a href="Sql$$CompositeOperator.html" class="extype" name="sorm.sql.Sql.CompositeOperator">CompositeOperator</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.Equal" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Equal"></a>
+      <a id="Equal:Equal"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$Equal$.html"><span class="name">Equal</span></a><span class="result"> extends <a href="Sql$$ComparisonOperator.html" class="extype" name="sorm.sql.Sql.ComparisonOperator">ComparisonOperator</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.In" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="In"></a>
+      <a id="In:In"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$In$.html"><span class="name">In</span></a><span class="result"> extends <a href="Sql$$ComparisonOperator.html" class="extype" name="sorm.sql.Sql.ComparisonOperator">ComparisonOperator</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.JoinKind" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="JoinKind"></a>
+      <a id="JoinKind:JoinKind"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$JoinKind$.html"><span class="name">JoinKind</span></a>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.Larger" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Larger"></a>
+      <a id="Larger:Larger"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$Larger$.html"><span class="name">Larger</span></a><span class="result"> extends <a href="Sql$$ComparisonOperator.html" class="extype" name="sorm.sql.Sql.ComparisonOperator">ComparisonOperator</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.LargerOrEqual" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LargerOrEqual"></a>
+      <a id="LargerOrEqual:LargerOrEqual"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$LargerOrEqual$.html"><span class="name">LargerOrEqual</span></a><span class="result"> extends <a href="Sql$$ComparisonOperator.html" class="extype" name="sorm.sql.Sql.ComparisonOperator">ComparisonOperator</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.Like" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Like"></a>
+      <a id="Like:Like"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$Like$.html"><span class="name">Like</span></a><span class="result"> extends <a href="Sql$$ComparisonOperator.html" class="extype" name="sorm.sql.Sql.ComparisonOperator">ComparisonOperator</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.NotEqual" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NotEqual"></a>
+      <a id="NotEqual:NotEqual"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$NotEqual$.html"><span class="name">NotEqual</span></a><span class="result"> extends <a href="Sql$$ComparisonOperator.html" class="extype" name="sorm.sql.Sql.ComparisonOperator">ComparisonOperator</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.NotIn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NotIn"></a>
+      <a id="NotIn:NotIn"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$NotIn$.html"><span class="name">NotIn</span></a><span class="result"> extends <a href="Sql$$ComparisonOperator.html" class="extype" name="sorm.sql.Sql.ComparisonOperator">ComparisonOperator</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.NotLike" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NotLike"></a>
+      <a id="NotLike:NotLike"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$NotLike$.html"><span class="name">NotLike</span></a><span class="result"> extends <a href="Sql$$ComparisonOperator.html" class="extype" name="sorm.sql.Sql.ComparisonOperator">ComparisonOperator</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.NotRegexp" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NotRegexp"></a>
+      <a id="NotRegexp:NotRegexp"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$NotRegexp$.html"><span class="name">NotRegexp</span></a><span class="result"> extends <a href="Sql$$ComparisonOperator.html" class="extype" name="sorm.sql.Sql.ComparisonOperator">ComparisonOperator</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.Or" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Or"></a>
+      <a id="Or:Or"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$Or$.html"><span class="name">Or</span></a><span class="result"> extends <a href="Sql$$CompositeOperator.html" class="extype" name="sorm.sql.Sql.CompositeOperator">CompositeOperator</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.Regexp" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Regexp"></a>
+      <a id="Regexp:Regexp"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$Regexp$.html"><span class="name">Regexp</span></a><span class="result"> extends <a href="Sql$$ComparisonOperator.html" class="extype" name="sorm.sql.Sql.ComparisonOperator">ComparisonOperator</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.Smaller" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Smaller"></a>
+      <a id="Smaller:Smaller"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$Smaller$.html"><span class="name">Smaller</span></a><span class="result"> extends <a href="Sql$$ComparisonOperator.html" class="extype" name="sorm.sql.Sql.ComparisonOperator">ComparisonOperator</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.sql.Sql.SmallerOrEqual" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SmallerOrEqual"></a>
+      <a id="SmallerOrEqual:SmallerOrEqual"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Sql$$SmallerOrEqual$.html"><span class="name">SmallerOrEqual</span></a><span class="result"> extends <a href="Sql$$ComparisonOperator.html" class="extype" name="sorm.sql.Sql.ComparisonOperator">ComparisonOperator</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+      <script defer="defer" type="text/javascript" id="jquery-js" src="../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../lib/template.js"></script>
+    </body>
+      </html>

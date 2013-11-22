@@ -13,6 +13,33 @@ import sorm.{Entity, Instance}
 class SormValidationSuite extends FunSuite with ShouldMatchers {
   import SormValidationSuite._
 
+  test("Mutually recursive types are not supported"){
+    evaluating {
+      new Instance(
+        Entity[F]() :: Entity[G]() :: Nil,
+        "jdbc:h2:mem:test",
+        initMode = InitMode.DropAllCreate
+      ).close()
+    } should produce [Instance.ValidationException]
+  }
+  test("Mutually recursive types are not supported - deep"){
+    evaluating {
+      new Instance(
+        Entity[F]() :: Entity[H]() :: Nil,
+        "jdbc:h2:mem:test",
+        initMode = InitMode.DropAllCreate
+      ).close()
+    } should produce [Instance.ValidationException]
+  }
+  test("Recursive types are not supported"){
+    evaluating {
+      new Instance(
+        Entity[E]() :: Nil,
+        "jdbc:h2:mem:test",
+        initMode = InitMode.DropAllCreate
+      ).close()
+    } should produce [Instance.ValidationException]
+  }
   test("`Any` type is not supported"){
     evaluating {
       new Instance(
@@ -31,15 +58,12 @@ class SormValidationSuite extends FunSuite with ShouldMatchers {
       ).close()
     } should produce [Instance.ValidationException]
   }
-  test("Correct instantiation doesnt throw exceptions"){
+  test("Correct instantiation doesn't throw exceptions"){
     new Instance(
       Entity[A]() :: Entity[B]() :: Entity[C]() :: Nil,
       "jdbc:h2:mem:test",
       initMode = InitMode.DropAllCreate
     ).close()
-  }
-  test("self reference validation"){
-    pending
   }
 }
 object SormValidationSuite {
@@ -51,4 +75,9 @@ object SormValidationSuite {
     ( a : Int )
   case class D
     ( a : Seq[Any] )
+  case class E
+    ( a : Seq[E] )
+  case class F(a: Seq[G])
+  case class G(a: F)
+  case class H(a: Seq[G])
 }

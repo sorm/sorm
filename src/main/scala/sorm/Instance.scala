@@ -209,7 +209,7 @@ object Instance {
     protected val connector = new Connector(url, user, password, poolSize)
 
     //  Validate entities (must be prior to mappings creation due to possible mappingkind detection errors):
-    entities flatMap errors map (new ValidationException(_)) foreach (throw _)
+    validateEntities(entities.toSeq).headOption.map(new ValidationException(_)).foreach(throw _)
 
     protected val mappings
       = {
@@ -226,7 +226,7 @@ object Instance {
       }
 
     // Validate input:
-    mappings.values.toStream $ errors map (new ValidationException(_)) foreach (throw _)
+    mappings.values.toStream $ validateMapping map (new ValidationException(_)) foreach (throw _)
 
     // Initialize a db schema:
     initializeSchema(mappings.values, connector, initMode)

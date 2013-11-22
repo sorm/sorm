@@ -11,7 +11,7 @@ import com.weiglewilczek.slf4s.Logging
 
 object Initialization extends Logging {
 
-  def errors ( mappings : Stream[EntityMapping] ) : Stream[String]
+  def validateMapping ( mappings : Stream[EntityMapping] ) : Stream[String]
     = mappings
         .zipBy(_.deepContainedMappings.collect{case m : EntityMapping => m})
         .map{case (m, refs) => m -> refs.filterNot(r => mappings.exists(_.reflection =:= r.reflection))}
@@ -23,45 +23,72 @@ object Initialization extends Logging {
         diff.nonEmpty.option("Reflections registered twice: " + diff.mkString(", "))
       }
 
-  def errors ( e : Entity ) : Stream[String]
+  def validateEntities ( entities : Seq[Entity] ) : Stream[String]
     = {
-      val descendats
-        = e.reflection.properties.values
-            .unfold( a => a.notEmpty.map(a => a -> a.flatMap(_.generics)) )
-            .flatten
+      lazy val entityTypes = entities.map(_.reflection)
+      def validateEntity ( e : Entity ) : Stream[String]
+        = {
+          lazy val descendats
+            = e.reflection.properties.values
+                .unfold( a => a.notEmpty.map(a => a -> a.flatMap(_.generics)) )
+                .flatten
 
-      def containsId
-        = e.reflection.properties.keys.exists(_ == "id").option("Property name `id` is not allowed")
+          def containsId
+            = e.reflection.properties.keys.exists(_ == "id").option("Property name `id` is not allowed")
 
-      def generalTypes
-        = descendats
-            .filter(r => r =:= Reflection[Any] || r =:= Reflection[AnyRef] || r =:= Reflection[AnyVal])
-            .map("Specifying general types `Any`, `AnyRef` or `AnyVal` is not allowed. `" + _.name + "` detected")
+          def generalTypes
+            = descendats
+                .filter(r => r =:= Reflection[Any] || r =:= Reflection[AnyRef] || r =:= Reflection[AnyVal])
+                .map("Specifying general types `Any`, `AnyRef` or `AnyVal` is not allowed. `" + _.name + "` detected")
 
-      def traversableTypes
-        = descendats
-            .filter(_ <:< Reflection[TraversableOnce[_]])
-            .filterNot(r =>
-              //  using java class to erase generics
-              r.javaClass == classOf[Seq[_]] ||
-              r.javaClass == classOf[Set[_]] ||
-              r.javaClass == classOf[Map[_, _]] ||
-              r.javaClass == classOf[Range]
-            )
-            .map("Only general immutable `Seq`, `Set`, `Map` and `Range` are supported traversable types. `" + _ + "` detected instead")
+          def traversableTypes
+            = descendats
+                .filter(_ <:< Reflection[TraversableOnce[_]])
+                .filterNot(r =>
+                  //  using java class to erase generics
+                  r.javaClass == classOf[Seq[_]] ||
+                  r.javaClass == classOf[Set[_]] ||
+                  r.javaClass == classOf[Map[_, _]] ||
+                  r.javaClass == classOf[Range]
+                )
+                .map("Only general immutable `Seq`, `Set`, `Map` and `Range` are supported traversable types. `" + _ + "` detected instead")
 
-      def inexistentPropertiesInKeys
-        = ( e.indexed.toStream ++ e.unique )
-            .flatten
-            .filterNot(e.reflection.properties.contains)
-            .map("Inexistent property: `" + _ + "`")
+          def inexistentPropertiesInKeys
+            = ( e.indexed.toStream ++ e.unique )
+                .flatten
+                .filterNot(e.reflection.properties.contains)
+                .map("Inexistent property: `" + _ + "`")
 
-      def notDistinctPropertiesInKeys
-        = ( e.indexed.toStream ++ e.unique )
-            .filter(ps => ps.distinct.size != ps.size )
-            .map("Not a distinct properties list: `" + _.mkString(", ") + "`")
+          def notDistinctPropertiesInKeys
+            = ( e.indexed.toStream ++ e.unique )
+                .filter(ps => ps.distinct.size != ps.size )
+                .map("Not a distinct properties list: `" + _.mkString(", ") + "`")
 
-      Stream() ++ containsId ++ generalTypes ++ traversableTypes ++ inexistentPropertiesInKeys ++ notDistinctPropertiesInKeys
+          def recursiveEntities
+            = {
+              def checkType(r : Reflection, seen : Seq[Reflection]) : Option[String]
+                = if( entityTypes.exists( _ =:= r ) && seen.exists( _ =:= r ) )
+                    Some("Entity '" + e.reflection.toString + "' recurses at '" + r.toString + "'")
+                  else if( seen.exists( _ =:= r ) )
+                    None
+                  else {
+                    val types = r.properties.values.toStream ++ r.generics
+                    val seen1 = r +: seen
+                    types.flatMap(t => checkType(t, seen1)).headOption
+                }
+              checkType(e.reflection, Seq())
+            }
+
+          Stream() ++
+          recursiveEntities ++
+          containsId ++
+          generalTypes ++
+          traversableTypes ++
+          inexistentPropertiesInKeys ++
+          notDistinctPropertiesInKeys
+        }
+
+      entities.toStream.flatMap(validateEntity)
     }
 
   def initializeSchema ( mappings : Iterable[EntityMapping], connector : Connector, initMode : InitMode ) {

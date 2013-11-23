@@ -1,3 +1,7 @@
+0.3.10
+  - Hot reload support (#29)
+  - Recursive entities validation on initialization (#13, #30)
+
 0.3.9
   - `mixoutPersisted`
   - Initialization error reporting fix

@@ -111,31 +111,21 @@ object PersistedClass extends Logging {
       ) .asInstanceOf[Class[T with Persisted]]
     }
 
-  private val cache = new {
-    private def currentClassLoader
-      = Thread.currentThread().getContextClassLoader
-
-    private var cachedClassLoader
-      = currentClassLoader
-
-    private val _cache
-      = new collection.mutable.WeakHashMap[Reflection, Class[_ <: Persisted]]
-
-    def apply(r: Reflection)
-      = {
-        val classLoader = currentClassLoader
-        if(classLoader != cachedClassLoader) {
-          logger.debug("Classloader changed, discarding PersistedClass cache")
-          cachedClassLoader = classLoader
-          _cache.clear()
-        }
-
-        synchronized { _cache.getOrElseUpdate( r, createClass(r) ) }
+  private val classesCache = new {
+    private def currentClassLoader = Thread.currentThread().getContextClassLoader
+    private var cachedClassLoader = currentClassLoader
+    private val map = new collection.mutable.WeakHashMap[Reflection, Class[_ <: Persisted]]
+    def resolve(r: Reflection) = synchronized {
+      val classLoader = currentClassLoader
+      if(classLoader != cachedClassLoader) {
+        logger.debug("Classloader changed, discarding PersistedClass cache")
+        cachedClassLoader = classLoader
+        map.clear()
       }
+      map.getOrElseUpdate( r, createClass(r) )
+    }
   }
 
-  def apply
-    ( r : Reflection )
-    = cache(r.mixinBasis)
+  def apply ( r : Reflection ) = classesCache.resolve(r.mixinBasis)
 
 }

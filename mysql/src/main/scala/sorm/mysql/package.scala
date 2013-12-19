@@ -1,7 +1,6 @@
 package sorm.mysql
 
-import sorm.core.api.select._
-import sorm.core.api.where._
+import sorm.core.api._
 
 class MysqlInstance 
   extends InstanceSelectSupport[ MysqlDriver ]

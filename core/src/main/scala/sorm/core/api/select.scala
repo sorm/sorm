@@ -1,8 +1,7 @@
-package sorm.core.api.select
+package sorm.core.api
 
 import sorm.core.{instructions => Instructions}
-import sorm.core.api.{where => Where}
-import sorm.core.subRef._
+import sorm.core._
 
 /**
  * @tparam Driver The driver, for which the instruction is to be composed.
@@ -22,8 +21,8 @@ class SelectComposition
 
     def where
       [ FiltersInput ]
-      ( filters : Where.WhereComposition[ Driver, Entity, Unit ] =>
-                  Where.WhereComposition[ Driver, Entity, FiltersInput ] )
+      ( filters : WhereComposition[ Driver, Entity, Unit ] =>
+                  WhereComposition[ Driver, Entity, FiltersInput ] )
       : SelectComposition[ Driver, Entity, (FiltersInput, Input), Output ]
       = ???
 
@@ -38,13 +37,13 @@ class SelectComposition
      */
     def order
       [ Value ]
-      ( ref : SubRef[ Entity, Value ],
+      ( ref : FieldRef[ Entity, Value ],
         reverse : Boolean )
       ( implicit support : OrderSupport[ Driver, Value ] )
       : SelectComposition[ Driver, Entity, Input, Output ]
       = new SelectComposition(
           driver,
-          Instructions.Order(
+          Instructions.Select.Order(
             ref,
             reverse,
             instructions
@@ -67,7 +66,7 @@ trait InstanceSelectSupport[ Driver <: DriverSelectSupport ] {
   def select
     [ Entity ]
     : SelectComposition[ Driver, Entity, Unit, Seq[ Entity ] ]
-    = new SelectComposition( driver, Instructions.OutputEntity[ Entity ](), Unit )
+    = new SelectComposition( driver, Instructions.Select.OutputEntity[ Entity ](), Unit )
 
 }
 

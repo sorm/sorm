@@ -1,9 +1,5 @@
 package sorm.mysql
 
-import sorm.core.api.where._
-import sorm.core.api.select._
-import sorm.core.subRef._
-
 object Demo extends App {
 
   case class Artist( name : String, genres : Set[ Genre ] )
@@ -13,7 +9,7 @@ object Demo extends App {
 
   val instructions = 
     db.select[ Artist ]
-      .where( 
+      .where(
         _.exists( _.genres )(
           _.equals( _.name, "lkdsjf" )
         )

@@ -1,6 +1,6 @@
 package sorm.core.instructions
 
-import sorm.core.subRef._
+import sorm.core._
 
 sealed trait Filters
   [ Entity, Input ]
@@ -9,6 +9,9 @@ case class FiltersNil
   [ Entity ]
   extends Filters[ Entity, Unit ]
 
+/**
+ * Used for "or"-logic.
+ */
 case class Fork
   [ Entity, HeadInput, TailInput ]
   ( head : Filters[ Entity, HeadInput ],
@@ -17,7 +20,7 @@ case class Fork
 
 case class Comparison
   [ Entity, ValueOutput, ValueInput, TailInput ]
-  ( subRef : SubRef[ Entity, ValueOutput ],
+  ( subRef : FieldRef[ Entity, ValueOutput ],
     value : ReferenceValue[ Entity, ValueInput, ValueOutput ],
     operator : Operator,
     negative : Boolean,
@@ -39,20 +42,21 @@ case class ReferenceValueInput
 
 
 sealed trait Operator
-case object Equal extends Operator
-case object Larger extends Operator
-case object Smaller extends Operator
-case object Like extends Operator
-case object Regex extends Operator
-case object In extends Operator
-case object Contains extends Operator
-/**
- * Makes part of a collection
- */
-case object Constitutes extends Operator
-/**
- * Includes a collection
- */
-case object Includes extends Operator
-case object HasSize extends Operator
-
+object Operator {
+  case object Equal extends Operator
+  case object Larger extends Operator
+  case object Smaller extends Operator
+  case object Like extends Operator
+  case object Regex extends Operator
+  case object In extends Operator
+  case object Contains extends Operator
+  /**
+   * Makes part of a collection
+   */
+  case object Constitutes extends Operator
+  /**
+   * Includes a collection
+   */
+  case object Includes extends Operator
+  case object HasSize extends Operator
+}

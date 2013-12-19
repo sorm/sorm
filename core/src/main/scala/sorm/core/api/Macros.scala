@@ -1,15 +1,93 @@
-package sorm.core
+package sorm.core.api
 
-import reflect.macros.Context
+object Macros {
 
-private object Macros {
+  import reflect.macros.Context
+
+  /**
+   * Expands an `Entity => Value` function from a `ref` parameter to a value
+   * `SubRef[ Entity, Value ]`, then passes it to an overloaded version of
+   * the macro-triggering method.
+   *
+   * @example
+   *   {{{
+   *     .equals( _.genre.name, "Jazz" )
+   *   }}}
+   *   gets expanded into
+   *   {{{
+   *     .equals( SubRef( <Type of Genre>,
+   *                      List( <Symbol of "genre" field of type Genre>,
+   *                            <Symbol of "name" field of a type of field
+   *                              "genre" of the Genre type> ),
+   *              "Jazz" )
+   *   }}}
+   *
+   * SubRef's context type value should be generated from the passed in `Entity`
+   * type-parameter.
+   */
+  def equals
+    [ driver,
+      entity : c.WeakTypeTag,
+      value : c.WeakTypeTag,
+      input ]
+    ( c : Context )
+    ( ref : c.Expr[ entity => value ],
+      value : c.Expr[ value ] )
+    : c.Expr[ WhereComposition[ driver, entity, (value, input) ] ]
+    = {
+
+    import c.universe._
+
+    val Entity = TypeTree(weakTypeOf[entity])
+    val Value = TypeTree(weakTypeOf[value])
+    def ru = treeBuild.mkRuntimeUniverseRef
+    def reifyType(tpe: Type) = c.reifyType(ru, EmptyTree, tpe, concrete = true)
+
+    object PropertyPath {
+      def unapply(tree: Tree): Option[List[RefTree]] = tree match {
+        case tree @ Ident(name) if name.isTermName => Some(List(tree))
+        case tree @ Select(prefix, name) if name.isTermName => unapply(prefix).map(_ :+ tree)
+        case _ => None
+      }
+    }
+
+    val reifiedSymbols = ref.tree match {
+      case Function(List(ValDef(_, paramName,_, _)), PropertyPath(target :: props)) if target.name == paramName =>
+        def loop(tpe: Type, props: List[RefTree], syms: List[Symbol]): List[Symbol] = props match {
+          case prop :: others =>
+            val sym = tpe.members.collect{ case m: MethodSymbol if m.name == prop.name && m.isGetter => m }.headOption
+            sym match {
+              case Some(sym) => loop(sym.returnType, others, syms :+ sym)
+              // FIXME: any additional validation? does the owner have to be a case class? a top-level case class?
+              case None => c.abort(prop.pos, s"only getters are supported in equals clauses")
+            }
+          case Nil => syms
+        }
+        val symbols = loop(Entity.tpe, props, Nil)
+        symbols.map(symbol => {
+          val reifiedOwner = Select(Select(reifyType(symbol.owner.asType.toType), newTermName("tpe")), newTermName("typeSymbol"))
+          val selectTerm = Select(Select(ru, newTermName("build")), newTermName("selectTerm"))
+          Apply(selectTerm, List(reifiedOwner, Literal(Constant(symbol.name.toString))))
+        })
+      case _ =>
+        println(showRaw(ref.tree))
+        c.abort(c.enclosingPosition, s"only property paths are supported in equals clauses")
+    }
+
+    val SubRef = selectTerm(c)("sorm.core.FieldRef")
+    val contextType = Select(reifyType(weakTypeOf[entity]), newTermName("tpe"))
+    val subFieldSymbols = Apply(Ident(newTermName("List")), reifiedSymbols)
+    val subRef = Apply(TypeApply(SubRef, List(Entity, Value)), List(contextType, subFieldSymbols))
+
+    c.Expr(Apply(Select(c.prefix.tree, newTermName("equals")), List(subRef, value.tree)))
+  }
 
   def uniqueKey
     [ entity : c.WeakTypeTag, fields : c.WeakTypeTag ]
     ( c : Context )
     ( f : c.Expr[ entity => fields ] )
-    : c.Expr[ UniqueKey[ entity, fields ] ]
-    = ??? 
+    : c.Expr[ Key.Unique[ entity, fields ] ]
+    = ???
 
   def entity
     [ a : c.WeakTypeTag ]
@@ -31,7 +109,7 @@ private object Macros {
     def mkCtor(superArgs: List[Tree]) = DefDef(NoMods, nme.CONSTRUCTOR, Nil, List(Nil), TypeTree(), Block(List(Apply(mkSuperRef(), superArgs)), Literal(Constant(()))))
     def mkParam(name: String, tpe: Tree) = ValDef(Modifiers(PARAM), newTermName(name), tpe, EmptyTree)
     def mkDefaultParam(name: String, tpe: Tree, rhs: Tree) = ValDef(Modifiers(PARAM | DEFAULTPARAM), newTermName(name), tpe, rhs)
-    def mkSormRef(name: Name) = Select(selectByString(c)("sorm.core"), name)
+    def mkSormRef(name: Name) = Select(selectTerm(c)("sorm.core.api"), name)
 
     val Entity = mkSormRef(newTypeName("Entity"))
     val Persisted = mkSormRef(newTypeName("Persisted"))
@@ -75,7 +153,7 @@ private object Macros {
     c.Expr[Entity[a]](mkAnon(List(AppliedTypeTree(Entity, List(TypeTree(T)))), List(entityCtor, keysField, mixinPersisted)))
   }
 
-  def selectByString( c : Context )( string : String ) = {
+  def selectTerm( c : Context )( string : String ) = {
     import c.universe._
     string.split('.').view.map(s => newTermName(s)) match {
       case head +: tail => tail.foldLeft(Ident(head) : Tree)((a, b) => Select(a, b))

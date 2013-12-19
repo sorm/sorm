@@ -1,4 +1,4 @@
-#SORM. An elegant and scalable way to do persistence in Scala
+#SORM
 
 SORM is an object-relational mapping framework designed to eliminate boilerplate and maximize productivity. It is absolutely abstracted from relational side, automatically creating database tables, emitting queries, inserting, updating and deleting records. This all functionality is presented to the user with a simple API around standard Scala's case classes. 
 
@@ -22,11 +22,13 @@ SORM is distributed in Maven Central, here's a dependency to the latest release 
     <dependency>
       <groupId>org.sorm-framework</groupId>
       <artifactId>sorm</artifactId>
-      <version>0.3.10</version>
+      <version>0.3.11</version>
     </dependency>
 
 ##SBT
 
-    libraryDependencies += "org.sorm-framework" % "sorm" % "0.3.10"
+    libraryDependencies += "org.sorm-framework" % "sorm" % "0.3.11"
+
+---
 
 [![Build Status](https://travis-ci.org/sorm/sorm.png?branch=master)](https://travis-ci.org/sorm/sorm)

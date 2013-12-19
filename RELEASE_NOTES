@@ -1,3 +1,6 @@
+0.3.11
+  - Fix nullable option mapping detection of being a part of a key (#32)
+
 0.3.10
   - Hot reload support (#29)
   - Recursive entities validation on initialization (#13, #30)

@@ -18,10 +18,11 @@ import reflect.runtime.universe._
  *   {{{
  *   SubRef
  *     [ <Type of `a`>, <Type of `c`> ]
- *     ( <Type of `a`>, List( <Symbol of field `b` of type of `a`>,
- *                            <Symbol of field `c` of type of `a.b`> ) )
+ *     ( <rep of type of `a`>, List( <Symbol of field `b` of type of `a`>,
+ *                                   <Symbol of field `c` of type of `a.b`> ) )
  *   }}}
  */
+// TODO: rename to FieldRef
 case class SubRef
   [ Context, Value ]
   ( contextType : Type,

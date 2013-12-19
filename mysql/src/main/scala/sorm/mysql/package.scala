@@ -14,21 +14,21 @@ class MysqlInstance
 trait MysqlDriver extends DriverSelectSupport {
 
 }
-object MysqlDriver {
+object MysqlDriver extends DriverSpecificOperationsSupport[MysqlDriver] {
 
   implicit object IntEqualsSupport 
-    extends EqualsSupport[ MysqlDriver, Int ]
+    extends DriverEqualsSupport[ Int ]
 
   implicit object IntNotLargerSupport 
-    extends NotLargerSupport[ MysqlDriver, Int ]
+    extends DriverNotLargerSupport[ Int ]
 
   implicit object StringEqualsSupport 
-    extends EqualsSupport[ MysqlDriver, String ]
+    extends DriverEqualsSupport[ String ]
 
   implicit object StringRegexSupport 
-    extends RegexSupport[ MysqlDriver, String ]
+    extends DriverRegexSupport[ String ]
 
   implicit object TraversableExistsSupport 
-    extends ExistsSupport[ MysqlDriver, Traversable[ _ ] ]
+    extends DriverExistsSupport[ Traversable[ _ ] ]
 
 }

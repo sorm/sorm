@@ -1,43 +1,13 @@
 package sorm.core
 
-import language.experimental.macros
-import reflect.runtime.universe._
 import reflect.macros.Context
 
-
-/**
- * A list of references from a single entity, representing an abstraction over
- * a database index.
- *
- * TODO: to provide a concrete implementation.
- */
-trait Key[ EntityT ]
-
-trait Persisted {
-  val id : Long
-}
-
-/**
- * The target for macro-conversion. The plan is that instances of this type
- * become constructors of the parameter type mixed in with Persisted by means of
- * the generated `mixinPersisted` method by a macro.
- */
-trait Entity[ T ] {
-  val indexed : Set[ Key[ T ] ]
-  val unique : Set[ Key[ T ] ]
-  def mixinPersisted( value : T, idValue : Long ) : T with Persisted 
-}
-
-
-/**
- * A container object for all module's macros
- */
 private object Macros {
 
   def entity
     [ T : c.WeakTypeTag ]
     ( c : Context )
-    ( indexed : c.Expr[ Set[ Key[ T ] ] ], 
+    ( indexed : c.Expr[ Set[ Key[ T ] ] ],
       unique : c.Expr[ Set[ Key[ T ] ] ] )
     : c.Expr[ Entity[ T ] ]
     = {
@@ -55,7 +25,7 @@ private object Macros {
     def mkCtor(superArgs: List[Tree]) = DefDef(NoMods, nme.CONSTRUCTOR, Nil, List(Nil), TypeTree(), Block(List(Apply(mkSuperRef(), superArgs)), Literal(Constant(()))))
     def mkParam(name: String, tpe: Tree) = ValDef(Modifiers(PARAM), newTermName(name), tpe, EmptyTree)
     def mkDefaultParam(name: String, tpe: Tree, rhs: Tree) = ValDef(Modifiers(PARAM | DEFAULTPARAM), newTermName(name), tpe, rhs)
-    def mkSormRef(name: Name) = Select(Select(Ident(newTermName("sorm")), newTermName("core")), name)
+    def mkSormRef(name: Name) = Select(selectByString(c)("sorm.core"), name)
 
     val Entity = mkSormRef(newTypeName("Entity"))
     val Persisted = mkSormRef(newTypeName("Persisted"))
@@ -99,25 +69,12 @@ private object Macros {
     val mixinPersisted = DefDef(NoMods, newTermName("mixinPersisted"), Nil, List(List(mkParam("value", TypeTree(T)), mkParam("idValue", Long))), TypeTree(), mixinPersistedBody)
     c.Expr[Entity[T]](mkAnon(List(AppliedTypeTree(Entity, List(TypeTree(T)))), List(entityCtor, indexedField, uniqueField, mixinPersisted)))
   }
-}
 
-
-/**
- * Exports of this module to be mixed into the public API, e.g. `sorm._`.
- */
-trait Exports {
-
-  type Persisted = sorm.core.Persisted
-
-  /**
-   * The macro conversion should just proxy the `indexed` and `unique`
-   * parameters.
-   */
-  def entity[ T ]
-    ( indexed : Set[ Key[ T ] ],
-      unique : Set[ Key[ T ] ] )
-    : Entity[ T ] 
-    = macro Macros.entity[ T ]
+  def selectByString( c : Context )( string : String ) = {
+    import c.universe._
+    string.split('.').view.map(s => newTermName(s)) match {
+      case head +: tail => tail.foldLeft(Ident(head) : Tree)((a, b) => Select(a, b))
+    }
+  }
 
 }
-

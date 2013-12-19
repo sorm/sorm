@@ -5,9 +5,8 @@ object EntityDemo extends App with Exports {
   // Having this class:
   case class A( a : Int, b : String )
 
-  // FIXME: please note that writing `val e: Entity[A] = ...` will make the code fail to compile
+  // NOTE: please note that writing `val e: Entity[A] = ...` will make the code fail to compile
   // because Entity[A] doesn't guarantee that .copy(...) will have the id member
-  // in your code it worked because Scala automatically inferred a structural type for e
 
   // triggering the macro conversion with the following:
   val e = entity[ A ]( Set(), Set() )
@@ -51,5 +50,7 @@ object EntityDemo extends App with Exports {
   assert(e.mixinPersisted(value, 2).copy(50).id == 2)
   // A copy correctly updates properties:
   assert(e.mixinPersisted(value, 3).copy(50).a == 50)
+
+  println("All is fine!")
 
 }

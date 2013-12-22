@@ -40,26 +40,4 @@ object FieldRefs {
   case class FieldRefsNil[ a ] extends FieldRefs[ a, Unit ]
 }
 
-/**
- * Exports of this module to be mixed into the public API, e.g. `sorm._`.
- */
-trait Exports {
-  import language.experimental.macros
-
-  type Persisted = api.Persisted
-  type Entity[a] = api.Entity[a]
-  type Key[entity, fields] = api.Key[entity, fields]
-  val Key = api.Key
-
-  def entity[ a ]
-    ( keys : Set[ Key[ a, Any ] ] )
-    : Entity[ a ]
-    = macro api.Macros.entity[ a ]
-
-  def uniqueKey[ entity, fields ]( f : entity => fields )
-    : Key.Unique[ entity, fields ]
-    = macro api.Macros.uniqueKey[ entity, fields ]
-
-}
-
 }

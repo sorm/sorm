@@ -95,7 +95,3 @@ class WhereComposition
         new WhereComposition( newInstructions, newInput )
       }
   }
-
-trait Exports {
-
-}

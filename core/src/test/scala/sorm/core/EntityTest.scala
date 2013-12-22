@@ -3,7 +3,7 @@ package sorm.core
 import org.scalatest.FunSuite
 
 @org.junit.runner.RunWith(classOf[org.scalatest.junit.JUnitRunner])
-class EntityTest extends FunSuite with Exports {
+class EntityTest extends FunSuite with sorm.core.api.DeclaresSettings {
 
   test("Mixin persisted"){
     // Having this class:

@@ -5,13 +5,7 @@ object Demo extends App {
   case class Artist( name : String, genres : Set[ Genre ] )
   case class Genre( name : String )
 
-  val db = new MysqlInstance {
-    entity[Artist]
-    uniqueKey[Artist](_.name)
-    nonUniqueKey[Artist](_.genres)
-    entity[Genre]
-
-  }
+  val db = new MysqlInstance
 
   val instructions = 
     db.select[ Artist ]
@@ -22,5 +16,6 @@ object Demo extends App {
       )
 
   println( instructions )
+
 
 }

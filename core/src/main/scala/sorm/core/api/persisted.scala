@@ -21,8 +21,6 @@ object PersistedMixiner {
 
     import scala.reflect.macros.Context
 
-    private var nameIndex = 0
-
     /**
      * Generate an instance of `PersistedMixiner`.
      *
@@ -76,9 +74,11 @@ object PersistedMixiner {
       val entityType = weakTypeOf[a]
       val fields = entityType.declarations.collect {case x: MethodSymbol if x.isParamAccessor => x}.toList
 
-      def mkAnon(parents: List[Tree], methods: List[Tree]) = Block(List(
-        ClassDef(Modifiers(FINAL), newTypeName("$anon"), Nil, Template(parents, emptyValDef, methods))),
-        Apply(Select(New(Ident(newTypeName("$anon"))), nme.CONSTRUCTOR), List()))
+      def mkAnon(name: String, parents: List[Tree], methods: List[Tree]) = {
+        val definition = ClassDef(Modifiers(FINAL), newTypeName(name), Nil, Template(parents, emptyValDef, methods))
+        val application = Apply(Select(New(Ident(newTypeName(name))), nme.CONSTRUCTOR), List())
+        Block(definition, application)
+      }
       def mkSuperRef() = Select(Super(This(tpnme.EMPTY), tpnme.EMPTY), nme.CONSTRUCTOR)
       def mkCtor(superArgs: List[Tree]) = DefDef(NoMods, nme.CONSTRUCTOR, Nil, List(Nil), TypeTree(), Block(List(Apply(mkSuperRef(), superArgs)), Literal(Constant(()))))
       def mkParam(name: String, tpe: Tree) = ValDef(Modifiers(PARAM), newTermName(name), tpe, EmptyTree)
@@ -109,18 +109,19 @@ object PersistedMixiner {
       val mixinCtor = mkCtor(fields.map(field => Select(Ident(newTermName("value")), field.name)))
       val id = ValDef(NoMods, newTermName("id"), TypeTree(), Ident(newTermName("idValue")))
       val productArity = DefDef(Modifiers(OVERRIDE), newTermName("productArity"), Nil, Nil, TypeTree(), Literal(Constant(fields.length + 1)))
-      val mixinPersistedBody = mkAnon(List(TypeTree(entityType), persistedType), List(mixinCtor, id, copy, productElement, productArity, equals))
+      val withPersistedInstance = {
+        val name = entityType.typeSymbol.name.toString + "WithPersisted"
+        mkAnon(name, List(TypeTree(entityType), persistedType), List(mixinCtor, id, copy, productElement, productArity, equals))
+      }
 
       val entityCtor = mkCtor(Nil)
-      val mixinPersisted = DefDef(NoMods, newTermName("mixinPersisted"), Nil, List(List(mkParam("value", TypeTree(entityType)), mkParam("idValue", util.selectType("Long")))), TypeTree(), mixinPersistedBody)
+      val mixinPersisted = DefDef(NoMods, newTermName("mixinPersisted"), Nil, List(List(mkParam("value", TypeTree(entityType)), mkParam("idValue", util.selectType("Long")))), TypeTree(), withPersistedInstance)
 
-      val instanceDeclaration = mkAnon(List(AppliedTypeTree(util.selectType("sorm.core.api.PersistedMixiner"), List(TypeTree(entityType)))), List(entityCtor, mixinPersisted))
-
-      val name = {
-        nameIndex += 1
-        "deriviedPersistedMixinerInstance" + nameIndex
+      val persistedMixinerInstance = {
+        val name = entityType.typeSymbol.name.toString + "PeristedMixiner"
+        mkAnon(name, List(AppliedTypeTree(util.selectType("sorm.core.api.PersistedMixiner"), List(TypeTree(entityType)))), List(entityCtor, mixinPersisted))
       }
-      c.Expr[Unit](ValDef(Modifiers(IMPLICIT), newTermName(name), TypeTree(), instanceDeclaration))
+      c.Expr[PersistedMixiner[a]](persistedMixinerInstance)
 
     }
   }

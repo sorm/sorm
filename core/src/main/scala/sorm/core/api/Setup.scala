@@ -1,16 +1,16 @@
 package sorm.core.api
 
-import sorm.core.util.HList
+import shapeless._
 
-abstract class Setup[members](members: members) {
+class Setup[tuple <: Product, hlist <: HList](tuple: tuple)(implicit tupleGeneric: Generic.Aux[tuple, hlist]) {
 
-  type Member[a] = Setup.Member[a]
+  import Setup._
 
-  implicit def memberInstance[a](implicit elementInstance: HList.Element[members, Setup.Member[a]]) =
-    elementInstance.get(members)
+  private val hlist: hlist = tupleGeneric.to(tuple)
+  implicit def memberInstance[a](implicit selector: ops.hlist.Selector[hlist, Member[a]]): Member[a] =
+    selector.apply(hlist)
 
 }
-
 /**
  * A meta-info on DB structure for use in runtime.
  */
@@ -32,6 +32,6 @@ object Setup {
   }
 
   @annotation.implicitNotFound(msg = "A Member[${a}] instance is not declared")
-  case class Member[a](persistedMixiner: PersistedMixiner[a], keys: Set[Key])
+  class Member[a](persistedMixiner: PersistedMixiner[a], keys: Set[Key])
 
 }

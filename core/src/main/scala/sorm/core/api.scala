@@ -3,7 +3,7 @@ package sorm.core
 import sorm.core.util._
 import sorm.core.api._
 
-trait API[members <: HList] extends Setup[members] {
+trait API[members <: Product] {
 
   import language.experimental.macros
 
@@ -19,7 +19,7 @@ trait API[members <: HList] extends Setup[members] {
 
   protected def uniqueKey[entity](refs: (entity => _)*): Unit = ???
 
-  def save[e: Member](e: e): e with Persisted
+//  def save[e: Member](e: e): e with Persisted
 
 
 }

@@ -1,3 +1,6 @@
+0.3.12
+  - Switch to ScalaLogging logger (#36)
+
 0.3.11
   - Fix nullable option mapping detection of being a part of a key (#32)
 

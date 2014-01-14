@@ -6,7 +6,7 @@
 
   <groupId>org.sorm-framework</groupId>
   <artifactId>sorm</artifactId>
-  <version>0.3.12-SNAPSHOT</version>
+  <version>0.3.12</version>
   <packaging>jar</packaging>
 
   <name>SORM</name>

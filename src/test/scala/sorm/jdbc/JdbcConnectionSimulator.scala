@@ -1,6 +1,6 @@
 package sorm.jdbc
 
-import com.weiglewilczek.slf4s.Logging
+import com.typesafe.scalalogging.slf4j.Logging
 import java.sql.ResultSet
 
 class JdbcConnectionSimulator

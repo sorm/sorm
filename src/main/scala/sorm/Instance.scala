@@ -9,7 +9,7 @@ import jdbc._
 
 import sext._, embrace._
 import reflect.runtime.universe._
-import com.weiglewilczek.slf4s.Logging
+import com.typesafe.scalalogging.slf4j.Logging
 
 /**
  * The instance of SORM

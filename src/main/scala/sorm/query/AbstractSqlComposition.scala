@@ -8,7 +8,7 @@ import sorm.persisted._
 import sorm.abstractSql.{AbstractSql => AS}
 import sorm.abstractSql.Combinators._
 import Query._
-import com.weiglewilczek.slf4s.Logging
+import com.typesafe.scalalogging.slf4j.Logging
 
 object AbstractSqlComposition extends Logging {
 

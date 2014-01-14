@@ -31,4 +31,4 @@ SORM is distributed in Maven Central, here's a dependency to the latest release 
 
 ---
 
-[![Build Status](https://travis-ci.org/sorm/sorm.png?branch=0.3)](https://travis-ci.org/sorm/sorm)
+[![Build Status](https://travis-ci.org/sorm/sorm.png?branch=master)](https://travis-ci.org/sorm/sorm)

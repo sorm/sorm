@@ -1,0 +1,317 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>jdbc - SORM 0.3.12 API - sorm.jdbc</title>
+          <meta name="description" content="jdbc - SORM 0.3.12 API - sorm.jdbc" />
+          <meta name="keywords" content="jdbc SORM 0.3.12 API sorm.jdbc" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../index.html';
+            var hash = 'sorm.jdbc.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../lib/package_big.png" />
+        <p id="owner"><a href="../package.html" class="extype" name="sorm">sorm</a></p>
+        <h1>jdbc</h1>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">jdbc</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="sorm.jdbc"><span>jdbc</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="sorm.jdbc.JdbcConnection" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="JdbcConnectionextendsTransactionswithJdbcConnectionLogging"></a>
+      <a id="JdbcConnection:JdbcConnection"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="JdbcConnection.html"><span class="name">JdbcConnection</span></a><span class="result"> extends <a href="Transactions.html" class="extype" name="sorm.jdbc.Transactions">Transactions</a> with <a href="JdbcConnectionLogging.html" class="extype" name="sorm.jdbc.JdbcConnectionLogging">JdbcConnectionLogging</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.jdbc.JdbcConnectionLogging" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="JdbcConnectionLoggingextendsAnyRef"></a>
+      <a id="JdbcConnectionLogging:JdbcConnectionLogging"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="JdbcConnectionLogging.html"><span class="name">JdbcConnectionLogging</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.jdbc.JdbcType" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="JdbcType=Int"></a>
+      <a id="JdbcType:JdbcType"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">JdbcType</span><span class="result"> = <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.jdbc.JdbcValue" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="JdbcValueextendsProductwithSerializable"></a>
+      <a id="JdbcValue:JdbcValue"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$JdbcValue.html"><span class="name">JdbcValue</span></a><span class="params">(<span name="value">value: <span class="extype" name="scala.Any">Any</span></span>, <span name="t">t: <a href="#JdbcType=Int" class="extmbr" name="sorm.jdbc.JdbcType">JdbcType</a></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.jdbc.PreparedStatementView" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PreparedStatementViewextendsAnyRef"></a>
+      <a id="PreparedStatementView:PreparedStatementView"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="PreparedStatementView.html"><span class="name">PreparedStatementView</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.jdbc.ResultSetView" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ResultSetViewextendsAnyRef"></a>
+      <a id="ResultSetView:ResultSetView"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ResultSetView.html"><span class="name">ResultSetView</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.jdbc.Statement" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StatementextendsProductwithSerializable"></a>
+      <a id="Statement:Statement"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$Statement.html"><span class="name">Statement</span></a><span class="params">(<span name="sql">sql: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="data">data: <span class="extype" name="scala.Seq">Seq</span>[<a href="package$$JdbcValue.html" class="extype" name="sorm.jdbc.JdbcValue">JdbcValue</a>] = <span class="symbol">immutable.this.Nil</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.jdbc.Transactions" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="TransactionsextendsAnyRef"></a>
+      <a id="Transactions:Transactions"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Transactions.html"><span class="name">Transactions</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="sorm.jdbc.JdbcConnection" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="JdbcConnection"></a>
+      <a id="JdbcConnection:JdbcConnection"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="JdbcConnection$.html"><span class="name">JdbcConnection</span></a>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.jdbc.JdbcType" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="JdbcType"></a>
+      <a id="JdbcType:JdbcType"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$JdbcType$.html"><span class="name">JdbcType</span></a>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.jdbc.JdbcValue" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="JdbcValue"></a>
+      <a id="JdbcValue:JdbcValue"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$JdbcValue$.html"><span class="name">JdbcValue</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.jdbc.Statement" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Statement"></a>
+      <a id="Statement:Statement"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$Statement$.html"><span class="name">Statement</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.jdbc.package#connectionAdapter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="connectionAdapter(x:java.sql.Connection):sorm.jdbc.JdbcConnection"></a>
+      <a id="connectionAdapter(Connection):JdbcConnection"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">connectionAdapter</span><span class="params">(<span name="x">x: <span class="extype" name="java.sql.Connection">Connection</span></span>)</span><span class="result">: <a href="JdbcConnection.html" class="extype" name="sorm.jdbc.JdbcConnection">JdbcConnection</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.jdbc.package#preparedStatementAdapter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="preparedStatementAdapter(x:java.sql.PreparedStatement):sorm.jdbc.PreparedStatementView"></a>
+      <a id="preparedStatementAdapter(PreparedStatement):PreparedStatementView"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">preparedStatementAdapter</span><span class="params">(<span name="x">x: <span class="extype" name="java.sql.PreparedStatement">PreparedStatement</span></span>)</span><span class="result">: <a href="PreparedStatementView.html" class="extype" name="sorm.jdbc.PreparedStatementView">PreparedStatementView</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="sorm.jdbc.package#resultSetAdapter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="resultSetAdapter(x:java.sql.ResultSet):sorm.jdbc.ResultSetView"></a>
+      <a id="resultSetAdapter(ResultSet):ResultSetView"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">resultSetAdapter</span><span class="params">(<span name="x">x: <span class="extype" name="java.sql.ResultSet">ResultSet</span></span>)</span><span class="result">: <a href="ResultSetView.html" class="extype" name="sorm.jdbc.ResultSetView">ResultSetView</a></span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+      <script defer="defer" type="text/javascript" id="jquery-js" src="../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../lib/template.js"></script>
+    </body>
+      </html>

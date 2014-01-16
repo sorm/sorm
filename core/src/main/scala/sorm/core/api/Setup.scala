@@ -2,36 +2,24 @@ package sorm.core.api
 
 import shapeless._
 
-class Setup[tuple <: Product, hlist <: HList](tuple: tuple)(implicit tupleGeneric: Generic.Aux[tuple, hlist]) {
-
-  import Setup._
-
-  private val hlist: hlist = tupleGeneric.to(tuple)
-  implicit def memberInstance[a](implicit selector: ops.hlist.Selector[hlist, Member[a]]): Member[a] =
-    selector.apply(hlist)
-
-}
-/**
- * A meta-info on DB structure for use in runtime.
- */
 object Setup {
 
-  import reflect.runtime.universe._
-
   /**
-   * Associations of entity types and keys.
+   * A meta-info on DB structure for use in runtime.
    */
-  type Settings = Map[Type, Set[Key]]
-
-  case class Key(flavour: KeyFlavour, fields: Seq[Symbol])
-
-  sealed trait KeyFlavour
-  object KeyFlavour {
-    case object Unique extends KeyFlavour
-    case object NonUnique extends KeyFlavour
+  class Members[tuple <: Product, hlist <: HList](tuple: tuple)(implicit tupleGeneric: Generic.Aux[tuple, hlist]) {
+    private val hlist: hlist = tupleGeneric.to(tuple)
+    implicit def memberInstance[a](implicit selector: ops.hlist.Selector[hlist, Member[a]]): Member[a] =
+      selector.apply(hlist)
   }
 
+  type Key = Seq[Symbol]
+
+  // NOTE: Not a case class, so that it isn't a Product
   @annotation.implicitNotFound(msg = "A Member[${a}] instance is not declared")
-  class Member[a](persistedMixiner: PersistedMixiner[a], keys: Set[Key])
+  class Member[a](persistedMixiner: PersistedMixiner[a], uniqueKeys: Set[Key], nonUniqueKeys: Set[Key])
+
+  def key[e](refs: (e => _)*): Key = ???
+  def member[e](uniqueKeys: Set[Key], nonUniqueKeys: Set[Key]): Member[e] = ???
 
 }

@@ -10,9 +10,9 @@ class SetupTest extends FunSuite {
 
   test("Member is reachable") {
 
-    val setup = new Setup(Tuple1(new Setup.Member(PersistedMixiner.derive[A], Set())))
+    val members = new Setup.Members(Tuple1(new Setup.Member(PersistedMixiner.derive[A], Set(), Set())))
 
-    import setup._
+    import members._
     implicitly[Setup.Member[A]]
   }
 

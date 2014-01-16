@@ -2,6 +2,7 @@ package sorm.core
 
 import sorm.core.util._
 import sorm.core.api._
+import Setup._
 
 trait API[members <: Product] {
 
@@ -11,15 +12,10 @@ trait API[members <: Product] {
   type PersistedMixiner[a] = api.PersistedMixiner[a]
   type Driver
 
-  /**
-   * Register an entity type and derive a `PersistedMixiner` typeclass instance.
-   * @tparam a The type of the entity
-   */
-  protected def entity[a]: Unit = ???
+  def insert[e](e: e)(implicit member: Member[e]): e with Persisted =
+    ???
 
-  protected def uniqueKey[entity](refs: (entity => _)*): Unit = ???
-
-//  def save[e: Member](e: e): e with Persisted
+  def update[e: Member](e: e) = ???
 
 
 }

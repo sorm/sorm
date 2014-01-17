@@ -1,5 +1,6 @@
 package sorm.core.driver
 
+import sorm.core.util._
 
 trait Driver {
   /**
@@ -24,40 +25,26 @@ trait Driver {
    */
   type Connection
 
-  val compiler : Compiler[ Instructions, CompiledInstructions ]
-  val executor : Executor[ CompiledInstructions, Connection, ResultResource ]
-  val parser : Parser[ ResultResource ]
-  val connector : Connector[ Connection ]
+  protected val compiler : Compiler[ Instructions, CompiledInstructions ]
+  protected val executor : Executor[ CompiledInstructions, Connection, ResultResource ]
+  protected val parser : Parser[ ResultResource ]
+  protected val connector : Connector[ Connection ]
 
-  private object memoizingCompiler {
-    /**
-     * A WeakHashMap will release cache members if memory tightens.
-     */
-    private val cache = new collection.mutable.WeakHashMap[ Instructions, CompiledInstructions ]
-
-    /**
-     * A memoized `compiler.compile`.
-     */
-    def compile( input : Instructions ) =
-      cache.getOrElseUpdate(
-        input,
-        compiler.compile( input )
-      )
-  }
-
+  private val memoCompile = memo(compiler.compile)
+  
   /**
    * Execute driver-agnostic instructions and get the parsed result.
    *
-   * @tparam Result
+   * @tparam output
    * @param instructions
    * @return Parsed result
    */
   final def execute
-    [ Input, Result ]
-    ( instructions : Instructions, input : Input )
-    : Result 
+    [ input, output ]
+    ( instructions : Instructions, input : input )
+    : output
     = {
-      val compiledInstructions = memoizingCompiler.compile( instructions )
+      val compiledInstructions = memoCompile( instructions )
       connector.withConnection(
         executor.withResultResource
           ( compiledInstructions, input, _ )
@@ -69,14 +56,14 @@ trait Driver {
    * Trigger asynchronous execution and parsing of driver-agnostic instructions
    * and return a [[scala.concurrent.Future]] of parsed result.
    *
-   * @tparam Result
+   * @tparam output
    * @param instructions
    * @return A future of parsed result
    */
   final def executeAsync
-    [ Input, Result ]
-    ( instructions : Instructions, input : Input )
-    : concurrent.Future[ Result ]
+    [ input, output ]
+    ( instructions : Instructions, input : input )
+    : concurrent.Future[ output ]
     = ???
 
 }
@@ -89,14 +76,14 @@ trait Driver {
  * 
  * In case of JDBC drivers it makes sense to produce SQL with it.
  */
-trait Compiler[ Input, Output ] {
-  def compile( input : Input ) : Output
+trait Compiler[ input, output ] {
+  def compile( input : input ) : output
 }
 
 /**
- * @tparam ResultResource In case of JDBC should be a ResultSet
+ * @tparam outputResource In case of JDBC should be a ResultSet
  */
-trait Executor[ Instructions, Connection, ResultResource ] {
+trait Executor[ instructions, connection, outputResource ] {
   /**
    * Execute the instructions on a connection and feed them to the passed in
    * function, release all resources afterwards and return the result of that
@@ -105,23 +92,23 @@ trait Executor[ Instructions, Connection, ResultResource ] {
    * In case of JDBC this method should handle the proper closing of 
    * `ResultSet`.
    */
-  def withResultResource[ Input, Result ]
-    ( instructions : Instructions, input : Input, connection : Connection )
-    ( f : ResultResource => Result )
-    : Result
+  def withResultResource[ input, output ]
+    ( instructions : instructions, input : input, connection : connection )
+    ( f : outputResource => output )
+    : output
 }
 
 /**
- * @tparam Input In case of JDBC should be a ResultSet
+ * @tparam input In case of JDBC should be a ResultSet
  */
-trait Parser[ Input ] {
-  def parse[ Output ]( input : Input ) : Output
+trait Parser[ input ] {
+  def parse[ output ]( input : input ) : output
 }
 
 /**
  * A manager of database connections. In case of JDBC a connection pool.
  */
-trait Connector[ Connection ] {
-  def withConnection[ Result ]( f : Connection => Result ) : Result
+trait Connector[ connection ] {
+  def withConnection[ result ]( f : connection => result ) : result
 }
 

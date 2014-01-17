@@ -40,4 +40,25 @@ object FieldRefs {
   case class FieldRefsNil[ a ] extends FieldRefs[ a, Unit ]
 }
 
+
+// ----------------- the modern way
+
+/**
+ * A reference to a specific member from a root type.
+ * Encodes the complete info at compile time.
+ */
+sealed trait TypePath
+object TypePath {
+  class Root extends TypePath
+  class Member[ parent <: TypePath, index <: shapeless.Nat ] extends TypePath
+}
+
+// sealed trait KeyKind
+// object KeyKind {
+//   class Unique extends KeyKind
+//   class NonUnique extends KeyKind
+// }
+
+
+
 }

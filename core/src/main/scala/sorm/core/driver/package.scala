@@ -29,7 +29,22 @@ trait Driver {
   val parser : Parser[ ResultResource ]
   val connector : Connector[ Connection ]
 
-  private val memoizedCompiler = new MemoizedCompiler( compiler )
+  private object memoizingCompiler {
+    /**
+     * A WeakHashMap will release cache members if memory tightens.
+     */
+    private val cache = new collection.mutable.WeakHashMap[ Instructions, CompiledInstructions ]
+
+    /**
+     * A memoized `compiler.compile`.
+     */
+    def compile( input : Instructions ) =
+      cache.getOrElseUpdate(
+        input,
+        compiler.compile( input )
+      )
+  }
+
   /**
    * Execute driver-agnostic instructions and get the parsed result.
    *
@@ -42,7 +57,7 @@ trait Driver {
     ( instructions : Instructions, input : Input )
     : Result 
     = {
-      val compiledInstructions = memoizedCompiler.compile( instructions )
+      val compiledInstructions = memoizingCompiler.compile( instructions )
       connector.withConnection(
         executor.withResultResource
           ( compiledInstructions, input, _ )
@@ -104,26 +119,9 @@ trait Parser[ Input ] {
 }
 
 /**
- * A manager of database connections. In case of JDBC a connection pooler.
+ * A manager of database connections. In case of JDBC a connection pool.
  */
 trait Connector[ Connection ] {
   def withConnection[ Result ]( f : Connection => Result ) : Result
 }
 
-private class MemoizedCompiler
-  [ Input, Output ]
-  ( compiler : Compiler[ Input, Output ] )
-  {
-    /**
-     * A WeakHashMap will release cache members if memory tightens.
-     */
-    private val cache = new collection.mutable.WeakHashMap[ Input, Output ]
-
-    /**
-     * A memoized `compiler.compile`.
-     */
-    def compile( input : Input ) =
-      cache.getOrElseUpdate( input,
-        compiler.compile( input )
-      )
-  }

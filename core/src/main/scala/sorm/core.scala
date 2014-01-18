@@ -1,7 +1,7 @@
 package sorm; package object core {
 
 
-import reflect.runtime.universe._
+import scala.reflect.runtime.{universe => ru}
 
 
 /**
@@ -24,7 +24,7 @@ import reflect.runtime.universe._
  */
 case class FieldRef
   [ source, target ]
-  ( contextType : Type,
+  ( contextType : ru.Type,
     subFieldSymbols : List[ Symbol ] )
 
 sealed trait FieldRefs
@@ -47,11 +47,58 @@ object FieldRefs {
  * A reference to a specific member from a root type.
  * Encodes the complete info at compile time.
  */
-sealed trait TypePath
+sealed trait TypePath[ root ]
 object TypePath {
-  class Root extends TypePath
-  class Member[ parent <: TypePath, index <: shapeless.Nat ] extends TypePath
+  class Root[ root ] extends TypePath[ root ]
+  class Member[ root, parent <: TypePath[ root ], index <: shapeless.Nat ] extends TypePath[ root ]
 }
+
+trait ToType[ a ] {
+  val toType: ru.Type
+}
+object ToType {
+  implicit def i1
+    [ root ]
+    ( implicit rootTT: ru.TypeTag[root] )
+    =
+    new ToType[ TypePath.Root[ root ] ] {
+      val toType = rootTT.tpe
+    }
+  implicit def i2
+    [ root, parent <: TypePath[root], index <: shapeless.Nat ]
+    ( implicit parentToType: ToType[parent], indexToInt: shapeless.ops.nat.ToInt[index] )
+    =
+    new ToType[ TypePath.Member[ root, parent, index ] ] {
+      val toType = {
+        val index = indexToInt.apply()
+        val parentType = parentToType.toType
+
+        if( parentType <:< ru.typeOf[Product] ) {
+          val properties = parentType.members.toStream.filter(_.isTerm).filter(!_.isMethod).reverse
+          properties.apply(index).asTerm.typeSignatureIn(parentType)
+        } else {
+          parentType.asInstanceOf[ru.TypeRef].args(index)
+//          sys.error("Unsupported type for access of member by index: " ++ parentType.typeSymbol.fullName)
+        }
+      }
+    }
+}
+
+//trait MemberTypeAt[ a, index <: shapeless.Nat ] {
+//  type Member
+//}
+//object MemberTypeAt {
+//  implicit def i1[ member ] = new MemberTypeAt[ Product1[member], shapeless._0 ] {
+//    type Member = member
+//  }
+//  implicit def i2[ member ] = new MemberTypeAt[ Product2[member, _], shapeless._0 ] {
+//    type Member = member
+//  }
+//  implicit def i3[ member ] = new MemberTypeAt[ Product2[_, member], shapeless.nat._1 ] {
+//    type Member = member
+//  }
+//}
+
 
 // sealed trait KeyKind
 // object KeyKind {

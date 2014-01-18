@@ -23,7 +23,7 @@ object templates {
       ( left: left, right: right, or: or )
       extends Where
     case class Comparison
-      [ path <: TypePath, operator <: Operator, negative <: typeLevel.Bool ]
+      [ root, path <: TypePath[root], operator <: Operator, negative <: typeLevel.Bool ]
       ( path: path, operator: operator, negative: negative )
       extends Where
   }

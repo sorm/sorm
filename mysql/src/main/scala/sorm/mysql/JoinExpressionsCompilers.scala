@@ -43,14 +43,20 @@ trait JoinExpressionsCompilers {
       negative <: typeLevel.Bool,
       inputVals <: genExp.values.Where.Comparison[ genExp.values.Expression.Value[ inputValue ] ],
       inputValue <: Int ]
+    // This is a frontend instance, so all we need is just resolve the column dynamically.
+    // So there's no need for deeper typeclasses.
+    // ( implicit
+    //     pathToColumn: ToColumn[path] )
+    ( implicit pathTypeResolver: TypeResolver[path] )
     =
     new genExp.Compiler[inputTpl, inputVals, relExp.templates.Where, List[rel.Value]] {
       def compileTemplate(tpl: inputTpl) = {
-        val column = {
-          val name = ???
-          val from = ???
-          relExp.templates.Column(name, from)
-        }
+        val column = relExp.functions.column(pathTypeResolver.seq)
+        // val column = {
+        //   val name = ???
+        //   val from = ???
+        //   relExp.templates.Column(name, from)
+        // }
         val operator = relExp.templates.Operator.Equal
         val value = relExp.templates.Expression.Placeholder
         val negative = tpl.negative.toBoolean

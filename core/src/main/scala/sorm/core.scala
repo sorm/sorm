@@ -1,7 +1,10 @@
-package sorm; package object core {
-
+package sorm
+package object core {
 
 import scala.reflect.runtime.{universe => ru}
+
+
+def bug ( m : String ) = sys.error("A SORM bug appeared. Please, report the following message to the maintainers: " + m)
 
 
 /**
@@ -60,6 +63,7 @@ trait TypeResolver[ a ] {
    * All the ancestors up to the root.
    */
   val tail: Seq[ru.Type]
+  lazy val seq = head +: tail.toStream
 }
 object TypeResolver {
   implicit def rootTypeResolver

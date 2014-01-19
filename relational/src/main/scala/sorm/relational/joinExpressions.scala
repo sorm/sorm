@@ -56,6 +56,39 @@ object templates {
 
 }
 
+/**
+ * Completely runtime stuff.
+ */
+object functions {
+
+  import sorm.relational._
+  import templates._
+  import sorm.core._
+  import reflect.runtime.{universe => ru}
+
+  // def typePathColumn
+  //   [ root, path <: TypePath[root] ]
+  //   ( implicit pathTypeResolver: TypeResolver[path] )
+  //   = {
+  //     ???
+  //   }
+  // def typePathFrom
+  //   [ root, path <: TypePath[root] ]
+  //   ( implicit pathTypeResolver: TypeResolver[path] )
+  //   = {
+  //     ???
+  //   }
+  def column( chain: Seq[ru.Type] ): Column = {
+    chain match {
+      case head +: tail => Column( rules.columnName(head), from(tail) )
+      case _ => bug("Empty chain")
+    }
+  }
+  def from( chain: Seq[ru.Type] ): From = ???
+
+
+}
+
 object typeClasses {
 
   import templates._
@@ -67,10 +100,11 @@ object typeClasses {
   }
   object ToFrom {
 
-//    implicit def i1[ path ]( implicit pathToType: ToType[path] ) =
+//    implicit def i1[ path ]( implicit pathTypeResolver: TypeResolver[path] ) =
 //      new ToFrom[path] {
 //        val toFrom = {
 //          val name = {
+//            pathTypeResolver.
 //            val typeName = rootTT.tpe.typeSymbol.name.decoded
 //            ddlEncode(typeName)
 //          }

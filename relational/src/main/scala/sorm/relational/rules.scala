@@ -1,6 +1,7 @@
 package sorm.relational
 
 import sorm.core._
+import sorm.relational._
 import reflect.runtime.{universe => ru}
 
 /**
@@ -9,11 +10,10 @@ import reflect.runtime.{universe => ru}
 object rules {
 
   def columnName( t: ru.Type ): String = ???
-  def bindings( from: ru.Type, to: ru.Type ): Seq[(String, String)] = 
-    ???
 
-  //  ---------- OR -------------
-  // def bindingsTo
-  // def bindingsFrom
+  def bindingsToParent( rep: mapping.Rep ): Seq[(String, String)] = rep match {
+    case mapping.Rep.CaseClass(properties) => ???
+    case _ => ???
+  }
   
 }

@@ -11,10 +11,10 @@ class ToTypeTest extends FunSuite with ShouldMatchers {
   case class B(a: (Int, Option[A]))
 
   type PathToB = TypePath.Root[B]
-  type PathToPropertyA = TypePath.CaseClassMember[B, PathToB, shapeless._0]
-  type PathToOption = TypePath.TupleMember[B, PathToPropertyA, shapeless.nat._1]
-  type PathToA = TypePath.OptionItem[B, PathToOption]
-  type PathToPropertyB = TypePath.CaseClassMember[B, PathToA, shapeless.nat._1]
+  type PathToPropertyA = TypePath.Property[B, PathToB, shapeless._0]
+  type PathToOption = TypePath.Property[B, PathToPropertyA, shapeless.nat._1]
+  type PathToA = TypePath.Generic[B, PathToOption, shapeless._0]
+  type PathToPropertyB = TypePath.Property[B, PathToA, shapeless.nat._1]
 
 
   test("Root") {

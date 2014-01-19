@@ -126,7 +126,7 @@ object typeClasses {
       [ root, parent <: TypePath[ root ], index <: shapeless.Nat ]
       ( implicit rootTT: ru.TypeTag[ root ] )
       =
-      new ToColumn[ TypePath.Member[ root, parent, index ] ] {
+      new ToColumn[ TypePath.Property[ root, parent, index ] ] {
         val toColumn = ???
       }
 

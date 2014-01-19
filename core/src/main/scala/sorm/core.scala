@@ -50,13 +50,8 @@ object FieldRefs {
 sealed trait TypePath[ root ]
 object TypePath {
   final class Root[ root ] extends TypePath[ root ]
-  final class OptionItem[ root, parent <: TypePath[ root ] ] extends TypePath[ root ]
-  final class SeqItem[ root, parent <: TypePath[ root ] ] extends TypePath[ root ]
-  final class SetItem[ root, parent <: TypePath[ root ] ] extends TypePath[ root ]
-  final class MapKey[ root, parent <: TypePath[ root ] ] extends TypePath[ root ]
-  final class MapValue[ root, parent <: TypePath[ root ] ] extends TypePath[ root ]
-  final class TupleMember[ root, parent <: TypePath[ root ], index <: shapeless.Nat ] extends TypePath[ root ]
-  final class CaseClassMember[ root, parent <: TypePath[ root ], index <: shapeless.Nat ] extends TypePath[ root ]
+  final class Generic[ root, parent <: TypePath[ root ], index <: shapeless.Nat ] extends TypePath[ root ]
+  final class Property[ root, parent <: TypePath[ root ], index <: shapeless.Nat ] extends TypePath[ root ]
 }
 
 trait ToType[ a ] {
@@ -70,33 +65,22 @@ object ToType {
     new ToType[ TypePath.Root[ root ] ] {
       val toType = rootTT.tpe
     }
-  implicit def optionToType
-    [ root, parent <: TypePath[ root ] ]
-    ( implicit parentToType: ToType[ parent ] )
-    =
-    new ToType[ TypePath.OptionItem[ root, parent ] ] {
-      val toType = {
-        val parentType = parentToType.toType
-        util.reflection.generic(parentType, 0)
-      }
-    }
-  implicit def tupleMemberToType
+  implicit def genericToType
     [ root, parent <: TypePath[root], index <: shapeless.Nat ]
     ( implicit parentToType: ToType[ parent ], indexToInt: shapeless.ops.nat.ToInt[ index ] )
     =
-    new ToType[ TypePath.TupleMember[ root, parent, index ] ] {
+    new ToType[ TypePath.Generic[ root, parent, index ] ] {
       val toType = {
         val index = indexToInt.apply()
         val parentType = parentToType.toType
-        val properties = parentType.members.toStream.filter(_.isTerm).filter(!_.isMethod).reverse
-        properties.apply(index).asTerm.typeSignatureIn(parentType)
+        util.reflection.generic(parentType, index)
       }
     }
-  implicit def caseClassMemberToType
+  implicit def propertyToType
     [ root, parent <: TypePath[root], index <: shapeless.Nat ]
     ( implicit parentToType: ToType[ parent ], indexToInt: shapeless.ops.nat.ToInt[ index ] )
     =
-    new ToType[ TypePath.CaseClassMember[ root, parent, index ] ] {
+    new ToType[ TypePath.Property[ root, parent, index ] ] {
       val toType = {
         val index = indexToInt.apply()
         val parentType = parentToType.toType

@@ -109,5 +109,22 @@ object TypeResolver {
 // }
 
 
+sealed trait DynamicTypePath
+object DynamicTypePath {
+  case class Root( t: ru.Type ) extends DynamicTypePath
+  case class Generic( parent: DynamicTypePath, index: Int ) extends DynamicTypePath
+  case class Property( parent: DynamicTypePath, name: String ) extends DynamicTypePath
+  case class TupleItem( parent: DynamicTypePath, index: Int ) extends DynamicTypePath
+}
+
+trait DynamicTypePathResolver[ a ] {
+  def dynamicTypePath: DynamicTypePath
+}
+object DynamicTypePathResolver {
+  // implicit def propertyDynamicTypePathResolver
+  //   ()
+}
+
+
 
 }

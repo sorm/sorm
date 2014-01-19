@@ -45,59 +45,66 @@ object FieldRefs {
 
 /**
  * A reference to a specific member from a root type.
- * Encodes the complete info at compile time.
+ * Encodes a complete info at type-level.
  */
 sealed trait TypePath[ root ]
 object TypePath {
-  class Root[ root ] extends TypePath[ root ]
-  class Member[ root, parent <: TypePath[ root ], index <: shapeless.Nat ] extends TypePath[ root ]
+  final class Root[ root ] extends TypePath[ root ]
+  final class OptionItem[ root, parent <: TypePath[ root ] ] extends TypePath[ root ]
+  final class SeqItem[ root, parent <: TypePath[ root ] ] extends TypePath[ root ]
+  final class SetItem[ root, parent <: TypePath[ root ] ] extends TypePath[ root ]
+  final class MapKey[ root, parent <: TypePath[ root ] ] extends TypePath[ root ]
+  final class MapValue[ root, parent <: TypePath[ root ] ] extends TypePath[ root ]
+  final class TupleMember[ root, parent <: TypePath[ root ], index <: shapeless.Nat ] extends TypePath[ root ]
+  final class CaseClassMember[ root, parent <: TypePath[ root ], index <: shapeless.Nat ] extends TypePath[ root ]
 }
 
 trait ToType[ a ] {
   val toType: ru.Type
 }
 object ToType {
-  implicit def i1
+  implicit def rootToType
     [ root ]
     ( implicit rootTT: ru.TypeTag[root] )
     =
     new ToType[ TypePath.Root[ root ] ] {
       val toType = rootTT.tpe
     }
-  implicit def i2
-    [ root, parent <: TypePath[root], index <: shapeless.Nat ]
-    ( implicit parentToType: ToType[parent], indexToInt: shapeless.ops.nat.ToInt[index] )
+  implicit def optionToType
+    [ root, parent <: TypePath[ root ] ]
+    ( implicit parentToType: ToType[ parent ] )
     =
-    new ToType[ TypePath.Member[ root, parent, index ] ] {
+    new ToType[ TypePath.OptionItem[ root, parent ] ] {
+      val toType = {
+        val parentType = parentToType.toType
+        util.reflection.generic(parentType, 0)
+      }
+    }
+  implicit def tupleMemberToType
+    [ root, parent <: TypePath[root], index <: shapeless.Nat ]
+    ( implicit parentToType: ToType[ parent ], indexToInt: shapeless.ops.nat.ToInt[ index ] )
+    =
+    new ToType[ TypePath.TupleMember[ root, parent, index ] ] {
       val toType = {
         val index = indexToInt.apply()
         val parentType = parentToType.toType
-
-        if( parentType <:< ru.typeOf[Product] ) {
-          val properties = parentType.members.toStream.filter(_.isTerm).filter(!_.isMethod).reverse
-          properties.apply(index).asTerm.typeSignatureIn(parentType)
-        } else {
-          parentType.asInstanceOf[ru.TypeRef].args(index)
-//          sys.error("Unsupported type for access of member by index: " ++ parentType.typeSymbol.fullName)
-        }
+        val properties = parentType.members.toStream.filter(_.isTerm).filter(!_.isMethod).reverse
+        properties.apply(index).asTerm.typeSignatureIn(parentType)
+      }
+    }
+  implicit def caseClassMemberToType
+    [ root, parent <: TypePath[root], index <: shapeless.Nat ]
+    ( implicit parentToType: ToType[ parent ], indexToInt: shapeless.ops.nat.ToInt[ index ] )
+    =
+    new ToType[ TypePath.CaseClassMember[ root, parent, index ] ] {
+      val toType = {
+        val index = indexToInt.apply()
+        val parentType = parentToType.toType
+        val properties = parentType.members.toStream.filter(_.isTerm).filter(!_.isMethod).reverse
+        properties.apply(index).asTerm.typeSignatureIn(parentType)
       }
     }
 }
-
-//trait MemberTypeAt[ a, index <: shapeless.Nat ] {
-//  type Member
-//}
-//object MemberTypeAt {
-//  implicit def i1[ member ] = new MemberTypeAt[ Product1[member], shapeless._0 ] {
-//    type Member = member
-//  }
-//  implicit def i2[ member ] = new MemberTypeAt[ Product2[member, _], shapeless._0 ] {
-//    type Member = member
-//  }
-//  implicit def i3[ member ] = new MemberTypeAt[ Product2[_, member], shapeless.nat._1 ] {
-//    type Member = member
-//  }
-//}
 
 
 // sealed trait KeyKind

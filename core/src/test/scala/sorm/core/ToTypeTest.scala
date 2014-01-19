@@ -8,28 +8,32 @@ import reflect.runtime.{universe => ru}
 class ToTypeTest extends FunSuite with ShouldMatchers {
 
   case class A(a: Int, b: String)
-  case class B(a: (Int, Seq[A]))
+  case class B(a: (Int, Option[A]))
 
   type PathToB = TypePath.Root[B]
-  type PathToPropertyA = TypePath.Member[B, PathToB, shapeless._0]
-  type PathToSeq = TypePath.Member[B, PathToPropertyA, shapeless.nat._1]
-  type PathToA = TypePath.Member[B, PathToSeq, shapeless._0]
-  type PathToPropertyB = TypePath.Member[B, PathToA, shapeless.nat._1]
+  type PathToPropertyA = TypePath.CaseClassMember[B, PathToB, shapeless._0]
+  type PathToOption = TypePath.TupleMember[B, PathToPropertyA, shapeless.nat._1]
+  type PathToA = TypePath.OptionItem[B, PathToOption]
+  type PathToPropertyB = TypePath.CaseClassMember[B, PathToA, shapeless.nat._1]
 
 
   test("Root") {
     implicitly[ToType[PathToB]].toType.shouldBe(ru.typeOf[B])
   }
 
-  test("First level") {
-    implicitly[ToType[PathToPropertyA]].toType.shouldBe(ru.typeOf[(Int, Seq[A])])
+  test("Case class property") {
+    implicitly[ToType[PathToPropertyA]].toType.shouldBe(ru.typeOf[(Int, Option[A])])
   }
 
-  test("Second level") {
-    implicitly[ToType[PathToSeq]].toType.shouldBe(ru.typeOf[Seq[A]])
+  test("Tuple member") {
+    implicitly[ToType[PathToOption]].toType.shouldBe(ru.typeOf[Option[A]])
   }
 
-  test("Deep") {
+  test("Option item") {
+    implicitly[ToType[PathToA]].toType.shouldBe(ru.typeOf[A])
+  }
+
+  test("Non first case class property") {
     implicitly[ToType[PathToPropertyB]].toType.shouldBe(ru.typeOf[String])
   }
 

@@ -54,39 +54,46 @@ object TypePath {
   final class Property[ root, parent <: TypePath[ root ], index <: shapeless.Nat ] extends TypePath[ root ]
 }
 
-trait ToType[ a ] {
-  val toType: ru.Type
+trait TypeResolver[ a ] {
+  val head: ru.Type
+  /**
+   * All the ancestors up to the root.
+   */
+  val tail: Seq[ru.Type]
 }
-object ToType {
-  implicit def rootToType
+object TypeResolver {
+  implicit def rootTypeResolver
     [ root ]
     ( implicit rootTT: ru.TypeTag[root] )
     =
-    new ToType[ TypePath.Root[ root ] ] {
-      val toType = rootTT.tpe
+    new TypeResolver[ TypePath.Root[ root ] ] {
+      val head = rootTT.tpe
+      val tail = Nil
     }
-  implicit def genericToType
+  implicit def genericTypeResolver
     [ root, parent <: TypePath[root], index <: shapeless.Nat ]
-    ( implicit parentToType: ToType[ parent ], indexToInt: shapeless.ops.nat.ToInt[ index ] )
+    ( implicit parentTypeResolver: TypeResolver[ parent ], indexToInt: shapeless.ops.nat.ToInt[ index ] )
     =
-    new ToType[ TypePath.Generic[ root, parent, index ] ] {
-      val toType = {
+    new TypeResolver[ TypePath.Generic[ root, parent, index ] ] {
+      val head = {
         val index = indexToInt.apply()
-        val parentType = parentToType.toType
+        val parentType = parentTypeResolver.head
         util.reflection.generic(parentType, index)
       }
+      lazy val tail = parentTypeResolver.head +: parentTypeResolver.tail
     }
-  implicit def propertyToType
+  implicit def propertyTypeResolver
     [ root, parent <: TypePath[root], index <: shapeless.Nat ]
-    ( implicit parentToType: ToType[ parent ], indexToInt: shapeless.ops.nat.ToInt[ index ] )
+    ( implicit parentTypeResolver: TypeResolver[ parent ], indexToInt: shapeless.ops.nat.ToInt[ index ] )
     =
-    new ToType[ TypePath.Property[ root, parent, index ] ] {
-      val toType = {
+    new TypeResolver[ TypePath.Property[ root, parent, index ] ] {
+      val head = {
         val index = indexToInt.apply()
-        val parentType = parentToType.toType
+        val parentType = parentTypeResolver.head
         val properties = parentType.members.toStream.filter(_.isTerm).filter(!_.isMethod).reverse
         properties.apply(index).asTerm.typeSignatureIn(parentType)
       }
+      lazy val tail = parentTypeResolver.head +: parentTypeResolver.tail
     }
 }
 

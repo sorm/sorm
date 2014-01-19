@@ -5,7 +5,7 @@ import org.scalatest.matchers.ShouldMatchers
 import reflect.runtime.{universe => ru}
 
 @org.junit.runner.RunWith(classOf[org.scalatest.junit.JUnitRunner])
-class ToTypeTest extends FunSuite with ShouldMatchers {
+class TypeResolverTest extends FunSuite with ShouldMatchers {
 
   case class A(a: Int, b: String)
   case class B(a: (Int, Option[A]))
@@ -18,23 +18,23 @@ class ToTypeTest extends FunSuite with ShouldMatchers {
 
 
   test("Root") {
-    implicitly[ToType[PathToB]].toType.shouldBe(ru.typeOf[B])
+    implicitly[TypeResolver[PathToB]].head.shouldBe(ru.typeOf[B])
   }
 
   test("Case class property") {
-    implicitly[ToType[PathToPropertyA]].toType.shouldBe(ru.typeOf[(Int, Option[A])])
+    implicitly[TypeResolver[PathToPropertyA]].head.shouldBe(ru.typeOf[(Int, Option[A])])
   }
 
   test("Tuple member") {
-    implicitly[ToType[PathToOption]].toType.shouldBe(ru.typeOf[Option[A]])
+    implicitly[TypeResolver[PathToOption]].head.shouldBe(ru.typeOf[Option[A]])
   }
 
   test("Option item") {
-    implicitly[ToType[PathToA]].toType.shouldBe(ru.typeOf[A])
+    implicitly[TypeResolver[PathToA]].head.shouldBe(ru.typeOf[A])
   }
 
   test("Non first case class property") {
-    implicitly[ToType[PathToPropertyB]].toType.shouldBe(ru.typeOf[String])
+    implicitly[TypeResolver[PathToPropertyB]].head.shouldBe(ru.typeOf[String])
   }
 
 }

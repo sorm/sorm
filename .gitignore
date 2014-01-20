@@ -1,6 +1,0 @@
-target/
-*.iml
-*.sublime*
-.*
-_site/
-*.command

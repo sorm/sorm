@@ -65,6 +65,18 @@ object rules {
     }
   }
 
+  trait MappingResolver[ path ] {
+    def mapping: Mapping
+  }
+  object MappingResolver {
+    implicit def propertyInstance
+      [ root, parent <: static.TypePath[ root ], index <: shapeless.Nat ]
+      =
+      new MappingResolver[ static.TypePath.Property[root, parent, index] ] {
+        def mapping = ???
+      }
+  }
+
   private def ddlEncode ( string : String ) : String = {
     import com.google.common.base.CaseFormat._
     UPPER_CAMEL.to( LOWER_UNDERSCORE, string )

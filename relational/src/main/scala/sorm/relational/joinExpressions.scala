@@ -65,27 +65,28 @@ object functions {
   import templates._
   import sorm.core._
   import reflect.runtime.{universe => ru}
+  import rules._
 
-  // def typePathColumn
-  //   [ root, path <: TypePath[root] ]
-  //   ( implicit pathTypeResolver: TypeResolver[path] )
-  //   = {
-  //     ???
-  //   }
-  // def typePathFrom
-  //   [ root, path <: TypePath[root] ]
-  //   ( implicit pathTypeResolver: TypeResolver[path] )
-  //   = {
-  //     ???
-  //   }
-  def column( chain: Seq[ru.Type] ): Column = {
-    chain match {
-      case head +: tail => Column( rules.columnName(head), from(tail) )
-      case _ => bug("Empty chain")
+  def column( mapping: Mapping ): Column = {
+    val name = mapping.memberName
+    val from = {
+      val parent = mapping.parent.getOrElse(bug("Getting a column from a mapping with no parent"))
+      this.from(parent)
+    }
+    Column(name, from)
+  }
+
+  def from( mapping: Mapping ): From = {
+    mapping.parent match {
+      case None => From.Root(mapping.tableName)
+      case Some(parentMapping) => {
+        val name = mapping.tableName
+        val parent = from(parentMapping)
+        val bindings = parentMapping.foreignKeyToChild(mapping).bindings.map(_.swap)
+        From.Join(name, parent, bindings)
+      }
     }
   }
-  def from( chain: Seq[ru.Type] ): From = ???
-
 
 }
 

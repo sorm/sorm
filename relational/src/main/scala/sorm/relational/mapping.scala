@@ -2,6 +2,7 @@ package sorm.relational.mapping
 
 import reflect.runtime.{universe => ru}
 import sorm.core._
+import sorm.relational._
 
 sealed trait Scenario
 object Scenario {
@@ -26,8 +27,8 @@ object Scenario {
 }
 
 /**
- * A runtime representation of a type in a position relative to a root entity.
- */
+* A runtime representation of a type in a position relative to a root entity.
+*/
 sealed trait Rep
 object Rep {
   case class CaseClass( properties: Seq[ru.TermSymbol] ) extends Rep
@@ -39,7 +40,7 @@ trait RepResolver[ path ] {
 object RepResolver {
   def propertyInstance
     [ root, parent <: TypePath[root], index <: shapeless.Nat ]
-    ( implicit 
+    ( implicit
         typeResolver: TypeResolver[ TypePath.Property[ root, parent, index ] ] )
     =
     new RepResolver[ TypePath.Property[ root, parent, index ] ] {
@@ -54,4 +55,28 @@ object RepResolver {
       }
     }
 }
+
+
+//sealed trait Mapping {
+//   def foreignKeyForParent: Option[ddl.ForeignKey] = None
+//   def members: Seq[Mapping] = Seq.empty
+//}
+
+
+
+
+// sealed trait TableMapping {
+//   def table: ddl.Table
+//   // def columns: Seq[ColumnMapping]
+//   // def subTables: Seq[TableMapping]
+//   def members: Map[DynamicTypePath, Mapping]
+//   def parent: Option[(DynamicTypePath, Mapping)]
+// }
+// sealed trait ColumnMapping {
+//   def column: ddl.Column
+// }
+
+
+
+// or nodes
 

@@ -29,6 +29,7 @@ object rules {
         if( util.reflection.isTuple(t) ) Tuple
         else if( t.typeSymbol.asClass.isCaseClass ) CaseClass
         else bug("No scenario for product type: " + t)
+      else if( ??? ) ???
       else bug("No scenario for type: " + t)
   }
 

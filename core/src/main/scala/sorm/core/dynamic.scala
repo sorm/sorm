@@ -1,5 +1,5 @@
 package sorm.core
-package object runtime {
+package object dynamic {
 
 import scala.reflect.runtime.{universe => ru}
 

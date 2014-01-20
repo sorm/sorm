@@ -3,6 +3,7 @@ package sorm.mysql
 trait JoinExpressionsCompilers {
 
   import sorm.core._
+  import sorm.core.static._
   import sorm.core.util._
   import sorm.core.{expressions => genExp}
   import sorm.{relational => rel}

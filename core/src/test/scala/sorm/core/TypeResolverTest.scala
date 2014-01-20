@@ -3,6 +3,7 @@ package sorm.core
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
 import reflect.runtime.{universe => ru}
+import static._
 
 @org.junit.runner.RunWith(classOf[org.scalatest.junit.JUnitRunner])
 class TypeResolverTest extends FunSuite with ShouldMatchers {

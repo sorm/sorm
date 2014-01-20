@@ -1,7 +1,8 @@
 package sorm.core.expressions
 
 import sorm.core._
-import sorm.core.util._
+import static._
+import util._
 
 /**
  * Compiler of static expression templates and processor of associated dynamic values.

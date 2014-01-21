@@ -33,9 +33,12 @@ object rules {
       else bug("No scenario for type: " + t)
   }
 
+  case class Membership( parent: Mapping, ref: ChildRef )
+
   class Mapping {
     def scenario: Scenario = ???
-    def parent: Option[Mapping] = ???
+    def membership: Option[Membership] = ???
+    def parent = membership.map(_.parent)
     def ancestors: Stream[Mapping] = parent.map(p => p +: p.ancestors).getOrElse(Stream.empty)
     def primaryKeyColumnNames: Seq[String] = {
       scenario match {
@@ -66,7 +69,23 @@ object rules {
      */
     def nameBasisFor( target: Mapping ): String = ???
     def tableName: String = ???
-    
+
+    // Propertyish approach
+    def memberNameBasis: Option[String] =
+      membership.flatMap{ case Membership(parent, ref) =>
+        (parent.scenario, ref) match {
+          case (Scenario.CaseClass, ChildRef.ByName(name)) => Some(ddlEncode(name))
+          case (Scenario.Map, ChildRef.ByIndex(0)) => Some("k")
+          case (Scenario.Map, ChildRef.ByIndex(1)) => Some("v")
+          case (Scenario.OptionToNullable, ChildRef.ByIndex(0)) => parent.memberNameBasis
+          case (Scenario.OptionToTable, ChildRef.ByIndex(0)) => Some("v")
+          case (Scenario.Range, ChildRef.ByIndex(0)) => parent.memberNameBasis.map(_ + "$s")
+          case (Scenario.Range, ChildRef.ByIndex(1)) => parent.memberNameBasis.map(_ + "$e")
+          case _ => None
+        }
+      }
+
+
   }
 
   trait MappingResolver[ path ] {

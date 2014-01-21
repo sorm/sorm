@@ -48,7 +48,7 @@ trait JoinExpressionsCompilers {
     =
     new genExp.Compiler[inputTpl, inputVals, relExp.templates.Where, List[rel.Value]] {
       def compileTemplate(tpl: inputTpl) = {
-        val column = relExp.functions.column(mappingResolver.mapping)
+        val column = relExp.functions.column(mappingResolver.mapping).getOrElse(bug("Mapping produces no column"))
         val operator = relExp.templates.Operator.Equal
         val value = relExp.templates.Expression.Placeholder
         val negative = tpl.negative.toBoolean

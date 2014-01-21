@@ -67,13 +67,12 @@ object functions {
   import reflect.runtime.{universe => ru}
   import rules._
 
-  def column( mapping: Mapping ): Column = {
-    val name = mapping.memberName
-    val from = {
-      val parent = mapping.parent.getOrElse(bug("Getting a column from a mapping with no parent"))
-      this.from(parent)
+  def column( mapping: Mapping ): Option[Column] = {
+    for {
+      name <- mapping.memberNameBasis
+      from <- mapping.parent.map(this.from)
     }
-    Column(name, from)
+    yield Column(name, from)
   }
 
   def from( mapping: Mapping ): From = {

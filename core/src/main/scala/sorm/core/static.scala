@@ -9,9 +9,9 @@ import scala.reflect.runtime.{universe => ru}
  */
 sealed trait TypePath[ root ]
 object TypePath {
-  final class Root[ root ] extends TypePath[ root ]
-  final class Generic[ root, parent <: TypePath[ root ], index <: shapeless.Nat ] extends TypePath[ root ]
-  final class Property[ root, parent <: TypePath[ root ], index <: shapeless.Nat ] extends TypePath[ root ]
+  sealed trait Root[ root ] extends TypePath[ root ]
+  sealed trait Generic[ root, parent <: TypePath[ root ], index <: shapeless.Nat ] extends TypePath[ root ]
+  sealed trait Property[ root, parent <: TypePath[ root ], index <: shapeless.Nat ] extends TypePath[ root ]
 }
 
 trait TypeResolver[ a ] {

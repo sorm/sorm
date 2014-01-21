@@ -36,6 +36,7 @@ object rules {
   class Mapping {
     def scenario: Scenario = ???
     def parent: Option[Mapping] = ???
+    def ancestors: Stream[Mapping] = parent.map(p => p +: p.ancestors).getOrElse(Stream.empty)
     def primaryKeyColumnNames: Seq[String] = {
       scenario match {
         case Scenario.CaseClass => "id" +: Nil
@@ -50,20 +51,22 @@ object rules {
     def child( ref: ChildRef ): Option[Mapping] = {
       ???
     }
-    def foreignKeyToChild( child: Mapping ): ddl.ForeignKey = {
-      val tableName = child.tableName
+    def foreignKeyTo( target: Mapping ): ddl.ForeignKey = {
+      val tableName = target.tableName
       val bindings = {
-        val childName = child.memberName
-        child.primaryKeyColumnNames.map(n => (childName + "$" + n, n))
+        val nameBasis = nameBasisFor(target)
+        target.primaryKeyColumnNames.map(n => (nameBasis + "$" + n, n))
       }
       val onDelete = ddl.ReferenceMode.Cascade
       val onUpdate = ddl.ReferenceMode.NoAction
       ddl.ForeignKey(tableName, bindings, onDelete, onUpdate)
     }
+    /**
+     * A name for other mapping from the perspective of this mapping.
+     */
+    def nameBasisFor( target: Mapping ): String = ???
     def tableName: String = ???
-    def memberName: String = {
-      ???
-    }
+    
   }
 
   trait MappingResolver[ path ] {

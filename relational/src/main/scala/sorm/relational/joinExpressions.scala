@@ -82,7 +82,7 @@ object functions {
       case Some(parentMapping) => {
         val name = mapping.tableName
         val parent = from(parentMapping)
-        val bindings = parentMapping.foreignKeyToChild(mapping).bindings.map(_.swap)
+        val bindings = parentMapping.foreignKeyTo(mapping).bindings.map(_.swap)
         From.Join(name, parent, bindings)
       }
     }

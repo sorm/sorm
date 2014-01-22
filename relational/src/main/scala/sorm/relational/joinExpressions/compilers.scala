@@ -16,7 +16,7 @@ object compilers {
 
   trait All extends Fork with IntEqual
 
-  private type OutputValues = List[Value]
+  private type Compiler[inputTemplate, inputValues] = i.Compiler[inputTemplate, inputValues, ot.Where, List[Value]]
   
   trait Fork {
     private type InputTemplate[left <: it.Where, right <: it.Where] = it.Where.Fork[left, right, typeLevel.Bool]
@@ -27,10 +27,10 @@ object compilers {
         leftInputValues <: iv.Where,
         rightInputValues <: iv.Where ]
       ( implicit
-          leftCompiler: i.Compiler[leftInputTemplate, leftInputValues, ot.Where, OutputValues],
-          rightCompiler: i.Compiler[rightInputTemplate, rightInputValues, ot.Where, OutputValues] )
+          leftCompiler: Compiler[leftInputTemplate, leftInputValues],
+          rightCompiler: Compiler[rightInputTemplate, rightInputValues] )
       =
-      new i.Compiler[InputTemplate[leftInputTemplate, rightInputTemplate], InputValues[leftInputValues, rightInputValues], ot.Where, OutputValues] {
+      new Compiler[InputTemplate[leftInputTemplate, rightInputTemplate], InputValues[leftInputValues, rightInputValues]] {
         def compileTemplate( tpl: InputTemplate[leftInputTemplate, rightInputTemplate] ) = {
           val left = leftCompiler.compileTemplate(tpl.left)
           val right = rightCompiler.compileTemplate(tpl.right)
@@ -50,31 +50,25 @@ object compilers {
     protected implicit def intEqualInstance
       [ root, path <: TypePath[root] ]
       ( implicit mappingResolver: rules.MappingResolver[path] )
-      = {
-        new i.Compiler
-          [ InputTemplate[root, path],
-            InputValues,
-            ot.Where,
-            OutputValues ]
-          {
-            override def compileTemplate(tpl: InputTemplate[root, path]) = {
-              val column = o.functions.column(mappingResolver.mapping).getOrElse(bug("Mapping produces no column"))
-              val operator = ot.Operator.Equal
-              val value = ot.Expression.Placeholder
-              val negative = tpl.negative.toBoolean
-              ot.Where.Comparison(column, value, operator, negative)
+      =
+      new Compiler[ InputTemplate[root, path], InputValues ]{
+        override def compileTemplate(tpl: InputTemplate[root, path]) = {
+          val column = o.functions.column(mappingResolver.mapping).getOrElse(bug("Mapping produces no column"))
+          val operator = ot.Operator.Equal
+          val value = ot.Expression.Placeholder
+          val negative = tpl.negative.toBoolean
+          ot.Where.Comparison(column, value, operator, negative)
+        }
+        override def processValues(vals: InputValues) = {
+          import i.values._
+          val value = {
+            val value = vals.expression match {
+              case Expression.Value(z) => z
             }
-            override def processValues(vals: InputValues) = {
-              import i.values._
-              val value = {
-                val value = vals.expression match {
-                  case Expression.Value(z) => z
-                }
-                Value(value, jdbcTypes.INTEGER)
-              }
-              value +: Nil
-            }
+            Value(value, jdbcTypes.INTEGER)
           }
+          value +: Nil
+        }
       }
   }
 

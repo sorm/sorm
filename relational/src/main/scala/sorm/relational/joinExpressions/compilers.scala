@@ -60,13 +60,7 @@ object compilers {
           ot.Where.Comparison(column, value, operator, negative)
         }
         override def processValues(vals: InputValues) = {
-          import i.values._
-          val value = {
-            val value = vals.expression match {
-              case Expression.Value(z) => z
-            }
-            Value(value, jdbcTypes.INTEGER)
-          }
+          val value = Value(vals.expression.value, jdbcTypes.INTEGER)
           value +: Nil
         }
       }

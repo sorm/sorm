@@ -46,6 +46,7 @@ package sorm.core; package object util {
       t <:< typeOf[Tuple22[_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _]]
     def generic(t: Type, i: Int) = t.asInstanceOf[TypeRef].args(i)
     def name(s: Symbol) = s.name.decoded.trim
+    def properties(t: Type) = t.members.toStream.filter(_.isTerm).filter(!_.isMethod).reverse
   }
 
 }

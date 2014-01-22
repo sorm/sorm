@@ -56,8 +56,9 @@ package sorm.mysql
 // -----------------
 // The following approach allows to delegate all the checking to compiler and
 // not to bother with it at the time of building.
-class Mysql extends JoinExpressionsCompilers {
-
-}
+import sorm.relational.joinExpressions.{compilers => jeCompilers}
+class Mysql
+  extends jeCompilers.Fork
+  with jeCompilers.IntEquals
 
 

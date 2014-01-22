@@ -24,7 +24,7 @@ object templates {
   object Where {
     case class Fork ( left: Where, right: Where, or: Boolean ) extends Where
     case class Comparison
-      ( column: Column, operator: Operator, value: Expression, negative: Boolean )
+      ( column: Column, value: Expression, operator: Operator, negative: Boolean )
       extends Where
   }
 

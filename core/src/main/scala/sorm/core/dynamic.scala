@@ -36,6 +36,7 @@ object TypePath {
   case class Member( parent: TypePath, ref: ChildRef ) extends TypePath
 }
 
+// TODO: simply replace with an Int
 sealed trait ChildRef
 object ChildRef {
   case class ByName( name: String ) extends ChildRef

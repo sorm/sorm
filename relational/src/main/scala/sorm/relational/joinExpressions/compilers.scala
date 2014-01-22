@@ -41,25 +41,26 @@ object compilers {
   }
 
   trait IntEqual {
-    implicit def intEqualInstance
-      [ root,
-        path <: TypePath[root] ]
+    private type InputTemplate[root, path <: TypePath[root]] = genExp.templates.Where.Comparison[root, path, genExp.templates.Operator.Equal, typeLevel.Bool]
+    private type InputValues = genExp.values.Where.Comparison[ genExp.values.Expression.Value[ Int ] ]
+    protected implicit def intEqualInstance
+      [ root, path <: TypePath[root] ]
       ( implicit mappingResolver: rel.rules.MappingResolver[path] )
       = {
         new genExp.Compiler
-          [ genExp.templates.Where.Comparison[root, path, genExp.templates.Operator.Equal, typeLevel.Bool],
-            genExp.values.Where.Comparison[ genExp.values.Expression.Value[ Int ] ],
+          [ InputTemplate[root, path],
+            InputValues,
             relExp.templates.Where,
             List[rel.Value] ]
           {
-            override def compileTemplate(tpl: genExp.templates.Where.Comparison[root, path, genExp.templates.Operator.Equal, typeLevel.Bool]) = {
+            override def compileTemplate(tpl: InputTemplate[root, path]) = {
               val column = relExp.functions.column(mappingResolver.mapping).getOrElse(bug("Mapping produces no column"))
               val operator = relExp.templates.Operator.Equal
               val value = relExp.templates.Expression.Placeholder
               val negative = tpl.negative.toBoolean
               relExp.templates.Where.Comparison(column, value, operator, negative)
             }
-            override def processValues(vals:  genExp.values.Where.Comparison[ genExp.values.Expression.Value[ Int ] ]) = {
+            override def processValues(vals: InputValues) = {
               val value = rel.Value(vals.value, jdbcTypes.INTEGER)
               value +: Nil
             }

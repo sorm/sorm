@@ -6,10 +6,7 @@ import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
 
 @org.junit.runner.RunWith(classOf[org.scalatest.junit.JUnitRunner])
-class JoinExpressionsTest extends FunSuite with ShouldMatchers {
-
-  object instances extends joinExpressions.compilers.All
-  import instances._
+class JoinExpressionsTest extends FunSuite with ShouldMatchers with joinExpressions.compilers.All {
 
   case class A(a: Int)
 

@@ -45,31 +45,24 @@ object rules {
       scenario match {
         case Scenario.CaseClass => "id" +: Nil
         case Scenario.OptionToTable | Scenario.Seq | Scenario.Set | Scenario.Map =>
-          parent
-            .getOrElse(bug("Slave table mapping has no parent"))
-            .primaryKeyColumnNames
-            .map("p$" + _)
+          parent.map(_.primaryKeyColumnNames.map("p$" + _)).getOrElse(Nil)
         case _ => Nil
       }
     }
-    def child( ref: ChildRef ): Option[Mapping] = {
-      ???
-    }
-    def foreignKeyTo( target: Mapping ): ddl.ForeignKey = {
-      val tableName = target.tableName
-      val bindings = {
-        val nameBasis = nameBasisFor(target)
-        target.primaryKeyColumnNames.map(n => (nameBasis + "$" + n, n))
+
+    def tableName: Option[String] = {
+      scenario match {
+        case Scenario.CaseClass => Some(ddlEncode(util.reflection.name(t.typeSymbol)))
+        case Scenario.OptionToTable | Scenario.Seq | Scenario.Set | Scenario.Map =>
+          for {
+            parent <- this.parent
+            parentName <- parent.tableName
+            memberName <- this.memberNameBasis
+          }
+          yield parentName + "$" + memberName
+        case _ => None
       }
-      val onDelete = ddl.ReferenceMode.Cascade
-      val onUpdate = ddl.ReferenceMode.NoAction
-      ddl.ForeignKey(tableName, bindings, onDelete, onUpdate)
     }
-    /**
-     * A name for other mapping from the perspective of this mapping.
-     */
-    def nameBasisFor( target: Mapping ): String = ???
-    def tableName: String = ???
 
     // Propertyish approach
     def memberNameBasis: Option[String] =
@@ -86,6 +79,30 @@ object rules {
         }
       }
 
+    /**
+     * For slave tables.
+     */
+    def foreignKeyToParent: Option[ddl.ForeignKey] =
+      for {
+        parent <- this.parent
+        tableName <- parent.tableName
+        bindings = parent.primaryKeyColumnNames.map(n => ("p$" + n, n))
+        onDelete = ddl.ReferenceMode.Cascade
+        onUpdate = ddl.ReferenceMode.NoAction
+      }
+      yield ddl.ForeignKey(tableName, bindings, onDelete, onUpdate)
+
+    /**
+     * A foreign key for a parent table.
+     */
+    def foreignKeyForParent: Option[ddl.ForeignKey] =
+      for {
+        tableName <- this.tableName
+        bindings = primaryKeyColumnNames.map(n => (memberNameBasis + "$" + n, n))
+        onDelete = ddl.ReferenceMode.Cascade
+        onUpdate = ddl.ReferenceMode.NoAction
+      }
+      yield ddl.ForeignKey(tableName, bindings, onDelete, onUpdate)
 
   }
 

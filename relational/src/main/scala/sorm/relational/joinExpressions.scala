@@ -70,21 +70,26 @@ object functions {
   def column( mapping: Mapping ): Option[Column] = {
     for {
       name <- mapping.memberNameBasis
-      from <- mapping.parent.map(this.from)
+      from <- mapping.parent.flatMap(this.from)
     }
     yield Column(name, from)
   }
 
-  def from( mapping: Mapping ): From = {
+  def from( mapping: Mapping ): Option[From] = {
     mapping.parent match {
-      case None => From.Root(mapping.tableName)
+      case None => mapping.tableName.map(From.Root)
       case Some(parentMapping) => {
-        val name = mapping.tableName
-        val parent = from(parentMapping)
-        val bindings = parentMapping.foreignKeyTo(mapping).bindings.map(_.swap)
-        From.Join(name, parent, bindings)
+        def bindingsFromParent = mapping.foreignKeyForParent.map(_.bindings.map(_.swap))
+        def bindingsToParent = mapping.foreignKeyToParent.map(_.bindings)
+        for {
+          parent <- from(parentMapping)
+          name <- mapping.tableName
+          bindings <- bindingsFromParent.orElse(bindingsToParent)
+        }
+        yield From.Join(name, parent, bindings)
       }
     }
   }
+
 
 }

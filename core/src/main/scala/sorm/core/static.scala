@@ -7,6 +7,9 @@ import scala.reflect.runtime.{universe => ru}
  * A reference to a specific member from a root type.
  * Encodes a complete info at type-level.
  */
+// TODO:
+// Does it really need to be parameterized with the type of the root?
+// Cause it could well be passed as a separate parameter where needed.
 sealed trait TypePath[ root ]
 object TypePath {
   sealed trait Root[ root ] extends TypePath[ root ]

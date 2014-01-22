@@ -43,12 +43,14 @@ object ChildRef {
   case class ByIndex( index: Int ) extends ChildRef
 }
 
-def childType( t: ru.Type, ref: ChildRef ) = {
-  import ChildRef._
-  ref match {
-    case ByName(name) => t.member(ru.newTermName(name)).typeSignatureIn(t)
-    case ByIndex(index) => util.reflection.generic(t, index)
-  }  
+object helpers {
+  def childType( t: ru.Type, ref: ChildRef ) = {
+    import ChildRef._
+    ref match {
+      case ByName(name) => t.member(ru.newTermName(name)).typeSignatureIn(t)
+      case ByIndex(index) => util.reflection.generic(t, index)
+    }
+  }
 }
 
 }

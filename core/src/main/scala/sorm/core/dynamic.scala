@@ -43,6 +43,40 @@ object ChildRef {
   case class ByIndex( index: Int ) extends ChildRef
 }
 
+trait ChildRefResolver[a] {
+  def childRef: ChildRef
+}
+object ChildRefResolver {
+  implicit def propertyInstance
+    [ root, parent <: static.TypePath[root], index <: shapeless.Nat ]
+    ( implicit
+        parentTypeResolver: static.TypeResolver[parent],
+        indexToInt: shapeless.ops.nat.ToInt[index] )
+    =
+    new ChildRefResolver[static.TypePath.Property[root, parent, index]] {
+      def childRef = {
+        val name = {
+          val parentType = parentTypeResolver.head
+          val index = indexToInt.apply()
+          val property = util.reflection.properties(parentType).apply(index)
+          util.reflection.name(property)
+        }
+        ChildRef.ByName(name)
+      }
+    }
+  implicit def genericInstance
+    [ root, parent <: static.TypePath[root], index <: shapeless.Nat ]
+    ( implicit indexToInt: shapeless.ops.nat.ToInt[index] )
+    =
+    new ChildRefResolver[static.TypePath.Generic[root, parent, index]] {
+      def childRef = {
+        val index = indexToInt.apply()
+        ChildRef.ByIndex(index)
+      }
+    }
+
+}
+
 object helpers {
   def childType( t: ru.Type, ref: ChildRef ) = {
     import ChildRef._

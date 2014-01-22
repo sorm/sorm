@@ -36,8 +36,9 @@ object rules {
   case class Membership( parent: Mapping, ref: ChildRef )
 
   class Mapping {
+    def t: ru.Type = ???
     def scenario: Scenario = ???
-    def membership: Option[Membership] = ???
+    private def membership: Option[Membership] = ???
     def parent = membership.map(_.parent)
     def ancestors: Stream[Mapping] = parent.map(p => p +: p.ancestors).getOrElse(Stream.empty)
     def primaryKeyColumnNames: Seq[String] = {

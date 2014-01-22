@@ -3,6 +3,7 @@ package object relational {
 
 import org.joda.time._
 import java.sql.{Types => jdbcTypes}
+import reflect.runtime.{universe => ru}
 
 /**
  * A parameter for PreparedStatement.

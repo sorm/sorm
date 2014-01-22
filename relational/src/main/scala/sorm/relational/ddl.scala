@@ -45,5 +45,24 @@ object ColumnType {
   case object Decimal extends ColumnType
   case object SmallInt extends ColumnType
   case object TinyInt extends ColumnType
-}
 
+  def jdbcType( t : ColumnType ) = {
+    import java.sql.Types._
+    t match {
+      case Enum(_)   => VARCHAR
+      case Time      => TIME
+      case Date      => DATE
+      case TimeStamp => TIMESTAMP
+      case Integer   => INTEGER
+      case VarChar   => VARCHAR
+      case Double    => DOUBLE
+      case Float     => FLOAT
+      case Text      => CLOB
+      case BigInt    => BIGINT
+      case Boolean   => BOOLEAN
+      case Decimal   => DECIMAL
+      case SmallInt  => SMALLINT
+      case TinyInt   => TINYINT
+    }
+  }
+}

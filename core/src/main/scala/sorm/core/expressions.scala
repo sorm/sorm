@@ -16,6 +16,7 @@ trait Compiler[inputTemplate, inputValues, outputTemplate, outputValues] {
  * Templates with complete type-level representation.
  */
 // TODO: Get rid of value-level stuff.
+// Although, value-level stuff may well be needed for runtime caching of compilation results.
 object templates {
 
   sealed trait Where

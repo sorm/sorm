@@ -7,7 +7,7 @@ import util._
 /**
  * Compiler of static expression templates and processor of associated dynamic values.
  */
-trait Compiler[inputTemplate, inputValues, outputTemplate, outputValues] {
+trait Compiler[-inputTemplate, -inputValues, +outputTemplate, +outputValues] {
   def compileTemplate(input: inputTemplate): outputTemplate
   def processValues(input: inputValues): outputValues
 }
@@ -26,7 +26,7 @@ object templates {
       ( left: left, right: right, or: or )
       extends Where
     case class Comparison
-      [ root, path <: TypePath[root], operator <: Operator, negative <: typeLevel.Bool ]
+      [ root, path <: TypePath[root], operator <: Operator, +negative <: typeLevel.Bool ]
       ( path: path, operator: operator, negative: negative )
       extends Where
   }

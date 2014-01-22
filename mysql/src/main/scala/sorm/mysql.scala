@@ -59,6 +59,6 @@ package sorm.mysql
 import sorm.relational.joinExpressions.{compilers => jeCompilers}
 class Mysql
   extends jeCompilers.Fork
-  with jeCompilers.IntEquals
+  with jeCompilers.IntEqual
 
 

@@ -41,7 +41,7 @@ object rules {
       val membership = Membership(this, ref)
       new Mapping(childType, Some(membership))
     }
-    def scenario: Scenario = ???
+    def scenario: Scenario = Scenario.fromType(t)
     def parent = membership.map(_.parent)
     def ancestors: Stream[Mapping] = parent.map(p => p +: p.ancestors).getOrElse(Stream.empty)
     def primaryKeyColumnNames: Seq[String] = {

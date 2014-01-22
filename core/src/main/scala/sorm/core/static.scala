@@ -10,6 +10,7 @@ import scala.reflect.runtime.{universe => ru}
 sealed trait TypePath[ root ]
 object TypePath {
   sealed trait Root[ root ] extends TypePath[ root ]
+  // TODO: Unite the following as Member. If needed add MemberKind to discern them.
   sealed trait Generic[ root, parent <: TypePath[ root ], index <: shapeless.Nat ] extends TypePath[ root ]
   sealed trait Property[ root, parent <: TypePath[ root ], index <: shapeless.Nat ] extends TypePath[ root ]
 }

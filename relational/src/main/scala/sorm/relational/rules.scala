@@ -35,10 +35,13 @@ object rules {
 
   case class Membership( parent: Mapping, ref: ChildRef )
 
-  class Mapping {
-    def t: ru.Type = ???
+  class Mapping(val t: ru.Type, val membership: Option[Membership]) {
+    val child = util.memo{ ref: ChildRef =>
+      val childType = helpers.childType(t, ref)
+      val membership = Membership(this, ref)
+      new Mapping(childType, Some(membership))
+    }
     def scenario: Scenario = ???
-    private def membership: Option[Membership] = ???
     def parent = membership.map(_.parent)
     def ancestors: Stream[Mapping] = parent.map(p => p +: p.ancestors).getOrElse(Stream.empty)
     def primaryKeyColumnNames: Seq[String] = {
@@ -110,11 +113,41 @@ object rules {
     def mapping: Mapping
   }
   object MappingResolver {
+    implicit def genericInstance
+      [ root, parent <: static.TypePath[ root ], index <: shapeless.Nat ]
+      ( implicit
+          parentMappingResolver: MappingResolver[parent],
+          childRefResolver: ChildRefResolver[static.TypePath.Generic[root, parent, index]] )
+      =
+      new MappingResolver[ static.TypePath.Generic[root, parent, index] ] {
+        def mapping = {
+          val parentMapping = parentMappingResolver.mapping
+          val childRef = childRefResolver.childRef
+          parentMapping.child(childRef)
+        }
+      }
     implicit def propertyInstance
       [ root, parent <: static.TypePath[ root ], index <: shapeless.Nat ]
+      ( implicit
+          parentMappingResolver: MappingResolver[parent],
+          childRefResolver: ChildRefResolver[static.TypePath.Property[root, parent, index]] )
       =
       new MappingResolver[ static.TypePath.Property[root, parent, index] ] {
-        def mapping = ???
+        def mapping = {
+          val parentMapping = parentMappingResolver.mapping
+          val childRef = childRefResolver.childRef
+          parentMapping.child(childRef)
+        }
+      }
+    implicit def rootInstance
+      [ root ]
+      ( implicit rootTypeResolver: static.TypeResolver[ static.TypePath.Root[root] ] )
+      =
+      new MappingResolver[ static.TypePath.Root[root] ] {
+        val mapping = {
+          val t = rootTypeResolver.head
+          new Mapping(t, None)
+        }
       }
   }
 

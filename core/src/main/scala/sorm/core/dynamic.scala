@@ -81,7 +81,7 @@ object helpers {
   def childType( t: ru.Type, ref: ChildRef ) = {
     import ChildRef._
     ref match {
-      case ByName(name) => t.member(ru.newTermName(name)).typeSignatureIn(t)
+      case ByName(name) => t.member(ru.newTermName(name)).typeSignatureIn(t).asInstanceOf[ru.NullaryMethodType].resultType
       case ByIndex(index) => util.reflection.generic(t, index)
     }
   }

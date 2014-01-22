@@ -7,7 +7,7 @@ import util._
 /**
  * Compiler of static expression templates and processor of associated dynamic values.
  */
-trait Compiler[-inputTemplate, -inputValues, +outputTemplate, +outputValues] {
+abstract class Compiler[-inputTemplate, -inputValues, +outputTemplate, +outputValues] {
   def compileTemplate(input: inputTemplate): outputTemplate
   def processValues(input: inputValues): outputValues
 }
@@ -22,11 +22,11 @@ object templates {
   sealed trait Where
   object Where {
     case class Fork
-      [ left <: Where, right <: Where, or <: typeLevel.Bool ]
+      [ +left <: Where, +right <: Where, +or <: typeLevel.Bool ]
       ( left: left, right: right, or: or )
       extends Where
     case class Comparison
-      [ root, path <: TypePath[root], operator <: Operator, +negative <: typeLevel.Bool ]
+      [ root, +path <: TypePath[root], +operator <: Operator, +negative <: typeLevel.Bool ]
       ( path: path, operator: operator, negative: negative )
       extends Where
   }
@@ -60,8 +60,8 @@ object values {
 
   sealed trait Where
   object Where {
-    case class Fork[ left, right ]( left: left, right: right ) extends Where
-    case class Comparison[ value <: Expression ]( value: value ) extends Where
+    case class Fork[ +left, +right ]( left: left, right: right ) extends Where
+    case class Comparison[ expression <: Expression ]( expression: expression ) extends Where
   }
 
   sealed trait Expression

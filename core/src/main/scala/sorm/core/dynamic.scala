@@ -43,7 +43,7 @@ object ChildRef {
   case class ByIndex( index: Int ) extends ChildRef
 }
 
-trait ChildRefResolver[a] {
+trait ChildRefResolver[-a] {
   def childRef: ChildRef
 }
 object ChildRefResolver {

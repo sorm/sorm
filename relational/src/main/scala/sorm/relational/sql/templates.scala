@@ -10,13 +10,13 @@ object templates {
   sealed trait Statement
   object Statement {
     case class Insert
-      ( table: String, columns: Seq[String] )
+      ( table: Identifier, columns: Seq[Identifier] )
       extends Statement
     case class Update
-      ( table: String, setExprs: Seq[(Ref, Expr)], where: Option[Condition] )
+      ( table: Identifier, setExprs: Seq[(Ref, Expr)], where: Option[Condition] )
       extends Statement
     case class Delete
-      ( table: String, 
+      ( table: Identifier, 
         where: Option[Condition],
         limit: Option[IntOrPlaceholder] = None,
         offset: Option[IntOrPlaceholder] = None )
@@ -37,30 +37,32 @@ object templates {
       extends Statement
   }
 
+  case class Identifier( value: String )
+
   case class What( head: WhatExpr, tail: Seq[WhatExpr] )
 
   sealed trait WhatExpr
   object WhatExpr {
     case class Ref( ref: templates.Ref ) extends WhatExpr
-    case class AllColumns( table: Option[String] ) extends WhatExpr
+    case class AllColumns( table: Option[Identifier] ) extends WhatExpr
     case class Count( expr: WhatExpr, distinct: Boolean ) extends WhatExpr
   }
 
   /**
    * In case of a column it's a column name and a table name or alias.
    */
-  case class Ref( name: String, context: Option[String] ) 
+  case class Ref( symbol: Identifier, context: Option[Identifier] ) 
 
-  case class From( expr: FromExpr, as: Option[String], joins: Seq[Join] )
+  case class From( expr: FromExpr, as: Option[Identifier], joins: Seq[Join] )
 
   sealed trait FromExpr
   object FromExpr {
-    case class Table( name: String ) extends FromExpr
+    case class Table( name: Identifier ) extends FromExpr
   }
 
   case class Join
     ( expr: FromExpr, 
-      as: Option[String], 
+      as: Option[Identifier], 
       on: Condition, 
       kind: JoinKind )
 
@@ -87,10 +89,14 @@ object templates {
 
   sealed trait Expr
   object Expr {
-    case object Placeholder extends Expr
+    case class Placeholder( placeholder: templates.Placeholder ) extends Expr
     case class Constant( value: Value ) extends Expr
     case class Select( select: Statement.Select ) extends Expr
+    case class Ref( ref: templates.Ref ) extends Expr
   }
+
+  sealed trait Placeholder
+  case object Placeholder extends Placeholder
 
   sealed trait Operator
   object Operator {
@@ -107,7 +113,7 @@ object templates {
   sealed trait IntOrPlaceholder
   object IntOrPlaceholder {
     case class Int( value: scala.Int ) extends IntOrPlaceholder
-    case object Placeholder extends IntOrPlaceholder
+    case class Placeholder( placeholder: templates.Placeholder ) extends IntOrPlaceholder
   }
 
 }

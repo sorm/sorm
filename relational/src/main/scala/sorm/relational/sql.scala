@@ -76,32 +76,3 @@ object values {
       extends Statement
   }
 }
-
-/**
- * A set of specific compilers
- */
-object compilers {
-  type Compiler[template, values] = core.Compiler[template, values, String, Seq[Any]]
-  protected val t = templates
-  protected val v = values
-
-  trait StatementCompiler {
-    protected implicit val sqlStatementToStringCompiler =
-      new Compiler[t.Statement, v.Statement] {
-        def renderTemplate( template: t.Statement ) = {
-          import t._, Statement._
-          template match {
-            case template: Select => implicitly[Compiler[Select, v.Statement.Select]].renderTemplate(template)
-          }
-        }
-        def arrangeValues( values: v.Statement ) = {
-          import v._, Statement._
-          values match {
-            case values: Select => implicitly[Compiler[t.Statement.Select, Select]].arrangeValues(values)
-          }
-        }
-      }
-    protected implicit val sqlSelectToStringCompiler : Compiler[t.Statement.Select, v.Statement.Select]
-  }
-
-}

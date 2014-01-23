@@ -9,8 +9,18 @@ object templates {
 
   sealed trait Statement
   object Statement {
-    // case class Insert
-    //   ( table: String, columns: Seq[String] )
+    case class Insert
+      ( table: String, columns: Seq[String] )
+      extends Statement
+    case class Update
+      ( table: String, setExprs: Seq[(Ref, Expr)], where: Option[Condition] )
+      extends Statement
+    case class Delete
+      ( table: String, 
+        where: Option[Condition],
+        limit: Option[IntOrPlaceholder] = None,
+        offset: Option[IntOrPlaceholder] = None )
+      extends Statement
     case class Select
       ( what: What,
         from: From,

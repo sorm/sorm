@@ -24,8 +24,8 @@ class JoinExpressionsTest extends FunSuite with ShouldMatchers with joinExpressi
 
     val inputTemplate : InputTemplate = {
       val path = null : Path1
-      val operator = expressions.templates.Operator.Equal()
-      val negative = util.typeLevel.Bool.True()
+      val operator = expressions.templates.Operator.Equal
+      val negative = util.typeLevel.Bool.True
       expressions.templates.Where.Comparison(path, operator, negative)
     }
     val outputTemplate = {
@@ -50,17 +50,17 @@ class JoinExpressionsTest extends FunSuite with ShouldMatchers with joinExpressi
       import expressions.templates._
       val left = {
         val path = null: Path1
-        val operator = Operator.Equal()
-        val negative = util.typeLevel.Bool.True()
+        val operator = Operator.Equal
+        val negative = util.typeLevel.Bool.True
         Where.Comparison(path, operator, negative): Where.Comparison[A, path.type, operator.type, negative.type]
       }
       val right = {
         val path = null: Path2
-        val operator = Operator.Equal()
-        val negative = util.typeLevel.Bool.False()
+        val operator = Operator.Equal
+        val negative = util.typeLevel.Bool.False
         Where.Comparison(path, operator, negative): Where.Comparison[A, path.type, operator.type, negative.type]
       }
-      val or = util.typeLevel.Bool.True()
+      val or = util.typeLevel.Bool.True
       Where.Fork(left, right, or)
     }
     val inputValues = {

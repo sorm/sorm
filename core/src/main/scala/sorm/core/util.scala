@@ -14,8 +14,10 @@ package sorm.core; package object util {
       val toBoolean: Boolean
     }
     object Bool {
-      case class True extends Bool { val toBoolean = true }
-      case class False extends Bool { val toBoolean = false }
+      sealed trait True extends Bool
+      sealed trait False extends Bool
+      case object True extends True { val toBoolean = true }
+      case object False extends False { val toBoolean = false }
     }
   }
 

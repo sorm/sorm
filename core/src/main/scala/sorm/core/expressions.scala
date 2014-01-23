@@ -33,22 +33,22 @@ object templates {
 
   sealed trait Operator
   object Operator {
-    case class Equal extends Operator
-    case class Larger extends Operator
-    case class Smaller extends Operator
-    case class Like extends Operator
-    case class Regex extends Operator
-    case class In extends Operator
-    case class Contains extends Operator
+    sealed trait Equal extends Operator; case object Equal extends Equal
+    sealed trait Larger extends Operator; case object Larger extends Larger
+    sealed trait Smaller extends Operator; case object Smaller extends Smaller
+    sealed trait Like extends Operator; case object Like extends Like
+    sealed trait Regex extends Operator; case object Regex extends Regex
+    sealed trait In extends Operator; case object In extends In
+    sealed trait Contains extends Operator; case object Contains extends Contains
     /**
      * Makes part of a collection
      */
-    case class Constitutes extends Operator
+    sealed trait Constitutes extends Operator; case object Constitutes extends Constitutes
     /**
      * Includes a collection
      */
-    case class Includes extends Operator
-    case class HasSize extends Operator
+    sealed trait Includes extends Operator; case object Includes extends Includes
+    sealed trait HasSize extends Operator; case object HasSize extends HasSize
   }
 
 }

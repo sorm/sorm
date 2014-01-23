@@ -111,11 +111,3 @@ object templates {
   }
 
 }
-
-object values {
-  sealed trait Statement
-  object Statement {
-    case class Select
-      extends Statement
-  }
-}

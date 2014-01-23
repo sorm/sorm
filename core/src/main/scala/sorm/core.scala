@@ -9,6 +9,7 @@ def bug ( m : String ) = sys.error("A SORM bug appeared. Please, report the foll
 /**
  * Compiler of expression templates and arranger of associated values.
  */
+//  TODO: Probably, better use lambdas.
 trait Compiler[-inputTemplate, -inputValues, +outputTemplate, +outputValues] {
   def renderTemplate(input: inputTemplate): outputTemplate
   def arrangeValues(input: inputValues): outputValues

@@ -1,6 +1,6 @@
 package sorm.relational.sql
 
-import sorm._, core._
+import sorm._, core._, relational._
 
 /**
  * SQL templates AST.
@@ -14,13 +14,12 @@ object templates {
     case class Select
       ( what: What,
         from: From,
-        where: Option[CondExpr] = None,
+        where: Option[Condition] = None,
         groupBy: Seq[WhatExpr] = Nil,
-        having: Option[CondExpr] = None,
+        having: Option[Condition] = None,
         orderBy: Seq[OrderByExpr] = Nil,
-        // Should be dynamic
-        limit: Option[Int] = None,
-        offset: Option[Int] = None,
+        limit: Option[IntOrPlaceholder] = None,
+        offset: Option[IntOrPlaceholder] = None,
         distinct: Boolean = false )
       extends Statement
     case class Union
@@ -52,7 +51,7 @@ object templates {
   case class Join
     ( expr: FromExpr, 
       as: Option[String], 
-      on: CondExpr, 
+      on: Condition, 
       kind: JoinKind )
 
   sealed trait JoinKind
@@ -63,9 +62,43 @@ object templates {
   /**
    * A conditional expression.
    */
-  sealed trait CondExpr
+  sealed trait Condition
+  object Condition {
+    case class Fork 
+      ( left: Condition, right: Condition, or: Boolean ) 
+      extends Condition
+    case class Comparison
+      ( left: Expr, right: Expr, operator: Operator, negative: Boolean )
+      extends Condition
+    case class IsNull
+      ( expr: Expr, negative: Boolean )
+      extends Condition
+  }
+
+  sealed trait Expr
+  object Expr {
+    case object Placeholder extends Expr
+    case class Constant( value: Value ) extends Expr
+    case class Select( select: Statement.Select ) extends Expr
+  }
+
+  sealed trait Operator
+  object Operator {
+    case object Equal extends Operator
+    case object Larger extends Operator
+    case object Smaller extends Operator
+    case object Like extends Operator
+    case object Regexp extends Operator
+    case object In extends Operator
+  }
 
   case class OrderByExpr( what: Ref, desc: Boolean = false )
+
+  sealed trait IntOrPlaceholder
+  object IntOrPlaceholder {
+    case class Int( value: scala.Int ) extends IntOrPlaceholder
+    case object Placeholder extends IntOrPlaceholder
+  }
 
 }
 

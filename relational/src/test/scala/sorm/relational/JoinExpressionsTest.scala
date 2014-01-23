@@ -1,7 +1,8 @@
 package sorm.relational
 
-import sorm.core._
-import sorm.relational.joinExpressions._
+import sorm._
+import core._
+import relational.joinExpressions._
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
 import java.sql.{Types => jdbcTypes}
@@ -15,7 +16,7 @@ class JoinExpressionsTest extends FunSuite with ShouldMatchers with joinExpressi
   type Path2 = static.TypePath.Property[A, static.TypePath.Root[A], shapeless.nat._1]
   type OutputTemplate = joinExpressions.templates.Where
   type OutputValues = List[Value]
-  type Compiler[inputTemplate, inputValues] = expressions.Compiler[inputTemplate, inputValues, OutputTemplate, OutputValues]
+  type Compiler[inputTemplate, inputValues] = core.Compiler[inputTemplate, inputValues, OutputTemplate, OutputValues]
 
   test("Int Equal Compiler") {
 
@@ -40,7 +41,7 @@ class JoinExpressionsTest extends FunSuite with ShouldMatchers with joinExpressi
       Where.Comparison(column, value, operator, negative)
     }
 
-    implicitly[Compiler[InputTemplate, InputValues]].compileTemplate(inputTemplate).shouldBe(outputTemplate)
+    implicitly[Compiler[InputTemplate, InputValues]].renderTemplate(inputTemplate).shouldBe(outputTemplate)
 
   }
 
@@ -95,8 +96,8 @@ class JoinExpressionsTest extends FunSuite with ShouldMatchers with joinExpressi
 
     val compiler = implicitly[Compiler[inputTemplate.type, inputValues.type]]
 
-    compiler.compileTemplate(inputTemplate).shouldBe(outputTemplate)
-    compiler.processValues(inputValues).shouldBe(outputValues)
+    compiler.renderTemplate(inputTemplate).shouldBe(outputTemplate)
+    compiler.arrangeValues(inputValues).shouldBe(outputValues)
   }
 
 }

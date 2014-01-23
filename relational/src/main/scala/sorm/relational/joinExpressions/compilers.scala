@@ -1,20 +1,21 @@
 package sorm.relational.joinExpressions
 
-import sorm.core._
-import sorm.core.static._
-import sorm.core.util._
-import sorm.core.{expressions => i}
+import sorm._
+import core._
+import core.static._
+import core.util._
+import core.{expressions => i}
 import i.{templates => it}
 import i.{values => iv}
-import sorm.relational._
-import sorm.relational.{joinExpressions => o}
+import relational._
+import relational.{joinExpressions => o}
 import o.{templates => ot}
 import java.sql.{Types => jdbcTypes}
 
 
 object compilers {
 
-  private type Compiler[inputTemplate, inputValues] = i.Compiler[inputTemplate, inputValues, ot.Where, List[Value]]
+  private type Compiler[inputTemplate, inputValues] = core.Compiler[inputTemplate, inputValues, ot.Where, List[Value]]
   
   trait Fork {
     private type InputTemplate[left <: it.Where, right <: it.Where] = it.Where.Fork[left, right, typeLevel.Bool]
@@ -29,14 +30,14 @@ object compilers {
           rightCompiler: Compiler[rightInputTemplate, rightInputValues] )
       =
       new Compiler[InputTemplate[leftInputTemplate, rightInputTemplate], InputValues[leftInputValues, rightInputValues]] {
-        def compileTemplate( tpl: InputTemplate[leftInputTemplate, rightInputTemplate] ) = {
-          val left = leftCompiler.compileTemplate(tpl.left)
-          val right = rightCompiler.compileTemplate(tpl.right)
+        def renderTemplate( tpl: InputTemplate[leftInputTemplate, rightInputTemplate] ) = {
+          val left = leftCompiler.renderTemplate(tpl.left)
+          val right = rightCompiler.renderTemplate(tpl.right)
           ot.Where.Fork(left, right, tpl.or.toBoolean)
         }
-        def processValues(vals: InputValues[leftInputValues, rightInputValues]) = {
-          val left = leftCompiler.processValues(vals.left)
-          val right = rightCompiler.processValues(vals.right)
+        def arrangeValues(vals: InputValues[leftInputValues, rightInputValues]) = {
+          val left = leftCompiler.arrangeValues(vals.left)
+          val right = rightCompiler.arrangeValues(vals.right)
           left ++: right
         }
       }
@@ -53,14 +54,14 @@ object compilers {
       = {
         val mapping = mappingResolver.mapping
         new Compiler[ InputTemplate[root, path], InputValues[value] ]{
-          override def compileTemplate(tpl: InputTemplate[root, path]) = {
+          override def renderTemplate(tpl: InputTemplate[root, path]) = {
             val column = o.functions.column(mapping).getOrElse(bug("Mapping produces no column"))
             val operator = ot.Operator.Equal
             val value = ot.Expression.Placeholder
             val negative = tpl.negative.toBoolean
             ot.Where.Comparison(column, value, operator, negative)
           }
-          override def processValues(vals: InputValues[value]) = {
+          override def arrangeValues(vals: InputValues[value]) = {
             val value = {
               val value = vals.expression.value
               val jdbcType = mapping.jdbcType.getOrElse(bug("Mapping produces no jdbcType"))
@@ -72,6 +73,9 @@ object compilers {
       }
   }
 
+  /**
+   * An evidence of support for `spec` by `value`.
+   */
   protected class Support[spec, value]
   trait IntEqual extends PrimitiveEqual {
     protected implicit val intPrimitiveEqualSupport = new Support[PrimitiveEqual, Int]

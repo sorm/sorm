@@ -5,14 +5,6 @@ import static._
 import util._
 
 /**
- * Compiler of static expression templates and processor of associated dynamic values.
- */
-abstract class Compiler[-inputTemplate, -inputValues, +outputTemplate, +outputValues] {
-  def compileTemplate(input: inputTemplate): outputTemplate
-  def processValues(input: inputValues): outputValues
-}
-
-/**
  * Templates with complete type-level representation.
  */
 // TODO: Get rid of value-level stuff.

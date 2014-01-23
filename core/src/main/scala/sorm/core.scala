@@ -6,6 +6,14 @@ import scala.reflect.runtime.{universe => ru}
 
 def bug ( m : String ) = sys.error("A SORM bug appeared. Please, report the following message to the maintainers: " + m)
 
+/**
+ * Compiler of expression templates and arranger of associated values.
+ */
+trait Compiler[-inputTemplate, -inputValues, +outputTemplate, +outputValues] {
+  def renderTemplate(input: inputTemplate): outputTemplate
+  def arrangeValues(input: inputValues): outputValues
+}
+
 
 /**
  * A reference from a context type to its subfield. E.g., `context.field` or
@@ -43,8 +51,6 @@ object FieldRefs {
   case class FieldRefsNil[ a ] extends FieldRefs[ a, Unit ]
 }
 
-
-// ----------------- the modern way
 
 
 }

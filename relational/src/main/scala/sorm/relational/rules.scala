@@ -65,10 +65,10 @@ object rules {
     }
 
     // TODO: reimplement it based on a typeclass, since drivers may perform different mapping.
-    def columnType: Option[ddl.ColumnType] = {
+    def columnType: Option[model.ColumnType] = {
       val s = Scenario
-      val ct = ddl.ColumnType
-      val partial: PartialFunction[Scenario, ddl.ColumnType] = {
+      val ct = model.ColumnType
+      val partial: PartialFunction[Scenario, model.ColumnType] = {
         case s.Int => ct.Integer
         case s.Long => ct.BigInt
         case s.Boolean => ct.TinyInt
@@ -76,7 +76,7 @@ object rules {
       }
       partial.lift.apply(scenario)
     }
-    def jdbcType: Option[JDBCType] = columnType.map(ddl.ColumnType.jdbcType)
+    def jdbcType: Option[JDBCType] = columnType.map(model.ColumnType.jdbcType)
 
     def tableName: Option[String] = {
       scenario match {
@@ -110,27 +110,27 @@ object rules {
     /**
      * For slave tables.
      */
-    def foreignKeyToParent: Option[ddl.ForeignKey] =
+    def foreignKeyToParent: Option[model.ForeignKey] =
       for {
         parent <- this.parent
         tableName <- parent.tableName
         bindings = parent.primaryKeyColumnNames.map(n => ("p$" + n, n))
-        onDelete = ddl.ReferenceMode.Cascade
-        onUpdate = ddl.ReferenceMode.NoAction
+        onDelete = model.ReferenceMode.Cascade
+        onUpdate = model.ReferenceMode.NoAction
       }
-      yield ddl.ForeignKey(tableName, bindings, onDelete, onUpdate)
+      yield model.ForeignKey(tableName, bindings, onDelete, onUpdate)
 
     /**
      * A foreign key for a parent table.
      */
-    def foreignKeyForParent: Option[ddl.ForeignKey] =
+    def foreignKeyForParent: Option[model.ForeignKey] =
       for {
         tableName <- this.tableName
         bindings = primaryKeyColumnNames.map(n => (memberNameBasis + "$" + n, n))
-        onDelete = ddl.ReferenceMode.Cascade
-        onUpdate = ddl.ReferenceMode.NoAction
+        onDelete = model.ReferenceMode.Cascade
+        onUpdate = model.ReferenceMode.NoAction
       }
-      yield ddl.ForeignKey(tableName, bindings, onDelete, onUpdate)
+      yield model.ForeignKey(tableName, bindings, onDelete, onUpdate)
 
   }
 

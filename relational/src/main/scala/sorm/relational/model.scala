@@ -1,4 +1,4 @@
-package sorm.relational.ddl
+package sorm.relational.model
 
 case class Table
   ( name        : String,

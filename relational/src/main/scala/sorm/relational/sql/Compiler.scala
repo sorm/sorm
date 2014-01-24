@@ -1,6 +1,6 @@
 package sorm.relational.sql
 
-import sorm._, core._, relational._
+import sorm._, core._, util._, relational._
 
 /**
  * A general compiler interface. 
@@ -16,25 +16,28 @@ trait Compiler {
 
   case class Output( template: String, f: F )
   
+  /**
+   * A composite input values arranger function.
+   */
   type F = Any => Seq[Value]
   object F {
     val void: F = _ => Nil
     val id: F = { case a: Value => Seq(a) }
-    def tuple2( f1: F, f2: F ): F = 
+    def join( f1: F, f2: F ): F = 
       { case (v1, v2) => f1(v1) ++ f2(v2) }
-    def tuple3( f1: F, f2: F, f3: F ): F = 
+    def join( f1: F, f2: F, f3: F ): F = 
       { case (v1, v2, v3) => f1(v1) ++ f2(v2) ++ f3(v3) }
-    def tuple4( f1: F, f2: F, f3: F, f4: F ): F = 
+    def join( f1: F, f2: F, f3: F, f4: F ): F = 
       { case (v1, v2, v3, v4) => f1(v1) ++ f2(v2) ++ f3(v3) ++ f4(v4) }
-    def tuple8( f1: F, f2: F, f3: F, f4: F, f5: F, f6: F, f7: F, f8: F ): F =
+    def join( f1: F, f2: F, f3: F, f4: F, f5: F, f6: F, f7: F, f8: F ): F =
       { case (v1, v2, v3, v4, v5, v6, v7, v8) =>
         f1(v1) ++ f2(v2) ++ f3(v3) ++ f4(v4) ++ f5(v5) ++ f6(v6) ++ f7(v7) ++ f8(v8)
       }
     def itr( fs: Iterable[F] ): F = 
       { case a: Iterable[Any] =>
-        val noF = bug("Not enough functions")
-        val noValues = bug("Not enough values")
-        fs.zipAll(a, noF, noValues).flatMap{ case (a, b) => a(b) }.toSeq
+        def noF = bug("Not enough functions")
+        def noValues = bug("Not enough values")
+        fs.zipAllLazy(a, noF, noValues).flatMap{ case (a, b) => a(b) }.toSeq
       }
   }
 
@@ -53,15 +56,18 @@ trait Compiler {
     }
     val template = {
       val valuesT = 
-        if( columns.isEmpty ) " VALUES (DEFAULT)"
+        if( columns.isEmpty ) "VALUES (DEFAULT)"
         else {
           val columnsT = columns.map(_.template).mkString(", ")
           val exprsT = exprs.map(_.template).mkString(", ")
           s"($columnsT) VALUES ($exprsT)"
         }
-      "INSERT INTO " + table.template + valuesT
+      "INSERT INTO " + table.template + " " + valuesT
     }
-    val f = F.tuple3(table.f, F.itr(columns.map(_.f)), F.itr(exprs.map(_.f)))
+    val f = {
+      val values = columns.map(_.f).zip(exprs.map(_.f)).map{ case (a, b) => F.join(a, b) }
+      F.join(table.f, F.itr(values))
+    }
     Output(template, f)
   } 
   def compile( a: t.Statement.Update ): Output = {
@@ -79,10 +85,10 @@ trait Compiler {
     }
     val f = {
       val valuesF = {
-        val fs = values.map{ case (id, expr) => F.tuple2(id.f, expr.f) }
+        val fs = values.map{ case (id, expr) => F.join(id.f, expr.f) }
         F.itr(fs)
       }
-      F.tuple3(table.f, valuesF, F.itr(where.map(_.f)))
+      F.join(table.f, valuesF, F.itr(where.map(_.f)))
     }
     Output(template, f)
   } 
@@ -98,7 +104,7 @@ trait Compiler {
       val offsetT = offset.map(" OFFSET " + _.template).mkString
       "DELETE" + fromT + whereT + limitT + offsetT
     }
-    val f = F.tuple4(from.f, F.itr(where.map(_.f)), F.itr(limit.map(_.f)), F.itr(offset.map(_.f)))
+    val f = F.join(from.f, F.itr(where.map(_.f)), F.itr(limit.map(_.f)), F.itr(offset.map(_.f)))
     Output(template, f)
   } 
   def compile( a: t.Statement.Select ): Output = {
@@ -126,7 +132,7 @@ trait Compiler {
       val offsetT = offset.map(" OFFSET " + _.template).mkString
       selectT + whatT + fromT + whereT + groupByT + havingT + orderByT + limitT + offsetT
     }
-    val f = F.tuple8( F.itr(what.map(_.f)), from.f, F.itr(where.map(_.f)),
+    val f = F.join( F.itr(what.map(_.f)), from.f, F.itr(where.map(_.f)),
                       F.itr(groupBy.map(_.f)), F.itr(having.map(_.f)), 
                       F.itr(orderBy.map(_.f)), F.itr(limit.map(_.f)), 
                       F.itr(offset.map(_.f)) )
@@ -136,7 +142,7 @@ trait Compiler {
     val left = compile(a.left)
     val right = compile(a.right)
     val template = s"(${left.template}) UNION (${compile(a.right)})"
-    val f = F.tuple2(left.f, right.f)
+    val f = F.join(left.f, right.f)
     Output(template, f)
   }
   def compile( a: t.WhatExpr ): Output = a match {
@@ -170,7 +176,7 @@ trait Compiler {
       val joinsT = joins.map(_.template).map(" " + _).mkString
       "FROM " + exprT + asT + joinsT
     }
-    val f = F.tuple3(expr.f, F.itr(as.map(_.f)), F.itr(joins.map(_.f)))
+    val f = F.join(expr.f, F.itr(as.map(_.f)), F.itr(joins.map(_.f)))
     Output(template, f)
   }
   def compile( a: t.FromExpr ): Output = a match {
@@ -187,7 +193,7 @@ trait Compiler {
       as.map(" AS " + _.template).mkString +
       on.map(" ON " + _.template).mkString
     }
-    val f = F.tuple4(dec.f, what.f, F.itr(as.map(_.f)), F.itr(on.map(_.f)))
+    val f = F.join(dec.f, what.f, F.itr(as.map(_.f)), F.itr(on.map(_.f)))
     Output(template, f)
   }
   def compile( a: t.JoinDeclaration ): Output = a match {
@@ -207,7 +213,7 @@ trait Compiler {
        case false => s"${left.template} AND ${right.template}"
      }
     }
-    val f = F.tuple2(left.f, right.f)
+    val f = F.join(left.f, right.f)
     Output(template, f)
   }
   def compile( a: t.Condition.Comparison ): Output = {
@@ -215,7 +221,7 @@ trait Compiler {
     val left = compile(a.left)
     val right = compile(a.right)
     val template = left.template + " " + operator.template + " " + right.template
-    val f = F.tuple3(left.f, operator.f, right.f)
+    val f = F.join(left.f, operator.f, right.f)
     Output(template, f)
   }
   def compile( a: t.Condition.IsNull ): Output = {
@@ -253,7 +259,7 @@ trait Compiler {
     val context = a.context.map(compile)
     val symbol = compile(a.symbol)
     val template = context.map(_.template + ".").getOrElse("") + symbol.template
-    val f = F.tuple2(F.itr(context.map(_.f)), symbol.f)
+    val f = F.join(F.itr(context.map(_.f)), symbol.f)
     Output(template, f)
   }
   def compile( a: t.Identifier ) = {

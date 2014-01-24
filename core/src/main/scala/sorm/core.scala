@@ -1,7 +1,20 @@
-package sorm; package object core {
+package sorm
+package object core {
+
+import scala.reflect.runtime.{universe => ru}
 
 
-import reflect.runtime.universe._
+def bug ( m : String ) = sys.error("A SORM bug appeared. Please, report the following message to maintainers: " + m)
+def todo ( m : String ) = sys.error("Reached an unimplemenented SORM feature. Please, report the following message to maintainers: " + m)
+
+/**
+ * Compiler of expression templates and arranger of associated values.
+ */
+//  TODO: Probably, better use lambdas.
+trait Compiler[-inputTemplate, -inputValues, +outputTemplate, +outputValues] {
+  def renderTemplate(input: inputTemplate): outputTemplate
+  def arrangeValues(input: inputValues): outputValues
+}
 
 
 /**
@@ -24,7 +37,7 @@ import reflect.runtime.universe._
  */
 case class FieldRef
   [ source, target ]
-  ( contextType : Type,
+  ( contextType : ru.Type,
     subFieldSymbols : List[ Symbol ] )
 
 sealed trait FieldRefs
@@ -39,5 +52,7 @@ object FieldRefs {
 
   case class FieldRefsNil[ a ] extends FieldRefs[ a, Unit ]
 }
+
+
 
 }

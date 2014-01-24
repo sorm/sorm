@@ -4,7 +4,8 @@ package object core {
 import scala.reflect.runtime.{universe => ru}
 
 
-def bug ( m : String ) = sys.error("A SORM bug appeared. Please, report the following message to the maintainers: " + m)
+def bug ( m : String ) = sys.error("A SORM bug appeared. Please, report the following message to maintainers: " + m)
+def todo ( m : String ) = sys.error("Reached an unimplemenented SORM feature. Please, report the following message to maintainers: " + m)
 
 /**
  * Compiler of expression templates and arranger of associated values.

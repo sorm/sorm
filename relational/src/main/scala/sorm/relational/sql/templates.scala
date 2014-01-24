@@ -10,26 +10,26 @@ object templates {
   sealed trait Statement
   object Statement {
     case class Insert
-      ( table: Identifier, columns: Seq[Identifier] )
+      ( table: Identifier, values: Seq[(Identifier, Expr)] )
       extends Statement
     case class Update
-      ( table: Identifier, setExprs: Seq[(Ref, Expr)], where: Option[Condition] )
+      ( table: Identifier, values: Seq[(Identifier, Expr)], where: Option[Condition] )
       extends Statement
     case class Delete
-      ( table: Identifier, 
+      ( from: From, 
         where: Option[Condition],
-        limit: Option[IntOrPlaceholder] = None,
-        offset: Option[IntOrPlaceholder] = None )
+        limit: Option[Expr] = None,
+        offset: Option[Expr] = None )
       extends Statement
     case class Select
-      ( what: What,
+      ( what: Seq[WhatExpr],
         from: From,
         where: Option[Condition] = None,
         groupBy: Seq[WhatExpr] = Nil,
         having: Option[Condition] = None,
         orderBy: Seq[OrderByExpr] = Nil,
-        limit: Option[IntOrPlaceholder] = None,
-        offset: Option[IntOrPlaceholder] = None,
+        limit: Option[Expr] = None,
+        offset: Option[Expr] = None,
         distinct: Boolean = false )
       extends Statement
     case class Union
@@ -39,13 +39,11 @@ object templates {
 
   case class Identifier( value: String )
 
-  case class What( head: WhatExpr, tail: Seq[WhatExpr] )
-
   sealed trait WhatExpr
   object WhatExpr {
     case class Ref( ref: templates.Ref ) extends WhatExpr
     case class AllColumns( table: Option[Identifier] ) extends WhatExpr
-    case class Count( expr: WhatExpr, distinct: Boolean ) extends WhatExpr
+    case class Count( what: Seq[WhatExpr], distinct: Boolean ) extends WhatExpr
   }
 
   /**
@@ -61,14 +59,14 @@ object templates {
   }
 
   case class Join
-    ( expr: FromExpr, 
+    ( declaration: JoinDeclaration,
+      what: FromExpr, 
       as: Option[Identifier], 
-      on: Condition, 
-      kind: JoinKind )
+      on: Option[Condition] )
 
-  sealed trait JoinKind
-  object JoinKind {
-    case object Left extends JoinKind
+  sealed trait JoinDeclaration
+  object JoinDeclaration {
+    case object Left extends JoinDeclaration
   }
 
   /**
@@ -108,12 +106,6 @@ object templates {
     case object In extends Operator
   }
 
-  case class OrderByExpr( what: Ref, desc: Boolean = false )
-
-  sealed trait IntOrPlaceholder
-  object IntOrPlaceholder {
-    case class Int( value: scala.Int ) extends IntOrPlaceholder
-    case class Placeholder( placeholder: templates.Placeholder ) extends IntOrPlaceholder
-  }
+  case class OrderByExpr( ref: Ref, desc: Boolean = false )
 
 }

@@ -30,6 +30,19 @@ object JDBCType {
     case _ : DateTime   => Some(TIMESTAMP)
     case _              => None
   }
+  val varchar   = VARCHAR
+  val time      = TIME
+  val date      = DATE
+  val timestamp = TIMESTAMP
+  val integer   = INTEGER
+  val double    = DOUBLE
+  val float     = FLOAT
+  val clob      = CLOB
+  val bigint    = BIGINT
+  val boolean   = BOOLEAN
+  val decimal   = DECIMAL
+  val smallint  = SMALLINT
+  val tinyint   = TINYINT
 }
 
 // FIXME: mappings are not bijective. E.g., 

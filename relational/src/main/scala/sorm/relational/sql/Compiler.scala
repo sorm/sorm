@@ -5,6 +5,9 @@ import sorm._, core._, relational._
 /**
  * A general compiler interface. 
  * It's granular, so that the drivers are able to override individual methods.
+ *
+ * Follows a rule that the values are placed in tuples isomorphic to according AST symbols,
+ * with exception that single-item symbols simply forward their internals.
  */
 // NOTE: Since all the compilation happens to dynamic types, 
 // typeclasses wouldn't really have helped here.
@@ -13,13 +16,21 @@ trait Compiler {
 
   case class Output( template: String, f: F )
   type F = Any => Seq[Value]
-
-  protected val voidF: F = _ => Nil
-  protected def pairF( left: Output, right: Output ): F = { case (a, b) => left.f(a) ++ right.f(b) }
-  protected def seqF( fs: Seq[F] ): F = { case a: Seq[Any] =>
-    val noF = bug("Not enough functions")
-    val noValues = bug("Not enough values")
-    fs.zipAll(a, noF, noValues).flatMap{ case (a, b) => a(b) }
+  object F {
+    val void: F = _ => Nil
+    val id: F = { case a: Value => Seq(a) }
+    def tuple2( f1: F, f2: F ): F = 
+      { case (i1, i2) => f1(i1) ++ f2(i2) }
+    def tuple3( f1: F, f2: F, f3: F ): F = 
+      { case (i1, i2, i3) => f1(i1) ++ f2(i2) ++ f3(i3) }
+    def tuple4( f1: F, f2: F, f3: F, f4: F ): F = 
+      { case (i1, i2, i3, i4) => f1(i1) ++ f2(i2) ++ f3(i3) ++ f4(i4) }
+    def seq( fs: Seq[F] ): F = 
+      { case a: Seq[Any] =>
+        val noF = bug("Not enough functions")
+        val noValues = bug("Not enough values")
+        fs.zipAll(a, noF, noValues).flatMap{ case (a, b) => a(b) }
+      }
   }
 
   def compile( a: t.Statement ): Output = a match {
@@ -37,7 +48,7 @@ trait Compiler {
     val where = a.where.map(compile)
     val template = {
       val distinct = if( a.distinct ) " DISTINCT" else ""
-      val whereT = where.map("WHERE " +)
+      val whereT = where.map("WHERE " + _)
       ???
     }
     ???
@@ -46,13 +57,13 @@ trait Compiler {
     val left = compile(a.left)
     val right = compile(a.right)
     val template = s"(${left.template}) UNION (${compile(a.right)})"
-    val f = pairF(left, right)
+    val f = F.tuple2(left.f, right.f)
     Output(template, f)
   }
   def compile( a: t.What ): Output = {
     val exprs = (a.head +: a.tail.toStream).map(compile)
     val template = exprs.map(_.template).mkString(", ")
-    val f: F = seqF(exprs.map(_.f))
+    val f: F = F.seq(exprs.map(_.f))
     Output(template, f)
   }
   def compile( a: t.WhatExpr ): Output = a match {
@@ -64,7 +75,7 @@ trait Compiler {
   def compile( a: t.WhatExpr.AllColumns ): Output = {
     val table = a.table.map(compile)
     val template = table.map(_.template).map(_ + ".").getOrElse("") + "*"
-    val f = table.map(_.f).getOrElse(voidF)
+    val f = table.map(_.f).getOrElse(F.void)
     Output(template, f)
   }
   def compile( a: t.WhatExpr.Count ): Output = ???
@@ -74,16 +85,11 @@ trait Compiler {
     val joins = a.joins.toStream.map(compile)
     val template = {
       val exprT = expr.template
-      val asT = as.map(_.template).map(" AS " +).getOrElse("")
-      val joinsT = joins.map(_.template).map(" " +).mkString
+      val asT = as.map(_.template).map(" AS " + _).getOrElse("")
+      val joinsT = joins.map(_.template).map(" " + _).mkString
       "FROM " + exprT + asT + joinsT
     }
-    val f: F = { case (a, b, c: Seq[Any]) =>
-      val exprV = expr.f(a)
-      val asV = as.map(_.f(b)).getOrElse(Nil)
-      val joinsV = seqF(joins.map(_.f))(c)
-      exprV ++ asV ++ joinsV
-    }
+    val f = F.tuple3(expr.f, as.map(_.f).getOrElse(F.void), F.seq(joins.map(_.f)))
     Output(template, f)
   }
   def compile( a: t.FromExpr ): Output = a match {
@@ -105,14 +111,15 @@ trait Compiler {
         case false => s"${left.template} AND ${right.template}"
       }
      }
-     Output(template, pairF(left, right))
+     val f = F.tuple2(left.f, right.f)
+     Output(template, f)
   }
   def compile( a: t.Condition.Comparison ): Output = {
     val operator = compile(a.operator, a.negative)
     val left = compile(a.left)
     val right = compile(a.right)
     val template = left.template + " " + operator.template + " " + right.template
-    val f: F = { case (a, b) => left.f(a) ++ right.f(b) }
+    val f = F.tuple3(left.f, operator.f, right.f)
     Output(template, f)
   }
   def compile( a: t.Condition.IsNull ): Output = {
@@ -122,18 +129,18 @@ trait Compiler {
     Output(template, f)
   }
   def compile( a: (t.Operator, Boolean) ): Output = a match {
-    case (t.Operator.Equal, false) => Output("=", voidF)
-    case (t.Operator.Equal, true) => Output("<>", voidF)
-    case (t.Operator.Larger, false) => Output(">", voidF)
-    case (t.Operator.Larger, true) => Output("<=", voidF)
-    case (t.Operator.Smaller, false) => Output("<", voidF)
-    case (t.Operator.Smaller, true) => Output(">=", voidF)
-    case (t.Operator.Like, false) => Output("LIKE", voidF)
-    case (t.Operator.Like, true) => Output("NOT LIKE", voidF)
-    case (t.Operator.Regexp, false) => Output("REGEXP", voidF)
-    case (t.Operator.Regexp, true) => Output("NOT REGEXP", voidF)
-    case (t.Operator.In, false) => Output("IN", voidF)
-    case (t.Operator.In, true) => Output("NOT IN", voidF)
+    case (t.Operator.Equal, false) => Output("=", F.void)
+    case (t.Operator.Equal, true) => Output("<>", F.void)
+    case (t.Operator.Larger, false) => Output(">", F.void)
+    case (t.Operator.Larger, true) => Output("<=", F.void)
+    case (t.Operator.Smaller, false) => Output("<", F.void)
+    case (t.Operator.Smaller, true) => Output(">=", F.void)
+    case (t.Operator.Like, false) => Output("LIKE", F.void)
+    case (t.Operator.Like, true) => Output("NOT LIKE", F.void)
+    case (t.Operator.Regexp, false) => Output("REGEXP", F.void)
+    case (t.Operator.Regexp, true) => Output("NOT REGEXP", F.void)
+    case (t.Operator.In, false) => Output("IN", F.void)
+    case (t.Operator.In, true) => Output("NOT IN", F.void)
   }
   def compile( a: t.Expr ): Output = a match {
     case a: t.Expr.Placeholder => compile(a)
@@ -145,16 +152,17 @@ trait Compiler {
   def compile( a: t.Expr.Constant ) = ???
   def compile( a: t.Expr.Select ) = ???
   def compile( a: t.Expr.Ref ): Output = compile(a.ref)
-  def compile( a: t.Placeholder ) = Output("?", voidF)
+  def compile( a: t.Placeholder ) = Output("?", F.id)
   def compile( a: t.Ref ): Output = {
     val context = a.context.map(compile)
     val symbol = compile(a.symbol)
     val template = context.map(_.template + ".").getOrElse("") + symbol.template
-    Output(template, voidF)
+    val f = F.tuple2(context.map(_.f).getOrElse(F.void), symbol.f)
+    Output(template, f)
   }
   def compile( a: t.Identifier ) = {
     val template = "\"" + a.value + "\""
-    Output(template, voidF)
+    Output(template, F.void)
   }
 
 }

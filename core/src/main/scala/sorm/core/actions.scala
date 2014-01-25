@@ -22,8 +22,8 @@ object Action extends scalaz.syntax.ToMonadOps {
 }
 
 trait ActionRunner {
-  def run[ result ]( action: Action[ result ] ): result = ???
-  def runAsTransaction[ result ]( action: Action[ result ] ): result = ???
+  def run[ result ]( action: Action[ result ] ): result
+  def runAsTransaction[ result ]( action: Action[ result ] ): result
 }
 
 trait StatementRunner {

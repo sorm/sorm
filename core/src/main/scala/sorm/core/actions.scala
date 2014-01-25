@@ -3,35 +3,39 @@ package sorm.core.actions
 import sorm._, core._, util._
 import core.static._
 
+case class Action[ result ]( f: StatementRunner => result )
+object Action extends scalaz.syntax.ToMonadOps {
+  implicit val monad = new scalaz.Monad[Action] {
+    def point[a](a: => a) = Action(_ => a)
+    def bind[a, b](a: Action[a])(k: a => Action[b]) = {
+      Action{ runner =>
+        val aResult = a.f(runner)
+        val bAction = k(aResult)
+        bAction.f(runner)
+      }
+    }
+  }
+}
 
-case class Action[ result ]( ast: AST )
-
-trait Runner {
+trait ActionRunner {
   def run[ result ]( action: Action[ result ] ): result = ???
   def runAsTransaction[ result ]( action: Action[ result ] ): result = ???
 }
 
-sealed trait AST
-object AST {
-  case class From
-    [ root ]
-    extends AST
-  case class Limit
-    [ tail ]
-    ( limit: Int, tail: tail )
-    extends AST
-  case class Offset
-    [ tail ]
-    ( offset: Int, tail: tail )
-    extends AST
-  case class Where
-    [ tail ]
-    ( tail: tail )
-    extends AST
-  case class Select
-    [ tail ]
-    ( tail: tail )
-    extends AST
+trait StatementRunner {
+  def run[ result ]( statement: syntax.Statement[ result ] ): result
+}
+
+object syntax {
+  case class From[ root ]
+  case class Limit[ tail ]( limit: Int, tail: tail )
+  case class Offset[ tail ]( offset: Int, tail: tail )
+  case class Where[ tail ]( tail: tail )
+
+  sealed trait Statement[ result ]
+  object Statement {
+    case class Select[ result, tail ]( tail: tail ) extends Statement[ result ]
+  }
 }
 
 trait Builders {
@@ -46,13 +50,16 @@ trait Builders {
     type OrderBySupport <: Bool
     type LimitSupport <: Bool
     type OffsetSupport <: Bool
-    type AST <: actions.AST
+    type AST
     type Root
     protected val ast: AST
   }
   object FromBuilder {
     implicit def selectSupport( b: FromBuilder{ type SelectSupport = True } ) = new {
-      def select = Action[b.Root](b.ast)
+      def select = {
+        val statement = syntax.Statement.Select[b.Root, b.AST](b.ast)
+        Action(runner => runner.run(statement))
+      }
     }
     implicit def limitSupport( b: FromBuilder{ type LimitSupport = True } ) = new {
       def limit(a: Int) = new FromBuilder {
@@ -63,9 +70,9 @@ trait Builders {
         type OrderBySupport = b.OrderBySupport
         type LimitSupport = False
         type OffsetSupport = b.OffsetSupport
-        type AST = AST.Limit[b.AST]
+        type AST = syntax.Limit[b.AST]
         type Root = b.Root
-        protected val ast = AST.Limit(a, b.ast)
+        protected val ast = syntax.Limit(a, b.ast)
       }
     }
     implicit def offsetSupport( b: FromBuilder{ type OffsetSupport = True } ) = new {
@@ -77,9 +84,9 @@ trait Builders {
         type OrderBySupport = b.OrderBySupport
         type LimitSupport = b.LimitSupport
         type OffsetSupport = False
-        type AST = AST.Offset[b.AST]
+        type AST = syntax.Offset[b.AST]
         type Root = b.Root
-        protected val ast = AST.Offset(a, b.ast)
+        protected val ast = syntax.Offset(a, b.ast)
       }
     }
   }
@@ -93,9 +100,9 @@ trait Builders {
       type OrderBySupport = True
       type LimitSupport = True
       type OffsetSupport = True
-      type AST = AST.From[a]
+      type AST = syntax.From[a]
       type Root = a
-      protected val ast = AST.From[a]
+      protected val ast = syntax.From[a]
     }
   def insert[ a ](a: a) = ???
 

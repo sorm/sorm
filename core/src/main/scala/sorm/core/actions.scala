@@ -15,6 +15,10 @@ object Action extends scalaz.syntax.ToMonadOps {
       }
     }
   }
+  implicit class RunOps[r](val self: Action[r]) extends AnyVal {
+    def runOn( runner: ActionRunner ) = runner.run(self)
+    def runAsTransactionOn( runner: ActionRunner ) = runner.runAsTransaction(self)
+  }
 }
 
 trait ActionRunner {

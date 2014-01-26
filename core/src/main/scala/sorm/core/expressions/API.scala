@@ -40,7 +40,6 @@ trait API {
     type OrderBySupport <: Bool
     type LimitSupport <: Bool
     type OffsetSupport <: Bool
-    type Root
     type Template
     protected val template: Template
     protected val values: Seq[Any]
@@ -62,7 +61,6 @@ trait API {
         type OrderBySupport = b.OrderBySupport
         type LimitSupport = False
         type OffsetSupport = b.OffsetSupport
-        type Root = b.Root
         type Template = templates.Limit[b.Template]
         protected val template = templates.Limit(b.template)
         protected val values = a +: b.values
@@ -77,7 +75,6 @@ trait API {
         type OrderBySupport = b.OrderBySupport
         type LimitSupport = b.LimitSupport
         type OffsetSupport = False
-        type Root = b.Root
         type Template = templates.Offset[b.Template]
         protected val template = templates.Offset(b.template)
         protected val values = a +: b.values
@@ -94,7 +91,6 @@ trait API {
       type OrderBySupport = True
       type LimitSupport = True
       type OffsetSupport = True
-      type Root = a
       type Template = templates.From[a]
       protected val template = templates.From[a]
       protected val values = Nil

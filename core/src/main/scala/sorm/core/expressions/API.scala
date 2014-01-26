@@ -45,14 +45,14 @@ trait API {
     protected val values: Seq[Any]
   }
   object FromBuilder {
-    implicit def selectSupport( b: FromBuilder{ type SelectSupport = True } ) = new {
+    implicit def selectOps( b: FromBuilder{ type SelectSupport = True } ) = new {
       def select = {
         val template = templates.Statement.Select(b.template)
         val values = b.values
         Action(runner => runner.run(template, values))
       }
     }
-    implicit def limitSupport( b: FromBuilder{ type LimitSupport = True } ) = new {
+    implicit def limitOps( b: FromBuilder{ type LimitSupport = True } ) = new {
       def limit(a: Int) = new FromBuilder {
         type SelectSupport = b.SelectSupport
         type UpdateSupport = b.UpdateSupport
@@ -66,7 +66,7 @@ trait API {
         protected val values = a +: b.values
       }
     }
-    implicit def offsetSupport( b: FromBuilder{ type OffsetSupport = True } ) = new {
+    implicit def offsetOps( b: FromBuilder{ type OffsetSupport = True } ) = new {
       def offset(a: Int) = new FromBuilder {
         type SelectSupport = b.SelectSupport
         type UpdateSupport = b.UpdateSupport

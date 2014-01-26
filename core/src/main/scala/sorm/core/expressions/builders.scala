@@ -19,7 +19,7 @@ sealed trait FromBuilder {
 object FromBuilder {
   implicit def selectOps
     ( b: FromBuilder{ type SelectSupport = True; type Template <: t.Select } )
-    ( implicit parser: expressions.Parser[t.Action.Select[b.Template]] )
+    ( implicit parser: t.Action.ResultParser[t.Action.Select[b.Template]] )
     =
     new {
       def select = {

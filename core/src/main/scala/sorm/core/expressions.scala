@@ -47,6 +47,13 @@ object templates {
     case class Update[ select <: templates.Select ]( select: select ) extends Action
     case class Delete[ select <: templates.Select ]( select: select ) extends Action
     case class Insert[ root ] extends Action
+
+    trait ResultParser[ action <: Action ] {
+      type Source
+      type Result
+      def parse( source: Source ): Result
+    }
+
   }
 
   sealed trait Select
@@ -71,7 +78,7 @@ object templates {
       ( condition: condition, tail: tail )
       extends Select
 
-    trait RootResolver[template] {
+    trait RootResolver[template <: Select] {
       type Root
     }
     object RootResolver {
@@ -80,8 +87,31 @@ object templates {
         [ tail <: Select ]
         ( implicit tailResolver: RootResolver[tail] )
         = new RootResolver[ Limit[tail] ]{ type Root = tailResolver.Root }
-        
     }
+
+    trait MemberResolver[template <: Select] {
+      type Root
+      def member: api.Setup.Member[Root]
+    }
+    object MemberResolver {
+      implicit def from
+        [ root ]
+        ( implicit member1: api.Setup.Member[ root ] )
+        =
+        new MemberResolver[ From[root] ] {
+          type Root = root
+          def member = member1
+        }
+      implicit def limit
+        [ tail <: Select ]
+        ( implicit tailInstance: MemberResolver[tail] )
+        =
+        new MemberResolver[tail] {
+          type Root = tailInstance.Root
+          def member = tailInstance.member
+        }
+    }
+
   }
 
 }
@@ -108,6 +138,6 @@ trait Runner {
   def run
     [ template <: templates.Action ]
     ( template: template, values: Seq[Any] )
-    ( implicit parser: Parser[ template ] )
+    ( implicit parser: templates.Action.ResultParser[ template ] )
     : parser.Result
 }

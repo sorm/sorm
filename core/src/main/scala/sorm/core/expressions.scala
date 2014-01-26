@@ -1,8 +1,6 @@
 package sorm.core.expressions
 
-import sorm.core._
-import static._
-import util._
+import sorm._, core._, util._, static._
 
 /**
  * Templates with complete type-level representation.
@@ -11,16 +9,16 @@ import util._
 // Although, value-level stuff may well be needed for runtime caching of compilation results.
 object templates {
 
-  sealed trait Where
-  object Where {
+  sealed trait Condition
+  object Condition {
     case class Fork
-      [ +left <: Where, +right <: Where, +or <: typeLevel.Bool ]
+      [ +left <: Condition, +right <: Condition, +or <: typeLevel.Bool ]
       ( left: left, right: right, or: or )
-      extends Where
+      extends Condition
     case class Comparison
       [ root, +path <: TypePath[root], +operator <: Operator, +negative <: typeLevel.Bool ]
       ( path: path, operator: operator, negative: negative )
-      extends Where
+      extends Condition
   }
 
   sealed trait Operator
@@ -43,6 +41,20 @@ object templates {
     sealed trait HasSize extends Operator; case object HasSize extends HasSize
   }
 
+  sealed trait Statement
+  object Statement {
+    case class Select[ tail ]( tail: tail ) extends Statement
+    case class Update[ tail ]( tail: tail ) extends Statement
+    case class Delete[ tail ]( tail: tail ) extends Statement
+    case class Insert[ path ] extends Statement
+  }
+
+  case class From[ root ]
+  case class Limit[ tail ]( tail: tail )
+  case class Offset[ tail ]( tail: tail )
+  case class OrderBy[ path <: TypePath[_], tail ]( tail: tail )
+  case class Where[ condition <: Condition, tail ]( tail: tail )
+
 }
 
 /**
@@ -50,10 +62,10 @@ object templates {
  */
 object values {
 
-  sealed trait Where
-  object Where {
-    case class Fork[ +left, +right ]( left: left, right: right ) extends Where
-    case class Comparison[ expression <: Expression ]( expression: expression ) extends Where
+  sealed trait Condition
+  object Condition {
+    case class Fork[ +left, +right ]( left: left, right: right ) extends Condition
+    case class Comparison[ expression <: Expression ]( expression: expression ) extends Condition
   }
 
   sealed trait Expression
@@ -62,8 +74,3 @@ object values {
   }
 
 }
-
-//case class Expression
-//  [template <: templates.Template, values <: values.Values]
-//  (template: template, values: values)
-

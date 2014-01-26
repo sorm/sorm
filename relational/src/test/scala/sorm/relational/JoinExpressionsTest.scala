@@ -20,14 +20,14 @@ class JoinExpressionsTest extends FunSuite with ShouldMatchers with joinExpressi
 
   test("Int Equal Compiler") {
 
-    type InputTemplate = expressions.templates.Where.Comparison[A, Path1, expressions.templates.Operator.Equal, util.typeLevel.Bool.True]
-    type InputValues = expressions.values.Where.Comparison[expressions.values.Expression.Value[Int]]
+    type InputTemplate = expressions.templates.Condition.Comparison[A, Path1, expressions.templates.Operator.Equal, util.typeLevel.Bool.True]
+    type InputValues = expressions.values.Condition.Comparison[expressions.values.Expression.Value[Int]]
 
     val inputTemplate : InputTemplate = {
       val path = null : Path1
       val operator = expressions.templates.Operator.Equal
       val negative = util.typeLevel.Bool.True
-      expressions.templates.Where.Comparison(path, operator, negative)
+      expressions.templates.Condition.Comparison(path, operator, negative)
     }
     val outputTemplate = {
       import joinExpressions.templates._
@@ -53,22 +53,22 @@ class JoinExpressionsTest extends FunSuite with ShouldMatchers with joinExpressi
         val path = null: Path1
         val operator = Operator.Equal
         val negative = util.typeLevel.Bool.True
-        Where.Comparison(path, operator, negative): Where.Comparison[A, path.type, operator.type, negative.type]
+        Condition.Comparison(path, operator, negative): Condition.Comparison[A, path.type, operator.type, negative.type]
       }
       val right = {
         val path = null: Path2
         val operator = Operator.Equal
         val negative = util.typeLevel.Bool.False
-        Where.Comparison(path, operator, negative): Where.Comparison[A, path.type, operator.type, negative.type]
+        Condition.Comparison(path, operator, negative): Condition.Comparison[A, path.type, operator.type, negative.type]
       }
       val or = util.typeLevel.Bool.True
-      Where.Fork(left, right, or)
+      Condition.Fork(left, right, or)
     }
     val inputValues = {
       import expressions.values._
-      val left = Where.Comparison(Expression.Value(2))
-      val right = Where.Comparison(Expression.Value(false))
-      Where.Fork(left, right)
+      val left = Condition.Comparison(Expression.Value(2))
+      val right = Condition.Comparison(Expression.Value(false))
+      Condition.Fork(left, right)
     }
     val outputTemplate = {
       import joinExpressions.templates._

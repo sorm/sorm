@@ -41,19 +41,48 @@ object templates {
     sealed trait HasSize extends Operator; case object HasSize extends HasSize
   }
 
-  sealed trait Statement
-  object Statement {
-    case class Select[ tail ]( tail: tail ) extends Statement
-    case class Update[ tail ]( tail: tail ) extends Statement
-    case class Delete[ tail ]( tail: tail ) extends Statement
-    case class Insert[ path ] extends Statement
+  sealed trait Action
+  object Action {
+    case class Select[ select <: templates.Select ]( select: select ) extends Action
+    case class Update[ select <: templates.Select ]( select: select ) extends Action
+    case class Delete[ select <: templates.Select ]( select: select ) extends Action
+    case class Insert[ root ] extends Action
   }
 
-  case class From[ root ]
-  case class Limit[ tail ]( tail: tail )
-  case class Offset[ tail ]( tail: tail )
-  case class OrderBy[ path <: TypePath[_], tail ]( tail: tail )
-  case class Where[ condition <: Condition, tail ]( tail: tail )
+  sealed trait Select
+  object Select {
+    case class From
+      [ root ] 
+      extends Select
+    case class Limit
+      [ tail <: Select ]
+      ( tail: tail )
+      extends Select
+    case class Offset
+      [ tail <: Select ]
+      ( tail: tail )
+      extends Select
+    case class OrderBy
+      [ path <: TypePath[_], desc <: typeLevel.Bool, tail <: Select ]
+      ( path: path, desc: desc, tail: tail )
+      extends Select
+    case class Where
+      [ condition <: Condition, tail <: Select ]
+      ( condition: condition, tail: tail )
+      extends Select
+
+    trait RootResolver[template] {
+      type Root
+    }
+    object RootResolver {
+      implicit def from[ root ] = new RootResolver[ From[root] ]{ type Root = root }
+      implicit def limit
+        [ tail <: Select ]
+        ( implicit tailResolver: RootResolver[tail] )
+        = new RootResolver[ Limit[tail] ]{ type Root = tailResolver.Root }
+        
+    }
+  }
 
 }
 
@@ -73,4 +102,12 @@ object values {
     case class Value[ value ]( value: value ) extends Expression
   }
 
+}
+
+trait Runner {
+  def run
+    [ template <: templates.Action ]
+    ( template: template, values: Seq[Any] )
+    ( implicit parser: Parser[ template ] )
+    : parser.Result
 }

@@ -1,5 +1,6 @@
 package sorm.core.expressions.builders
 
+import language.implicitConversions
 import sorm._, core._, util._
 import typeLevel.Bool, Bool._
 import expressions.{templates => t}

@@ -5,8 +5,6 @@ import sorm._, core._, util._, static._
 /**
  * Templates with complete type-level representation.
  */
-// TODO: Get rid of value-level stuff.
-// Although, value-level stuff may well be needed for runtime caching of compilation results.
 object templates {
 
   sealed trait Condition
@@ -46,7 +44,7 @@ object templates {
     case class Select[ select <: templates.Select ]( select: select ) extends Action
     case class Update[ select <: templates.Select ]( select: select ) extends Action
     case class Delete[ select <: templates.Select ]( select: select ) extends Action
-    case class Insert[ root ] extends Action
+    case class Insert[ root ]() extends Action
 
     trait ResultParser[ action <: Action ] {
       type Source
@@ -59,7 +57,8 @@ object templates {
   sealed trait Select
   object Select {
     case class From
-      [ root ] 
+      [ root ]
+      ()
       extends Select
     case class Limit
       [ tail <: Select ]

@@ -45,13 +45,6 @@ object templates {
     case class Update[ select <: templates.Select ]( select: select ) extends Action
     case class Delete[ select <: templates.Select ]( select: select ) extends Action
     case class Insert[ root ]() extends Action
-
-    trait ResultParser[ action <: Action ] {
-      type Source
-      type Result
-      def parse( source: Source ): Result
-    }
-
   }
 
   sealed trait Select
@@ -140,8 +133,13 @@ object values {
 
 trait Runner {
   def run
-    [ template <: templates.Action ]
-    ( template: template, values: Seq[Any] )
-    ( implicit parser: templates.Action.ResultParser[ template ] )
-    : parser.Result
+    [ result ]
+    ( template: templates.Action, values: Seq[Any] )
+    ( implicit parser: ResultParser[ result ] )
+    : result
+}
+
+trait ResultParser[ +result ] {
+  type Source
+  def parse( source: Source ): result
 }

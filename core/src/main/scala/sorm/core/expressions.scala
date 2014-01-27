@@ -46,7 +46,7 @@ object templates {
     case class Delete[ select <: templates.Select ]( select: select ) extends Action
     case class Insert[ root ]() extends Action
 
-    trait ResultParser[ action <: Action ] {
+    trait ResultParser[ driver, action <: Action ] {
       type Source
       type Result
       def parse( source: Source ): Result
@@ -138,10 +138,10 @@ object values {
 
 }
 
-trait Runner {
+trait Runner[ driver ] {
   def run
     [ template <: templates.Action ]
     ( template: template, values: Seq[Any] )
-    ( implicit parser: templates.Action.ResultParser[ template ] )
+    ( implicit parser: templates.Action.ResultParser[ driver, template ] )
     : parser.Result
 }

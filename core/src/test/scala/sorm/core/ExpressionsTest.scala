@@ -12,17 +12,25 @@ class ExpressionsTest extends FunSuite with ShouldMatchers {
   case class A(a: Int, bs: Seq[B])
   case class B(a: Int)
 
-  class API extends builders.API {
-    protected val expressionsRunner: Runner = ???
-
-    protected def selectParser[a] = new ResultParser[Iterable[a with core.api.Persisted]] {
-      type Source = java.sql.ResultSet
-      def parse(source: Source) = ???
-    }
+  class Driver extends builders.API[ Driver ] {
+    protected val expressionsRunner: Runner[ Driver ] = ???
+  }
+  object Driver {
+    implicit def select
+      [ select <: templates.Select ]
+//      ( implicit memberResolver: templates.Select.MemberResolver[select] )
+      =
+      new templates.Action.ResultParser[Driver, templates.Action.Select[select]] {
+        type Source = java.sql.ResultSet
+//        type Result = Iterable[ memberResolver.Root with core.api.Persisted ]
+        def parse(source: Source) = {
+          ???
+        }
+      }
   }
 
-  val api = new API
+  val driver = new Driver
 
-  val x = api.from[A].offset(2).select
+  val x = driver.from[A].offset(2).select
 
 }

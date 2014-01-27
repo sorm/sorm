@@ -3,11 +3,9 @@ package sorm.core.expressions.builders
 import sorm._, core._, util._, expressions._
 import expressions.{templates => t}
 
-trait API {
+trait API[ driver ] {
 
-  protected def selectParser[ a ]: ResultParser[ Iterable[ a with api.Persisted ] ]
-
-  protected val expressionsRunner: Runner
+  protected val expressionsRunner: Runner[ driver ]
 
   def from[a] = {
     val template = t.Select.From[a]()
@@ -20,13 +18,13 @@ trait API {
     ( protected val template: template,
       protected val values: Seq[Any] )
 
-  sealed trait Select[ template <: t.Select ] extends Builder[template] {
+  sealed trait Select[ select <: t.Select ] extends Builder[select] {
     def select
-      ( implicit rootResolver: t.Select.RootResolver[template] )
+      ( implicit parser: t.Action.ResultParser[ driver, t.Action.Select[select] ] )
       = {
         val template = t.Action.Select(this.template)
         val values = this.values
-        expressionsRunner.run(template, values)(selectParser[rootResolver.Root])
+        expressionsRunner.run(template, values)
       }
   }
 

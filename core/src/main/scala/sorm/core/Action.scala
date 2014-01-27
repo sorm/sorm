@@ -1,6 +1,6 @@
 package sorm.core
 
-case class Action[ result ]( f: expressions.Runner => result )
+case class Action[ result ]( f: expressions.Runner[_] => result )
 object Action extends scalaz.syntax.ToMonadOps {
   implicit val monad = new scalaz.Monad[Action] {
     def point[a](a: => a) = Action(_ => a)

@@ -81,11 +81,16 @@ object templates {
       type Root
     }
     object RootResolver {
-      implicit def from[ root ] = new RootResolver[ From[root] ]{ type Root = root }
-      implicit def limit
-        [ tail <: Select ]
-        ( implicit tailResolver: RootResolver[tail] )
+      implicit def from[ root ]
+        = new RootResolver[ From[root] ]{ type Root = root }
+      implicit def limit[ tail <: Select ]( implicit tailResolver: RootResolver[tail] )
         = new RootResolver[ Limit[tail] ]{ type Root = tailResolver.Root }
+      implicit def offset[ tail <: Select ]( implicit tailResolver: RootResolver[tail] )
+        = new RootResolver[ Offset[tail] ]{ type Root = tailResolver.Root }
+      implicit def orderBy[ tail <: Select ]( implicit tailResolver: RootResolver[tail] )
+        = new RootResolver[ OrderBy[_, _, tail] ]{ type Root = tailResolver.Root }
+      implicit def where[ tail <: Select ]( implicit tailResolver: RootResolver[tail] )
+        = new RootResolver[ Where[_, tail] ]{ type Root = tailResolver.Root }
     }
 
     trait MemberResolver[template <: Select] {

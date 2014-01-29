@@ -1,12 +1,13 @@
-package sorm.core
+package sorm.core.members
 
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
+
 import shapeless._
-import members._
+import sorm._, core._, members._
 
 @org.junit.runner.RunWith(classOf[org.scalatest.junit.JUnitRunner])
-class SetupTest extends FunSuite with ShouldMatchers {
+class InternalMemberResolverTest extends FunSuite with ShouldMatchers {
 
   case class A(a: Int, b: String)
   case class B(c: Boolean)

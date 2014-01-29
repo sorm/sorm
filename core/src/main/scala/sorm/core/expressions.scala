@@ -45,13 +45,6 @@ object templates {
     case class Update[ select <: templates.Select ]( select: select ) extends Action
     case class Delete[ select <: templates.Select ]( select: select ) extends Action
     case class Insert[ root ]() extends Action
-
-    trait ResultParser[ driver, action <: Action ] {
-      type Source
-      type Result
-      def parse( source: Source ): Result
-    }
-
   }
 
   sealed trait Select
@@ -93,27 +86,25 @@ object templates {
         = new RootResolver[ Where[_, tail] ]{ type Root = tailResolver.Root }
     }
 
-    trait MemberResolver[template <: Select] {
-      type Root
-      def member: api.Setup.Member[Root]
+    trait MemberResolver[ api, template <: Select ] {
+      def member( api: api ): members.Member
     }
     object MemberResolver {
       implicit def from
-        [ root ]
-        ( implicit member1: api.Setup.Member[ root ] )
+        [ api <: members.API, root ]
+        ( implicit r: members.MemberResolver[ api, root ] )
         =
-        new MemberResolver[ From[root] ] {
-          type Root = root
-          def member = member1
+        new MemberResolver[ api, From[root] ] {
+          def member(api: api) = r.apply(api)
         }
-      implicit def limit
-        [ tail <: Select ]
-        ( implicit tailInstance: MemberResolver[tail] )
-        =
-        new MemberResolver[tail] {
-          type Root = tailInstance.Root
-          def member = tailInstance.member
-        }
+//      implicit def limit
+//        [ tail <: Select ]
+//        ( implicit tailInstance: MemberResolver[tail] )
+//        =
+//        new MemberResolver[tail] {
+//          type Root = tailInstance.Root
+//          def member = tailInstance.member
+//        }
     }
 
   }
@@ -140,8 +131,13 @@ object values {
 
 trait Runner[ driver ] {
   def run
-    [ template <: templates.Action ]
+    [ result, template <: templates.Action ]
     ( template: template, values: Seq[Any] )
-    ( implicit parser: templates.Action.ResultParser[ driver, template ] )
-    : parser.Result
+    ( implicit parser: ResultParser[ driver, result ] )
+    : result
+}
+
+trait ResultParser[ driver, result ] {
+  type Source
+  def parse( source: Source ): result
 }

@@ -5,7 +5,12 @@ import shapeless._
 package object members {
 
   // NOTE: Can't be a case class, be cause it mustn't be a Product.
-  class Member[a](persistedMixiner: api.PersistedMixiner[a], uniqueKeys: Set[Key], nonUniqueKeys: Set[Key])
+  abstract class Member {
+    type Value
+    def persistedMixiner: api.PersistedMixiner[ Value ]
+    def uniqueKeys: Set[Key] = Set.empty
+    def nonUniqueKeys: Set[Key] = Set.empty
+  }
 
   type Key = Seq[Symbol]
 
@@ -29,14 +34,18 @@ package object members {
     }
 
     @annotation.implicitNotFound("The type `${a}` is not registered as a member")
-    trait MemberResolver[ a ]{ def apply: Member[ a ] }
+    trait MemberResolver[ a ]{ def apply: Member }
     object MemberResolver {
       implicit def default
         [ a ]
-        ( implicit selector: ops.hlist.Selector[ members.HList, Member[ a ] ] )
+        ( implicit selector: util.typeLevel.hlist.Selector[ members.HList, Member{ type Value <: a } ] )
         =
         new MemberResolver[ a ]{ def apply = selector.apply(members.hlist) }
+    }
 
+    def member[ a ] = new Member {
+      type Value = a
+      def persistedMixiner = ???
     }
   }
 

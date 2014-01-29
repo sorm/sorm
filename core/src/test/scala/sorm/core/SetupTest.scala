@@ -9,15 +9,14 @@ import members._
 class SetupTest extends FunSuite with ShouldMatchers {
 
   case class A(a: Int, b: String)
-
-  val aMember = new Member[A](api.PersistedMixiner.derive[A], Set(), Set())
+  case class B(c: Boolean)
 
   abstract class API extends members.API {
     def testMember[ a ]( implicit resolver: MemberResolver[ a ] ) = true
   }
 
   object db extends API {
-    protected val members = Members.fromTuple(Tuple1(aMember))
+    protected val members = Members.fromTuple(member[A], member[B])
   }
 
   test("Member is reachable") {

@@ -23,6 +23,25 @@ package object util {
       case object True extends True { val toBoolean = true }
       case object False extends False { val toBoolean = false }
     }
+
+    object hlist {
+
+      import shapeless._
+
+      //  A fixed version with contravariant `hlist`
+      trait Selector[ -hlist <: HList, item ] { def apply( hlist: hlist ): item }
+      object Selector {
+        implicit def head
+          [ head, tail <: HList ]
+          = new Selector[ head :: tail, head ] { def apply( hlist: head :: tail ) = hlist.head }
+        implicit def tail
+          [ head, tail <: HList, item ]
+          ( implicit tailInstance: Selector[ tail, item ] )
+          = new Selector[ head :: tail, item ] { def apply( hlist: head :: tail ) = tailInstance(hlist.tail) }
+      }
+
+    }
+
   }
 
   object reflection {

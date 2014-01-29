@@ -16,7 +16,7 @@ class SetupTest extends FunSuite with ShouldMatchers {
   }
 
   object db extends API {
-    protected val members = Members.fromTuple(member[A], member[B])
+    protected val members = membersFromTuple(member[A], member[B])
   }
 
   test("Member is reachable") {

@@ -15,32 +15,22 @@ package object members {
   type Key = Seq[Symbol]
 
   trait API {
-    protected val members: Members
+    protected val members: shapeless.HList
 
-    protected trait Members {
-      type HList <: shapeless.HList
-      val hlist: HList
-    }
-    protected object Members {
-      def fromTuple
-        [ tuple <: Product ]
-        ( tuple: tuple )
-        ( implicit generic: Generic[ tuple ]{ type Repr <: HList } )
-        =
-        new Members {
-          type HList = generic.Repr
-          override val hlist = generic.to(tuple)
-        }
-    }
+    def membersFromTuple
+      [ tuple <: Product ]
+      ( tuple: tuple )
+      ( implicit generic: Generic[ tuple ]{ type Repr <: HList } )
+      = generic.to(tuple)
 
     @annotation.implicitNotFound("The type `${a}` is not registered as a member")
     trait MemberResolver[ a ]{ def apply: Member }
     object MemberResolver {
       implicit def default
         [ a ]
-        ( implicit selector: util.typeLevel.hlist.Selector[ members.HList, Member{ type Value <: a } ] )
+        ( implicit selector: util.typeLevel.hlist.Selector[ members.type, Member{ type Value <: a } ] )
         =
-        new MemberResolver[ a ]{ def apply = selector.apply(members.hlist) }
+        new MemberResolver[ a ]{ def apply = selector.apply(members) }
     }
 
     def member[ a ] = new Member {

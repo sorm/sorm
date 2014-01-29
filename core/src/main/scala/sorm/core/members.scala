@@ -10,41 +10,34 @@ package object members {
 
   type Key = Seq[Symbol]
 
-  trait MemberResolver[ container <: Container, a ]{
-    def apply( container: container ): Member[ a ]
-  }
+  trait API {
+    protected val members: Members
 
-  trait Container {
-    type MembersHList <: shapeless.HList
-    protected val membersHList: MembersHList
-  }
-  object Container {
-    implicit def memberResolver
-      [ container <: Container, a ]
-      ( implicit selector: ops.hlist.Selector[ container#MembersHList, Member[ a ] ] )
-      =
-      new MemberResolver[ container, a ]{
-        def apply( container: container ) = selector.apply( container.membersHList )
-      }
-  }
-
-  abstract class ContainerFromTuple
-    [ tuple <: Product, hlist <: HList ]
-    ( tuple: tuple )
-    ( implicit tupleGeneric: Generic.Aux[tuple, hlist] )
-    extends Container
-    {
-      type MembersHList = hlist
-      protected val membersHList: MembersHList = tupleGeneric.to(tuple)
+    protected trait Members {
+      type HList <: shapeless.HList
+      val hlist: HList
+    }
+    protected object Members {
+      def fromTuple
+        [ tuple <: Product ]
+        ( tuple: tuple )
+        ( implicit generic: Generic[ tuple ]{ type Repr <: HList } )
+        =
+        new Members {
+          type HList = generic.Repr
+          override val hlist = generic.to(tuple)
+        }
     }
 
-  abstract class ContainerFromHList
-    [ hlist <: HList ]
-    ( hlist: hlist )
-    extends Container
-    {
-      type MembersHList = hlist
-      protected val membersHList: MembersHList = hlist
+    trait MemberResolver[ a ]{ def apply: Member[ a ] }
+    object MemberResolver {
+      implicit def default
+        [ a ]
+        ( implicit selector: ops.hlist.Selector[ members.HList, Member[ a ] ] )
+        =
+        new MemberResolver[ a ]{ def apply = selector.apply(members.hlist) }
+
     }
+  }
 
 }

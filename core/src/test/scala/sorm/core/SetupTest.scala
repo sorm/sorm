@@ -12,13 +12,13 @@ class SetupTest extends FunSuite with ShouldMatchers {
 
   val aMember = new Member[A](api.PersistedMixiner.derive[A], Set(), Set())
 
-  abstract class API[ hlist <: shapeless.HList ]( members: hlist ) extends Container {
-    type MembersHList = hlist
-    protected val membersHList = members
-    def testMember[ a ]( implicit resolver: MemberResolver[ this.type, a ] ) = true
+  abstract class API extends members.API {
+    def testMember[ a ]( implicit resolver: MemberResolver[ a ] ) = true
   }
 
-  object db extends API( aMember :: HNil )
+  object db extends API {
+    protected val members = Members.fromTuple(Tuple1(aMember))
+  }
 
   test("Member is reachable") {
     db.testMember[A].should(be(true))

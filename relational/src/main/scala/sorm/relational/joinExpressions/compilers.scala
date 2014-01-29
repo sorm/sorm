@@ -18,13 +18,13 @@ object compilers {
   private type Compiler[inputTemplate, inputValues] = core.Compiler[inputTemplate, inputValues, ot.Where, List[Value]]
   
   trait Fork {
-    private type InputTemplate[left <: it.Where, right <: it.Where] = it.Where.Fork[left, right, typeLevel.Bool]
-    private type InputValues[left, right] = iv.Where.Fork[left, right]
+    private type InputTemplate[left <: it.Condition, right <: it.Condition] = it.Condition.Fork[left, right, typeLevel.Bool]
+    private type InputValues[left, right] = iv.Condition.Fork[left, right]
     protected implicit def forkInstance
-      [ leftInputTemplate <: it.Where,
-        rightInputTemplate <: it.Where,
-        leftInputValues <: iv.Where,
-        rightInputValues <: iv.Where ]
+      [ leftInputTemplate <: it.Condition,
+        rightInputTemplate <: it.Condition,
+        leftInputValues <: iv.Condition,
+        rightInputValues <: iv.Condition ]
       ( implicit
           leftCompiler: Compiler[leftInputTemplate, leftInputValues],
           rightCompiler: Compiler[rightInputTemplate, rightInputValues] )
@@ -44,8 +44,8 @@ object compilers {
   }
 
   trait PrimitiveEqual {
-    private type InputTemplate[root, path <: TypePath[root]] = it.Where.Comparison[root, path, it.Operator.Equal, typeLevel.Bool]
-    private type InputValues[value] = iv.Where.Comparison[ iv.Expression.Value[ value ] ]
+    private type InputTemplate[root, path <: TypePath[root]] = it.Condition.Comparison[root, path, it.Operator.Equal, typeLevel.Bool]
+    private type InputValues[value] = iv.Condition.Comparison[ iv.Expression.Value[ value ] ]
     protected implicit def primitiveEqualInstance
       [ root, path <: TypePath[root], value ]
       ( implicit

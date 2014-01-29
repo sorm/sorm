@@ -4,8 +4,7 @@ import shapeless._
 
 package object members {
 
-  // NOTE: Not a case class, so that it isn't a Product
-  @annotation.implicitNotFound(msg = "A Member[${a}] instance is not declared")
+  // NOTE: Can't be a case class, be cause it mustn't be a Product.
   class Member[a](persistedMixiner: api.PersistedMixiner[a], uniqueKeys: Set[Key], nonUniqueKeys: Set[Key])
 
   type Key = Seq[Symbol]
@@ -29,6 +28,7 @@ package object members {
         }
     }
 
+    @annotation.implicitNotFound("The type `${a}` is not registered as a member")
     trait MemberResolver[ a ]{ def apply: Member[ a ] }
     object MemberResolver {
       implicit def default

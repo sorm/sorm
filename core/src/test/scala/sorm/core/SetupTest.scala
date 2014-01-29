@@ -1,19 +1,15 @@
 package sorm.core
 
 import org.scalatest.FunSuite
-import sorm.core.api._
+import org.scalatest.matchers.ShouldMatchers
 
 @org.junit.runner.RunWith(classOf[org.scalatest.junit.JUnitRunner])
-class SetupTest extends FunSuite {
+class SetupTest extends FunSuite with ShouldMatchers {
 
   case class A(a: Int, b: String)
 
   test("Member is reachable") {
 
-    val members = new Setup.Members(Tuple1(new Setup.Member(PersistedMixiner.derive[A], Set(), Set())))
-
-    import members._
-    implicitly[Setup.Member[A]]
   }
 
 }

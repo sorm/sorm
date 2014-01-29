@@ -24,9 +24,9 @@ package object members {
       = generic.to(tuple)
 
     @annotation.implicitNotFound("The type `${a}` is not registered as a member")
-    trait MemberResolver[ a ]{ def apply: Member }
-    object MemberResolver {
-      implicit def default
+    protected trait MemberResolver[ a ]{ def apply: Member }
+    protected object MemberResolver {
+      implicit def selector
         [ a ]
         ( implicit selector: util.typeLevel.hlist.Selector[ members.type, Member{ type Value <: a } ] )
         =
@@ -37,6 +37,17 @@ package object members {
       type Value = a
       def persistedMixiner = ???
     }
+
+  }
+  object API {
+    implicit def memberResolver
+      [ api <: API, a ]
+      ( implicit resolver: api#MemberResolver[ a ] )
+      = new MemberResolver[ api, a ]{ def apply( api: api ) = resolver.apply }
+  }
+  @annotation.implicitNotFound("The type `${a}` is not registered as a member")
+  trait MemberResolver[ api <: API, a ]{
+    def apply( api: api ): Member
   }
 
 }

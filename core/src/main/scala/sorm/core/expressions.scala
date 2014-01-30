@@ -86,27 +86,6 @@ object templates {
         = new RootResolver[ Where[_, tail] ]{ type Root = tailResolver.Root }
     }
 
-    trait MemberResolver[ api, template <: Select ] {
-      def member( api: api ): members.Member
-    }
-    object MemberResolver {
-      implicit def from
-        [ api <: members.API, root ]
-        ( implicit r: members.MemberResolver[ api, root ] )
-        =
-        new MemberResolver[ api, From[root] ] {
-          def member(api: api) = r.apply(api)
-        }
-//      implicit def limit
-//        [ tail <: Select ]
-//        ( implicit tailInstance: MemberResolver[tail] )
-//        =
-//        new MemberResolver[tail] {
-//          type Root = tailInstance.Root
-//          def member = tailInstance.member
-//        }
-    }
-
   }
 
 }

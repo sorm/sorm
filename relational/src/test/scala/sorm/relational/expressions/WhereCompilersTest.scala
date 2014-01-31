@@ -1,12 +1,12 @@
-package sorm.relational.joinExpressions
+package sorm.relational.expressions
 
-import sorm._, core._, relational._
+import sorm._, core._, relational._, core.expressions._
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
 import java.sql.{Types => jdbcTypes}
 
 @org.junit.runner.RunWith(classOf[org.scalatest.junit.JUnitRunner])
-class ExpressionCompilersTest extends FunSuite with ShouldMatchers with joinExpressions.expressionCompilers.All {
+class WhereCompilersTest extends FunSuite with ShouldMatchers with whereCompilers.All {
 
   case class A(a: Int, b: Boolean)
 
@@ -18,14 +18,14 @@ class ExpressionCompilersTest extends FunSuite with ShouldMatchers with joinExpr
 
   test("Int Equal Compiler") {
 
-    type InputTemplate = expressions.templates.Condition.Comparison[A, Path1, expressions.templates.Operator.Equal, util.typeLevel.Bool.True]
-    type InputValues = expressions.values.Condition.Comparison[expressions.values.Expression.Value[Int]]
+    type InputTemplate = templates.Condition.Comparison[A, Path1, templates.Operator.Equal, util.typeLevel.Bool.True]
+    type InputValues = values.Condition.Comparison[values.Expression.Value[Int]]
 
     val inputTemplate : InputTemplate = {
       val path = null : Path1
-      val operator = expressions.templates.Operator.Equal
+      val operator = templates.Operator.Equal
       val negative = util.typeLevel.Bool.True
-      expressions.templates.Condition.Comparison(path, operator, negative)
+      templates.Condition.Comparison(path, operator, negative)
     }
     val outputTemplate = {
       import joinExpressions.templates._
@@ -46,7 +46,7 @@ class ExpressionCompilersTest extends FunSuite with ShouldMatchers with joinExpr
   test("Fork/Int/Boolean Compiler") {
 
     val inputTemplate = {
-      import expressions.templates._
+      import templates._
       val left = {
         val path = null: Path1
         val operator = Operator.Equal
@@ -63,7 +63,7 @@ class ExpressionCompilersTest extends FunSuite with ShouldMatchers with joinExpr
       Condition.Fork(left, right, or)
     }
     val inputValues = {
-      import expressions.values._
+      import values._
       val left = Condition.Comparison(Expression.Value(2))
       val right = Condition.Comparison(Expression.Value(false))
       Condition.Fork(left, right)

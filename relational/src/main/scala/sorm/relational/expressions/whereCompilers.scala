@@ -1,4 +1,4 @@
-package sorm.relational.joinExpressions
+package sorm.relational.expressions
 
 import sorm._
 import core._
@@ -13,7 +13,7 @@ import o.{templates => ot}
 import java.sql.{Types => jdbcTypes}
 
 
-object expressionCompilers {
+object whereCompilers {
 
   private type Compiler[inputTemplate, inputValues] = core.Compiler[inputTemplate, inputValues, ot.Where, List[Value]]
   

@@ -13,7 +13,7 @@ import o.{templates => ot}
 import java.sql.{Types => jdbcTypes}
 
 
-object compilers {
+object expressionCompilers {
 
   private type Compiler[inputTemplate, inputValues] = core.Compiler[inputTemplate, inputValues, ot.Where, List[Value]]
   
@@ -55,7 +55,7 @@ object compilers {
         val mapping = mappingResolver.mapping
         new Compiler[ InputTemplate[root, path], InputValues[value] ]{
           override def renderTemplate(tpl: InputTemplate[root, path]) = {
-            val column = o.functions.column(mapping).getOrElse(bug("Mapping produces no column"))
+            val column = o.helpers.column(mapping).getOrElse(bug("Mapping produces no column"))
             val operator = ot.Operator.Equal
             val value = ot.Expression.Placeholder
             val negative = tpl.negative.toBoolean

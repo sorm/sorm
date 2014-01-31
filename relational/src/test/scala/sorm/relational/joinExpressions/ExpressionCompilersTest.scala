@@ -1,14 +1,12 @@
-package sorm.relational
+package sorm.relational.joinExpressions
 
-import sorm._
-import core._
-import relational.joinExpressions._
+import sorm._, core._, relational._
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
 import java.sql.{Types => jdbcTypes}
 
 @org.junit.runner.RunWith(classOf[org.scalatest.junit.JUnitRunner])
-class JoinExpressionsTest extends FunSuite with ShouldMatchers with joinExpressions.compilers.All {
+class ExpressionCompilersTest extends FunSuite with ShouldMatchers with joinExpressions.expressionCompilers.All {
 
   case class A(a: Int, b: Boolean)
 

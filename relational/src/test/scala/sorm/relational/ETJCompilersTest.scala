@@ -14,12 +14,12 @@ class ETJCompilersTest extends FunSuite with ShouldMatchers with ETJCompilers.Al
   type Path2 = static.TypePath.Property[A, static.TypePath.Root[A], shapeless.nat._1]
   type OutputTemplate = joinExpressions.templates.Where
   type OutputValues = List[Value]
-  type Compiler[inputTemplate, inputValues] = core.Compiler[inputTemplate, inputValues, OutputTemplate, OutputValues]
+  type Compiler[inputTemplate, inputValues] = engine.Compiler[Any, inputTemplate, inputValues, OutputTemplate, OutputValues]
 
   test("Int Equal Compiler") {
 
     type InputTemplate = templates.Condition.Comparison[A, Path1, templates.Operator.Equal, util.typeLevel.Bool.True]
-    type InputValues = values.Condition.Comparison[values.Expression.Value[Int]]
+    type InputValues = values.Condition.Comparison[Int]
 
     val inputTemplate : InputTemplate = {
       val path = null : Path1
@@ -64,8 +64,8 @@ class ETJCompilersTest extends FunSuite with ShouldMatchers with ETJCompilers.Al
     }
     val inputValues = {
       import values._
-      val left = Condition.Comparison(Expression.Value(2))
-      val right = Condition.Comparison(Expression.Value(false))
+      val left = Condition.Comparison(2)
+      val right = Condition.Comparison(false)
       Condition.Fork(left, right)
     }
     val outputTemplate = {

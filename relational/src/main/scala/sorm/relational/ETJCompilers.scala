@@ -18,21 +18,22 @@ object ETJCompilers {
   /**
    * A compiler from `core.expressions` to `relational.joinExpressions`.
    */
-  private type ETJCompiler[inputTemplate, inputValues, outputTemplate] = core.Compiler[inputTemplate, inputValues, outputTemplate, List[Value]]
+  private type ETJCompiler[engine, inputTemplate, inputValues, outputTemplate] = engine.Compiler[engine, inputTemplate, inputValues, outputTemplate, List[Value]]
   
   trait Fork {
     private type InputTemplate[left <: it.Condition, right <: it.Condition] = it.Condition.Fork[left, right, typeLevel.Bool]
     private type InputValues[left, right] = iv.Condition.Fork[left, right]
     implicit def forkETJCompiler
-      [ leftInputTemplate <: it.Condition,
+      [ engine,
+        leftInputTemplate <: it.Condition,
         rightInputTemplate <: it.Condition,
         leftInputValues <: iv.Condition,
         rightInputValues <: iv.Condition ]
       ( implicit
-          leftCompiler: ETJCompiler[leftInputTemplate, leftInputValues, ot.Where],
-          rightCompiler: ETJCompiler[rightInputTemplate, rightInputValues, ot.Where] )
+          leftCompiler: ETJCompiler[engine, leftInputTemplate, leftInputValues, ot.Where],
+          rightCompiler: ETJCompiler[engine, rightInputTemplate, rightInputValues, ot.Where] )
       =
-      new ETJCompiler[InputTemplate[leftInputTemplate, rightInputTemplate], InputValues[leftInputValues, rightInputValues], ot.Where] {
+      new ETJCompiler[engine, InputTemplate[leftInputTemplate, rightInputTemplate], InputValues[leftInputValues, rightInputValues], ot.Where] {
         def renderTemplate( tpl: InputTemplate[leftInputTemplate, rightInputTemplate] ) = {
           val left = leftCompiler.renderTemplate(tpl.left)
           val right = rightCompiler.renderTemplate(tpl.right)
@@ -48,15 +49,15 @@ object ETJCompilers {
 
   trait PrimitiveEqual {
     private type InputTemplate[root, path <: TypePath[root]] = it.Condition.Comparison[root, path, it.Operator.Equal, typeLevel.Bool]
-    private type InputValues[value] = iv.Condition.Comparison[ iv.Expression.Value[ value ] ]
+    private type InputValues[value] = iv.Condition.Comparison[ value ]
     implicit def primitiveEqualETJCompiler
-      [ root, path <: TypePath[root], value ]
+      [ engine, root, path <: TypePath[root], value ]
       ( implicit
           mappingResolver: rules.MappingResolver[path],
           support: Support[PrimitiveEqual, value] )
       = {
         val mapping = mappingResolver.mapping
-        new ETJCompiler[ InputTemplate[root, path], InputValues[value], ot.Where ]{
+        new ETJCompiler[ engine, InputTemplate[root, path], InputValues[value], ot.Where ]{
           override def renderTemplate(tpl: InputTemplate[root, path]) = {
             val column = o.helpers.column(mapping).getOrElse(bug("Mapping produces no column"))
             val operator = ot.Operator.Equal
@@ -66,7 +67,7 @@ object ETJCompilers {
           }
           override def arrangeValues(vals: InputValues[value]) = {
             val value = {
-              val value = vals.expression.value
+              val value = vals.value
               val jdbcType = mapping.jdbcType.getOrElse(bug("Mapping produces no jdbcType"))
               Value(value, jdbcType)
             }

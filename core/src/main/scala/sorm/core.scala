@@ -7,15 +7,6 @@ import scala.reflect.runtime.{universe => ru}
 def bug ( m : String ) = sys.error("A SORM bug appeared. Please, report the following message to maintainers: " + m)
 def todo ( m : String ) = sys.error("Reached an unimplemenented SORM feature. Please, report the following message to maintainers: " + m)
 
-/**
- * Compiler of expression templates and arranger of associated values.
- */
-//  TODO: Probably, better use lambdas.
-trait Compiler[-inputTemplate, -inputValues, +outputTemplate, +outputValues] {
-  def renderTemplate(input: inputTemplate): outputTemplate
-  def arrangeValues(input: inputValues): outputValues
-}
-
 
 /**
  * A reference from a context type to its subfield. E.g., `context.field` or

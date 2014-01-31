@@ -1,4 +1,4 @@
-package sorm.relational.expressions
+package sorm.relational
 
 import sorm._, core._, relational._, core.expressions._
 import org.scalatest.FunSuite
@@ -6,7 +6,7 @@ import org.scalatest.matchers.ShouldMatchers
 import java.sql.{Types => jdbcTypes}
 
 @org.junit.runner.RunWith(classOf[org.scalatest.junit.JUnitRunner])
-class WhereCompilersTest extends FunSuite with ShouldMatchers with whereCompilers.All {
+class ETJCompilersTest extends FunSuite with ShouldMatchers with ETJCompilers.All {
 
   case class A(a: Int, b: Boolean)
 

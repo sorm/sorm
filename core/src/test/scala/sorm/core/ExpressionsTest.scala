@@ -25,9 +25,15 @@ class ExpressionsTest extends FunSuite with ShouldMatchers {
     implicit def selectParser
       [ a ]
       =
-      new engine.Parser[Engine, Iterable[ a with api.Persisted ]]{
+      new engine.Parser[ Engine, Iterable[ a with api.Persisted ] ]{
         override type source = java.sql.ResultSet
         override def parse(source: source, member: members.Member) = ???
+      }
+    implicit def selectCompiler
+      =
+      new engine.Compiler[ Engine, templates.Action.Select[ templates.SelectSpec ], values.Action.Select[ values.SelectSpec ], String, Seq[Any] ]{
+        override def renderTemplate(input: templates.Action.Select[templates.SelectSpec]) = ???
+        override def arrangeValues(input: values.Action.Select[values.SelectSpec]) = ???
       }
   }
   abstract class API extends builders.API with members.API {
@@ -37,6 +43,6 @@ class ExpressionsTest extends FunSuite with ShouldMatchers {
     protected val members = membersFromTuple(member[A], member[B])
   }
 
-//  val x = instance.from[A].limit(2).select
+  val x = instance.from[A].limit(2).select
 
 }

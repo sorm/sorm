@@ -75,12 +75,12 @@ trait Engine {
  * Compiler of expression templates and arranger of associated values.
  */
 //  TODO: Probably, better use lambdas.
-trait Compiler[ engine, -inputTemplate, -inputValues, +outputTemplate, +outputValues ]{
+trait Compiler[ -engine, -inputTemplate, -inputValues, +outputTemplate, +outputValues ]{
   def renderTemplate(input: inputTemplate): outputTemplate
   def arrangeValues(input: inputValues): outputValues
 }
 
-trait Parser[ engine, +result ]{
+trait Parser[ -engine, +result ]{
   type source
   def parse( source: source, member: members.Member ): result
 }

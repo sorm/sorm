@@ -1,14 +1,12 @@
 package sorm.relational
 
-import sorm._
-import core._
-import relational.joinExpressions._
+import sorm._, core._, relational._, core.expressions._
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
 import java.sql.{Types => jdbcTypes}
 
 @org.junit.runner.RunWith(classOf[org.scalatest.junit.JUnitRunner])
-class JoinExpressionsTest extends FunSuite with ShouldMatchers with joinExpressions.compilers.All {
+class ETJCompilersTest extends FunSuite with ShouldMatchers with ETJCompilers.All {
 
   case class A(a: Int, b: Boolean)
 
@@ -16,18 +14,18 @@ class JoinExpressionsTest extends FunSuite with ShouldMatchers with joinExpressi
   type Path2 = static.TypePath.Property[A, static.TypePath.Root[A], shapeless.nat._1]
   type OutputTemplate = joinExpressions.templates.Where
   type OutputValues = List[Value]
-  type Compiler[inputTemplate, inputValues] = core.Compiler[inputTemplate, inputValues, OutputTemplate, OutputValues]
+  type Compiler[inputTemplate, inputValues] = engine.Compiler[Any, inputTemplate, inputValues, OutputTemplate, OutputValues]
 
   test("Int Equal Compiler") {
 
-    type InputTemplate = expressions.templates.Condition.Comparison[A, Path1, expressions.templates.Operator.Equal, util.typeLevel.Bool.True]
-    type InputValues = expressions.values.Condition.Comparison[expressions.values.Expression.Value[Int]]
+    type InputTemplate = templates.Condition.Comparison[A, Path1, templates.Operator.Equal, util.typeLevel.Bool.True]
+    type InputValues = values.Condition.Comparison[Int]
 
     val inputTemplate : InputTemplate = {
       val path = null : Path1
-      val operator = expressions.templates.Operator.Equal
+      val operator = templates.Operator.Equal
       val negative = util.typeLevel.Bool.True
-      expressions.templates.Condition.Comparison(path, operator, negative)
+      templates.Condition.Comparison(path, operator, negative)
     }
     val outputTemplate = {
       import joinExpressions.templates._
@@ -48,7 +46,7 @@ class JoinExpressionsTest extends FunSuite with ShouldMatchers with joinExpressi
   test("Fork/Int/Boolean Compiler") {
 
     val inputTemplate = {
-      import expressions.templates._
+      import templates._
       val left = {
         val path = null: Path1
         val operator = Operator.Equal
@@ -65,9 +63,9 @@ class JoinExpressionsTest extends FunSuite with ShouldMatchers with joinExpressi
       Condition.Fork(left, right, or)
     }
     val inputValues = {
-      import expressions.values._
-      val left = Condition.Comparison(Expression.Value(2))
-      val right = Condition.Comparison(Expression.Value(false))
+      import values._
+      val left = Condition.Comparison(2)
+      val right = Condition.Comparison(false)
       Condition.Fork(left, right)
     }
     val outputTemplate = {

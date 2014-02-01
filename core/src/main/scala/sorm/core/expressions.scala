@@ -41,50 +41,21 @@ object templates {
 
   sealed trait Action
   object Action {
-    case class Select[ select <: templates.Select ]( select: select ) extends Action
-    case class Update[ select <: templates.Select ]( select: select ) extends Action
-    case class Delete[ select <: templates.Select ]( select: select ) extends Action
-    case class Insert[ root ]() extends Action
+    case class Select[ +select <: templates.SelectSpec ]( select: select ) extends Action
+    case class Update[ +select <: templates.SelectSpec ]( select: select ) extends Action
+    case class Delete[ +select <: templates.SelectSpec ]( select: select ) extends Action
+    case class Insert() extends Action
   }
 
-  sealed trait Select
-  object Select {
-    case class From
-      [ root ]
-      ()
-      extends Select
-    case class Limit
-      [ tail <: Select ]
-      ( tail: tail )
-      extends Select
-    case class Offset
-      [ tail <: Select ]
-      ( tail: tail )
-      extends Select
-    case class OrderBy
-      [ path <: TypePath[_], desc <: typeLevel.Bool, tail <: Select ]
-      ( path: path, desc: desc, tail: tail )
-      extends Select
-    case class Where
-      [ condition <: Condition, tail <: Select ]
-      ( condition: condition, tail: tail )
-      extends Select
-
-    trait RootResolver[template <: Select] {
-      type Root
-    }
-    object RootResolver {
-      implicit def from[ root ]
-        = new RootResolver[ From[root] ]{ type Root = root }
-      implicit def limit[ tail <: Select ]( implicit tailResolver: RootResolver[tail] )
-        = new RootResolver[ Limit[tail] ]{ type Root = tailResolver.Root }
-      implicit def offset[ tail <: Select ]( implicit tailResolver: RootResolver[tail] )
-        = new RootResolver[ Offset[tail] ]{ type Root = tailResolver.Root }
-      implicit def orderBy[ tail <: Select ]( implicit tailResolver: RootResolver[tail] )
-        = new RootResolver[ OrderBy[_, _, tail] ]{ type Root = tailResolver.Root }
-      implicit def where[ tail <: Select ]( implicit tailResolver: RootResolver[tail] )
-        = new RootResolver[ Where[_, tail] ]{ type Root = tailResolver.Root }
-    }
+  sealed trait SelectSpec
+  object SelectSpec {
+    case class From() extends SelectSpec
+    case class Limit[ tail <: SelectSpec ]( tail: tail ) extends SelectSpec
+    case class Offset[ tail <: SelectSpec ]( tail: tail ) extends SelectSpec
+    case class OrderBy[ path <: TypePath[_], desc <: typeLevel.Bool, tail <: SelectSpec ]
+                      ( path: path, desc: desc, tail: tail ) extends SelectSpec
+    case class Where[ condition <: Condition, tail <: SelectSpec ]
+                    ( condition: condition, tail: tail ) extends SelectSpec
 
   }
 
@@ -98,25 +69,19 @@ object values {
   sealed trait Condition
   object Condition {
     case class Fork[ +left, +right ]( left: left, right: right ) extends Condition
-    case class Comparison[ expression <: Expression ]( expression: expression ) extends Condition
+    case class Comparison[ value ]( value: value ) extends Condition
   }
 
-  sealed trait Expression
-  object Expression {
-    case class Value[ value ]( value: value ) extends Expression
+  sealed trait Action
+  object Action {
+    case class Select[ spec <: values.SelectSpec ]( spec: spec ) extends Action
   }
 
-}
+  sealed trait SelectSpec
+  object SelectSpec {
+    case class From() extends SelectSpec
+    case class Limit[ tail <: SelectSpec ]( by: Int, tail: tail ) extends SelectSpec
+    case class Offset[ tail <: SelectSpec ]( by: Int, tail: tail ) extends SelectSpec
+  }
 
-trait Runner[ driver ] {
-  def run
-    [ result, template <: templates.Action ]
-    ( template: template, values: Seq[Any] )
-    ( implicit parser: ResultParser[ driver, result ] )
-    : result
-}
-
-trait ResultParser[ driver, result ] {
-  type Source
-  def parse( source: Source ): result
 }

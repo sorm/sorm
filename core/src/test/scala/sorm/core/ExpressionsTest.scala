@@ -12,25 +12,37 @@ class ExpressionsTest extends FunSuite with ShouldMatchers {
   case class A(a: Int, bs: Seq[B])
   case class B(a: Int)
 
-  abstract class Driver extends builders.API[ Driver ] with members.API {
-    protected val expressionsRunner: Runner[ Driver ] = ???
+
+  class Engine extends core.engine.Engine {
+    override type compiledTemplate = String
+    override type compiledValues = Seq[Any]
+    override type connection = Nothing
+    override type resultSource = java.sql.ResultSet
+    override def withConnection[result](f: (connection) => result) = ???
+    override def withResultSource[result](template: compiledTemplate, values: compiledValues, connection: connection)(f: resultSource => result) = ???
   }
-  object Driver {
-    implicit def select
+  object Engine {
+    implicit def selectParser
       [ a ]
       =
-      new ResultParser[ Driver, Iterable[ a with api.Persisted ] ] {
-        type Source = java.sql.ResultSet
-        def parse(source: Source) = {
-          ???
-        }
+      new engine.Parser[ Engine, Iterable[ a with api.Persisted ] ]{
+        override type source = java.sql.ResultSet
+        override def parse(source: source, member: members.Member) = ???
+      }
+    implicit def selectCompiler
+      =
+      new engine.Compiler[ Engine, templates.Action.Select[ templates.SelectSpec ], values.Action.Select[ values.SelectSpec ], String, Seq[Any] ]{
+        override def renderTemplate(input: templates.Action.Select[templates.SelectSpec]) = ???
+        override def arrangeValues(input: values.Action.Select[values.SelectSpec]) = ???
       }
   }
-
-  object instance extends Driver {
+  abstract class API extends builders.API with members.API {
+    override protected val engine = new Engine
+  }
+  object instance extends API {
     protected val members = membersFromTuple(member[A], member[B])
   }
 
-  val x = instance.from[A].offset(2).select
+  val x = instance.from[A].limit(2).select
 
 }

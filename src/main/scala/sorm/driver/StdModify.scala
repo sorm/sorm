@@ -11,7 +11,7 @@ trait StdModify { self: StdConnection with StdStatement =>
     ( table : String, values : Iterable[(String, Any)], pk : Iterable[(String, Any)] )
     {
       val exprs = values.toStream.map{case (c, v) => SetExpression(Column(c), v)}
-      Update(table, exprs, pk $ where) $ statement $ connection.executeUpdate
+      if( exprs.nonEmpty ) Update(table, exprs, pk $ where) $ statement $ connection.executeUpdate
     }
 
   def insert

@@ -1,3 +1,7 @@
+0.3.13
+  - Fix updating of entities with no fields of primitive types (#39)
+  - Introduce connection timeout setting (#37)
+
 0.3.12
   - Switch to ScalaLogging logger (#36)
 

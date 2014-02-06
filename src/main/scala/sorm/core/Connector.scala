@@ -11,9 +11,9 @@ import sext._, embrace._
 /**
  * Abstracts connections pooling away by binding connections to threads
  */
-class Connector (url: String, user: String, password: String, poolSize: Int) {
+class Connector (url: String, user: String, password: String, poolSize: Int, timeout: Int) {
   private val dbType = DbType.byUrl(url)
-  private val pool = new C3p0ConnectionPool(dbType, url, user, password, poolSize)
+  private val pool = new C3p0ConnectionPool(dbType, url, user, password, poolSize, timeout)
   private def driverConnection ( jdbcConnection : JdbcConnection ) : DriverConnection
     = dbType match {
         case DbType.H2 => new H2(jdbcConnection)

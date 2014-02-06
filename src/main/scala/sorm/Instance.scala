@@ -24,6 +24,8 @@ import com.typesafe.scalalogging.slf4j.Logging
  *                 to the db will be kept at max. Useful for multithreaded
  *                 databases.
  * @param initMode An initialization mode for this instance
+ * @param timeout Amount of seconds the underlying connections may remain idle.
+ *                Determines how often the "keepalive" queries will be emitted.
  */
 class Instance
   ( entities : Traversable[Entity],
@@ -31,8 +33,9 @@ class Instance
     user : String = "",
     password : String = "",
     poolSize : Int = 1,
-    initMode : InitMode = InitMode.Create )
-  extends Instance.Initialization(entities, url, user, password, poolSize, initMode)
+    initMode : InitMode = InitMode.Create,
+    timeout : Int = 30 )
+  extends Instance.Initialization(entities, url, user, password, poolSize, initMode, timeout)
   with Instance.Api
 
 object Instance {
@@ -201,12 +204,13 @@ object Instance {
       user : String = "",
       password : String = "",
       poolSize : Int = 1,
-      initMode : InitMode = InitMode.Create )
+      initMode : InitMode = InitMode.Create,
+      timeout : Int )
     extends Logging
   {
     import core.Initialization._
 
-    protected val connector = new Connector(url, user, password, poolSize)
+    protected val connector = new Connector(url, user, password, poolSize, timeout)
 
     //  Validate entities (must be prior to mappings creation due to possible mappingkind detection errors):
     validateEntities(entities.toSeq).headOption.map(new ValidationException(_)).foreach(throw _)

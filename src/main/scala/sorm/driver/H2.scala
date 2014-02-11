@@ -20,6 +20,7 @@ class H2 (protected val connection : JdbcConnection)
   with StdDropAllTables
   with StdNow
   {
+    override def listTables() = super.listTables().map(_.toLowerCase)
     override def createTable(table: Table) {
       super.createTable(table)
       table.indexes.foreach{

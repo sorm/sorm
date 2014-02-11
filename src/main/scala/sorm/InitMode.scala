@@ -16,8 +16,7 @@ object InitMode {
    */
   case object DropCreate extends InitMode
   /**
-   * Just generate the tables. Fail if name conflicts arise with the existing
-   * ones
+   * Try to generate the tables if they don’t already exist.
    */
   case object Create extends InitMode
   /**

@@ -1,3 +1,6 @@
+0.3.15
+  - Fix Postgres Double support (#41)
+
 0.3.14
   - Fix H2 "Create" mode issue (#40)
 

@@ -1,3 +1,6 @@
+0.3.14
+  - Fix H2 "Create" mode issue (#40)
+
 0.3.13
   - Fix updating of entities with no fields of primitive types (#39)
   - Introduce connection timeout setting (#37)

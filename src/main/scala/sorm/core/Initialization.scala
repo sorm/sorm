@@ -7,7 +7,7 @@ import jdbc._
 import tableSorters._
 
 import sext._, embrace._
-import com.typesafe.scalalogging.slf4j.Logging
+import com.typesafe.scalalogging.slf4j.{StrictLogging => Logging}
 
 object Initialization extends Logging {
 

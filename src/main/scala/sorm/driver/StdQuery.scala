@@ -8,6 +8,7 @@ import sql._
 
 trait StdQuery { self: StdConnection with StdStatement =>
   import abstractSql.AbstractSql._
+  /*
   def query
     [ T ]
     ( asql : Statement )
@@ -20,7 +21,17 @@ trait StdQuery { self: StdConnection with StdStatement =>
     ( parse : ResultSetView => T = (_ : ResultSetView).indexedRowsTraversable.toList )
     : T
     = connection.executeQuery(s)(parse)
-
+  */
+  /* workaround. see DriverConnection.scala comment */
+  def query
+    [ T ]
+    ( unknown : Object )
+    ( parse : ResultSetView => T = (_ : ResultSetView).indexedRowsTraversable.toList )
+    : T
+    = unknown match {
+        case asql: Statement => query(statement(asql))(parse)
+        case s: jdbc.Statement => connection.executeQuery(s)(parse)
+    }
 
   protected def statement(asql: Statement): jdbc.Statement
     = asql $ sql $ postProcessSql $ Optimization.optimized $ statement

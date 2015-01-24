@@ -1,14 +1,18 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!DOCTYPE html >
 <html>
         <head>
-          <title>Querier - SORM 0.3.15 API - sorm.Querier</title>
-          <meta name="description" content="Querier - SORM 0.3.15 API - sorm.Querier" />
-          <meta name="keywords" content="Querier SORM 0.3.15 API sorm.Querier" />
+          <title>Querier - SORM 0.3.16 API - sorm.Querier</title>
+          <meta name="description" content="Querier - SORM 0.3.16 API - sorm.Querier" />
+          <meta name="keywords" content="Querier SORM 0.3.16 API sorm.Querier" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../lib/template.js"></script>
+      <script type="text/javascript" src="../lib/tools.tooltip.js"></script>
+      
       <script type="text/javascript">
          if(top === self) {
             var url = '../index.html';
@@ -26,7 +30,11 @@
       <div id="definition">
         <a href="Querier$.html" title="Go to companion"><img src="../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="package.html" class="extype" name="sorm">sorm</a></p>
-        <h1><a href="Querier$.html" title="Go to companion">Querier</a></h1>
+        <h1><a href="Querier$.html" title="Go to companion">Querier</a></h1> <span class="permalink">
+      <a href="../index.html#sorm.Querier" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       </div>
 
       <h4 id="signature" class="signature">
@@ -55,13 +63,13 @@
                 <li class="inherit out"><span>By inheritance</span></li>
               </ol>
             </div>
-        <div id="ancestors">
+        <div class="ancestors">
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
                   <li class="in" name="sorm.Querier"><span>Querier</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
-              </div><div id="ancestors">
+              </div><div class="ancestors">
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
@@ -80,8 +88,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="sorm.Querier#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(query:sorm.query.Query,connector:sorm.core.Connector)(implicitevidence$1:reflect.runtime.universe.TypeTag[T]):sorm.Querier[T]"></a>
-      <a id="&lt;init&gt;:Querier[T]"></a>
+      <a id="&lt;init&gt;(query:sorm.query.Query,connector:sorm.core.Connector)(implicitevidence$1:reflect.runtime.universe.TypeTag[T]):sorm.Querier[T]"></a><a id="&lt;init&gt;:Querier[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -90,7 +97,11 @@
       <span class="symbol">
         <span class="name">Querier</span><span class="params">(<span name="query">query: <a href="query/Query.html" class="extype" name="sorm.query.Query">Query</a></span>, <span name="connector">connector: <a href="core/Connector.html" class="extype" name="sorm.core.Connector">Connector</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="sorm.Querier.T">T</span>]</span>)</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@&lt;init&gt;(query:sorm.query.Query,connector:sorm.core.Connector)(implicitevidence$1:reflect.runtime.universe.TypeTag[T]):sorm.Querier[T]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       
     </li></ol>
             </div>
@@ -99,24 +110,10 @@
 
         
 
-        <div id="values" class="values members">
+        <div class="values members">
               <h3>Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="!=(x$1:AnyRef):Boolean"></a>
-      <a id="!=(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="!=(x$1:Any):Boolean"></a>
-      <a id="!=(Any):Boolean"></a>
+      <a id="!=(x$1:Any):Boolean"></a><a id="!=(Any):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
@@ -125,10 +122,13 @@
       <span class="symbol">
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="##():Int"></a>
       <a id="##():Int"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -138,24 +138,14 @@
       <span class="symbol">
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@##():Int" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="==(x$1:AnyRef):Boolean"></a>
-      <a id="==(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="==(x$1:Any):Boolean"></a>
-      <a id="==(Any):Boolean"></a>
+      <a id="==(x$1:Any):Boolean"></a><a id="==(Any):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
@@ -164,10 +154,13 @@
       <span class="symbol">
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -177,11 +170,14 @@
       <span class="symbol">
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="clone():Object"></a>
-      <a id="clone():AnyRef"></a>
+      <a id="clone():Object"></a><a id="clone():AnyRef"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -190,7 +186,11 @@
       <span class="symbol">
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@clone():Object" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -200,7 +200,6 @@
         </dd></dl></div>
     </li><li name="sorm.Querier#count" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="count():Int"></a>
-      <a id="count():Int"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -209,11 +208,14 @@
       <span class="symbol">
         <span class="name">count</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@count():Int" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Fetch a number of matching entities stored in db.</p>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="eq(x$1:AnyRef):Boolean"></a>
-      <a id="eq(AnyRef):Boolean"></a>
+      <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
@@ -222,11 +224,14 @@
       <span class="symbol">
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="equals(x$1:Any):Boolean"></a>
-      <a id="equals(Any):Boolean"></a>
+      <a id="equals(x$1:Any):Boolean"></a><a id="equals(Any):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -235,10 +240,13 @@
       <span class="symbol">
         <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="sorm.Querier#exists" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="exists():Boolean"></a>
       <a id="exists():Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -248,11 +256,14 @@
       <span class="symbol">
         <span class="name">exists</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@exists():Boolean" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Fetch a boolean value indicating whether any matching entities are stored in db.</p>
     </li><li name="sorm.Querier#fetch" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="fetch():Stream[Twithsorm.Persisted]"></a>
-      <a id="fetch():Stream[TwithPersisted]"></a>
+      <a id="fetch():Stream[Twithsorm.Persisted]"></a><a id="fetch():Stream[TwithPersisted]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -261,11 +272,14 @@
       <span class="symbol">
         <span class="name">fetch</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="sorm.Querier.T">T</span> with <a href="Persisted.html" class="extype" name="sorm.Persisted">Persisted</a>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@fetch():Stream[Twithsorm.Persisted]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Fetch matching entities from db.</p><div class="fullcomment"><div class="comment cmt"><p>Fetch matching entities from db.</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>A stream of entity instances with <a href="Persisted.html" class="extype" name="sorm.Persisted">sorm.Persisted</a> mixed in
 </p></dd></dl></div>
     </li><li name="sorm.Querier#fetchIds" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="fetchIds():Stream[Long]"></a>
       <a id="fetchIds():Stream[Long]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -275,12 +289,15 @@
       <span class="symbol">
         <span class="name">fetchIds</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="scala.Long">Long</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@fetchIds():Stream[Long]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Fetch ids of matching entities stored in db.</p><div class="fullcomment"><div class="comment cmt"><p>Fetch ids of matching entities stored in db.</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>A stream of ids
 </p></dd></dl></div>
     </li><li name="sorm.Querier#fetchOne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="fetchOne():Option[Twithsorm.Persisted]"></a>
-      <a id="fetchOne():Option[TwithPersisted]"></a>
+      <a id="fetchOne():Option[Twithsorm.Persisted]"></a><a id="fetchOne():Option[TwithPersisted]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -289,11 +306,14 @@
       <span class="symbol">
         <span class="name">fetchOne</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="sorm.Querier.T">T</span> with <a href="Persisted.html" class="extype" name="sorm.Persisted">Persisted</a>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@fetchOne():Option[Twithsorm.Persisted]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Fetch only one entity ensuring that <code>limit(1)</code> is applied to the query.</p><div class="fullcomment"><div class="comment cmt"><p>Fetch only one entity ensuring that <code>limit(1)</code> is applied to the query.</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>An option of entity instance with <a href="Persisted.html" class="extype" name="sorm.Persisted">sorm.Persisted</a> mixed in
 </p></dd></dl></div>
     </li><li name="sorm.Querier#fetchOneId" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="fetchOneId():Option[Long]"></a>
       <a id="fetchOneId():Option[Long]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -303,10 +323,13 @@
       <span class="symbol">
         <span class="name">fetchOneId</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Long">Long</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@fetchOneId():Option[Long]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Fetch only one id ensuring that <code>limit(1)</code> is applied to the query.</p>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -316,7 +339,11 @@
       <span class="symbol">
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@finalize():Unit" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -326,7 +353,6 @@
         </dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
-      <a id="getClass():Class[_]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
@@ -335,10 +361,13 @@
       <span class="symbol">
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -348,10 +377,13 @@
       <span class="symbol">
         <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@hashCode():Int" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -361,11 +393,14 @@
       <span class="symbol">
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="sorm.Querier#limit" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="limit(amount:Int):sorm.Querier[T]"></a>
-      <a id="limit(Int):Querier[T]"></a>
+      <a id="limit(amount:Int):sorm.Querier[T]"></a><a id="limit(Int):Querier[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -374,12 +409,15 @@
       <span class="symbol">
         <span class="name">limit</span><span class="params">(<span name="amount">amount: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="" class="extype" name="sorm.Querier">Querier</a>[<span class="extype" name="sorm.Querier.T">T</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@limit(amount:Int):sorm.Querier[T]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Limit the amount of entities to be fetched
 </p>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="ne(x$1:AnyRef):Boolean"></a>
-      <a id="ne(AnyRef):Boolean"></a>
+      <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
@@ -388,10 +426,13 @@
       <span class="symbol">
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="notify():Unit"></a>
       <a id="notify():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -401,10 +442,13 @@
       <span class="symbol">
         <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@notify():Unit" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="notifyAll():Unit"></a>
       <a id="notifyAll():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -414,11 +458,14 @@
       <span class="symbol">
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="sorm.Querier#offset" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="offset(offset:Int):sorm.Querier[T]"></a>
-      <a id="offset(Int):Querier[T]"></a>
+      <a id="offset(offset:Int):sorm.Querier[T]"></a><a id="offset(Int):Querier[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -427,12 +474,15 @@
       <span class="symbol">
         <span class="name">offset</span><span class="params">(<span name="offset">offset: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="" class="extype" name="sorm.Querier">Querier</a>[<span class="extype" name="sorm.Querier.T">T</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@offset(offset:Int):sorm.Querier[T]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Set the amount of first results to skip
 </p>
     </li><li name="sorm.Querier#order" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="order(p:String,reverse:Boolean):sorm.Querier[T]"></a>
-      <a id="order(String,Boolean):Querier[T]"></a>
+      <a id="order(p:String,reverse:Boolean):sorm.Querier[T]"></a><a id="order(String,Boolean):Querier[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -441,12 +491,15 @@
       <span class="symbol">
         <span class="name">order</span><span class="params">(<span name="p">p: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="reverse">reverse: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <a href="" class="extype" name="sorm.Querier">Querier</a>[<span class="extype" name="sorm.Querier.T">T</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@order(p:String,reverse:Boolean):sorm.Querier[T]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Add an ordering instruction
 </p>
     </li><li name="sorm.Querier#replace" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="replace(value:T):List[Twithsorm.Persisted]"></a>
-      <a id="replace(T):List[TwithPersisted]"></a>
+      <a id="replace(value:T):List[Twithsorm.Persisted]"></a><a id="replace(T):List[TwithPersisted]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -455,12 +508,15 @@
       <span class="symbol">
         <span class="name">replace</span><span class="params">(<span name="value">value: <span class="extype" name="sorm.Querier.T">T</span></span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[<span class="extype" name="sorm.Querier.T">T</span> with <a href="Persisted.html" class="extype" name="sorm.Persisted">Persisted</a>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@replace(value:T):List[Twithsorm.Persisted]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Replace all matching entities stored in db with the value provided</p><div class="fullcomment"><div class="comment cmt"><p>Replace all matching entities stored in db with the value provided</p></div><dl class="paramcmts block"><dt class="param">value</dt><dd class="cmt"><p>A value to replace the existing entities with</p></dd><dt>returns</dt><dd class="cmt"><p>A list of saved entities with <a href="Persisted.html" class="extype" name="sorm.Persisted">sorm.Persisted</a> mixed in
 </p></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
-      <a id="synchronized[T0](⇒T0):T0"></a>
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
@@ -469,10 +525,13 @@
       <span class="symbol">
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toString():String"></a>
       <a id="toString():String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -482,10 +541,13 @@
       <span class="symbol">
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@toString():String" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -495,7 +557,11 @@
       <span class="symbol">
         <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@wait():Unit" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -504,8 +570,7 @@
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
-      <a id="wait(Long,Int):Unit"></a>
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
@@ -514,7 +579,11 @@
       <span class="symbol">
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -523,8 +592,7 @@
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait(x$1:Long):Unit"></a>
-      <a id="wait(Long):Unit"></a>
+      <a id="wait(x$1:Long):Unit"></a><a id="wait(Long):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
@@ -533,7 +601,11 @@
       <span class="symbol">
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -542,8 +614,7 @@
               
         </dd></dl></div>
     </li><li name="sorm.Querier#where" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="where(f:sorm.Querier.Filter):sorm.Querier[T]"></a>
-      <a id="where(Filter):Querier[T]"></a>
+      <a id="where(f:sorm.Querier.Filter):sorm.Querier[T]"></a><a id="where(Filter):Querier[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -552,11 +623,14 @@
       <span class="symbol">
         <span class="name">where</span><span class="params">(<span name="f">f: <a href="Querier$$Filter.html" class="extype" name="sorm.Querier.Filter">Filter</a></span>)</span><span class="result">: <a href="" class="extype" name="sorm.Querier">Querier</a>[<span class="extype" name="sorm.Querier.T">T</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@where(f:sorm.Querier.Filter):sorm.Querier[T]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Return a copy of this <code>Querier</code> object with a filter generated from DSL.</p><div class="fullcomment"><div class="comment cmt"><p>Return a copy of this <code>Querier</code> object with a filter generated from DSL.</p><p>Usage of this method should be accompanied with </p><pre><span class="kw">import</span> sorm.Dsl._</pre></div></div>
     </li><li name="sorm.Querier#whereConstitutes" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="whereConstitutes(p:String,v:Any):sorm.Querier[T]"></a>
-      <a id="whereConstitutes(String,Any):Querier[T]"></a>
+      <a id="whereConstitutes(p:String,v:Any):sorm.Querier[T]"></a><a id="whereConstitutes(String,Any):Querier[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -565,11 +639,14 @@
       <span class="symbol">
         <span class="name">whereConstitutes</span><span class="params">(<span name="p">p: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="v">v: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="" class="extype" name="sorm.Querier">Querier</a>[<span class="extype" name="sorm.Querier.T">T</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@whereConstitutes(p:String,v:Any):sorm.Querier[T]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.Querier#whereContains" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="whereContains(p:String,v:Any):sorm.Querier[T]"></a>
-      <a id="whereContains(String,Any):Querier[T]"></a>
+      <a id="whereContains(p:String,v:Any):sorm.Querier[T]"></a><a id="whereContains(String,Any):Querier[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -578,11 +655,14 @@
       <span class="symbol">
         <span class="name">whereContains</span><span class="params">(<span name="p">p: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="v">v: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="" class="extype" name="sorm.Querier">Querier</a>[<span class="extype" name="sorm.Querier.T">T</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@whereContains(p:String,v:Any):sorm.Querier[T]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.Querier#whereEqual" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="whereEqual(p:String,v:Any):sorm.Querier[T]"></a>
-      <a id="whereEqual(String,Any):Querier[T]"></a>
+      <a id="whereEqual(p:String,v:Any):sorm.Querier[T]"></a><a id="whereEqual(String,Any):Querier[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -591,13 +671,16 @@
       <span class="symbol">
         <span class="name">whereEqual</span><span class="params">(<span name="p">p: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="v">v: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="" class="extype" name="sorm.Querier">Querier</a>[<span class="extype" name="sorm.Querier.T">T</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@whereEqual(p:String,v:Any):sorm.Querier[T]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Return a copy of this <code>Querier</code> object with an equality filter applied.</p><div class="fullcomment"><div class="comment cmt"><p>Return a copy of this <code>Querier</code> object with an equality filter applied.
 </p></div><dl class="paramcmts block"><dt class="param">p</dt><dd class="cmt"><p>A string indicating a path to the property on which to filter</p></dd><dt class="param">v</dt><dd class="cmt"><p>A value to compare with</p></dd><dt>returns</dt><dd class="cmt"><p>A new instance of <code>Querier</code> with this filter applied
 </p></dd></dl></div>
     </li><li name="sorm.Querier#whereIn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="whereIn(p:String,v:Any):sorm.Querier[T]"></a>
-      <a id="whereIn(String,Any):Querier[T]"></a>
+      <a id="whereIn(p:String,v:Any):sorm.Querier[T]"></a><a id="whereIn(String,Any):Querier[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -606,11 +689,14 @@
       <span class="symbol">
         <span class="name">whereIn</span><span class="params">(<span name="p">p: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="v">v: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="" class="extype" name="sorm.Querier">Querier</a>[<span class="extype" name="sorm.Querier.T">T</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@whereIn(p:String,v:Any):sorm.Querier[T]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.Querier#whereIncludes" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="whereIncludes(p:String,v:Any):sorm.Querier[T]"></a>
-      <a id="whereIncludes(String,Any):Querier[T]"></a>
+      <a id="whereIncludes(p:String,v:Any):sorm.Querier[T]"></a><a id="whereIncludes(String,Any):Querier[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -619,11 +705,14 @@
       <span class="symbol">
         <span class="name">whereIncludes</span><span class="params">(<span name="p">p: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="v">v: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="" class="extype" name="sorm.Querier">Querier</a>[<span class="extype" name="sorm.Querier.T">T</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@whereIncludes(p:String,v:Any):sorm.Querier[T]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.Querier#whereLarger" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="whereLarger(p:String,v:Any):sorm.Querier[T]"></a>
-      <a id="whereLarger(String,Any):Querier[T]"></a>
+      <a id="whereLarger(p:String,v:Any):sorm.Querier[T]"></a><a id="whereLarger(String,Any):Querier[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -632,11 +721,14 @@
       <span class="symbol">
         <span class="name">whereLarger</span><span class="params">(<span name="p">p: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="v">v: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="" class="extype" name="sorm.Querier">Querier</a>[<span class="extype" name="sorm.Querier.T">T</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@whereLarger(p:String,v:Any):sorm.Querier[T]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.Querier#whereLargerOrEqual" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="whereLargerOrEqual(p:String,v:Any):sorm.Querier[T]"></a>
-      <a id="whereLargerOrEqual(String,Any):Querier[T]"></a>
+      <a id="whereLargerOrEqual(p:String,v:Any):sorm.Querier[T]"></a><a id="whereLargerOrEqual(String,Any):Querier[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -645,11 +737,14 @@
       <span class="symbol">
         <span class="name">whereLargerOrEqual</span><span class="params">(<span name="p">p: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="v">v: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="" class="extype" name="sorm.Querier">Querier</a>[<span class="extype" name="sorm.Querier.T">T</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@whereLargerOrEqual(p:String,v:Any):sorm.Querier[T]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.Querier#whereLike" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="whereLike(p:String,v:Any):sorm.Querier[T]"></a>
-      <a id="whereLike(String,Any):Querier[T]"></a>
+      <a id="whereLike(p:String,v:Any):sorm.Querier[T]"></a><a id="whereLike(String,Any):Querier[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -658,11 +753,14 @@
       <span class="symbol">
         <span class="name">whereLike</span><span class="params">(<span name="p">p: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="v">v: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="" class="extype" name="sorm.Querier">Querier</a>[<span class="extype" name="sorm.Querier.T">T</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@whereLike(p:String,v:Any):sorm.Querier[T]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.Querier#whereNotConstitutes" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="whereNotConstitutes(p:String,v:Any):sorm.Querier[T]"></a>
-      <a id="whereNotConstitutes(String,Any):Querier[T]"></a>
+      <a id="whereNotConstitutes(p:String,v:Any):sorm.Querier[T]"></a><a id="whereNotConstitutes(String,Any):Querier[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -671,11 +769,14 @@
       <span class="symbol">
         <span class="name">whereNotConstitutes</span><span class="params">(<span name="p">p: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="v">v: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="" class="extype" name="sorm.Querier">Querier</a>[<span class="extype" name="sorm.Querier.T">T</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@whereNotConstitutes(p:String,v:Any):sorm.Querier[T]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.Querier#whereNotContains" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="whereNotContains(p:String,v:Any):sorm.Querier[T]"></a>
-      <a id="whereNotContains(String,Any):Querier[T]"></a>
+      <a id="whereNotContains(p:String,v:Any):sorm.Querier[T]"></a><a id="whereNotContains(String,Any):Querier[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -684,11 +785,14 @@
       <span class="symbol">
         <span class="name">whereNotContains</span><span class="params">(<span name="p">p: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="v">v: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="" class="extype" name="sorm.Querier">Querier</a>[<span class="extype" name="sorm.Querier.T">T</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@whereNotContains(p:String,v:Any):sorm.Querier[T]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.Querier#whereNotEqual" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="whereNotEqual(p:String,v:Any):sorm.Querier[T]"></a>
-      <a id="whereNotEqual(String,Any):Querier[T]"></a>
+      <a id="whereNotEqual(p:String,v:Any):sorm.Querier[T]"></a><a id="whereNotEqual(String,Any):Querier[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -697,11 +801,14 @@
       <span class="symbol">
         <span class="name">whereNotEqual</span><span class="params">(<span name="p">p: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="v">v: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="" class="extype" name="sorm.Querier">Querier</a>[<span class="extype" name="sorm.Querier.T">T</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@whereNotEqual(p:String,v:Any):sorm.Querier[T]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.Querier#whereNotIn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="whereNotIn(p:String,v:Any):sorm.Querier[T]"></a>
-      <a id="whereNotIn(String,Any):Querier[T]"></a>
+      <a id="whereNotIn(p:String,v:Any):sorm.Querier[T]"></a><a id="whereNotIn(String,Any):Querier[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -710,11 +817,14 @@
       <span class="symbol">
         <span class="name">whereNotIn</span><span class="params">(<span name="p">p: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="v">v: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="" class="extype" name="sorm.Querier">Querier</a>[<span class="extype" name="sorm.Querier.T">T</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@whereNotIn(p:String,v:Any):sorm.Querier[T]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.Querier#whereNotIncludes" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="whereNotIncludes(p:String,v:Any):sorm.Querier[T]"></a>
-      <a id="whereNotIncludes(String,Any):Querier[T]"></a>
+      <a id="whereNotIncludes(p:String,v:Any):sorm.Querier[T]"></a><a id="whereNotIncludes(String,Any):Querier[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -723,11 +833,14 @@
       <span class="symbol">
         <span class="name">whereNotIncludes</span><span class="params">(<span name="p">p: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="v">v: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="" class="extype" name="sorm.Querier">Querier</a>[<span class="extype" name="sorm.Querier.T">T</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@whereNotIncludes(p:String,v:Any):sorm.Querier[T]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.Querier#whereNotLike" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="whereNotLike(p:String,v:Any):sorm.Querier[T]"></a>
-      <a id="whereNotLike(String,Any):Querier[T]"></a>
+      <a id="whereNotLike(p:String,v:Any):sorm.Querier[T]"></a><a id="whereNotLike(String,Any):Querier[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -736,11 +849,14 @@
       <span class="symbol">
         <span class="name">whereNotLike</span><span class="params">(<span name="p">p: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="v">v: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="" class="extype" name="sorm.Querier">Querier</a>[<span class="extype" name="sorm.Querier.T">T</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@whereNotLike(p:String,v:Any):sorm.Querier[T]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.Querier#whereNotRegex" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="whereNotRegex(p:String,v:Any):sorm.Querier[T]"></a>
-      <a id="whereNotRegex(String,Any):Querier[T]"></a>
+      <a id="whereNotRegex(p:String,v:Any):sorm.Querier[T]"></a><a id="whereNotRegex(String,Any):Querier[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -749,11 +865,14 @@
       <span class="symbol">
         <span class="name">whereNotRegex</span><span class="params">(<span name="p">p: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="v">v: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="" class="extype" name="sorm.Querier">Querier</a>[<span class="extype" name="sorm.Querier.T">T</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@whereNotRegex(p:String,v:Any):sorm.Querier[T]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.Querier#whereRegex" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="whereRegex(p:String,v:Any):sorm.Querier[T]"></a>
-      <a id="whereRegex(String,Any):Querier[T]"></a>
+      <a id="whereRegex(p:String,v:Any):sorm.Querier[T]"></a><a id="whereRegex(String,Any):Querier[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -762,11 +881,14 @@
       <span class="symbol">
         <span class="name">whereRegex</span><span class="params">(<span name="p">p: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="v">v: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="" class="extype" name="sorm.Querier">Querier</a>[<span class="extype" name="sorm.Querier.T">T</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@whereRegex(p:String,v:Any):sorm.Querier[T]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.Querier#whereSmaller" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="whereSmaller(p:String,v:Any):sorm.Querier[T]"></a>
-      <a id="whereSmaller(String,Any):Querier[T]"></a>
+      <a id="whereSmaller(p:String,v:Any):sorm.Querier[T]"></a><a id="whereSmaller(String,Any):Querier[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -775,11 +897,14 @@
       <span class="symbol">
         <span class="name">whereSmaller</span><span class="params">(<span name="p">p: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="v">v: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="" class="extype" name="sorm.Querier">Querier</a>[<span class="extype" name="sorm.Querier.T">T</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@whereSmaller(p:String,v:Any):sorm.Querier[T]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.Querier#whereSmallerOrEqual" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="whereSmallerOrEqual(p:String,v:Any):sorm.Querier[T]"></a>
-      <a id="whereSmallerOrEqual(String,Any):Querier[T]"></a>
+      <a id="whereSmallerOrEqual(p:String,v:Any):sorm.Querier[T]"></a><a id="whereSmallerOrEqual(String,Any):Querier[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -788,7 +913,11 @@
       <span class="symbol">
         <span class="name">whereSmallerOrEqual</span><span class="params">(<span name="p">p: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="v">v: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="" class="extype" name="sorm.Querier">Querier</a>[<span class="extype" name="sorm.Querier.T">T</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.Querier@whereSmallerOrEqual(p:String,v:Any):sorm.Querier[T]" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       
     </li></ol>
             </div>
@@ -819,6 +948,7 @@
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-      <script defer="defer" type="text/javascript" id="jquery-js" src="../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../lib/template.js"></script>
+
+
     </body>
       </html>

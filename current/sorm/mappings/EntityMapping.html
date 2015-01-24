@@ -1,14 +1,18 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!DOCTYPE html >
 <html>
         <head>
-          <title>EntityMapping - SORM 0.3.15 API - sorm.mappings.EntityMapping</title>
-          <meta name="description" content="EntityMapping - SORM 0.3.15 API - sorm.mappings.EntityMapping" />
-          <meta name="keywords" content="EntityMapping SORM 0.3.15 API sorm.mappings.EntityMapping" />
+          <title>EntityMapping - SORM 0.3.16 API - sorm.mappings.EntityMapping</title>
+          <meta name="description" content="EntityMapping - SORM 0.3.16 API - sorm.mappings.EntityMapping" />
+          <meta name="keywords" content="EntityMapping SORM 0.3.16 API sorm.mappings.EntityMapping" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
+      
       <script type="text/javascript">
          if(top === self) {
             var url = '../../index.html';
@@ -26,7 +30,11 @@
       <div id="definition">
         <img src="../../lib/class_big.png" />
         <p id="owner"><a href="../package.html" class="extype" name="sorm">sorm</a>.<a href="package.html" class="extype" name="sorm.mappings">mappings</a></p>
-        <h1>EntityMapping</h1>
+        <h1>EntityMapping</h1> <span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       </div>
 
       <h4 id="signature" class="signature">
@@ -55,13 +63,13 @@
                 <li class="inherit out"><span>By inheritance</span></li>
               </ol>
             </div>
-        <div id="ancestors">
+        <div class="ancestors">
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
                   <li class="in" name="sorm.mappings.EntityMapping"><span>EntityMapping</span></li><li class="in" name="sorm.mappings.MasterTableMapping"><span>MasterTableMapping</span></li><li class="in" name="sorm.mappings.TableMapping"><span>TableMapping</span></li><li class="in" name="sorm.mappings.Querying"><span>Querying</span></li><li class="in" name="sorm.mappings.CompositeMapping"><span>CompositeMapping</span></li><li class="in" name="sorm.mappings.Mapping"><span>Mapping</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
-              </div><div id="ancestors">
+              </div><div class="ancestors">
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
@@ -80,8 +88,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="sorm.mappings.EntityMapping#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(reflection:sorm.reflection.Reflection,membership:Option[sorm.mappings.Membership],settings:Map[sorm.reflection.Reflection,sorm.mappings.EntitySettings]):sorm.mappings.EntityMapping"></a>
-      <a id="&lt;init&gt;:EntityMapping"></a>
+      <a id="&lt;init&gt;(reflection:sorm.reflection.Reflection,membership:Option[sorm.mappings.Membership],settings:Map[sorm.reflection.Reflection,sorm.mappings.EntitySettings]):sorm.mappings.EntityMapping"></a><a id="&lt;init&gt;:EntityMapping"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -90,7 +97,11 @@
       <span class="symbol">
         <span class="name">EntityMapping</span><span class="params">(<span name="reflection">reflection: <a href="../reflection/Reflection.html" class="extype" name="sorm.reflection.Reflection">Reflection</a></span>, <span name="membership">membership: <span class="extype" name="scala.Option">Option</span>[<a href="Membership.html" class="extype" name="sorm.mappings.Membership">Membership</a>]</span>, <span name="settings">settings: <span class="extype" name="scala.Predef.Map">Map</span>[<a href="../reflection/Reflection.html" class="extype" name="sorm.reflection.Reflection">Reflection</a>, <a href="package$$EntitySettings.html" class="extype" name="sorm.mappings.EntitySettings">EntitySettings</a>]</span>)</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@&lt;init&gt;(reflection:sorm.reflection.Reflection,membership:Option[sorm.mappings.Membership],settings:Map[sorm.reflection.Reflection,sorm.mappings.EntitySettings]):sorm.mappings.EntityMapping" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       
     </li></ol>
             </div>
@@ -99,24 +110,10 @@
 
         
 
-        <div id="values" class="values members">
+        <div class="values members">
               <h3>Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="!=(x$1:AnyRef):Boolean"></a>
-      <a id="!=(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="!=(x$1:Any):Boolean"></a>
-      <a id="!=(Any):Boolean"></a>
+      <a id="!=(x$1:Any):Boolean"></a><a id="!=(Any):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
@@ -125,10 +122,13 @@
       <span class="symbol">
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="##():Int"></a>
       <a id="##():Int"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -138,24 +138,14 @@
       <span class="symbol">
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@##():Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="==(x$1:AnyRef):Boolean"></a>
-      <a id="==(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="==(x$1:Any):Boolean"></a>
-      <a id="==(Any):Boolean"></a>
+      <a id="==(x$1:Any):Boolean"></a><a id="==(Any):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
@@ -164,11 +154,14 @@
       <span class="symbol">
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="sorm.mappings.Querying#abstractSqlTable" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="abstractSqlTable:sorm.abstractSql.AbstractSql.Table"></a>
-      <a id="abstractSqlTable:Table"></a>
+      <a id="abstractSqlTable:sorm.abstractSql.AbstractSql.Table"></a><a id="abstractSqlTable:Table"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -177,11 +170,14 @@
       <span class="symbol">
         <span class="name">abstractSqlTable</span><span class="result">: <a href="../abstractSql/AbstractSql$$Table.html" class="extype" name="sorm.abstractSql.AbstractSql.Table">Table</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@abstractSqlTable:sorm.abstractSql.AbstractSql.Table" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Querying.html" class="extype" name="sorm.mappings.Querying">Querying</a></dd></dl></div>
     </li><li name="sorm.mappings.Mapping#ancestors" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="ancestors:Stream[sorm.mappings.Mapping]"></a>
-      <a id="ancestors:Stream[Mapping]"></a>
+      <a id="ancestors:Stream[sorm.mappings.Mapping]"></a><a id="ancestors:Stream[Mapping]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -190,10 +186,13 @@
       <span class="symbol">
         <span class="name">ancestors</span><span class="result">: <span class="extype" name="scala.Stream">Stream</span>[<a href="Mapping.html" class="extype" name="sorm.mappings.Mapping">Mapping</a>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@ancestors:Stream[sorm.mappings.Mapping]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Mapping.html" class="extype" name="sorm.mappings.Mapping">Mapping</a></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -203,11 +202,14 @@
       <span class="symbol">
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="sorm.mappings.MasterTableMapping#bindingsToContainerTable" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="bindingsToContainerTable:scala.collection.immutable.Stream[(String,String)]"></a>
-      <a id="bindingsToContainerTable:Stream[(String,String)]"></a>
+      <a id="bindingsToContainerTable:scala.collection.immutable.Stream[(String,String)]"></a><a id="bindingsToContainerTable:Stream[(String,String)]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -216,11 +218,14 @@
       <span class="symbol">
         <span class="name">bindingsToContainerTable</span><span class="result">: <span class="extype" name="scala.collection.immutable.Stream">Stream</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>)]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@bindingsToContainerTable:scala.collection.immutable.Stream[(String,String)]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="MasterTableMapping.html" class="extype" name="sorm.mappings.MasterTableMapping">MasterTableMapping</a> → <a href="Querying.html" class="extype" name="sorm.mappings.Querying">Querying</a></dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="clone():Object"></a>
-      <a id="clone():AnyRef"></a>
+      <a id="clone():Object"></a><a id="clone():AnyRef"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -229,7 +234,11 @@
       <span class="symbol">
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@clone():Object" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -238,8 +247,7 @@
               
         </dd></dl></div>
     </li><li name="sorm.mappings.MasterTableMapping#columnsForContainer" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="columnsForContainer:Stream[sorm.ddl.Column]"></a>
-      <a id="columnsForContainer:Stream[Column]"></a>
+      <a id="columnsForContainer:Stream[sorm.ddl.Column]"></a><a id="columnsForContainer:Stream[Column]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -248,11 +256,14 @@
       <span class="symbol">
         <span class="name">columnsForContainer</span><span class="result">: <span class="extype" name="scala.Stream">Stream</span>[<a href="../ddl/package$$Column.html" class="extype" name="sorm.ddl.Column">Column</a>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@columnsForContainer:Stream[sorm.ddl.Column]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="MasterTableMapping.html" class="extype" name="sorm.mappings.MasterTableMapping">MasterTableMapping</a> → <a href="CompositeMapping.html" class="extype" name="sorm.mappings.CompositeMapping">CompositeMapping</a> → <a href="Mapping.html" class="extype" name="sorm.mappings.Mapping">Mapping</a></dd></dl></div>
     </li><li name="sorm.mappings.CompositeMapping#compositeColumns" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="compositeColumns:Stream[sorm.ddl.Column]"></a>
-      <a id="compositeColumns:Stream[Column]"></a>
+      <a id="compositeColumns:Stream[sorm.ddl.Column]"></a><a id="compositeColumns:Stream[Column]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -261,11 +272,14 @@
       <span class="symbol">
         <span class="name">compositeColumns</span><span class="result">: <span class="extype" name="scala.Stream">Stream</span>[<a href="../ddl/package$$Column.html" class="extype" name="sorm.ddl.Column">Column</a>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@compositeColumns:Stream[sorm.ddl.Column]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CompositeMapping.html" class="extype" name="sorm.mappings.CompositeMapping">CompositeMapping</a></dd></dl></div>
     </li><li name="sorm.mappings.TableMapping#containedForeignKeys" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="containedForeignKeys:Stream[sorm.ddl.ForeignKey]"></a>
-      <a id="containedForeignKeys:Stream[ForeignKey]"></a>
+      <a id="containedForeignKeys:Stream[sorm.ddl.ForeignKey]"></a><a id="containedForeignKeys:Stream[ForeignKey]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -274,11 +288,14 @@
       <span class="symbol">
         <span class="name">containedForeignKeys</span><span class="result">: <span class="extype" name="scala.Stream">Stream</span>[<a href="../ddl/package$$ForeignKey.html" class="extype" name="sorm.ddl.ForeignKey">ForeignKey</a>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@containedForeignKeys:Stream[sorm.ddl.ForeignKey]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="TableMapping.html" class="extype" name="sorm.mappings.TableMapping">TableMapping</a></dd></dl></div>
     </li><li name="sorm.mappings.CompositeMapping#containedTableMappings" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="containedTableMappings:Stream[sorm.mappings.TableMapping]"></a>
-      <a id="containedTableMappings:Stream[TableMapping]"></a>
+      <a id="containedTableMappings:Stream[sorm.mappings.TableMapping]"></a><a id="containedTableMappings:Stream[TableMapping]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -287,15 +304,18 @@
       <span class="symbol">
         <span class="name">containedTableMappings</span><span class="result">: <span class="extype" name="scala.Stream">Stream</span>[<a href="TableMapping.html" class="extype" name="sorm.mappings.TableMapping">TableMapping</a>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@containedTableMappings:Stream[sorm.mappings.TableMapping]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <p class="shortcomment cmt">First descendant table mappings
 Or containedTableMappings
 </p><div class="fullcomment"><div class="comment cmt"><p>First descendant table mappings
 Or containedTableMappings
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CompositeMapping.html" class="extype" name="sorm.mappings.CompositeMapping">CompositeMapping</a></dd></dl></div>
     </li><li name="sorm.mappings.Mapping#containerTableMapping" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="containerTableMapping:Option[sorm.mappings.TableMapping]"></a>
-      <a id="containerTableMapping:Option[TableMapping]"></a>
+      <a id="containerTableMapping:Option[sorm.mappings.TableMapping]"></a><a id="containerTableMapping:Option[TableMapping]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -304,11 +324,14 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">containerTableMapping</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<a href="TableMapping.html" class="extype" name="sorm.mappings.TableMapping">TableMapping</a>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@containerTableMapping:Option[sorm.mappings.TableMapping]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Mapping.html" class="extype" name="sorm.mappings.Mapping">Mapping</a></dd></dl></div>
     </li><li name="sorm.mappings.CompositeMapping#deepContainedMappings" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="deepContainedMappings:Stream[sorm.mappings.Mapping]"></a>
-      <a id="deepContainedMappings:Stream[Mapping]"></a>
+      <a id="deepContainedMappings:Stream[sorm.mappings.Mapping]"></a><a id="deepContainedMappings:Stream[Mapping]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -317,11 +340,14 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">deepContainedMappings</span><span class="result">: <span class="extype" name="scala.Stream">Stream</span>[<a href="Mapping.html" class="extype" name="sorm.mappings.Mapping">Mapping</a>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@deepContainedMappings:Stream[sorm.mappings.Mapping]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CompositeMapping.html" class="extype" name="sorm.mappings.CompositeMapping">CompositeMapping</a></dd></dl></div>
     </li><li name="sorm.mappings.EntityMapping#delete" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="delete(value:Any,connection:sorm.driver.DriverConnection):Unit"></a>
-      <a id="delete(Any,DriverConnection):Unit"></a>
+      <a id="delete(value:Any,connection:sorm.driver.DriverConnection):Unit"></a><a id="delete(Any,DriverConnection):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -330,11 +356,14 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">delete</span><span class="params">(<span name="value">value: <span class="extype" name="scala.Any">Any</span></span>, <span name="connection">connection: <a href="../driver/DriverConnection.html" class="extype" name="sorm.driver.DriverConnection">DriverConnection</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@delete(value:Any,connection:sorm.driver.DriverConnection):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="eq(x$1:AnyRef):Boolean"></a>
-      <a id="eq(AnyRef):Boolean"></a>
+      <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
@@ -343,11 +372,14 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="equals(x$1:Any):Boolean"></a>
-      <a id="equals(Any):Boolean"></a>
+      <a id="equals(x$1:Any):Boolean"></a><a id="equals(Any):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -356,11 +388,14 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="sorm.mappings.Querying#fetchByContainerPrimaryKey" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="fetchByContainerPrimaryKey:(Map[String,Any],sorm.driver.DriverConnection)=&gt;Any"></a>
-      <a id="fetchByContainerPrimaryKey:(Map[String,Any],DriverConnection)⇒Any"></a>
+      <a id="fetchByContainerPrimaryKey:(Map[String,Any],sorm.driver.DriverConnection)=&gt;Any"></a><a id="fetchByContainerPrimaryKey:(Map[String,Any],DriverConnection)⇒Any"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -369,11 +404,14 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">fetchByContainerPrimaryKey</span><span class="result">: (<span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Any">Any</span>], <a href="../driver/DriverConnection.html" class="extype" name="sorm.driver.DriverConnection">DriverConnection</a>) ⇒ <span class="extype" name="scala.Any">Any</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@fetchByContainerPrimaryKey:(Map[String,Any],sorm.driver.DriverConnection)=&gt;Any" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Querying.html" class="extype" name="sorm.mappings.Querying">Querying</a></dd></dl></div>
     </li><li name="sorm.mappings.Querying#fetchByPrimaryKey" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="fetchByPrimaryKey:(Map[String,Any],sorm.driver.DriverConnection)=&gt;Any"></a>
-      <a id="fetchByPrimaryKey:(Map[String,Any],DriverConnection)⇒Any"></a>
+      <a id="fetchByPrimaryKey:(Map[String,Any],sorm.driver.DriverConnection)=&gt;Any"></a><a id="fetchByPrimaryKey:(Map[String,Any],DriverConnection)⇒Any"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -382,10 +420,13 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">fetchByPrimaryKey</span><span class="result">: (<span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Any">Any</span>], <a href="../driver/DriverConnection.html" class="extype" name="sorm.driver.DriverConnection">DriverConnection</a>) ⇒ <span class="extype" name="scala.Any">Any</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@fetchByPrimaryKey:(Map[String,Any],sorm.driver.DriverConnection)=&gt;Any" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Querying.html" class="extype" name="sorm.mappings.Querying">Querying</a></dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -395,7 +436,11 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -404,8 +449,7 @@ Or containedTableMappings
               
         </dd></dl></div>
     </li><li name="sorm.mappings.MasterTableMapping#foreignKeyForContainer" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="foreignKeyForContainer:sorm.ddl.ForeignKey"></a>
-      <a id="foreignKeyForContainer:ForeignKey"></a>
+      <a id="foreignKeyForContainer:sorm.ddl.ForeignKey"></a><a id="foreignKeyForContainer:ForeignKey"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -414,11 +458,14 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">foreignKeyForContainer</span><span class="result">: <a href="../ddl/package$$ForeignKey.html" class="extype" name="sorm.ddl.ForeignKey">ForeignKey</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@foreignKeyForContainer:sorm.ddl.ForeignKey" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="MasterTableMapping.html" class="extype" name="sorm.mappings.MasterTableMapping">MasterTableMapping</a></dd></dl></div>
     </li><li name="sorm.mappings.MasterTableMapping#foreignKeys" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="foreignKeys:scala.collection.immutable.Set[sorm.ddl.ForeignKey]"></a>
-      <a id="foreignKeys:Set[ForeignKey]"></a>
+      <a id="foreignKeys:scala.collection.immutable.Set[sorm.ddl.ForeignKey]"></a><a id="foreignKeys:Set[ForeignKey]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -427,11 +474,14 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">foreignKeys</span><span class="result">: <span class="extype" name="scala.collection.immutable.Set">Set</span>[<a href="../ddl/package$$ForeignKey.html" class="extype" name="sorm.ddl.ForeignKey">ForeignKey</a>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@foreignKeys:scala.collection.immutable.Set[sorm.ddl.ForeignKey]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="MasterTableMapping.html" class="extype" name="sorm.mappings.MasterTableMapping">MasterTableMapping</a> → <a href="TableMapping.html" class="extype" name="sorm.mappings.TableMapping">TableMapping</a></dd></dl></div>
     </li><li name="sorm.mappings.EntityMapping#generatedColumns" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="generatedColumns:scala.collection.immutable.Stream[sorm.ddl.Column]"></a>
-      <a id="generatedColumns:Stream[Column]"></a>
+      <a id="generatedColumns:scala.collection.immutable.Stream[sorm.ddl.Column]"></a><a id="generatedColumns:Stream[Column]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -440,10 +490,13 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">generatedColumns</span><span class="result">: <span class="extype" name="scala.collection.immutable.Stream">Stream</span>[<a href="../ddl/package$$Column.html" class="extype" name="sorm.ddl.Column">Column</a>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@generatedColumns:scala.collection.immutable.Stream[sorm.ddl.Column]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="sorm.mappings.EntityMapping">EntityMapping</a> → <a href="TableMapping.html" class="extype" name="sorm.mappings.TableMapping">TableMapping</a></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -453,10 +506,13 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -466,11 +522,14 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="sorm.mappings.EntityMapping#id" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="id:sorm.mappings.ValueMapping"></a>
-      <a id="id:ValueMapping"></a>
+      <a id="id:sorm.mappings.ValueMapping"></a><a id="id:ValueMapping"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -479,10 +538,13 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">id</span><span class="result">: <a href="ValueMapping.html" class="extype" name="sorm.mappings.ValueMapping">ValueMapping</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@id:sorm.mappings.ValueMapping" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.mappings.EntityMapping#indexes" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="indexes:Set[Seq[String]]"></a>
       <a id="indexes:Set[Seq[String]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -492,11 +554,14 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">indexes</span><span class="result">: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@indexes:Set[Seq[String]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.mappings.EntityMapping#indexesColumnNames" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="indexesColumnNames:scala.collection.immutable.Set[Seq[String]]"></a>
-      <a id="indexesColumnNames:Set[Seq[String]]"></a>
+      <a id="indexesColumnNames:scala.collection.immutable.Set[Seq[String]]"></a><a id="indexesColumnNames:Set[Seq[String]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -505,11 +570,14 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">indexesColumnNames</span><span class="result">: <span class="extype" name="scala.collection.immutable.Set">Set</span>[<span class="extype" name="scala.collection.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@indexesColumnNames:scala.collection.immutable.Set[Seq[String]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="sorm.mappings.EntityMapping">EntityMapping</a> → <a href="TableMapping.html" class="extype" name="sorm.mappings.TableMapping">TableMapping</a></dd></dl></div>
     </li><li name="sorm.mappings.Mapping#insert" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="insert(value:Any,masterKey:Stream[Any],connection:sorm.driver.DriverConnection):Unit"></a>
-      <a id="insert(Any,Stream[Any],DriverConnection):Unit"></a>
+      <a id="insert(value:Any,masterKey:Stream[Any],connection:sorm.driver.DriverConnection):Unit"></a><a id="insert(Any,Stream[Any],DriverConnection):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -518,10 +586,13 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">insert</span><span class="params">(<span name="value">value: <span class="extype" name="scala.Any">Any</span></span>, <span name="masterKey">masterKey: <span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="scala.Any">Any</span>]</span>, <span name="connection">connection: <a href="../driver/DriverConnection.html" class="extype" name="sorm.driver.DriverConnection">DriverConnection</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@insert(value:Any,masterKey:Stream[Any],connection:sorm.driver.DriverConnection):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Mapping.html" class="extype" name="sorm.mappings.Mapping">Mapping</a></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -531,11 +602,14 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="sorm.mappings.EntityMapping#mappings" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="mappings:scala.collection.immutable.Stream[sorm.mappings.Mapping]"></a>
-      <a id="mappings:Stream[Mapping]"></a>
+      <a id="mappings:scala.collection.immutable.Stream[sorm.mappings.Mapping]"></a><a id="mappings:Stream[Mapping]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -544,10 +618,13 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">mappings</span><span class="result">: <span class="extype" name="scala.collection.immutable.Stream">Stream</span>[<a href="Mapping.html" class="extype" name="sorm.mappings.Mapping">Mapping</a>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@mappings:scala.collection.immutable.Stream[sorm.mappings.Mapping]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="sorm.mappings.EntityMapping">EntityMapping</a> → <a href="CompositeMapping.html" class="extype" name="sorm.mappings.CompositeMapping">CompositeMapping</a></dd></dl></div>
     </li><li name="sorm.mappings.Mapping#memberName" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="memberName:String"></a>
       <a id="memberName:String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -557,11 +634,14 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">memberName</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@memberName:String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Mapping.html" class="extype" name="sorm.mappings.Mapping">Mapping</a></dd></dl></div>
     </li><li name="sorm.mappings.EntityMapping#membership" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="membership:Option[sorm.mappings.Membership]"></a>
-      <a id="membership:Option[Membership]"></a>
+      <a id="membership:Option[sorm.mappings.Membership]"></a><a id="membership:Option[Membership]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -570,11 +650,14 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">membership</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<a href="Membership.html" class="extype" name="sorm.mappings.Membership">Membership</a>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@membership:Option[sorm.mappings.Membership]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="sorm.mappings.EntityMapping">EntityMapping</a> → <a href="Mapping.html" class="extype" name="sorm.mappings.Mapping">Mapping</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="ne(x$1:AnyRef):Boolean"></a>
-      <a id="ne(AnyRef):Boolean"></a>
+      <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
@@ -583,10 +666,13 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="notify():Unit"></a>
       <a id="notify():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -596,10 +682,13 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@notify():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="notifyAll():Unit"></a>
       <a id="notifyAll():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -609,11 +698,14 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="sorm.mappings.EntityMapping#parseResultSet" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="parseResultSet(rs:sorm.jdbc.ResultSetView,c:sorm.driver.DriverConnection):sorm.Persisted"></a>
-      <a id="parseResultSet(ResultSetView,DriverConnection):Persisted"></a>
+      <a id="parseResultSet(rs:sorm.jdbc.ResultSetView,c:sorm.driver.DriverConnection):sorm.Persisted"></a><a id="parseResultSet(ResultSetView,DriverConnection):Persisted"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -622,11 +714,14 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">parseResultSet</span><span class="params">(<span name="rs">rs: <a href="../jdbc/ResultSetView.html" class="extype" name="sorm.jdbc.ResultSetView">ResultSetView</a></span>, <span name="c">c: <a href="../driver/DriverConnection.html" class="extype" name="sorm.driver.DriverConnection">DriverConnection</a></span>)</span><span class="result">: <a href="../Persisted.html" class="extype" name="sorm.Persisted">Persisted</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@parseResultSet(rs:sorm.jdbc.ResultSetView,c:sorm.driver.DriverConnection):sorm.Persisted" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="sorm.mappings.EntityMapping">EntityMapping</a> → <a href="Querying.html" class="extype" name="sorm.mappings.Querying">Querying</a></dd></dl></div>
     </li><li name="sorm.mappings.TableMapping#primaryKeyColumnNames" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="primaryKeyColumnNames:scala.collection.immutable.Stream[String]"></a>
-      <a id="primaryKeyColumnNames:Stream[String]"></a>
+      <a id="primaryKeyColumnNames:scala.collection.immutable.Stream[String]"></a><a id="primaryKeyColumnNames:Stream[String]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -635,11 +730,14 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">primaryKeyColumnNames</span><span class="result">: <span class="extype" name="scala.collection.immutable.Stream">Stream</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@primaryKeyColumnNames:scala.collection.immutable.Stream[String]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="TableMapping.html" class="extype" name="sorm.mappings.TableMapping">TableMapping</a> → <a href="Querying.html" class="extype" name="sorm.mappings.Querying">Querying</a></dd></dl></div>
     </li><li name="sorm.mappings.EntityMapping#primaryKeyColumns" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="primaryKeyColumns:scala.collection.immutable.Stream[sorm.ddl.Column]"></a>
-      <a id="primaryKeyColumns:Stream[Column]"></a>
+      <a id="primaryKeyColumns:scala.collection.immutable.Stream[sorm.ddl.Column]"></a><a id="primaryKeyColumns:Stream[Column]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -648,11 +746,14 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">primaryKeyColumns</span><span class="result">: <span class="extype" name="scala.collection.immutable.Stream">Stream</span>[<a href="../ddl/package$$Column.html" class="extype" name="sorm.ddl.Column">Column</a>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@primaryKeyColumns:scala.collection.immutable.Stream[sorm.ddl.Column]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="sorm.mappings.EntityMapping">EntityMapping</a> → <a href="TableMapping.html" class="extype" name="sorm.mappings.TableMapping">TableMapping</a></dd></dl></div>
     </li><li name="sorm.mappings.Querying#primaryKeySelect" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="primaryKeySelect:sorm.abstractSql.AbstractSql.Select"></a>
-      <a id="primaryKeySelect:Select"></a>
+      <a id="primaryKeySelect:sorm.abstractSql.AbstractSql.Select"></a><a id="primaryKeySelect:Select"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -661,11 +762,14 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">primaryKeySelect</span><span class="result">: <a href="../abstractSql/AbstractSql$$Select.html" class="extype" name="sorm.abstractSql.AbstractSql.Select">Select</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@primaryKeySelect:sorm.abstractSql.AbstractSql.Select" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Querying.html" class="extype" name="sorm.mappings.Querying">Querying</a></dd></dl></div>
     </li><li name="sorm.mappings.EntityMapping#properties" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="properties:scala.collection.immutable.Map[String,sorm.mappings.Mapping]"></a>
-      <a id="properties:Map[String,Mapping]"></a>
+      <a id="properties:scala.collection.immutable.Map[String,sorm.mappings.Mapping]"></a><a id="properties:Map[String,Mapping]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -674,11 +778,14 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">properties</span><span class="result">: <span class="extype" name="scala.collection.immutable.Map">Map</span>[<span class="extype" name="java.lang.String">String</span>, <a href="Mapping.html" class="extype" name="sorm.mappings.Mapping">Mapping</a>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@properties:scala.collection.immutable.Map[String,sorm.mappings.Mapping]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.mappings.EntityMapping#reflection" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="reflection:sorm.reflection.Reflection"></a>
-      <a id="reflection:Reflection"></a>
+      <a id="reflection:sorm.reflection.Reflection"></a><a id="reflection:Reflection"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -687,11 +794,14 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">reflection</span><span class="result">: <a href="../reflection/Reflection.html" class="extype" name="sorm.reflection.Reflection">Reflection</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@reflection:sorm.reflection.Reflection" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="sorm.mappings.EntityMapping">EntityMapping</a> → <a href="Mapping.html" class="extype" name="sorm.mappings.Mapping">Mapping</a></dd></dl></div>
     </li><li name="sorm.mappings.Mapping#root" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="root:sorm.mappings.TableMapping"></a>
-      <a id="root:TableMapping"></a>
+      <a id="root:sorm.mappings.TableMapping"></a><a id="root:TableMapping"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -700,11 +810,14 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">root</span><span class="result">: <a href="TableMapping.html" class="extype" name="sorm.mappings.TableMapping">TableMapping</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@root:sorm.mappings.TableMapping" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Mapping.html" class="extype" name="sorm.mappings.Mapping">Mapping</a></dd></dl></div>
     </li><li name="sorm.mappings.EntityMapping#save" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="save(value:Any,connection:sorm.driver.DriverConnection):sorm.Persisted"></a>
-      <a id="save(Any,DriverConnection):Persisted"></a>
+      <a id="save(value:Any,connection:sorm.driver.DriverConnection):sorm.Persisted"></a><a id="save(Any,DriverConnection):Persisted"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -713,11 +826,14 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">save</span><span class="params">(<span name="value">value: <span class="extype" name="scala.Any">Any</span></span>, <span name="connection">connection: <a href="../driver/DriverConnection.html" class="extype" name="sorm.driver.DriverConnection">DriverConnection</a></span>)</span><span class="result">: <a href="../Persisted.html" class="extype" name="sorm.Persisted">Persisted</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@save(value:Any,connection:sorm.driver.DriverConnection):sorm.Persisted" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.mappings.EntityMapping#settings" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="settings:Map[sorm.reflection.Reflection,sorm.mappings.EntitySettings]"></a>
-      <a id="settings:Map[Reflection,EntitySettings]"></a>
+      <a id="settings:Map[sorm.reflection.Reflection,sorm.mappings.EntitySettings]"></a><a id="settings:Map[Reflection,EntitySettings]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -726,11 +842,14 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">settings</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<a href="../reflection/Reflection.html" class="extype" name="sorm.reflection.Reflection">Reflection</a>, <a href="package$$EntitySettings.html" class="extype" name="sorm.mappings.EntitySettings">EntitySettings</a>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@settings:Map[sorm.reflection.Reflection,sorm.mappings.EntitySettings]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="sorm.mappings.EntityMapping">EntityMapping</a> → <a href="Mapping.html" class="extype" name="sorm.mappings.Mapping">Mapping</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
-      <a id="synchronized[T0](⇒T0):T0"></a>
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
@@ -739,11 +858,14 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="sorm.mappings.TableMapping#table" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="table:sorm.ddl.Table"></a>
-      <a id="table:Table"></a>
+      <a id="table:sorm.ddl.Table"></a><a id="table:Table"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -752,11 +874,14 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">table</span><span class="result">: <a href="../ddl/package$$Table.html" class="extype" name="sorm.ddl.Table">Table</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@table:sorm.ddl.Table" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="TableMapping.html" class="extype" name="sorm.mappings.TableMapping">TableMapping</a></dd></dl></div>
     </li><li name="sorm.mappings.TableMapping#tableColumns" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="tableColumns:scala.collection.immutable.Stream[sorm.ddl.Column]"></a>
-      <a id="tableColumns:Stream[Column]"></a>
+      <a id="tableColumns:scala.collection.immutable.Stream[sorm.ddl.Column]"></a><a id="tableColumns:Stream[Column]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -765,10 +890,13 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">tableColumns</span><span class="result">: <span class="extype" name="scala.collection.immutable.Stream">Stream</span>[<a href="../ddl/package$$Column.html" class="extype" name="sorm.ddl.Column">Column</a>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@tableColumns:scala.collection.immutable.Stream[sorm.ddl.Column]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="TableMapping.html" class="extype" name="sorm.mappings.TableMapping">TableMapping</a> → <a href="Querying.html" class="extype" name="sorm.mappings.Querying">Querying</a></dd></dl></div>
     </li><li name="sorm.mappings.MasterTableMapping#tableName" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="tableName:String"></a>
       <a id="tableName:String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -778,10 +906,13 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">tableName</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@tableName:String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="MasterTableMapping.html" class="extype" name="sorm.mappings.MasterTableMapping">MasterTableMapping</a> → <a href="TableMapping.html" class="extype" name="sorm.mappings.TableMapping">TableMapping</a> → <a href="Querying.html" class="extype" name="sorm.mappings.Querying">Querying</a></dd></dl></div>
     </li><li name="sorm.mappings.Mapping#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toString():String"></a>
       <a id="toString():String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -791,10 +922,13 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@toString():String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Mapping.html" class="extype" name="sorm.mappings.Mapping">Mapping</a> → AnyRef → Any</dd></dl></div>
     </li><li name="sorm.mappings.EntityMapping#uniqueKeys" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="uniqueKeys:Set[Seq[String]]"></a>
       <a id="uniqueKeys:Set[Seq[String]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -804,11 +938,14 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">uniqueKeys</span><span class="result">: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@uniqueKeys:Set[Seq[String]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.mappings.EntityMapping#uniqueKeysColumnNames" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="uniqueKeysColumnNames:scala.collection.immutable.Set[Seq[String]]"></a>
-      <a id="uniqueKeysColumnNames:Set[Seq[String]]"></a>
+      <a id="uniqueKeysColumnNames:scala.collection.immutable.Set[Seq[String]]"></a><a id="uniqueKeysColumnNames:Set[Seq[String]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -817,11 +954,14 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">uniqueKeysColumnNames</span><span class="result">: <span class="extype" name="scala.collection.immutable.Set">Set</span>[<span class="extype" name="scala.collection.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@uniqueKeysColumnNames:scala.collection.immutable.Set[Seq[String]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="sorm.mappings.EntityMapping">EntityMapping</a> → <a href="TableMapping.html" class="extype" name="sorm.mappings.TableMapping">TableMapping</a></dd></dl></div>
     </li><li name="sorm.mappings.Mapping#update" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="update(value:Any,masterKey:Stream[Any],connection:sorm.driver.DriverConnection):Unit"></a>
-      <a id="update(Any,Stream[Any],DriverConnection):Unit"></a>
+      <a id="update(value:Any,masterKey:Stream[Any],connection:sorm.driver.DriverConnection):Unit"></a><a id="update(Any,Stream[Any],DriverConnection):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -830,11 +970,14 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">update</span><span class="params">(<span name="value">value: <span class="extype" name="scala.Any">Any</span></span>, <span name="masterKey">masterKey: <span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="scala.Any">Any</span>]</span>, <span name="connection">connection: <a href="../driver/DriverConnection.html" class="extype" name="sorm.driver.DriverConnection">DriverConnection</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@update(value:Any,masterKey:Stream[Any],connection:sorm.driver.DriverConnection):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Mapping.html" class="extype" name="sorm.mappings.Mapping">Mapping</a></dd></dl></div>
     </li><li name="sorm.mappings.TableMapping#valueFromContainerRow" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="valueFromContainerRow(data:String=&gt;Any,connection:sorm.driver.DriverConnection):Any"></a>
-      <a id="valueFromContainerRow((String)⇒Any,DriverConnection):Any"></a>
+      <a id="valueFromContainerRow(data:String=&gt;Any,connection:sorm.driver.DriverConnection):Any"></a><a id="valueFromContainerRow((String)⇒Any,DriverConnection):Any"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -843,11 +986,14 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">valueFromContainerRow</span><span class="params">(<span name="data">data: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Any">Any</span></span>, <span name="connection">connection: <a href="../driver/DriverConnection.html" class="extype" name="sorm.driver.DriverConnection">DriverConnection</a></span>)</span><span class="result">: <span class="extype" name="scala.Any">Any</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@valueFromContainerRow(data:String=&gt;Any,connection:sorm.driver.DriverConnection):Any" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="TableMapping.html" class="extype" name="sorm.mappings.TableMapping">TableMapping</a> → <a href="Mapping.html" class="extype" name="sorm.mappings.Mapping">Mapping</a></dd></dl></div>
     </li><li name="sorm.mappings.EntityMapping#valuesForContainerTableRow" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="valuesForContainerTableRow(value:Any):Iterable[(String,Any)]"></a>
-      <a id="valuesForContainerTableRow(Any):Iterable[(String,Any)]"></a>
+      <a id="valuesForContainerTableRow(value:Any):Iterable[(String,Any)]"></a><a id="valuesForContainerTableRow(Any):Iterable[(String,Any)]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -856,10 +1002,13 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">valuesForContainerTableRow</span><span class="params">(<span name="value">value: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Iterable">Iterable</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Any">Any</span>)]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@valuesForContainerTableRow(value:Any):Iterable[(String,Any)]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="sorm.mappings.EntityMapping">EntityMapping</a> → <a href="Mapping.html" class="extype" name="sorm.mappings.Mapping">Mapping</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -869,7 +1018,11 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@wait():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -878,8 +1031,7 @@ Or containedTableMappings
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
-      <a id="wait(Long,Int):Unit"></a>
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
@@ -888,7 +1040,11 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -897,8 +1053,7 @@ Or containedTableMappings
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait(x$1:Long):Unit"></a>
-      <a id="wait(Long):Unit"></a>
+      <a id="wait(x$1:Long):Unit"></a><a id="wait(Long):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
@@ -907,7 +1062,11 @@ Or containedTableMappings
       <span class="symbol">
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.EntityMapping@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -954,6 +1113,7 @@ Or containedTableMappings
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-      <script defer="defer" type="text/javascript" id="jquery-js" src="../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../lib/template.js"></script>
+
+
     </body>
       </html>

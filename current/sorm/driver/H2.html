@@ -1,14 +1,18 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!DOCTYPE html >
 <html>
         <head>
-          <title>H2 - SORM 0.3.15 API - sorm.driver.H2</title>
-          <meta name="description" content="H2 - SORM 0.3.15 API - sorm.driver.H2" />
-          <meta name="keywords" content="H2 SORM 0.3.15 API sorm.driver.H2" />
+          <title>H2 - SORM 0.3.16 API - sorm.driver.H2</title>
+          <meta name="description" content="H2 - SORM 0.3.16 API - sorm.driver.H2" />
+          <meta name="keywords" content="H2 SORM 0.3.16 API sorm.driver.H2" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
+      
       <script type="text/javascript">
          if(top === self) {
             var url = '../../index.html';
@@ -26,7 +30,11 @@
       <div id="definition">
         <img src="../../lib/class_big.png" />
         <p id="owner"><a href="../package.html" class="extype" name="sorm">sorm</a>.<a href="package.html" class="extype" name="sorm.driver">driver</a></p>
-        <h1>H2</h1>
+        <h1>H2</h1> <span class="permalink">
+      <a href="../../index.html#sorm.driver.H2" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       </div>
 
       <h4 id="signature" class="signature">
@@ -55,13 +63,13 @@
                 <li class="inherit out"><span>By inheritance</span></li>
               </ol>
             </div>
-        <div id="ancestors">
+        <div class="ancestors">
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
                   <li class="in" name="sorm.driver.H2"><span>H2</span></li><li class="in" name="sorm.driver.StdNow"><span>StdNow</span></li><li class="in" name="sorm.driver.StdDropAllTables"><span>StdDropAllTables</span></li><li class="in" name="sorm.driver.StdDropTables"><span>StdDropTables</span></li><li class="in" name="sorm.driver.StdListTables"><span>StdListTables</span></li><li class="in" name="sorm.driver.StdCreateTable"><span>StdCreateTable</span></li><li class="in" name="sorm.driver.StdModify"><span>StdModify</span></li><li class="in" name="sorm.driver.StdQuery"><span>StdQuery</span></li><li class="in" name="sorm.driver.StdStatement"><span>StdStatement</span></li><li class="in" name="sorm.driver.StdSqlRendering"><span>StdSqlRendering</span></li><li class="in" name="sorm.driver.StdQuote"><span>StdQuote</span></li><li class="in" name="sorm.driver.StdAbstractSqlToSql"><span>StdAbstractSqlToSql</span></li><li class="in" name="sorm.driver.StdTransaction"><span>StdTransaction</span></li><li class="in" name="sorm.driver.StdConnection"><span>StdConnection</span></li><li class="in" name="sorm.driver.DriverConnection"><span>DriverConnection</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
-              </div><div id="ancestors">
+              </div><div class="ancestors">
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
@@ -80,8 +88,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="sorm.driver.H2#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(connection:sorm.jdbc.JdbcConnection):sorm.driver.H2"></a>
-      <a id="&lt;init&gt;:H2"></a>
+      <a id="&lt;init&gt;(connection:sorm.jdbc.JdbcConnection):sorm.driver.H2"></a><a id="&lt;init&gt;:H2"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -90,7 +97,11 @@
       <span class="symbol">
         <span class="name">H2</span><span class="params">(<span name="connection">connection: <a href="../jdbc/JdbcConnection.html" class="extype" name="sorm.jdbc.JdbcConnection">JdbcConnection</a></span>)</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@&lt;init&gt;(connection:sorm.jdbc.JdbcConnection):sorm.driver.H2" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       
     </li></ol>
             </div>
@@ -99,24 +110,10 @@
 
         
 
-        <div id="values" class="values members">
+        <div class="values members">
               <h3>Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="!=(x$1:AnyRef):Boolean"></a>
-      <a id="!=(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="!=(x$1:Any):Boolean"></a>
-      <a id="!=(Any):Boolean"></a>
+      <a id="!=(x$1:Any):Boolean"></a><a id="!=(Any):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
@@ -125,10 +122,13 @@
       <span class="symbol">
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="##():Int"></a>
       <a id="##():Int"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -138,24 +138,14 @@
       <span class="symbol">
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@##():Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="==(x$1:AnyRef):Boolean"></a>
-      <a id="==(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="==(x$1:Any):Boolean"></a>
-      <a id="==(Any):Boolean"></a>
+      <a id="==(x$1:Any):Boolean"></a><a id="==(Any):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
@@ -164,10 +154,13 @@
       <span class="symbol">
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -177,11 +170,14 @@
       <span class="symbol">
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="clone():Object"></a>
-      <a id="clone():AnyRef"></a>
+      <a id="clone():Object"></a><a id="clone():AnyRef"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -190,7 +186,11 @@
       <span class="symbol">
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@clone():Object" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -199,8 +199,7 @@
               
         </dd></dl></div>
     </li><li name="sorm.driver.StdCreateTable#columnDdl" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="columnDdl(c:sorm.ddl.Column):String"></a>
-      <a id="columnDdl(Column):String"></a>
+      <a id="columnDdl(c:sorm.ddl.Column):String"></a><a id="columnDdl(Column):String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -209,11 +208,14 @@
       <span class="symbol">
         <span class="name">columnDdl</span><span class="params">(<span name="c">c: <a href="../ddl/package$$Column.html" class="extype" name="sorm.ddl.Column">Column</a></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@columnDdl(c:sorm.ddl.Column):String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="StdCreateTable.html" class="extype" name="sorm.driver.StdCreateTable">StdCreateTable</a></dd></dl></div>
     </li><li name="sorm.driver.StdCreateTable#columnTypeDdl" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="columnTypeDdl(t:sorm.ddl.ColumnType):String"></a>
-      <a id="columnTypeDdl(ColumnType):String"></a>
+      <a id="columnTypeDdl(t:sorm.ddl.ColumnType):String"></a><a id="columnTypeDdl(ColumnType):String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -222,11 +224,14 @@
       <span class="symbol">
         <span class="name">columnTypeDdl</span><span class="params">(<span name="t">t: <a href="../ddl/package$$ColumnType.html" class="extype" name="sorm.ddl.ColumnType">ColumnType</a></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@columnTypeDdl(t:sorm.ddl.ColumnType):String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="StdCreateTable.html" class="extype" name="sorm.driver.StdCreateTable">StdCreateTable</a></dd></dl></div>
     </li><li name="sorm.driver.H2#connection" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="connection:sorm.jdbc.JdbcConnection"></a>
-      <a id="connection:JdbcConnection"></a>
+      <a id="connection:sorm.jdbc.JdbcConnection"></a><a id="connection:JdbcConnection"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -235,11 +240,14 @@
       <span class="symbol">
         <span class="name">connection</span><span class="result">: <a href="../jdbc/JdbcConnection.html" class="extype" name="sorm.jdbc.JdbcConnection">JdbcConnection</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@connection:sorm.jdbc.JdbcConnection" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="sorm.driver.H2">H2</a> → <a href="StdConnection.html" class="extype" name="sorm.driver.StdConnection">StdConnection</a></dd></dl></div>
     </li><li name="sorm.driver.H2#createIndexDdl" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="createIndexDdl(table:String,columns:Seq[String]):String"></a>
-      <a id="createIndexDdl(String,Seq[String]):String"></a>
+      <a id="createIndexDdl(table:String,columns:Seq[String]):String"></a><a id="createIndexDdl(String,Seq[String]):String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -248,11 +256,14 @@
       <span class="symbol">
         <span class="name">createIndexDdl</span><span class="params">(<span name="table">table: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="columns">columns: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@createIndexDdl(table:String,columns:Seq[String]):String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="sorm.driver.H2#createTable" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="createTable(table:sorm.ddl.Table):Unit"></a>
-      <a id="createTable(Table):Unit"></a>
+      <a id="createTable(table:sorm.ddl.Table):Unit"></a><a id="createTable(Table):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -261,11 +272,14 @@
       <span class="symbol">
         <span class="name">createTable</span><span class="params">(<span name="table">table: <a href="../ddl/package$$Table.html" class="extype" name="sorm.ddl.Table">Table</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@createTable(table:sorm.ddl.Table):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="sorm.driver.H2">H2</a> → <a href="StdCreateTable.html" class="extype" name="sorm.driver.StdCreateTable">StdCreateTable</a> → <a href="DriverConnection.html" class="extype" name="sorm.driver.DriverConnection">DriverConnection</a></dd></dl></div>
     </li><li name="sorm.driver.StdSqlRendering#data" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="data(sql:sorm.sql.Sql):Stream[Any]"></a>
-      <a id="data(Sql):Stream[Any]"></a>
+      <a id="data(sql:sorm.sql.Sql):Stream[Any]"></a><a id="data(Sql):Stream[Any]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -274,11 +288,14 @@
       <span class="symbol">
         <span class="name">data</span><span class="params">(<span name="sql">sql: <a href="../sql/Sql.html" class="extype" name="sorm.sql.Sql">Sql</a></span>)</span><span class="result">: <span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="scala.Any">Any</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@data(sql:sorm.sql.Sql):Stream[Any]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="StdSqlRendering.html" class="extype" name="sorm.driver.StdSqlRendering">StdSqlRendering</a></dd></dl></div>
     </li><li name="sorm.driver.StdModify#delete" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="delete(table:String,pk:Iterable[(String,Any)]):Unit"></a>
-      <a id="delete(String,Iterable[(String,Any)]):Unit"></a>
+      <a id="delete(table:String,pk:Iterable[(String,Any)]):Unit"></a><a id="delete(String,Iterable[(String,Any)]):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -287,10 +304,13 @@
       <span class="symbol">
         <span class="name">delete</span><span class="params">(<span name="table">table: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="pk">pk: <span class="extype" name="scala.Iterable">Iterable</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Any">Any</span>)]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@delete(table:String,pk:Iterable[(String,Any)]):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="StdModify.html" class="extype" name="sorm.driver.StdModify">StdModify</a></dd></dl></div>
     </li><li name="sorm.driver.StdDropAllTables#dropAllTables" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="dropAllTables():Unit"></a>
       <a id="dropAllTables():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -300,11 +320,14 @@
       <span class="symbol">
         <span class="name">dropAllTables</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@dropAllTables():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="StdDropAllTables.html" class="extype" name="sorm.driver.StdDropAllTables">StdDropAllTables</a></dd></dl></div>
     </li><li name="sorm.driver.StdDropTables#dropTable" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="dropTable(table:String):Unit"></a>
-      <a id="dropTable(String):Unit"></a>
+      <a id="dropTable(table:String):Unit"></a><a id="dropTable(String):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -313,11 +336,14 @@
       <span class="symbol">
         <span class="name">dropTable</span><span class="params">(<span name="table">table: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@dropTable(table:String):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="StdDropTables.html" class="extype" name="sorm.driver.StdDropTables">StdDropTables</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="eq(x$1:AnyRef):Boolean"></a>
-      <a id="eq(AnyRef):Boolean"></a>
+      <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
@@ -326,11 +352,14 @@
       <span class="symbol">
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="equals(x$1:Any):Boolean"></a>
-      <a id="equals(Any):Boolean"></a>
+      <a id="equals(x$1:Any):Boolean"></a><a id="equals(Any):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -339,10 +368,13 @@
       <span class="symbol">
         <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -352,7 +384,11 @@
       <span class="symbol">
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -361,8 +397,7 @@
               
         </dd></dl></div>
     </li><li name="sorm.driver.StdCreateTable#foreingKeyDdl" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="foreingKeyDdl(fk:sorm.ddl.ForeignKey):String"></a>
-      <a id="foreingKeyDdl(ForeignKey):String"></a>
+      <a id="foreingKeyDdl(fk:sorm.ddl.ForeignKey):String"></a><a id="foreingKeyDdl(ForeignKey):String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -371,10 +406,13 @@
       <span class="symbol">
         <span class="name">foreingKeyDdl</span><span class="params">(<span name="fk">fk: <a href="../ddl/package$$ForeignKey.html" class="extype" name="sorm.ddl.ForeignKey">ForeignKey</a></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@foreingKeyDdl(fk:sorm.ddl.ForeignKey):String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="StdCreateTable.html" class="extype" name="sorm.driver.StdCreateTable">StdCreateTable</a></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -384,10 +422,13 @@
       <span class="symbol">
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -397,11 +438,14 @@
       <span class="symbol">
         <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="sorm.driver.StdCreateTable#indexDdl" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="indexDdl(columns:Seq[String]):String"></a>
-      <a id="indexDdl(Seq[String]):String"></a>
+      <a id="indexDdl(columns:Seq[String]):String"></a><a id="indexDdl(Seq[String]):String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -410,11 +454,14 @@
       <span class="symbol">
         <span class="name">indexDdl</span><span class="params">(<span name="columns">columns: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@indexDdl(columns:Seq[String]):String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="StdCreateTable.html" class="extype" name="sorm.driver.StdCreateTable">StdCreateTable</a></dd></dl></div>
     </li><li name="sorm.driver.StdModify#insert" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="insert(table:String,values:Iterable[(String,Any)]):Unit"></a>
-      <a id="insert(String,Iterable[(String,Any)]):Unit"></a>
+      <a id="insert(table:String,values:Iterable[(String,Any)]):Unit"></a><a id="insert(String,Iterable[(String,Any)]):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -423,11 +470,14 @@
       <span class="symbol">
         <span class="name">insert</span><span class="params">(<span name="table">table: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="values">values: <span class="extype" name="scala.Iterable">Iterable</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Any">Any</span>)]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@insert(table:String,values:Iterable[(String,Any)]):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="StdModify.html" class="extype" name="sorm.driver.StdModify">StdModify</a></dd></dl></div>
     </li><li name="sorm.driver.StdModify#insertAndGetGeneratedKeys" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="insertAndGetGeneratedKeys(table:String,values:Iterable[(String,Any)]):Seq[Any]"></a>
-      <a id="insertAndGetGeneratedKeys(String,Iterable[(String,Any)]):Seq[Any]"></a>
+      <a id="insertAndGetGeneratedKeys(table:String,values:Iterable[(String,Any)]):Seq[Any]"></a><a id="insertAndGetGeneratedKeys(String,Iterable[(String,Any)]):Seq[Any]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -436,10 +486,13 @@
       <span class="symbol">
         <span class="name">insertAndGetGeneratedKeys</span><span class="params">(<span name="table">table: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="values">values: <span class="extype" name="scala.Iterable">Iterable</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Any">Any</span>)]</span>)</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Any">Any</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@insertAndGetGeneratedKeys(table:String,values:Iterable[(String,Any)]):Seq[Any]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="StdModify.html" class="extype" name="sorm.driver.StdModify">StdModify</a></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -449,10 +502,13 @@
       <span class="symbol">
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="sorm.driver.H2#listTables" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="listTables():List[String]"></a>
       <a id="listTables():List[String]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -462,11 +518,14 @@
       <span class="symbol">
         <span class="name">listTables</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@listTables():List[String]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="sorm.driver.H2">H2</a> → <a href="StdListTables.html" class="extype" name="sorm.driver.StdListTables">StdListTables</a> → <a href="DriverConnection.html" class="extype" name="sorm.driver.DriverConnection">DriverConnection</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="ne(x$1:AnyRef):Boolean"></a>
-      <a id="ne(AnyRef):Boolean"></a>
+      <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
@@ -475,10 +534,13 @@
       <span class="symbol">
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="notify():Unit"></a>
       <a id="notify():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -488,10 +550,13 @@
       <span class="symbol">
         <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@notify():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="notifyAll():Unit"></a>
       <a id="notifyAll():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -501,11 +566,14 @@
       <span class="symbol">
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="sorm.driver.StdNow#now" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="now():org.joda.time.DateTime"></a>
-      <a id="now():DateTime"></a>
+      <a id="now():org.joda.time.DateTime"></a><a id="now():DateTime"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -514,11 +582,14 @@
       <span class="symbol">
         <span class="name">now</span><span class="params">()</span><span class="result">: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@now():org.joda.time.DateTime" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="StdNow.html" class="extype" name="sorm.driver.StdNow">StdNow</a></dd></dl></div>
     </li><li name="sorm.driver.StdQuery#postProcessSql" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="postProcessSql(sql:sorm.sql.Sql.Statement):sorm.sql.Sql.Statement"></a>
-      <a id="postProcessSql(Statement):Statement"></a>
+      <a id="postProcessSql(sql:sorm.sql.Sql.Statement):sorm.sql.Sql.Statement"></a><a id="postProcessSql(Statement):Statement"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -527,11 +598,14 @@
       <span class="symbol">
         <span class="name">postProcessSql</span><span class="params">(<span name="sql">sql: <a href="../sql/Sql$$Statement.html" class="extype" name="sorm.sql.Sql.Statement">Statement</a></span>)</span><span class="result">: <a href="../sql/Sql$$Statement.html" class="extype" name="sorm.sql.Sql.Statement">Statement</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@postProcessSql(sql:sorm.sql.Sql.Statement):sorm.sql.Sql.Statement" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="StdQuery.html" class="extype" name="sorm.driver.StdQuery">StdQuery</a></dd></dl></div>
     </li><li name="sorm.driver.StdCreateTable#primaryKeyDdl" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="primaryKeyDdl(columns:Seq[String]):String"></a>
-      <a id="primaryKeyDdl(Seq[String]):String"></a>
+      <a id="primaryKeyDdl(columns:Seq[String]):String"></a><a id="primaryKeyDdl(Seq[String]):String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -540,24 +614,14 @@
       <span class="symbol">
         <span class="name">primaryKeyDdl</span><span class="params">(<span name="columns">columns: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@primaryKeyDdl(columns:Seq[String]):String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="StdCreateTable.html" class="extype" name="sorm.driver.StdCreateTable">StdCreateTable</a></dd></dl></div>
     </li><li name="sorm.driver.StdQuery#query" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="query[T](s:sorm.jdbc.Statement)(parse:sorm.jdbc.ResultSetView=&gt;T):T"></a>
-      <a id="query[T](Statement)((ResultSetView)⇒T):T"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">query</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="s">s: <a href="../jdbc/package$$Statement.html" class="extype" name="sorm.jdbc.Statement">Statement</a></span>)</span><span class="params">(<span name="parse">parse: (<a href="../jdbc/ResultSetView.html" class="extype" name="sorm.jdbc.ResultSetView">ResultSetView</a>) ⇒ <span class="extype" name="sorm.driver.StdQuery.query.T">T</span> = <span class="defval" name='<span class="name"><a href="../jdbc/ResultSetView.html#indexedRowsTraversable:Traversable[IndexedSeq[Any]]">_ : ResultSetView).indexedRowsTraversable.toList</a></span>'>...</span></span>)</span><span class="result">: <span class="extype" name="sorm.driver.StdQuery.query.T">T</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="StdQuery.html" class="extype" name="sorm.driver.StdQuery">StdQuery</a></dd></dl></div>
-    </li><li name="sorm.driver.StdQuery#query" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="query[T](asql:sorm.abstractSql.AbstractSql.Statement)(parse:sorm.jdbc.ResultSetView=&gt;T):T"></a>
-      <a id="query[T](Statement)((ResultSetView)⇒T):T"></a>
+      <a id="query[T](asql:sorm.abstractSql.AbstractSql.Statement)(parse:sorm.jdbc.ResultSetView=&gt;T):T"></a><a id="query[T](Statement)((ResultSetView)⇒T):T"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -566,11 +630,30 @@
       <span class="symbol">
         <span class="name">query</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="asql">asql: <a href="../abstractSql/AbstractSql$$Statement.html" class="extype" name="sorm.abstractSql.AbstractSql.Statement">Statement</a></span>)</span><span class="params">(<span name="parse">parse: (<a href="../jdbc/ResultSetView.html" class="extype" name="sorm.jdbc.ResultSetView">ResultSetView</a>) ⇒ <span class="extype" name="sorm.driver.StdQuery.query.T">T</span> = <span class="defval" name='<span class="name"><a href="../jdbc/ResultSetView.html#indexedRowsTraversable:Traversable[IndexedSeq[Any]]">_ : ResultSetView).indexedRowsTraversable.toList</a></span>'>...</span></span>)</span><span class="result">: <span class="extype" name="sorm.driver.StdQuery.query.T">T</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@query[T](asql:sorm.abstractSql.AbstractSql.Statement)(parse:sorm.jdbc.ResultSetView=&gt;T):T" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="StdQuery.html" class="extype" name="sorm.driver.StdQuery">StdQuery</a></dd></dl></div>
+    </li><li name="sorm.driver.StdQuery#queryJdbc" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="queryJdbc[T](s:sorm.jdbc.Statement)(parse:sorm.jdbc.ResultSetView=&gt;T):T"></a><a id="queryJdbc[T](Statement)((ResultSetView)⇒T):T"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">queryJdbc</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="s">s: <a href="../jdbc/package$$Statement.html" class="extype" name="sorm.jdbc.Statement">Statement</a></span>)</span><span class="params">(<span name="parse">parse: (<a href="../jdbc/ResultSetView.html" class="extype" name="sorm.jdbc.ResultSetView">ResultSetView</a>) ⇒ <span class="extype" name="sorm.driver.StdQuery.queryJdbc.T">T</span> = <span class="defval" name='<span class="name"><a href="../jdbc/ResultSetView.html#indexedRowsTraversable:Traversable[IndexedSeq[Any]]">_ : ResultSetView).indexedRowsTraversable.toList</a></span>'>...</span></span>)</span><span class="result">: <span class="extype" name="sorm.driver.StdQuery.queryJdbc.T">T</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@queryJdbc[T](s:sorm.jdbc.Statement)(parse:sorm.jdbc.ResultSetView=&gt;T):T" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="StdQuery.html" class="extype" name="sorm.driver.StdQuery">StdQuery</a></dd></dl></div>
     </li><li name="sorm.driver.StdQuote#quote" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="quote(x:String):String"></a>
-      <a id="quote(String):String"></a>
+      <a id="quote(x:String):String"></a><a id="quote(String):String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -579,11 +662,14 @@
       <span class="symbol">
         <span class="name">quote</span><span class="params">(<span name="x">x: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@quote(x:String):String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="StdQuote.html" class="extype" name="sorm.driver.StdQuote">StdQuote</a></dd></dl></div>
     </li><li name="sorm.driver.StdCreateTable#referenceOptionDdl" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="referenceOptionDdl(o:sorm.ddl.ReferenceOption):String"></a>
-      <a id="referenceOptionDdl(ReferenceOption):String"></a>
+      <a id="referenceOptionDdl(o:sorm.ddl.ReferenceOption):String"></a><a id="referenceOptionDdl(ReferenceOption):String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -592,10 +678,13 @@
       <span class="symbol">
         <span class="name">referenceOptionDdl</span><span class="params">(<span name="o">o: <a href="../ddl/package$$ReferenceOption.html" class="extype" name="sorm.ddl.ReferenceOption">ReferenceOption</a></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@referenceOptionDdl(o:sorm.ddl.ReferenceOption):String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="StdCreateTable.html" class="extype" name="sorm.driver.StdCreateTable">StdCreateTable</a></dd></dl></div>
     </li><li name="sorm.driver.StdListTables#showTablesSql" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="showTablesSql:String"></a>
       <a id="showTablesSql:String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -605,11 +694,14 @@
       <span class="symbol">
         <span class="name">showTablesSql</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@showTablesSql:String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="StdListTables.html" class="extype" name="sorm.driver.StdListTables">StdListTables</a></dd></dl></div>
     </li><li name="sorm.driver.StdAbstractSqlToSql#sql" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="sql(statement:sorm.abstractSql.AbstractSql.Statement):sorm.sql.Sql.Statement"></a>
-      <a id="sql(Statement):Statement"></a>
+      <a id="sql(statement:sorm.abstractSql.AbstractSql.Statement):sorm.sql.Sql.Statement"></a><a id="sql(Statement):Statement"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -618,11 +710,14 @@
       <span class="symbol">
         <span class="name">sql</span><span class="params">(<span name="statement">statement: <a href="../abstractSql/AbstractSql$$Statement.html" class="extype" name="sorm.abstractSql.AbstractSql.Statement">Statement</a></span>)</span><span class="result">: <a href="../sql/Sql$$Statement.html" class="extype" name="sorm.sql.Sql.Statement">Statement</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@sql(statement:sorm.abstractSql.AbstractSql.Statement):sorm.sql.Sql.Statement" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="StdAbstractSqlToSql.html" class="extype" name="sorm.driver.StdAbstractSqlToSql">StdAbstractSqlToSql</a></dd></dl></div>
     </li><li name="sorm.driver.StdQuery#statement" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="statement(asql:sorm.abstractSql.AbstractSql.Statement):sorm.jdbc.Statement"></a>
-      <a id="statement(Statement):Statement"></a>
+      <a id="statement(asql:sorm.abstractSql.AbstractSql.Statement):sorm.jdbc.Statement"></a><a id="statement(Statement):Statement"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -631,11 +726,14 @@
       <span class="symbol">
         <span class="name">statement</span><span class="params">(<span name="asql">asql: <a href="../abstractSql/AbstractSql$$Statement.html" class="extype" name="sorm.abstractSql.AbstractSql.Statement">Statement</a></span>)</span><span class="result">: <a href="../jdbc/package$$Statement.html" class="extype" name="sorm.jdbc.Statement">Statement</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@statement(asql:sorm.abstractSql.AbstractSql.Statement):sorm.jdbc.Statement" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="StdQuery.html" class="extype" name="sorm.driver.StdQuery">StdQuery</a></dd></dl></div>
     </li><li name="sorm.driver.StdSqlRendering#statement" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="statement(sql:sorm.sql.Sql):sorm.jdbc.Statement"></a>
-      <a id="statement(Sql):Statement"></a>
+      <a id="statement(sql:sorm.sql.Sql):sorm.jdbc.Statement"></a><a id="statement(Sql):Statement"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -644,11 +742,14 @@
       <span class="symbol">
         <span class="name">statement</span><span class="params">(<span name="sql">sql: <a href="../sql/Sql.html" class="extype" name="sorm.sql.Sql">Sql</a></span>)</span><span class="result">: <a href="../jdbc/package$$Statement.html" class="extype" name="sorm.jdbc.Statement">Statement</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@statement(sql:sorm.sql.Sql):sorm.jdbc.Statement" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="StdSqlRendering.html" class="extype" name="sorm.driver.StdSqlRendering">StdSqlRendering</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
-      <a id="synchronized[T0](⇒T0):T0"></a>
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
@@ -657,11 +758,14 @@
       <span class="symbol">
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="sorm.driver.H2#tableDdl" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="tableDdl(t:sorm.ddl.Table):String"></a>
-      <a id="tableDdl(Table):String"></a>
+      <a id="tableDdl(t:sorm.ddl.Table):String"></a><a id="tableDdl(Table):String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -670,11 +774,14 @@
       <span class="symbol">
         <span class="name">tableDdl</span><span class="params">(<span name="t">t: <a href="../ddl/package$$Table.html" class="extype" name="sorm.ddl.Table">Table</a></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@tableDdl(t:sorm.ddl.Table):String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="sorm.driver.H2">H2</a> → <a href="StdCreateTable.html" class="extype" name="sorm.driver.StdCreateTable">StdCreateTable</a></dd></dl></div>
     </li><li name="sorm.driver.StdSqlRendering#template" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="template(sql:sorm.sql.Sql):String"></a>
-      <a id="template(Sql):String"></a>
+      <a id="template(sql:sorm.sql.Sql):String"></a><a id="template(Sql):String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -683,10 +790,13 @@
       <span class="symbol">
         <span class="name">template</span><span class="params">(<span name="sql">sql: <a href="../sql/Sql.html" class="extype" name="sorm.sql.Sql">Sql</a></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@template(sql:sorm.sql.Sql):String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="StdSqlRendering.html" class="extype" name="sorm.driver.StdSqlRendering">StdSqlRendering</a></dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toString():String"></a>
       <a id="toString():String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -696,11 +806,14 @@
       <span class="symbol">
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@toString():String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="sorm.driver.StdTransaction#transaction" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="transaction[T](t:=&gt;T):T"></a>
-      <a id="transaction[T](⇒T):T"></a>
+      <a id="transaction[T](t:=&gt;T):T"></a><a id="transaction[T](⇒T):T"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -709,11 +822,14 @@
       <span class="symbol">
         <span class="name">transaction</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="t">t: ⇒ <span class="extype" name="sorm.driver.StdTransaction.transaction.T">T</span></span>)</span><span class="result">: <span class="extype" name="sorm.driver.StdTransaction.transaction.T">T</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@transaction[T](t:=&gt;T):T" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="StdTransaction.html" class="extype" name="sorm.driver.StdTransaction">StdTransaction</a></dd></dl></div>
     </li><li name="sorm.driver.StdCreateTable#uniqueKeyDdl" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="uniqueKeyDdl(columns:Seq[String]):String"></a>
-      <a id="uniqueKeyDdl(Seq[String]):String"></a>
+      <a id="uniqueKeyDdl(columns:Seq[String]):String"></a><a id="uniqueKeyDdl(Seq[String]):String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -722,11 +838,14 @@
       <span class="symbol">
         <span class="name">uniqueKeyDdl</span><span class="params">(<span name="columns">columns: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@uniqueKeyDdl(columns:Seq[String]):String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="StdCreateTable.html" class="extype" name="sorm.driver.StdCreateTable">StdCreateTable</a></dd></dl></div>
     </li><li name="sorm.driver.StdModify#update" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="update(table:String,values:Iterable[(String,Any)],pk:Iterable[(String,Any)]):Unit"></a>
-      <a id="update(String,Iterable[(String,Any)],Iterable[(String,Any)]):Unit"></a>
+      <a id="update(table:String,values:Iterable[(String,Any)],pk:Iterable[(String,Any)]):Unit"></a><a id="update(String,Iterable[(String,Any)],Iterable[(String,Any)]):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -735,10 +854,13 @@
       <span class="symbol">
         <span class="name">update</span><span class="params">(<span name="table">table: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="values">values: <span class="extype" name="scala.Iterable">Iterable</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Any">Any</span>)]</span>, <span name="pk">pk: <span class="extype" name="scala.Iterable">Iterable</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Any">Any</span>)]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@update(table:String,values:Iterable[(String,Any)],pk:Iterable[(String,Any)]):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="StdModify.html" class="extype" name="sorm.driver.StdModify">StdModify</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -748,7 +870,11 @@
       <span class="symbol">
         <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@wait():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -757,8 +883,7 @@
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
-      <a id="wait(Long,Int):Unit"></a>
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
@@ -767,7 +892,11 @@
       <span class="symbol">
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -776,8 +905,7 @@
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait(x$1:Long):Unit"></a>
-      <a id="wait(Long):Unit"></a>
+      <a id="wait(x$1:Long):Unit"></a><a id="wait(Long):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
@@ -786,7 +914,11 @@
       <span class="symbol">
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.driver.H2@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -851,6 +983,7 @@
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-      <script defer="defer" type="text/javascript" id="jquery-js" src="../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../lib/template.js"></script>
+
+
     </body>
       </html>

@@ -1,23 +1,57 @@
 // © 2009–2010 EPFL/LAMP
-// code by Gilles Dubochet with contributions by Pedro Furlanetto
+// code by Gilles Dubochet with contributions by Pedro Furlanetto and Marcin Kubala
 
 $(document).ready(function(){
 
+    var controls = {
+        visibility: {
+            publicOnly: $("#visbl").find("> ol > li.public"),
+            all: $("#visbl").find("> ol > li.all")
+        }
+    };
+
     // Escapes special characters and returns a valid jQuery selector
     function escapeJquery(str){
-        return str.replace(/([;&,\.\+\*\~':"\!\^#$%@\[\]\(\)=>\|])/g, '\\$1');
+        return str.replace(/([;&,\.\+\*\~':"\!\^#$%@\[\]\(\)=<>\|])/g, '\\$1');
     }
 
-    // highlight and jump to selected member
-    if (window.location.hash) {
-      var temp = window.location.hash.replace('#', '');
-      var elem = '#'+escapeJquery(temp);
-
-      window.scrollTo(0, 0);
-      $(elem).parent().effect("highlight", {color: "#FFCC85"}, 3000);
-      $('html,body').animate({scrollTop:$(elem).parent().offset().top}, 1000);
+    function toggleVisibilityFilter(ctrlToEnable, ctrToDisable) {
+        if (ctrlToEnable.hasClass("out")) {
+            ctrlToEnable.removeClass("out").addClass("in");
+            ctrToDisable.removeClass("in").addClass("out");
+            filter();
+        }
     }
-    
+
+    controls.visibility.publicOnly.click(function () {
+        toggleVisibilityFilter(controls.visibility.publicOnly, controls.visibility.all);
+    });
+
+    controls.visibility.all.click(function () {
+        toggleVisibilityFilter(controls.visibility.all, controls.visibility.publicOnly);
+    });
+
+    function exposeMember(jqElem) {
+        var jqElemParent = jqElem.parent(),
+            parentName = jqElemParent.attr("name"),
+            linearizationName = /^([^#]*)(#.*)?$/gi.exec(parentName)[1];
+
+        // switch visibility filter if necessary
+        if (jqElemParent.attr("visbl") == "prt") {
+            toggleVisibilityFilter(controls.visibility.all, controls.visibility.publicOnly);
+        }
+
+        // toggle appropriate linearization buttons
+        if (linearizationName) {
+            $("#linearization li.out[name='" + linearizationName + "']").removeClass("out").addClass("in");
+        }
+
+        filter();
+        window.scrollTo(0, 0);
+        jqElemParent.effect("highlight", {color: "#FFCC85"}, 3000);
+        $('html,body').animate({scrollTop: jqElemParent.offset().top}, 1000);
+    }
+
     var isHiddenClass = function (name) {
         return name == 'scala.Any' ||
                name == 'scala.AnyRef';
@@ -97,7 +131,7 @@ $(document).ready(function(){
         else if ($(this).hasClass("out")) {
             $(this).removeClass("out");
             $(this).addClass("in");
-        };
+        }
         filter();
     });
 
@@ -109,23 +143,23 @@ $(document).ready(function(){
         else if ($(this).hasClass("out")) {
             $(this).removeClass("out");
             $(this).addClass("in");
-        };
+        }
         filter();
     });
 
-    $("#mbrsel > div[id=ancestors] > ol > li.hideall").click(function() {
+    $("#mbrsel > div.ancestors > ol > li.hideall").click(function() {
         $("#linearization li.in").removeClass("in").addClass("out");
         $("#linearization li:first").removeClass("out").addClass("in");
         $("#implicits li.in").removeClass("in").addClass("out");
 
-        if ($(this).hasClass("out") && $("#mbrsel > div[id=ancestors] > ol > li.showall").hasClass("in")) {
+        if ($(this).hasClass("out") && $("#mbrsel > div.ancestors > ol > li.showall").hasClass("in")) {
             $(this).removeClass("out").addClass("in");
-            $("#mbrsel > div[id=ancestors] > ol > li.showall").removeClass("in").addClass("out");
+            $("#mbrsel > div.ancestors > ol > li.showall").removeClass("in").addClass("out");
         }
 
         filter();
     })
-    $("#mbrsel > div[id=ancestors] > ol > li.showall").click(function() {
+    $("#mbrsel > div.ancestors > ol > li.showall").click(function() {
         var filteredLinearization =
             $("#linearization li.out").filter(function() {
                 return ! isHiddenClass($(this).attr("name"));
@@ -138,41 +172,27 @@ $(document).ready(function(){
         });
         filteredImplicits.removeClass("out").addClass("in");
 
-        if ($(this).hasClass("out") && $("#mbrsel > div[id=ancestors] > ol > li.hideall").hasClass("in")) {
+        if ($(this).hasClass("out") && $("#mbrsel > div.ancestors > ol > li.hideall").hasClass("in")) {
             $(this).removeClass("out").addClass("in");
-            $("#mbrsel > div[id=ancestors] > ol > li.hideall").removeClass("in").addClass("out");
+            $("#mbrsel > div.ancestors > ol > li.hideall").removeClass("in").addClass("out");
         }
 
         filter();
     });
     $("#visbl > ol > li.public").click(function() {
         if ($(this).hasClass("out")) {
-            $(this).removeClass("out").addClass("in");
-            $("#visbl > ol > li.all").removeClass("in").addClass("out");
-            filter();
-        };
-    })
-    $("#visbl > ol > li.all").click(function() {
-        if ($(this).hasClass("out")) {
-            $(this).removeClass("out").addClass("in");
-            $("#visbl > ol > li.public").removeClass("in").addClass("out");
-            filter();
-        };
-    });
-    $("#order > ol > li.alpha").click(function() {
-        if ($(this).hasClass("out")) {
             orderAlpha();
-        };
+        }
     })
     $("#order > ol > li.inherit").click(function() {
         if ($(this).hasClass("out")) {
             orderInherit();
-        };
+        }
     });
     $("#order > ol > li.group").click(function() {
         if ($(this).hasClass("out")) {
             orderGroup();
-        };
+        }
     });
     $("#groupedMembers").hide();
 
@@ -181,7 +201,7 @@ $(document).ready(function(){
     // Create tooltips
     $(".extype").add(".defval").tooltip({
         tip: "#tooltip",
-        position:"top center",
+        position: "top center",
         predelay: 500,
         onBeforeShow: function(ev) {
             $(this.getTip()).text(this.getTrigger().attr("name"));
@@ -233,6 +253,20 @@ $(document).ready(function(){
     windowTitle();
 
     if ($("#order > ol > li.group").length == 1) { orderGroup(); };
+
+    function findElementByHash(locationHash) {
+        var temp = locationHash.replace('#', '');
+        var memberSelector = '#' + escapeJquery(temp);
+        return $(memberSelector);
+    }
+
+    // highlight and jump to selected member
+    if (window.location.hash) {
+        var jqElem = findElementByHash(window.location.hash);
+        if (jqElem.length > 0) {
+            exposeMember(jqElem);
+        }
+    }
 });
 
 function orderAlpha() {
@@ -241,7 +275,7 @@ function orderAlpha() {
     $("#order > ol > li.group").removeClass("in").addClass("out");
     $("#template > div.parent").hide();
     $("#template > div.conversion").hide();
-    $("#mbrsel > div[id=ancestors]").show();
+    $("#mbrsel > div.ancestors").show();
     filter();
 };
 
@@ -251,7 +285,7 @@ function orderInherit() {
     $("#order > ol > li.group").removeClass("in").addClass("out");
     $("#template > div.parent").show();
     $("#template > div.conversion").show();
-    $("#mbrsel > div[id=ancestors]").hide();
+    $("#mbrsel > div.ancestors").hide();
     filter();
 };
 
@@ -261,7 +295,7 @@ function orderGroup() {
     $("#order > ol > li.inherit").removeClass("in").addClass("out");
     $("#template > div.parent").hide();
     $("#template > div.conversion").hide();
-    $("#mbrsel > div[id=ancestors]").show();
+    $("#mbrsel > div.ancestors").show();
     filter();
 };
 
@@ -316,7 +350,7 @@ function initInherit() {
         }
     });
 
-    $("#values > ol > li").each(function(){
+    $(".values > ol > li").each(function(){
         var mbr = $(this);
         this.mbrText = mbr.find("> .fullcomment .cmt").text();
         var qualName = mbr.attr("name");

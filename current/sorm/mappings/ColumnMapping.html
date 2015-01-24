@@ -1,14 +1,18 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!DOCTYPE html >
 <html>
         <head>
-          <title>ColumnMapping - SORM 0.3.15 API - sorm.mappings.ColumnMapping</title>
-          <meta name="description" content="ColumnMapping - SORM 0.3.15 API - sorm.mappings.ColumnMapping" />
-          <meta name="keywords" content="ColumnMapping SORM 0.3.15 API sorm.mappings.ColumnMapping" />
+          <title>ColumnMapping - SORM 0.3.16 API - sorm.mappings.ColumnMapping</title>
+          <meta name="description" content="ColumnMapping - SORM 0.3.16 API - sorm.mappings.ColumnMapping" />
+          <meta name="keywords" content="ColumnMapping SORM 0.3.16 API sorm.mappings.ColumnMapping" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
+      
       <script type="text/javascript">
          if(top === self) {
             var url = '../../index.html';
@@ -26,7 +30,11 @@
       <div id="definition">
         <img src="../../lib/trait_big.png" />
         <p id="owner"><a href="../package.html" class="extype" name="sorm">sorm</a>.<a href="package.html" class="extype" name="sorm.mappings">mappings</a></p>
-        <h1>ColumnMapping</h1>
+        <h1>ColumnMapping</h1> <span class="permalink">
+      <a href="../../index.html#sorm.mappings.ColumnMapping" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       </div>
 
       <h4 id="signature" class="signature">
@@ -43,9 +51,9 @@
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="Mapping.html" class="extype" name="sorm.mappings.Mapping">Mapping</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
-          <span class="toggle">Known Subclasses</span>
-          <div class="subClasses hiddenContent"><a href="EnumMapping.html" class="extype" name="sorm.mappings.EnumMapping">EnumMapping</a>, <a href="ValueMapping.html" class="extype" name="sorm.mappings.ValueMapping">ValueMapping</a></div>
-        </div></div>
+            <span class="toggle">Known Subclasses</span>
+            <div class="subClasses hiddenContent"><a href="EnumMapping.html" class="extype" name="sorm.mappings.EnumMapping">EnumMapping</a>, <a href="ValueMapping.html" class="extype" name="sorm.mappings.ValueMapping">ValueMapping</a></div>
+          </div></div>
         
 
       <div id="mbrsel">
@@ -58,13 +66,13 @@
                 <li class="inherit out"><span>By inheritance</span></li>
               </ol>
             </div>
-        <div id="ancestors">
+        <div class="ancestors">
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
                   <li class="in" name="sorm.mappings.ColumnMapping"><span>ColumnMapping</span></li><li class="in" name="sorm.mappings.Mapping"><span>Mapping</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
-              </div><div id="ancestors">
+              </div><div class="ancestors">
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
@@ -84,11 +92,10 @@
 
         
 
-        <div id="values" class="values members">
+        <div class="values members">
               <h3>Abstract Value Members</h3>
               <ol><li name="sorm.mappings.ColumnMapping#columnType" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="columnType:sorm.ddl.ColumnType"></a>
-      <a id="columnType:ColumnType"></a>
+      <a id="columnType:sorm.ddl.ColumnType"></a><a id="columnType:ColumnType"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
@@ -97,11 +104,14 @@
       <span class="symbol">
         <span class="name">columnType</span><span class="result">: <a href="../ddl/package$$ColumnType.html" class="extype" name="sorm.ddl.ColumnType">ColumnType</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.ColumnMapping@columnType:sorm.ddl.ColumnType" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.mappings.Mapping#membership" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="membership:Option[sorm.mappings.Membership]"></a>
-      <a id="membership:Option[Membership]"></a>
+      <a id="membership:Option[sorm.mappings.Membership]"></a><a id="membership:Option[Membership]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
@@ -110,11 +120,14 @@
       <span class="symbol">
         <span class="name">membership</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<a href="Membership.html" class="extype" name="sorm.mappings.Membership">Membership</a>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.ColumnMapping@membership:Option[sorm.mappings.Membership]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Mapping.html" class="extype" name="sorm.mappings.Mapping">Mapping</a></dd></dl></div>
     </li><li name="sorm.mappings.Mapping#reflection" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="reflection:sorm.reflection.Reflection"></a>
-      <a id="reflection:Reflection"></a>
+      <a id="reflection:sorm.reflection.Reflection"></a><a id="reflection:Reflection"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
@@ -123,11 +136,14 @@
       <span class="symbol">
         <span class="name">reflection</span><span class="result">: <a href="../reflection/Reflection.html" class="extype" name="sorm.reflection.Reflection">Reflection</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.ColumnMapping@reflection:sorm.reflection.Reflection" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Mapping.html" class="extype" name="sorm.mappings.Mapping">Mapping</a></dd></dl></div>
     </li><li name="sorm.mappings.Mapping#settings" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="settings:Map[sorm.reflection.Reflection,sorm.mappings.EntitySettings]"></a>
-      <a id="settings:Map[Reflection,EntitySettings]"></a>
+      <a id="settings:Map[sorm.reflection.Reflection,sorm.mappings.EntitySettings]"></a><a id="settings:Map[Reflection,EntitySettings]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
@@ -136,11 +152,14 @@
       <span class="symbol">
         <span class="name">settings</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<a href="../reflection/Reflection.html" class="extype" name="sorm.reflection.Reflection">Reflection</a>, <a href="package$$EntitySettings.html" class="extype" name="sorm.mappings.EntitySettings">EntitySettings</a>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.ColumnMapping@settings:Map[sorm.reflection.Reflection,sorm.mappings.EntitySettings]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Mapping.html" class="extype" name="sorm.mappings.Mapping">Mapping</a></dd></dl></div>
     </li><li name="sorm.mappings.Mapping#valueFromContainerRow" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="valueFromContainerRow(data:String=&gt;Any,connection:sorm.driver.DriverConnection):Any"></a>
-      <a id="valueFromContainerRow((String)⇒Any,DriverConnection):Any"></a>
+      <a id="valueFromContainerRow(data:String=&gt;Any,connection:sorm.driver.DriverConnection):Any"></a><a id="valueFromContainerRow((String)⇒Any,DriverConnection):Any"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
@@ -149,11 +168,14 @@
       <span class="symbol">
         <span class="name">valueFromContainerRow</span><span class="params">(<span name="data">data: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Any">Any</span></span>, <span name="connection">connection: <a href="../driver/DriverConnection.html" class="extype" name="sorm.driver.DriverConnection">DriverConnection</a></span>)</span><span class="result">: <span class="extype" name="scala.Any">Any</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.ColumnMapping@valueFromContainerRow(data:String=&gt;Any,connection:sorm.driver.DriverConnection):Any" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Mapping.html" class="extype" name="sorm.mappings.Mapping">Mapping</a></dd></dl></div>
     </li><li name="sorm.mappings.Mapping#valuesForContainerTableRow" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="valuesForContainerTableRow(value:Any):Iterable[(String,Any)]"></a>
-      <a id="valuesForContainerTableRow(Any):Iterable[(String,Any)]"></a>
+      <a id="valuesForContainerTableRow(value:Any):Iterable[(String,Any)]"></a><a id="valuesForContainerTableRow(Any):Iterable[(String,Any)]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
@@ -162,29 +184,19 @@
       <span class="symbol">
         <span class="name">valuesForContainerTableRow</span><span class="params">(<span name="value">value: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Iterable">Iterable</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Any">Any</span>)]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.ColumnMapping@valuesForContainerTableRow(value:Any):Iterable[(String,Any)]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Mapping.html" class="extype" name="sorm.mappings.Mapping">Mapping</a></dd></dl></div>
     </li></ol>
             </div>
 
-        <div id="values" class="values members">
+        <div class="values members">
               <h3>Concrete Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="!=(x$1:AnyRef):Boolean"></a>
-      <a id="!=(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="!=(x$1:Any):Boolean"></a>
-      <a id="!=(Any):Boolean"></a>
+      <a id="!=(x$1:Any):Boolean"></a><a id="!=(Any):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
@@ -193,10 +205,13 @@
       <span class="symbol">
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.ColumnMapping@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="##():Int"></a>
       <a id="##():Int"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -206,24 +221,14 @@
       <span class="symbol">
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.ColumnMapping@##():Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="==(x$1:AnyRef):Boolean"></a>
-      <a id="==(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="==(x$1:Any):Boolean"></a>
-      <a id="==(Any):Boolean"></a>
+      <a id="==(x$1:Any):Boolean"></a><a id="==(Any):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
@@ -232,11 +237,14 @@
       <span class="symbol">
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.ColumnMapping@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="sorm.mappings.Mapping#ancestors" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="ancestors:Stream[sorm.mappings.Mapping]"></a>
-      <a id="ancestors:Stream[Mapping]"></a>
+      <a id="ancestors:Stream[sorm.mappings.Mapping]"></a><a id="ancestors:Stream[Mapping]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -245,10 +253,13 @@
       <span class="symbol">
         <span class="name">ancestors</span><span class="result">: <span class="extype" name="scala.Stream">Stream</span>[<a href="Mapping.html" class="extype" name="sorm.mappings.Mapping">Mapping</a>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.ColumnMapping@ancestors:Stream[sorm.mappings.Mapping]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Mapping.html" class="extype" name="sorm.mappings.Mapping">Mapping</a></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -258,10 +269,13 @@
       <span class="symbol">
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.ColumnMapping@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="sorm.mappings.ColumnMapping#autoIncremented" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="autoIncremented:Boolean"></a>
       <a id="autoIncremented:Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -271,11 +285,14 @@
       <span class="symbol">
         <span class="name">autoIncremented</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.ColumnMapping@autoIncremented:Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="clone():Object"></a>
-      <a id="clone():AnyRef"></a>
+      <a id="clone():Object"></a><a id="clone():AnyRef"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -284,7 +301,11 @@
       <span class="symbol">
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.ColumnMapping@clone():Object" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -293,8 +314,7 @@
               
         </dd></dl></div>
     </li><li name="sorm.mappings.ColumnMapping#column" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="column:sorm.ddl.Column"></a>
-      <a id="column:Column"></a>
+      <a id="column:sorm.ddl.Column"></a><a id="column:Column"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -303,11 +323,14 @@
       <span class="symbol">
         <span class="name">column</span><span class="result">: <a href="../ddl/package$$Column.html" class="extype" name="sorm.ddl.Column">Column</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.ColumnMapping@column:sorm.ddl.Column" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.mappings.ColumnMapping#columnsForContainer" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="columnsForContainer:Stream[sorm.ddl.Column]"></a>
-      <a id="columnsForContainer:Stream[Column]"></a>
+      <a id="columnsForContainer:Stream[sorm.ddl.Column]"></a><a id="columnsForContainer:Stream[Column]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -316,11 +339,14 @@
       <span class="symbol">
         <span class="name">columnsForContainer</span><span class="result">: <span class="extype" name="scala.Stream">Stream</span>[<a href="../ddl/package$$Column.html" class="extype" name="sorm.ddl.Column">Column</a>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.ColumnMapping@columnsForContainer:Stream[sorm.ddl.Column]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="sorm.mappings.ColumnMapping">ColumnMapping</a> → <a href="Mapping.html" class="extype" name="sorm.mappings.Mapping">Mapping</a></dd></dl></div>
     </li><li name="sorm.mappings.Mapping#containerTableMapping" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="containerTableMapping:Option[sorm.mappings.TableMapping]"></a>
-      <a id="containerTableMapping:Option[TableMapping]"></a>
+      <a id="containerTableMapping:Option[sorm.mappings.TableMapping]"></a><a id="containerTableMapping:Option[TableMapping]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -329,11 +355,14 @@
       <span class="symbol">
         <span class="name">containerTableMapping</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<a href="TableMapping.html" class="extype" name="sorm.mappings.TableMapping">TableMapping</a>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.ColumnMapping@containerTableMapping:Option[sorm.mappings.TableMapping]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Mapping.html" class="extype" name="sorm.mappings.Mapping">Mapping</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="eq(x$1:AnyRef):Boolean"></a>
-      <a id="eq(AnyRef):Boolean"></a>
+      <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
@@ -342,11 +371,14 @@
       <span class="symbol">
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.ColumnMapping@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="equals(x$1:Any):Boolean"></a>
-      <a id="equals(Any):Boolean"></a>
+      <a id="equals(x$1:Any):Boolean"></a><a id="equals(Any):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -355,10 +387,13 @@
       <span class="symbol">
         <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.ColumnMapping@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -368,7 +403,11 @@
       <span class="symbol">
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.ColumnMapping@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -378,7 +417,6 @@
         </dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
-      <a id="getClass():Class[_]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
@@ -387,10 +425,13 @@
       <span class="symbol">
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.ColumnMapping@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -400,11 +441,14 @@
       <span class="symbol">
         <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.ColumnMapping@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="sorm.mappings.Mapping#insert" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="insert(value:Any,masterKey:Stream[Any],connection:sorm.driver.DriverConnection):Unit"></a>
-      <a id="insert(Any,Stream[Any],DriverConnection):Unit"></a>
+      <a id="insert(value:Any,masterKey:Stream[Any],connection:sorm.driver.DriverConnection):Unit"></a><a id="insert(Any,Stream[Any],DriverConnection):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -413,10 +457,13 @@
       <span class="symbol">
         <span class="name">insert</span><span class="params">(<span name="value">value: <span class="extype" name="scala.Any">Any</span></span>, <span name="masterKey">masterKey: <span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="scala.Any">Any</span>]</span>, <span name="connection">connection: <a href="../driver/DriverConnection.html" class="extype" name="sorm.driver.DriverConnection">DriverConnection</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.ColumnMapping@insert(value:Any,masterKey:Stream[Any],connection:sorm.driver.DriverConnection):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Mapping.html" class="extype" name="sorm.mappings.Mapping">Mapping</a></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -426,10 +473,13 @@
       <span class="symbol">
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.ColumnMapping@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="sorm.mappings.Mapping#memberName" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="memberName:String"></a>
       <a id="memberName:String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -439,11 +489,14 @@
       <span class="symbol">
         <span class="name">memberName</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.ColumnMapping@memberName:String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Mapping.html" class="extype" name="sorm.mappings.Mapping">Mapping</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="ne(x$1:AnyRef):Boolean"></a>
-      <a id="ne(AnyRef):Boolean"></a>
+      <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
@@ -452,10 +505,13 @@
       <span class="symbol">
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.ColumnMapping@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="notify():Unit"></a>
       <a id="notify():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -465,10 +521,13 @@
       <span class="symbol">
         <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.ColumnMapping@notify():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="notifyAll():Unit"></a>
       <a id="notifyAll():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -478,10 +537,13 @@
       <span class="symbol">
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.ColumnMapping@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="sorm.mappings.ColumnMapping#nullable" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="nullable:Boolean"></a>
       <a id="nullable:Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -491,11 +553,14 @@
       <span class="symbol">
         <span class="name">nullable</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.ColumnMapping@nullable:Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.mappings.Mapping#root" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="root:sorm.mappings.TableMapping"></a>
-      <a id="root:TableMapping"></a>
+      <a id="root:sorm.mappings.TableMapping"></a><a id="root:TableMapping"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -504,11 +569,14 @@
       <span class="symbol">
         <span class="name">root</span><span class="result">: <a href="TableMapping.html" class="extype" name="sorm.mappings.TableMapping">TableMapping</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.ColumnMapping@root:sorm.mappings.TableMapping" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Mapping.html" class="extype" name="sorm.mappings.Mapping">Mapping</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
-      <a id="synchronized[T0](⇒T0):T0"></a>
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
@@ -517,10 +585,13 @@
       <span class="symbol">
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.ColumnMapping@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="sorm.mappings.Mapping#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toString():String"></a>
       <a id="toString():String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -530,11 +601,14 @@
       <span class="symbol">
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.ColumnMapping@toString():String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Mapping.html" class="extype" name="sorm.mappings.Mapping">Mapping</a> → AnyRef → Any</dd></dl></div>
     </li><li name="sorm.mappings.Mapping#update" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="update(value:Any,masterKey:Stream[Any],connection:sorm.driver.DriverConnection):Unit"></a>
-      <a id="update(Any,Stream[Any],DriverConnection):Unit"></a>
+      <a id="update(value:Any,masterKey:Stream[Any],connection:sorm.driver.DriverConnection):Unit"></a><a id="update(Any,Stream[Any],DriverConnection):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -543,10 +617,13 @@
       <span class="symbol">
         <span class="name">update</span><span class="params">(<span name="value">value: <span class="extype" name="scala.Any">Any</span></span>, <span name="masterKey">masterKey: <span class="extype" name="scala.Stream">Stream</span>[<span class="extype" name="scala.Any">Any</span>]</span>, <span name="connection">connection: <a href="../driver/DriverConnection.html" class="extype" name="sorm.driver.DriverConnection">DriverConnection</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.ColumnMapping@update(value:Any,masterKey:Stream[Any],connection:sorm.driver.DriverConnection):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Mapping.html" class="extype" name="sorm.mappings.Mapping">Mapping</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -556,7 +633,11 @@
       <span class="symbol">
         <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.ColumnMapping@wait():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -565,8 +646,7 @@
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
-      <a id="wait(Long,Int):Unit"></a>
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
@@ -575,7 +655,11 @@
       <span class="symbol">
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.ColumnMapping@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -584,8 +668,7 @@
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait(x$1:Long):Unit"></a>
-      <a id="wait(Long):Unit"></a>
+      <a id="wait(x$1:Long):Unit"></a><a id="wait(Long):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
@@ -594,7 +677,11 @@
       <span class="symbol">
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#sorm.mappings.ColumnMapping@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -633,6 +720,7 @@
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-      <script defer="defer" type="text/javascript" id="jquery-js" src="../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../lib/template.js"></script>
+
+
     </body>
       </html>

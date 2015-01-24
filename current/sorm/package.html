@@ -1,14 +1,18 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!DOCTYPE html >
 <html>
         <head>
-          <title>sorm - SORM 0.3.15 API - sorm</title>
-          <meta name="description" content="sorm - SORM 0.3.15 API - sorm" />
-          <meta name="keywords" content="sorm SORM 0.3.15 API sorm" />
+          <title>sorm - SORM 0.3.16 API - sorm</title>
+          <meta name="description" content="sorm - SORM 0.3.16 API - sorm" />
+          <meta name="keywords" content="sorm SORM 0.3.16 API sorm" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../lib/template.js"></script>
+      <script type="text/javascript" src="../lib/tools.tooltip.js"></script>
+      
       <script type="text/javascript">
          if(top === self) {
             var url = '../index.html';
@@ -26,7 +30,11 @@
       <div id="definition">
         <img src="../lib/package_big.png" />
         
-        <h1>sorm</h1>
+        <h1>sorm</h1> <span class="permalink">
+      <a href="../index.html#sorm.package" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       </div>
 
       <h4 id="signature" class="signature">
@@ -59,8 +67,7 @@
         <div id="types" class="types members">
               <h3>Type Members</h3>
               <ol><li name="sorm.Entity" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="EntityextendsProductwithSerializable"></a>
-      <a id="Entity:Entity"></a>
+      <a id="EntityextendsProductwithSerializable"></a><a id="Entity:Entity"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">sealed </span>
@@ -69,11 +76,14 @@
       <span class="symbol">
         <a href="Entity.html"><span class="name">Entity</span></a><span class="params">(<span name="reflection">reflection: <a href="reflection/Reflection.html" class="extype" name="sorm.reflection.Reflection">Reflection</a></span>, <span name="indexed">indexed: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]]</span>, <span name="unique">unique: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.package@EntityextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.InitMode" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="InitModeextendsAnyRef"></a>
-      <a id="InitMode:InitMode"></a>
+      <a id="InitModeextendsAnyRef"></a><a id="InitMode:InitMode"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">sealed </span>
@@ -82,12 +92,15 @@
       <span class="symbol">
         <a href="InitMode.html"><span class="name">InitMode</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
-      </h4>
-      <p class="comment cmt">A mode for initialization performed when a connection to db gets established
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.package@InitModeextendsAnyRef" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A mode for initialization performed when a connection to db gets established
 on creation of a SORM instance.</p>
     </li><li name="sorm.Instance" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="InstanceextendsInstance.InitializationwithInstance.Api"></a>
-      <a id="Instance:Instance"></a>
+      <a id="InstanceextendsInstance.InitializationwithInstance.Api"></a><a id="Instance:Instance"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -96,11 +109,14 @@ on creation of a SORM instance.</p>
       <span class="symbol">
         <a href="Instance.html"><span class="name">Instance</span></a><span class="result"> extends <a href="Instance$$Initialization.html" class="extype" name="sorm.Instance.Initialization">Initialization</a> with <a href="Instance$$Api.html" class="extype" name="sorm.Instance.Api">Api</a></span>
       </span>
-      </h4>
-      <p class="comment cmt">The instance of SORM</p>
-    </li><li name="sorm.Persisted" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="PersistedextendsAnyRef"></a>
-      <a id="Persisted:Persisted"></a>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.package@InstanceextendsInstance.InitializationwithInstance.Api" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The instance of SORM</p>
+    </li><li name="sorm.Persisted" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="PersistedextendsAnyRef"></a><a id="Persisted:Persisted"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -109,11 +125,17 @@ on creation of a SORM instance.</p>
       <span class="symbol">
         <a href="Persisted.html"><span class="name">Persisted</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
-      </h4>
-      <p class="comment cmt">All the entities returned from SORM have a <code>Persisted</code> trait with an appropriate value of <code>id</code> mixed in.</p>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.package@PersistedextendsAnyRef" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">All the entities returned from SORM have a <code>Persisted</code> trait with an appropriate value of <code>id</code> mixed in.</p><div class="fullcomment"><div class="comment cmt"><h4>Persisted trait and ids</h4><p>All the entities returned from SORM have a <code>Persisted</code> trait with an appropriate value of <code>id</code> mixed in. This is what lets SORM decide whether to <code>INSERT</code> rows or <code>UPDATE</code> them (and which ones) when the save operation is called. This also provides you with access to its generated <code>id</code>.
+Since the <code>id</code> property value is meant to be generated by database, it is protected from the user of being able to manually specify it as well as letting the case classes have such a property.
+So, instead of</p><pre><span class="kw">case</span> <span class="kw">class</span> Artist ( id : <span class="std">Long</span>, name : <span class="std">String</span> )</pre><p>you should use</p><pre><span class="kw">case</span> <span class="kw">class</span> Artist ( name : <span class="std">String</span> )</pre><p>and let SORM take care of id property management for you.</p><h4>What should you do when you need to get an id of an entity?</h4><p>Just do</p><pre>artist.id</pre><p>but for you to be able to do that the artist value must have a Persisted trait mixed in (i.e., have a type Artist with Persisted), which can happen only in three cases:
+When you store a value in the db:</p><pre><span class="kw">val</span> artist = Db.save(Artist(<span class="lit">"Metallica"</span>))</pre><p>When you fetch it from the db:</p><pre><span class="kw">val</span> artist = Db.query[Artist].whereEqual(<span class="lit">"name"</span>, <span class="lit">"Metallica"</span>).fetchOne().get</pre><p>When you make a copy of an already persisted entity:</p><pre><span class="kw">val</span> artist = someOtherPersistedArtist.copy(name = <span class="lit">"METALLICA"</span>)</pre></div></div>
     </li><li name="sorm.Querier" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Querier[T&lt;:AnyRef]extendsAnyRef"></a>
-      <a id="Querier[T&lt;:AnyRef]:Querier[T]"></a>
+      <a id="Querier[T&lt;:AnyRef]extendsAnyRef"></a><a id="Querier[T&lt;:AnyRef]:Querier[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -122,18 +144,21 @@ on creation of a SORM instance.</p>
       <span class="symbol">
         <a href="Querier.html"><span class="name">Querier</span></a><span class="tparams">[<span name="T">T &lt;: <span class="extype" name="scala.AnyRef">AnyRef</span></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.package@Querier[T&lt;:AnyRef]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       
     </li></ol>
             </div>
 
         
 
-        <div id="values" class="values members">
+        <div class="values members">
               <h3>Value Members</h3>
               <ol><li name="sorm.Dsl" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Dsl"></a>
-      <a id="Dsl:Dsl"></a>
+      <a id="Dsl"></a><a id="Dsl:Dsl"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -142,11 +167,14 @@ on creation of a SORM instance.</p>
       <span class="symbol">
         <a href="Dsl$.html"><span class="name">Dsl</span></a>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.package@Dsl" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.Entity" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Entity"></a>
-      <a id="Entity:Entity"></a>
+      <a id="Entity"></a><a id="Entity:Entity"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -155,11 +183,14 @@ on creation of a SORM instance.</p>
       <span class="symbol">
         <a href="Entity$.html"><span class="name">Entity</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.package@Entity" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.InitMode" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="InitMode"></a>
-      <a id="InitMode:InitMode"></a>
+      <a id="InitMode"></a><a id="InitMode:InitMode"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -168,11 +199,14 @@ on creation of a SORM instance.</p>
       <span class="symbol">
         <a href="InitMode$.html"><span class="name">InitMode</span></a>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.package@InitMode" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.Instance" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Instance"></a>
-      <a id="Instance:Instance"></a>
+      <a id="Instance"></a><a id="Instance:Instance"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -181,11 +215,14 @@ on creation of a SORM instance.</p>
       <span class="symbol">
         <a href="Instance$.html"><span class="name">Instance</span></a>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.package@Instance" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.Querier" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Querier"></a>
-      <a id="Querier:Querier"></a>
+      <a id="Querier"></a><a id="Querier:Querier"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -194,11 +231,14 @@ on creation of a SORM instance.</p>
       <span class="symbol">
         <a href="Querier$.html"><span class="name">Querier</span></a>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.package@Querier" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.abstractSql" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="abstractSql"></a>
-      <a id="abstractSql:abstractSql"></a>
+      <a id="abstractSql"></a><a id="abstractSql:abstractSql"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -207,11 +247,14 @@ on creation of a SORM instance.</p>
       <span class="symbol">
         <a href="abstractSql/package.html"><span class="name">abstractSql</span></a>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.package@abstractSql" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.core" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="core"></a>
-      <a id="core:core"></a>
+      <a id="core"></a><a id="core:core"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -220,11 +263,14 @@ on creation of a SORM instance.</p>
       <span class="symbol">
         <a href="core/package.html"><span class="name">core</span></a>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.package@core" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.ddl" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ddl"></a>
-      <a id="ddl:ddl"></a>
+      <a id="ddl"></a><a id="ddl:ddl"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -233,11 +279,14 @@ on creation of a SORM instance.</p>
       <span class="symbol">
         <a href="ddl/package.html"><span class="name">ddl</span></a>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.package@ddl" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.driver" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="driver"></a>
-      <a id="driver:driver"></a>
+      <a id="driver"></a><a id="driver:driver"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -246,11 +295,14 @@ on creation of a SORM instance.</p>
       <span class="symbol">
         <a href="driver/package.html"><span class="name">driver</span></a>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.package@driver" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.jdbc" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="jdbc"></a>
-      <a id="jdbc:jdbc"></a>
+      <a id="jdbc"></a><a id="jdbc:jdbc"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -259,11 +311,14 @@ on creation of a SORM instance.</p>
       <span class="symbol">
         <a href="jdbc/package.html"><span class="name">jdbc</span></a>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.package@jdbc" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.joda" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="joda"></a>
-      <a id="joda:joda"></a>
+      <a id="joda"></a><a id="joda:joda"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -272,11 +327,14 @@ on creation of a SORM instance.</p>
       <span class="symbol">
         <a href="joda/package.html"><span class="name">joda</span></a>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.package@joda" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.mappings" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="mappings"></a>
-      <a id="mappings:mappings"></a>
+      <a id="mappings"></a><a id="mappings:mappings"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -285,11 +343,14 @@ on creation of a SORM instance.</p>
       <span class="symbol">
         <a href="mappings/package.html"><span class="name">mappings</span></a>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.package@mappings" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.persisted" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="persisted"></a>
-      <a id="persisted:persisted"></a>
+      <a id="persisted"></a><a id="persisted:persisted"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -298,11 +359,14 @@ on creation of a SORM instance.</p>
       <span class="symbol">
         <a href="persisted/package.html"><span class="name">persisted</span></a>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.package@persisted" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.pooling" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="pooling"></a>
-      <a id="pooling:pooling"></a>
+      <a id="pooling"></a><a id="pooling:pooling"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -311,11 +375,14 @@ on creation of a SORM instance.</p>
       <span class="symbol">
         <a href="pooling/package.html"><span class="name">pooling</span></a>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.package@pooling" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.query" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="query"></a>
-      <a id="query:query"></a>
+      <a id="query"></a><a id="query:query"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -324,11 +391,14 @@ on creation of a SORM instance.</p>
       <span class="symbol">
         <a href="query/package.html"><span class="name">query</span></a>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.package@query" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.reflection" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="reflection"></a>
-      <a id="reflection:reflection"></a>
+      <a id="reflection"></a><a id="reflection:reflection"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -337,11 +407,14 @@ on creation of a SORM instance.</p>
       <span class="symbol">
         <a href="reflection/package.html"><span class="name">reflection</span></a>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.package@reflection" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.sql" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="sql"></a>
-      <a id="sql:sql"></a>
+      <a id="sql"></a><a id="sql:sql"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -350,11 +423,14 @@ on creation of a SORM instance.</p>
       <span class="symbol">
         <a href="sql/package.html"><span class="name">sql</span></a>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.package@sql" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="sorm.tableSorters" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="tableSorters"></a>
-      <a id="tableSorters:tableSorters"></a>
+      <a id="tableSorters"></a><a id="tableSorters:tableSorters"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
@@ -363,7 +439,11 @@ on creation of a SORM instance.</p>
       <span class="symbol">
         <a href="tableSorters/package.html"><span class="name">tableSorters</span></a>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../index.html#sorm.package@tableSorters" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
       
     </li></ol>
             </div>
@@ -390,6 +470,7 @@ on creation of a SORM instance.</p>
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-      <script defer="defer" type="text/javascript" id="jquery-js" src="../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../lib/template.js"></script>
+
+
     </body>
       </html>

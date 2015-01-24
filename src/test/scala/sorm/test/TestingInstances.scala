@@ -1,5 +1,7 @@
 package sorm.test
 
+import java.sql.SQLException
+
 import sorm._, core._
 import sext._, embrace._
 
@@ -19,12 +21,18 @@ object TestingInstances {
     = t.toString
 
   def instance ( entities : Traversable[Entity], t : DbType, poolSize : Int = 1 )
-    = t match {
+    = {
+      def createInstance = t match {
         case DbType.Postgres =>
           new Instance(entities, url(t), "postgres", poolSize = poolSize, initMode = InitMode.DropAllCreate)
         case _ =>
           new Instance(entities, url(t), poolSize = poolSize, initMode = InitMode.DropAllCreate)
       }
+      try createInstance catch {
+        case e : java.sql.SQLException =>
+          throw new SormException("Failed connecting to DB of type " ++ t.toString)
+      }
+    }
 
   def instances
     ( entities : Traversable[Entity],

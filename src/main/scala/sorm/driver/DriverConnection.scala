@@ -12,22 +12,14 @@ import jdbc.ResultSetView
  * An abstraction over jdbc connection, instances of which implement sql dialects of different databases
  */
 trait DriverConnection {
-  /*
   def query
     [ T ]
     ( asql : Statement )
     ( parse : ResultSetView => T = (_ : ResultSetView).indexedRowsTraversable.toList )
     : T
-  def query
+  def queryJdbc
     [ T ]
     ( s : jdbc.Statement )
-    ( parse : ResultSetView => T = (_ : ResultSetView).indexedRowsTraversable.toList )
-    : T
-  */
-  /* workaround for "in trait DriverConnection, multiple overloaded alternatives of method query define default arguments." error */
-  def query
-    [ T ]
-    ( s : Object )
     ( parse : ResultSetView => T = (_ : ResultSetView).indexedRowsTraversable.toList )
     : T
   def now() : DateTime

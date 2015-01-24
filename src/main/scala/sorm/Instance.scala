@@ -91,7 +91,7 @@ object Instance {
       : Seq[T with Persisted]
       = connector.withConnection{ cx =>
           jdbc.Statement.simple(template, values)
-            .$( cx.query(_)(_.byNameRowsTraversable.toList).toStream )
+            .$( cx.queryJdbc(_)(_.byNameRowsTraversable.toList).toStream )
             .ensuring( 
               _.headOption
                 .map( k => k.keys == Set("id") )

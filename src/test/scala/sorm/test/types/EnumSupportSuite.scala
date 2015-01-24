@@ -29,7 +29,6 @@ class EnumSupportSuite extends FunSuite with ShouldMatchers with MultiInstanceSu
     test(dbId + " - Not equal query"){
       db.query[A].whereNotEqual("a", B.Two).fetch()
         .should(
-          //not be 'empty and // this line caused compilation problems ...
           contain (a1) and
           contain (a3)
         )

@@ -13,7 +13,7 @@ For more info, tutorials and documentation please visit the [official site](http
 
 ##Supported Scala versions
 
-2.10.*, 2.11.*
+2.10, 2.11
 
 ##Maven
 

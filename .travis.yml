@@ -1,9 +1,7 @@
 language: scala
 scala:
-  - 2.10.3
-  - 2.10.2
-  - 2.10.1
-  - 2.10.0
+  - 2.10.4
+  - 2.11.5
 before_script:
   - psql -c 'create database test;' -U postgres
 install: 

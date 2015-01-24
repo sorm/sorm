@@ -9,7 +9,7 @@ object TestingInstances {
   private def url ( t : DbType )
     = t match {
         case DbType.H2 => "jdbc:h2:mem:test"
-        case DbType.Mysql => "jdbc:mysql://localhost/test"
+        case DbType.Mysql => "jdbc:mysql://localhost/sorm_test"
         case DbType.Sqlite => "jdbc:sqlite::memory:"
         case DbType.Hsqldb => "jdbc:hsqldb:mem:test"
         case DbType.Derby => "jdbc:derby:memory:test;create=true"
@@ -25,6 +25,8 @@ object TestingInstances {
       def createInstance = t match {
         case DbType.Postgres =>
           new Instance(entities, url(t), "postgres", poolSize = poolSize, initMode = InitMode.DropAllCreate)
+        case DbType.Mysql =>
+          new Instance(entities, url(t), "root", poolSize = poolSize, initMode = InitMode.DropAllCreate)
         case _ =>
           new Instance(entities, url(t), poolSize = poolSize, initMode = InitMode.DropAllCreate)
       }

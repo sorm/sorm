@@ -4,5 +4,6 @@ scala:
   - 2.11.5
 before_script:
   - psql -c 'create database test;' -U postgres
+  - mysql -e 'create database sorm_test;'
 install: 
   mvn install -DskipTests=true -Dgpg.skip=true

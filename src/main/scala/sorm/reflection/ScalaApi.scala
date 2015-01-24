@@ -10,7 +10,7 @@ object ScalaApi {
     def s : Symbol = t.typeSymbol
     private def members : Stream[Symbol] = t.members.toStream
     def properties
-      = members.filter{_.isTerm}.filter{!_.isMethod}
+      = members.filter(_.isTerm).map(_.asTerm).filter(_.isAccessor)
     def constructors
       = members.view
           .collect{

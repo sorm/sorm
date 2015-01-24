@@ -7,8 +7,14 @@ import ScalaApi._
 import util.hashing.MurmurHash3
 import collection.immutable.ListMap
 
-class Reflection ( protected val t : Type ) {
-
+class Reflection ( protected val ambiguousType : Type ) {
+  
+  protected val t =
+    ambiguousType match {
+      case t : NullaryMethodType => t.resultType
+      case t => t
+    }  
+  
   protected def s : Symbol = t.s
 
   override def toString = t.toString
@@ -33,7 +39,7 @@ class Reflection ( protected val t : Type ) {
         .toMap
   def generics
     = t match {
-        case t : TypeRef => t.args.view.map{ Reflection(_) }.toIndexedSeq
+        case t : TypeRef => t.args.view.map(Reflection(_)).toIndexedSeq
         case _ => Vector()
       }
   def name

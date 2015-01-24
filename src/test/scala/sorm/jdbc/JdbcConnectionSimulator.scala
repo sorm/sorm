@@ -1,6 +1,6 @@
 package sorm.jdbc
 
-import com.typesafe.scalalogging.slf4j.Logging
+import com.typesafe.scalalogging.slf4j.{StrictLogging => Logging}
 import java.sql.ResultSet
 
 class JdbcConnectionSimulator

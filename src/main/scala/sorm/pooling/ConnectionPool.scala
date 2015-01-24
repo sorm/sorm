@@ -1,7 +1,7 @@
 package sorm.pooling
 
 import sorm.jdbc.JdbcConnection
-import com.typesafe.scalalogging.slf4j.Logging
+import com.typesafe.scalalogging.slf4j.{StrictLogging => Logging}
 
 trait ConnectionPool extends Logging {
   protected def fetchConnection () : JdbcConnection

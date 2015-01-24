@@ -17,7 +17,7 @@ trait DriverConnection {
     ( asql : Statement )
     ( parse : ResultSetView => T = (_ : ResultSetView).indexedRowsTraversable.toList )
     : T
-  def query
+  def queryJdbc
     [ T ]
     ( s : jdbc.Statement )
     ( parse : ResultSetView => T = (_ : ResultSetView).indexedRowsTraversable.toList )

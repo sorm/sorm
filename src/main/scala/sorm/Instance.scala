@@ -9,7 +9,7 @@ import jdbc._
 
 import sext._, embrace._
 import reflect.runtime.universe._
-import com.typesafe.scalalogging.slf4j.Logging
+import com.typesafe.scalalogging.slf4j.{StrictLogging => Logging}
 
 /**
  * The instance of SORM
@@ -91,7 +91,7 @@ object Instance {
       : Seq[T with Persisted]
       = connector.withConnection{ cx =>
           jdbc.Statement.simple(template, values)
-            .$( cx.query(_)(_.byNameRowsTraversable.toList).toStream )
+            .$( cx.queryJdbc(_)(_.byNameRowsTraversable.toList).toStream )
             .ensuring( 
               _.headOption
                 .map( k => k.keys == Set("id") )

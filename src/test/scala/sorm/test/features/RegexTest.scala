@@ -3,12 +3,14 @@ package sorm.test.features
 import org.scalatest._
 import sorm.Entity
 import RegexTest._
+import sorm.core.DbType
 import sorm.test.MultiInstanceSuite
 
 @org.junit.runner.RunWith(classOf[junit.JUnitRunner])
 class RegexTest extends FunSuite with ShouldMatchers with MultiInstanceSuite {
 
   def entities = Set() + Entity[User]()
+  override def dbTypes = DbType.H2 :: DbType.Mysql :: DbType.Postgres :: Nil
 
   instancesAndIds foreach { case (db, dbId) =>
 

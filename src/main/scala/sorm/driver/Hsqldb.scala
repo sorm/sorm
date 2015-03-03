@@ -40,6 +40,10 @@ class Hsqldb (protected val connection : JdbcConnection)
   override protected def template(sql: Sql) = {
     import sorm.sql.Sql._
     sql match {
+      case Comparison(l, r, Sql.Regexp) =>
+        "REGEXP_MATCHES(" +  template(l) + ", " + template(r) + ")"
+      case Comparison(l, r, Sql.NotRegexp) =>
+        "!" + template(Sql.Comparison(l, r, Sql.Regexp))
       case Comparison(Value(l : Boolean), Value(r : Boolean), o) =>
         if ( o == Equal && l == r || o == NotEqual && l != r ) "TRUE"
         else "FALSE"

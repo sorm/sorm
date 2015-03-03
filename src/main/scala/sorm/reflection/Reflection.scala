@@ -54,16 +54,6 @@ class Reflection ( protected val ambiguousType : Type ) {
     = t.toString
 
   def instantiate
-    ( params : Map[String, Any] )
-    : Any
-    = t.constructors
-        .view
-        .zipBy{ _.paramss.view.flatten.map{_.decodedName} }
-        .find{ _._2.toSet == params.keySet }
-        .map{ case (c, ps) => s.instantiate( c, ps.map{params} ) }
-        .get
-
-  def instantiate
     ( params : Seq[Any] )
     : Any
     = s.instantiate(t.constructors.head, params)

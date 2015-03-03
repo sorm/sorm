@@ -83,23 +83,6 @@ class ReflectionSuite extends FunSuite with ShouldMatchers {
   test("Generics must be proper"){
     assert( Reflection[Seq[Int]].generics(0) == Reflection[Int] )
   }
-  test("Instantiation by map"){
-    Reflection[Artist]
-      .instantiate(
-        Map("genres" -> Set(), "tags" -> Set(), "name" -> "X", "id" -> 99)
-      )
-      .should(
-        equal( Artist(99, "X", Set(), Set()) )
-      )
-  }
-  test("Instantiation fails on improper arguments"){
-    evaluating {
-      Reflection[Artist]
-        .instantiate(
-          Map("tags" -> Set(), "name" -> "X", "id" -> 99)
-        )
-    } should produce [Throwable]
-  }
 
   test("property value") {
     val artist = Artist(234, "Nirvana", Set(Genre("Grunge"), Genre("Rock")), Set("kurt-cobain", "grunge", "nirvana"))

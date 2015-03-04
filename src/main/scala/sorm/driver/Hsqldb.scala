@@ -3,6 +3,7 @@ package sorm.driver
 import sorm._, ddl._, jdbc._
 import sext._, embrace._
 import org.joda.time.DateTime
+import sorm.core.SormException
 import sql.Sql
 
 class Hsqldb (protected val connection : JdbcConnection)
@@ -40,6 +41,8 @@ class Hsqldb (protected val connection : JdbcConnection)
   override protected def template(sql: Sql) = {
     import sorm.sql.Sql._
     sql match {
+      case Comparison(l, r, Sql.Regexp) =>
+        throw new SormException("Regexp is not supported by the HSQLDB driver")
       case Comparison(Value(l : Boolean), Value(r : Boolean), o) =>
         if ( o == Equal && l == r || o == NotEqual && l != r ) "TRUE"
         else "FALSE"

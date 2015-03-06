@@ -49,8 +49,10 @@ class Postgres (protected val connection : JdbcConnection)
   override def insertAndGetGeneratedKeys(table: String, values: Iterable[(String, Any)])
     = super.insertAndGetGeneratedKeys(table, values).take(1)
   override protected def template(sql: Sql) = sql match {
-    case Sql.Regexp => "~"
-    case Sql.NotRegexp => "!~"
+    case Sql.Regexp => "~*"
+    case Sql.NotRegexp => "!~*"
+    case Sql.Like => "~~*"
+    case Sql.NotLike => "!~~*"
     case _ => super.template(sql)
   }
 }

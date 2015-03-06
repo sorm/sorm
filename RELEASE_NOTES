@@ -1,3 +1,6 @@
+0.3.18
+  - Make Regex and Like in Postgres case-insensitive
+
 0.3.17
   - Fix the Regex support in Postgres
 

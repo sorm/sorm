@@ -79,8 +79,8 @@
     </dependency>
     <dependency>
       <groupId>com.typesafe.scala-logging</groupId>
-      <artifactId>scala-logging-slf4j_2.11</artifactId>
-      <version>2.1.2</version>
+      <artifactId>scala-logging_2.11</artifactId>
+      <version>3.1.0</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>

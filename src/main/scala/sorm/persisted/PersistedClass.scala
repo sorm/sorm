@@ -4,7 +4,7 @@ import sorm._
 import reflection._
 
 import sext._, embrace._
-import com.typesafe.scalalogging.slf4j.{StrictLogging => Logging}
+import com.typesafe.scalalogging.{StrictLogging => Logging}
 
 object PersistedClass extends Logging {
 

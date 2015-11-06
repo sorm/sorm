@@ -6,7 +6,7 @@
 
   <groupId>org.sorm-framework</groupId>
   <artifactId>sorm</artifactId>
-  <version>0.3.18</version>
+  <version>0.3.19</version>
   <packaging>jar</packaging>
 
   <name>SORM</name>
@@ -128,12 +128,12 @@
     <dependency>
       <groupId>org.scala-lang</groupId>
       <artifactId>scala-reflect</artifactId>
-      <version>[2.10,2.12)</version>
+      <version>[2.10,2.11.999)</version>
     </dependency>
     <dependency>
       <groupId>org.scala-lang</groupId>
       <artifactId>scala-library</artifactId>
-      <version>[2.10,2.12)</version>
+      <version>[2.10,2.11.999)</version>
     </dependency>
   </dependencies>
 
@@ -142,7 +142,7 @@
       <plugin>
         <groupId>net.alchim31.maven</groupId>
         <artifactId>scala-maven-plugin</artifactId>
-        <version>3.2.0</version>
+        <version>3.2.2</version>
         <configuration>
           <recompileMode>incremental</recompileMode>
           <useZincServer>true</useZincServer>

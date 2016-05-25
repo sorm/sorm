@@ -1,0 +1,20 @@
+Support for Oracle is currently considered experimental and a few features might not work correctly.
+One known case of such a feature is OFFSET.
+However, the implementation passes all active test cases, and performs well in a real-world use case.
+
+This has been tested with Oracle 11g and the 12.1.0.2 JDBC Thin driver (ojdbc7.jar) available from
+http://www.oracle.com/technetwork/database/features/jdbc/default-2280470.html
+Do not use the 12.1.0.1 driver, it is buggy and makes the entire thing explode.
+
+Since the driver cannot be publicly distributed, you have to download it manually and place
+it as an unmanaged dependency (e.g., in the lib/ folder).
+
+Issues and pull requests should be directed to https://github.com/clangguth/sorm, from where
+changes would hopefully make their way up to the official upstream repository.
+
+
+Known limitations:
+- String values are only supported up to a length of 4000 bytes (depending on your character set,
+  that will be something between 1000 and 4000 characters). This is due to the CLOB type not being
+  available in WHERE clauses, so I had to resort to VARCHAR2, which has this limit.
+  

@@ -1,3 +1,3 @@
 package sorm.core
 
-class SormException (m : String) extends RuntimeException (m)
+class SormException (m : String, c: Throwable = null) extends RuntimeException (m, c)

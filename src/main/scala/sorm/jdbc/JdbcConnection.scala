@@ -46,6 +46,31 @@ class JdbcConnection( protected val connection : Connection ) extends Transactio
       }
     }
 
+  def executeUpdateAndGetGeneratedKeysOracle
+    ( s : Statement, seq: String )
+    : List[IndexedSeq[Any]]
+    = {
+      logStatement(s)
+
+      val sql = "BEGIN "+s.sql+" RETURNING \"id\" INTO ?; END;"
+      val js = connection.prepareCall(sql)
+
+      val idx = s.data.length + 1
+      js.registerOutParameter(idx, java.sql.Types.BIGINT)
+
+      if (idx != 1) {
+        for( (v, i) <- s.data.view.zipWithIndex ) {
+          js.set(i + 1, v)
+        }
+      }
+
+      executeLoggingBenchmark(js.execute())
+      val id = js.getLong(idx)
+
+      js.close()
+      List(IndexedSeq(id))
+    }
+
   def executeUpdate
     ( s : Statement )
     : Int

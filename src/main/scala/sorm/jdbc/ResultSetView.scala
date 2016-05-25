@@ -5,6 +5,7 @@ import java.sql._
 import sorm._
 import joda.Extensions._
 import sext._, embrace._
+import sorm.driver.Oracle
 
 class ResultSetView
   ( rs : ResultSet ) 
@@ -43,6 +44,12 @@ class ResultSetView
               }
             }
         }
+
+    def numeric(rs: ResultSet, i: Int): Any = {
+      val converted = if (rs.getMetaData.getClass.getName.startsWith("oracle.")) Oracle.Numbers.convert(rs, i) else None
+      converted.getOrElse(rs.getBigDecimal(i) $ (new BigDecimal(_)))
+    }
+
     /**
      * @see <a href=http://docstore.mik.ua/orelly/java-ent/servlet/ch09_02.htm#ch09-22421>jdbc table
      */
@@ -56,7 +63,8 @@ class ResultSetView
           = t match {
               case CHAR | VARCHAR     => rs.getString(i)
               case LONGVARCHAR        => rs.getString(i)
-              case NUMERIC | DECIMAL  => rs.getBigDecimal(i) $ (new BigDecimal(_))
+              case NUMERIC            => numeric(rs, i)
+              case DECIMAL            => rs.getBigDecimal(i) $ (new BigDecimal(_))
               case BIT                => rs.getBoolean(i)
               case TINYINT            => rs.getByte(i)
               case SMALLINT           => rs.getShort(i)
@@ -68,7 +76,7 @@ class ResultSetView
               case LONGVARBINARY      => rs.getBinaryStream(i)
               case DATE               => rs.getDate(i)
               case TIME               => rs.getTime(i)
-              case TIMESTAMP          => rs.getTimestamp(i)
+              case TIMESTAMP | -101   => rs.getTimestamp(i) // -101 is Oracle's "timestamp with time zone"
               case BLOB               => rs.getBlob(i)
               case CLOB               => rs.getString(i)
               case BOOLEAN            => rs.getBoolean(i)

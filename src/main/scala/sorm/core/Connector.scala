@@ -20,6 +20,7 @@ class Connector (url: String, user: String, password: String, poolSize: Int, tim
         case DbType.Mysql => new Mysql(jdbcConnection)
         case DbType.Hsqldb => new Hsqldb(jdbcConnection)
         case DbType.Postgres => new Postgres(jdbcConnection)
+        case DbType.Oracle => new Oracle(jdbcConnection)
         case _ => ???
       }
   

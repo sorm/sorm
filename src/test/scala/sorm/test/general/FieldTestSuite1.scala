@@ -32,6 +32,7 @@ class FieldTestSuite1 extends FunSuite with ShouldMatchers with SequentialNested
   test("HSQLDB initialization") { instance(DbType.Hsqldb).close() }
   test("H2 initialization") { instance(DbType.H2).close() }
   test("MySQL initialization") { instance(DbType.Mysql).close() }
+  test("Oracle initialization") { instance(DbType.Oracle).close() }
 
 }
 object FieldTestSuite1 {

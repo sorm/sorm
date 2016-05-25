@@ -14,6 +14,7 @@ object TestingInstances {
         case DbType.Hsqldb => "jdbc:hsqldb:mem:test"
         case DbType.Derby => "jdbc:derby:memory:test;create=true"
         case DbType.Postgres => "jdbc:postgresql:test"
+        case DbType.Oracle => "jdbc:oracle:thin:???"
         case _ => ???
       }
 
@@ -23,6 +24,8 @@ object TestingInstances {
   def instance ( entities : Traversable[Entity], t : DbType, poolSize : Int = 1 )
     = {
       def createInstance = t match {
+        case DbType.Oracle =>
+          new Instance(entities, url(t), "user", password="password", poolSize = poolSize, initMode = InitMode.DropAllCreate)
         case DbType.Postgres =>
           new Instance(entities, url(t), "postgres", poolSize = poolSize, initMode = InitMode.DropAllCreate)
         case DbType.Mysql =>
@@ -32,14 +35,14 @@ object TestingInstances {
       }
       try createInstance catch {
         case e : java.sql.SQLException =>
-          throw new SormException("Failed connecting to DB of type " ++ t.toString)
+          throw new SormException("Failed connecting to DB of type " ++ t.toString, e)
       }
     }
 
   def instances
     ( entities : Traversable[Entity],
       poolSizes : Seq[Int] = 1 :: 6 :: Nil,
-      dbTypes : Seq[DbType] = DbType.H2 :: DbType.Mysql :: DbType.Hsqldb :: DbType.Postgres :: Nil )
+      dbTypes : Seq[DbType] = DbType.H2 :: DbType.Mysql :: DbType.Hsqldb :: DbType.Postgres :: DbType.Oracle :: Nil )
     : Stream[(Instance, String)]
     = dbTypes.toStream.flatMap(t => poolSizes.map(t -> _))
         .map{ case (t, s) => instance(entities, t, s) -> (name(t) + ":" + s) }

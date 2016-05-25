@@ -10,6 +10,7 @@ For more info, tutorials and documentation please visit the [official site](http
 * PostgreSQL
 * H2
 * HSQLDB
+* Oracle (experimental)
 
 ##Supported Scala versions
 

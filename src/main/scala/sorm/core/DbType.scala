@@ -39,6 +39,7 @@ object DbType {
         case DbType.Sqlite   => "org.sqlite.JDBC"
         case DbType.Hsqldb   => "org.hsqldb.jdbcDriver"
         case DbType.Derby    => "org.apache.derby.jdbc.EmbeddedDriver"
+        case DbType.Oracle   => "oracle.jdbc.driver.OracleDriver"
         case _               => ???
       }
 }

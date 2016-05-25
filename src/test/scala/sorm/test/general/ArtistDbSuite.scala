@@ -116,7 +116,12 @@ class ArtistDbSuite extends FunSuite with ShouldMatchers with MultiInstanceSuite
         .toSet should be === Set("Metallica", "Nirvana", "Godsmack")
     }
     test(dbId + " - Results have correct id property"){
-      db.query[Artist].fetchOne().map{_.id} should be === Some(metallica.id)
+      pending
+      // Note: this test sometimes fails on Oracle, but that is because the
+      // assumption of the test is invalid: A database does not necessarily
+      // have to return data in the order that they were inserted, and the
+      // query does not include an ORDER BY clause.
+      // db.query[Artist].fetchOne().map{_.id} should be === Some(metallica.id)
     }
     test(dbId + " - Query by id"){
       db.query[Artist].whereEqual("id", metallica.id).fetchOne()

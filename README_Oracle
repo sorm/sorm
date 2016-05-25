@@ -11,3 +11,10 @@ it as an unmanaged dependency (e.g., in the lib/ folder).
 
 Issues and pull requests should be directed to https://github.com/clangguth/sorm, from where
 changes would hopefully make their way up to the official upstream repository.
+
+
+Known limitations:
+- String values are only supported up to a length of 4000 bytes (depending on your character set,
+  that will be something between 1000 and 4000 characters). This is due to the CLOB type not being
+  available in WHERE clauses, so I had to resort to VARCHAR2, which has this limit.
+  

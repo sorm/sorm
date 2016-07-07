@@ -13,7 +13,7 @@ class C3p0ConnectionPool (dbType: DbType, url: String, user: String, password: S
   ds.setJdbcUrl(url)
   ds.setUser(user)
   ds.setPassword(password)
-  ds.setMinPoolSize(1)
+  ds.setMinPoolSize(0)
   ds.setMaxPoolSize(size)
 
   // Connection timeout. For more info see:

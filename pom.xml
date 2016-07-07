@@ -54,12 +54,12 @@
     <dependency>
       <groupId>com.github.nikita-volkov</groupId>
       <artifactId>embrace</artifactId>
-      <version>0.1.4</version>
+      <version>[0.1.5,0.2)</version>
     </dependency>
     <dependency>
       <groupId>com.github.nikita-volkov</groupId>
       <artifactId>sext</artifactId>
-      <version>0.2.4</version>
+      <version>[0.2.4,0.3)</version>
     </dependency>
     <dependency>
       <groupId>joda-time</groupId>

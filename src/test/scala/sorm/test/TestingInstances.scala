@@ -42,7 +42,7 @@ object TestingInstances {
   def instances
     ( entities : Traversable[Entity],
       poolSizes : Seq[Int] = 1 :: 6 :: Nil,
-      dbTypes : Seq[DbType] = DbType.H2 :: DbType.Mysql :: DbType.Hsqldb :: DbType.Postgres :: DbType.Oracle :: Nil )
+      dbTypes : Seq[DbType] = DbType.H2 :: DbType.Mysql :: DbType.Hsqldb :: DbType.Postgres :: Nil )
     : Stream[(Instance, String)]
     = dbTypes.toStream.flatMap(t => poolSizes.map(t -> _))
         .map{ case (t, s) => instance(entities, t, s) -> (name(t) + ":" + s) }

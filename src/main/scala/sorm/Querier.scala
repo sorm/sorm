@@ -173,55 +173,55 @@ class Querier [ T <: AnyRef : TypeTag ] ( query : Query, connector : Connector )
     = macro QuerierMacro.whereEqualImpl[T,A]
 
   def whereNotEqual ( p : String, v : Any ) : Querier[T]
-    = where( p, v, Equal )
+    = where( p, v, NotEqual )
 
   def whereNotEqual[A] ( p : T with Persisted => A, v : A ) : Querier[T]
     = macro QuerierMacro.whereNotEqualImpl[T,A]
 
   def whereLarger ( p : String, v : Any ) : Querier[T]
-    = where( p, v, Equal )
+    = where( p, v, Larger )
 
   def whereLarger[A] ( p : T with Persisted => A, v : A ) : Querier[T]
     = macro QuerierMacro.whereLargerImpl[T,A]
 
   def whereLargerOrEqual ( p : String, v : Any ) : Querier[T]
-    = where( p, v, Equal )
+    = where( p, v, LargerOrEqual )
 
   def whereLargerOrEqual[A] ( p : T with Persisted => A, v : A ) : Querier[T]
     = macro QuerierMacro.whereLargerOrEqualImpl[T,A]
 
   def whereSmaller ( p : String, v : Any ) : Querier[T]
-    = where( p, v, Equal )
+    = where( p, v, Smaller )
 
   def whereSmaller[A] ( p : T with Persisted => A, v : A ) : Querier[T]
     = macro QuerierMacro.whereSmallerImpl[T,A]
 
   def whereSmallerOrEqual ( p : String, v : Any ) : Querier[T]
-    = where( p, v, Equal )
+    = where( p, v, SmallerOrEqual )
 
   def whereSmallerOrEqual[A] ( p : T with Persisted => A, v : A ) : Querier[T]
     = macro QuerierMacro.whereSmallerOrEqualImpl[T,A]
 
   def whereLike ( p : String, v : Any ) : Querier[T]
-    = where( p, v, Equal )
+    = where( p, v, Like )
 
   def whereLike ( p : T with Persisted => String, v : String ) : Querier[T]
     = macro QuerierMacro.whereLikeImpl[T]
 
   def whereNotLike ( p : String, v : Any ) : Querier[T]
-    = where( p, v, Equal )
+    = where( p, v, NotLike )
 
   def whereNotLike ( p : T with Persisted => String, v : String ) : Querier[T]
     = macro QuerierMacro.whereNotLikeImpl[T]
 
   def whereIn ( p : String, v : Any ) : Querier[T]
-    = where( p, v, Equal )
+    = where( p, v, In )
 
   def whereIn[A] ( p : T with Persisted => A, v : Seq[A] ) : Querier[T]
     = macro QuerierMacro.whereInImpl[T,A]
 
   def whereNotIn ( p : String, v : Any ) : Querier[T]
-    = where( p, v, Equal )
+    = where( p, v, NotIn )
 
   def whereNotIn[A] ( p : T with Persisted => A, v : Seq[A] ) : Querier[T]
     = macro QuerierMacro.whereNotInImpl[T,A]

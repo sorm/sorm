@@ -241,8 +241,14 @@ class Querier [ T <: AnyRef : TypeTag ] ( query : Query, connector : Connector )
   def whereContains ( p : String, v : Any ) : Querier[T]
     = where( p, v, Contains )
 
+  def whereContains[A]( p : T with Persisted => Iterable[A], v : A) : Querier[T]
+    = macro QuerierMacro.whereContainsImpl[T,A]
+
   def whereNotContains ( p : String, v : Any ) : Querier[T]
     = where( p, v, NotContains )
+
+  def whereNotContains[A]( p : T with Persisted => Iterable[A], v : A) : Querier[T]
+  = macro QuerierMacro.whereNotContainsImpl[T,A]
 
   def whereConstitutes ( p : String, v : Any ) : Querier[T]
     = where( p, v, Constitutes )
@@ -253,9 +259,14 @@ class Querier [ T <: AnyRef : TypeTag ] ( query : Query, connector : Connector )
   def whereIncludes ( p : String, v : Any )  : Querier[T]
     = where( p, v, Includes )
 
+  def whereIncludes[A]( p : T with Persisted => Iterable[A], v : Iterable[A]) : Querier[T]
+    = macro QuerierMacro.whereIncludesImpl[T,A]
+
   def whereNotIncludes ( p : String, v : Any ) : Querier[T]
     = where( p, v, NotIncludes )
 
+  def whereNotIncludes[A]( p : T with Persisted => Iterable[A], v : Iterable[A]) : Querier[T]
+    = macro QuerierMacro.whereNotIncludesImpl[T,A]
 }
 object Querier {
   def apply [ T <: AnyRef : TypeTag ] ( mapping : EntityMapping, connector : Connector )

@@ -31,11 +31,11 @@ object QuerierMacro {
   def whereNotLikeImpl[T <: AnyRef](c: Context)( p: c.Expr[T => String], v: c.Expr[String]) : c.Expr[Querier[T]] = {
     whereImpl(c)("whereNotLike", p, v)
   }
-  def whereInImpl[T <: AnyRef,A](c: Context)( p: c.Expr[T => A], v: c.Expr[Seq[A]]) : c.Expr[Querier[T]] = {
-    whereSeqImpl(c)("whereIn", p, v)
+  def whereInImpl[T <: AnyRef,A](c: Context)( p: c.Expr[T => A], v: c.Expr[Iterable[A]]) : c.Expr[Querier[T]] = {
+    whereIterableImpl(c)("whereIn", p, v)
   }
-  def whereNotInImpl[T <: AnyRef,A](c: Context)( p: c.Expr[T => A], v: c.Expr[Seq[A]]) : c.Expr[Querier[T]] = {
-    whereSeqImpl(c)("whereNotIn", p, v)
+  def whereNotInImpl[T <: AnyRef,A](c: Context)( p: c.Expr[T => A], v: c.Expr[Iterable[A]]) : c.Expr[Querier[T]] = {
+    whereIterableImpl(c)("whereNotIn", p, v)
   }
 
   def whereRegexImpl[T <: AnyRef](c: Context)( p: c.Expr[T => String], v: c.Expr[String]) : c.Expr[Querier[T]] = {
@@ -46,16 +46,41 @@ object QuerierMacro {
     whereImpl[T,String](c)("whereNotRegex", p, v)
   }
 
+  def whereContainsImpl[T <: AnyRef,A](c: Context)( p: c.Expr[T => Iterable[A]], v: c.Expr[A]) : c.Expr[Querier[T]] ={
+    _whereImpl[T](c)("whereContains",p,v,
+      p.actualType.typeArgs(1).typeArgs(0), v.actualType)
+  }
+
+  def whereNotContainsImpl[T <: AnyRef,A](c: Context)( p: c.Expr[T => Iterable[A]], v: c.Expr[A]) : c.Expr[Querier[T]] ={
+    _whereImpl[T](c)("whereNotContains",p,v,
+      p.actualType.typeArgs(1).typeArgs(0), v.actualType)
+  }
+
+  def whereIncludesImpl[T <: AnyRef,A](c: Context)( p: c.Expr[T => Iterable[A]], v: c.Expr[Iterable[A]]) : c.Expr[Querier[T]] ={
+    _whereImpl[T](c)("whereIncludes",p,v,
+      p.actualType.typeArgs(1).typeArgs(0), v.actualType.typeArgs(0))
+  }
+
+  def whereNotIncludesImpl[T <: AnyRef,A](c: Context)( p: c.Expr[T => Iterable[A]], v: c.Expr[Iterable[A]]) : c.Expr[Querier[T]] ={
+    _whereImpl[T](c)("whereNotIncludes",p,v,
+      p.actualType.typeArgs(1).typeArgs(0), v.actualType.typeArgs(0))
+  }
+
   def whereImpl[T <: AnyRef,A](c: Context)(methodName: String, p: c.Expr[T => A], v: c.Expr[A]) : c.Expr[Querier[T]] = {
-    _whereImpl[T,A](c)(methodName,p,v,v.actualType)
+    _whereImpl[T](c)(methodName,p,v,
+      p.actualType.typeArgs(1), v.actualType)
   }
 
-  def whereSeqImpl[T <: AnyRef,A](c: Context)(methodName: String, p: c.Expr[T => A], v: c.Expr[Seq[A]]) : c.Expr[Querier[T]] = {
-    _whereImpl[T,A](c)(methodName,p,v,v.actualType.typeArgs(0))
+  def whereIterableImpl[T <: AnyRef,A](c: Context)(methodName: String, p: c.Expr[T => A], v: c.Expr[Iterable[A]]) : c.Expr[Querier[T]] = {
+    _whereImpl[T](c)(methodName,p,v,
+      p.actualType.typeArgs(1), v.actualType.typeArgs(0))
   }
 
 
-  def _whereImpl[T <: AnyRef,A](c: Context)(methodName: String, p: c.Expr[T => A], v: c.Expr[Any], passedType: c.Type) : c.Expr[Querier[T]] = {
+
+  def _whereImpl[T <: AnyRef](c: Context)(methodName: String,
+      p: c.Expr[T => Any], v: c.Expr[Any],
+      expectedType: c.Type, passedType: c.Type) : c.Expr[Querier[T]] = {
     import c.universe._
 
     // format check
@@ -67,14 +92,13 @@ object QuerierMacro {
     }
 
     // type check
-    val fieldType = p.actualType.typeArgs(1)
-    if(!(passedType <:< fieldType)){
+    if(!(passedType <:< expectedType)){
       // check convertable primitive type
-      if( ((passedType =:= typeOf[Int]) && (fieldType =:= typeOf[Long])) ||
-          ((passedType =:= typeOf[Float]) && (fieldType =:= typeOf[Double]))){
+      if( ((passedType =:= typeOf[Int]) && (expectedType =:= typeOf[Long])) ||
+          ((passedType =:= typeOf[Float]) && (expectedType =:= typeOf[Double]))){
         // OK
       } else {
-        c.abort(c.enclosingPosition, s"Field:${fieldName} is ${fieldType} but passed ${passedType}")
+        c.abort(c.enclosingPosition, s"Field:${fieldName} is ${expectedType} but passed ${passedType}")
       }
     }
 

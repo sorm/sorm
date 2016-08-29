@@ -1,7 +1,9 @@
 package sorm
 
 import sext._, embrace._
+import sorm.macroimpl.QuerierMacro
 import reflect.runtime.universe._
+import scala.language.experimental.macros
 
 import sorm._
 import mappings._
@@ -15,7 +17,8 @@ class Querier [ T <: AnyRef : TypeTag ] ( query : Query, connector : Connector )
 
   /**
    * Fetch matching entities from db.
-   * @return A stream of entity instances with [[sorm.Persisted]] mixed in
+    *
+    * @return A stream of entity instances with [[sorm.Persisted]] mixed in
    */
   def fetch () : Stream[T with Persisted]
     = fetchIds()
@@ -28,7 +31,8 @@ class Querier [ T <: AnyRef : TypeTag ] ( query : Query, connector : Connector )
 
   /**
    * Fetch ids of matching entities stored in db.
-   * @return A stream of ids
+    *
+    * @return A stream of ids
    */
   def fetchIds () : Stream[Long]
     = connector.withConnection { cx =>
@@ -37,7 +41,8 @@ class Querier [ T <: AnyRef : TypeTag ] ( query : Query, connector : Connector )
 
   /**
    * Fetch only one entity ensuring that `limit(1)` is applied to the query.
-   * @return An option of entity instance with [[sorm.Persisted]] mixed in
+    *
+    * @return An option of entity instance with [[sorm.Persisted]] mixed in
    */
   def fetchOne () : Option[T with Persisted]
     = limit(1).fetch().headOption
@@ -64,7 +69,8 @@ class Querier [ T <: AnyRef : TypeTag ] ( query : Query, connector : Connector )
 
   /**
    * Replace all matching entities stored in db with the value provided
-   * @param value A value to replace the existing entities with
+    *
+    * @param value A value to replace the existing entities with
    * @return A list of saved entities with [[sorm.Persisted]] mixed in
    */
   def replace ( value : T ) : List[T with Persisted]
@@ -86,6 +92,9 @@ class Querier [ T <: AnyRef : TypeTag ] ( query : Query, connector : Connector )
    */
   def order ( p : String, reverse : Boolean = false ) : Querier[T]
     = query.order.toVector :+ Order(Path.mapping(query.mapping, p), reverse) $ (x => copy(order = x))
+
+  def orderBy(p : T => Any, reverse : Boolean = false) =
+    macro QuerierMacro.orderByImpl[T]
 
   /**
    * Limit the amount of entities to be fetched
@@ -157,60 +166,107 @@ class Querier [ T <: AnyRef : TypeTag ] ( query : Query, connector : Connector )
    * @param v A value to compare with
    * @return A new instance of `Querier` with this filter applied
    */
-  def whereEqual ( p : String, v : Any )
+  def whereEqual ( p : String, v : Any ) : Querier[T]
     = where( p, v, Equal )
 
-  def whereNotEqual ( p : String, v : Any )
+  def whereEqual[A] ( p : T with Persisted => A, v : A ) : Querier[T]
+    = macro QuerierMacro.whereEqualImpl[T,A]
+
+  def whereNotEqual ( p : String, v : Any ) : Querier[T]
     = where( p, v, NotEqual )
 
-  def whereLarger ( p : String, v : Any )
+  def whereNotEqual[A] ( p : T with Persisted => A, v : A ) : Querier[T]
+    = macro QuerierMacro.whereNotEqualImpl[T,A]
+
+  def whereLarger ( p : String, v : Any ) : Querier[T]
     = where( p, v, Larger )
 
-  def whereLargerOrEqual ( p : String, v : Any )
+  def whereLarger[A] ( p : T with Persisted => A, v : A ) : Querier[T]
+    = macro QuerierMacro.whereLargerImpl[T,A]
+
+  def whereLargerOrEqual ( p : String, v : Any ) : Querier[T]
     = where( p, v, LargerOrEqual )
 
-  def whereSmaller ( p : String, v : Any ) 
+  def whereLargerOrEqual[A] ( p : T with Persisted => A, v : A ) : Querier[T]
+    = macro QuerierMacro.whereLargerOrEqualImpl[T,A]
+
+  def whereSmaller ( p : String, v : Any ) : Querier[T]
     = where( p, v, Smaller )
 
-  def whereSmallerOrEqual ( p : String, v : Any )
+  def whereSmaller[A] ( p : T with Persisted => A, v : A ) : Querier[T]
+    = macro QuerierMacro.whereSmallerImpl[T,A]
+
+  def whereSmallerOrEqual ( p : String, v : Any ) : Querier[T]
     = where( p, v, SmallerOrEqual )
 
-  def whereLike( p : String, v : Any ) 
+  def whereSmallerOrEqual[A] ( p : T with Persisted => A, v : A ) : Querier[T]
+    = macro QuerierMacro.whereSmallerOrEqualImpl[T,A]
+
+  def whereLike ( p : String, v : Any ) : Querier[T]
     = where( p, v, Like )
 
-  def whereNotLike( p : String, v : Any ) 
+  def whereLike ( p : T with Persisted => String, v : String ) : Querier[T]
+    = macro QuerierMacro.whereLikeImpl[T]
+
+  def whereNotLike ( p : String, v : Any ) : Querier[T]
     = where( p, v, NotLike )
 
-  def whereRegex( p : String, v : Any ) 
-    = where( p, v, Regex )
+  def whereNotLike ( p : T with Persisted => String, v : String ) : Querier[T]
+    = macro QuerierMacro.whereNotLikeImpl[T]
 
-  def whereNotRegex( p : String, v : Any ) 
-    = where( p, v, NotRegex )
-
-  def whereIn ( p : String, v : Any ) 
+  def whereIn ( p : String, v : Any ) : Querier[T]
     = where( p, v, In )
 
-  def whereNotIn ( p : String, v : Any ) 
+  def whereIn[A] ( p : T with Persisted => A, v : Seq[A] ) : Querier[T]
+    = macro QuerierMacro.whereInImpl[T,A]
+
+  def whereNotIn ( p : String, v : Any ) : Querier[T]
     = where( p, v, NotIn )
 
-  def whereContains ( p : String, v : Any ) 
+  def whereNotIn[A] ( p : T with Persisted => A, v : Seq[A] ) : Querier[T]
+    = macro QuerierMacro.whereNotInImpl[T,A]
+
+  def whereRegex( p : String, v : Any ) : Querier[T]
+    = where( p, v, Regex )
+
+  def whereRegex ( p : T with Persisted => String, v : String ) : Querier[T]
+    = macro QuerierMacro.whereRegexImpl[T]
+
+  def whereNotRegex( p : String, v : Any ) : Querier[T]
+    = where( p, v, NotRegex )
+
+  def whereNotRegex ( p : T with Persisted => String, v : String ) : Querier[T]
+    = macro QuerierMacro.whereNotRegexImpl[T]
+
+  def whereContains ( p : String, v : Any ) : Querier[T]
     = where( p, v, Contains )
 
-  def whereNotContains ( p : String, v : Any ) 
+  def whereContains[A]( p : T with Persisted => Iterable[A], v : A) : Querier[T]
+    = macro QuerierMacro.whereContainsImpl[T,A]
+
+  def whereNotContains ( p : String, v : Any ) : Querier[T]
     = where( p, v, NotContains )
 
-  def whereConstitutes ( p : String, v : Any ) 
+  def whereNotContains[A]( p : T with Persisted => Iterable[A], v : A) : Querier[T]
+  = macro QuerierMacro.whereNotContainsImpl[T,A]
+
+  def whereConstitutes ( p : String, v : Any ) : Querier[T]
     = where( p, v, Constitutes )
 
-  def whereNotConstitutes ( p : String, v : Any ) 
+  def whereNotConstitutes ( p : String, v : Any ) : Querier[T]
     = where( p, v, NotConstitutes )
 
-  def whereIncludes ( p : String, v : Any ) 
+  def whereIncludes ( p : String, v : Any )  : Querier[T]
     = where( p, v, Includes )
 
-  def whereNotIncludes ( p : String, v : Any ) 
+  def whereIncludes[A]( p : T with Persisted => Iterable[A], v : Iterable[A]) : Querier[T]
+    = macro QuerierMacro.whereIncludesImpl[T,A]
+
+  def whereNotIncludes ( p : String, v : Any ) : Querier[T]
     = where( p, v, NotIncludes )
 
+  def whereNotIncludes[A]( p : T with Persisted => Iterable[A], v : Iterable[A]) : Querier[T]
+    = macro QuerierMacro.whereNotIncludesImpl[T,A]
 }
 object Querier {
   def apply [ T <: AnyRef : TypeTag ] ( mapping : EntityMapping, connector : Connector )

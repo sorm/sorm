@@ -13,7 +13,7 @@ class ValueMapping
     val settings : Map[Reflection, EntitySettings] )
   extends ColumnMapping {
 
-    lazy val columnType : ColumnType
+    val columnType : ColumnType
       = reflection match {
           case _ if reflection <:< Reflection.apply[String]
             ⇒ if (isKeyPart)
@@ -43,7 +43,7 @@ class ValueMapping
           case _ if reflection <:< Reflection[LocalDate]
             ⇒ ColumnType.Date
           case _
-            ⇒ ???
+            ⇒ throw new Exception(s"Unsupport type $reflection")
         }
 
     private def isKeyPart

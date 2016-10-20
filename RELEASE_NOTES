@@ -1,3 +1,5 @@
+0.3.22-SNAPSHOT
+
 0.3.21
   - Timezones fix (#64)
   - Deadlock on lazy vals fix (#80)

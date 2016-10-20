@@ -24,7 +24,7 @@ object Extensions {
   }
 
   implicit class TimeToJoda ( val self : java.sql.Time ) extends AnyVal {
-    def toJoda = LocalTime.fromDateFields(self)
+    def toJoda = LocalTime.fromMillisOfDay(self.getTime)
   }
 
   implicit class TimestampToJoda ( val self : java.sql.Timestamp ) extends AnyVal {

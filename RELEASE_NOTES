@@ -1,3 +1,9 @@
+0.3.22-SNAPSHOT
+
+0.3.21
+  - Timezones fix (#64)
+  - Deadlock on lazy vals fix (#80)
+  
 0.3.20
   - Change the min pool size from 1 to 0
 

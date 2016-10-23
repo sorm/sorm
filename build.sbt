@@ -9,10 +9,6 @@ lazy val commonSettings = Seq(
   crossScalaVersions := Seq("2.11.8","2.10.4")
 )
 
-name := "sorm"
-
-scalaVersion := "2.11.8"
-
 lazy val root = project.in(file(".")).settings(commonSettings:_*).
   settings(
     libraryDependencies ++= Seq(
@@ -32,38 +28,36 @@ lazy val root = project.in(file(".")).settings(commonSettings:_*).
       "junit" % "junit" % "4.7" % "test",
       "org.scala-lang" % "scala-reflect" % scalaVersion.value,
       "org.scala-lang" % "scala-compiler" % scalaVersion.value
-    )
+    ),
+    publishMavenStyle := true,
+    publishTo := {
+      val nexus = "https://oss.sonatype.org/"
+      if (isSnapshot.value)
+        Some("snapshots" at nexus + "content/repositories/snapshots")
+      else
+        Some("releases"  at nexus + "service/local/staging/deploy/maven2")
+    },
+    pomExtra := {
+      <url>http://github.com/sorm/sorm</url>
+        <licenses>
+          <license>
+            <name>MIT/X11</name>
+            <url>http://www.github.com/sorm/sorm/LICENSE</url>
+          </license>
+        </licenses>
+        <scm>
+          <connection>scm:git:git@github.com:sorm/sorm.git</connection>
+          <url>scm:git:git@github.com:sorm/sorm.git</url>
+          <developerConnection>scm:git:git@github.com:sorm/sorm.git</developerConnection>
+        </scm>
+
+        <developers>
+          <developer>
+            <id>nikita-volkov</id>
+            <name>Nikita Volkov</name>
+            <email>nikita.y.volkov@mail.ru</email>
+          </developer>
+        </developers>
+    }
   )
 
-publishMavenStyle := true
-
-publishTo := {
-  val nexus = "https://oss.sonatype.org/"
-  if (isSnapshot.value)
-    Some("snapshots" at nexus + "content/repositories/snapshots")
-  else
-    Some("releases"  at nexus + "service/local/staging/deploy/maven2")
-}
-
-pomExtra := {
-  <url>http://github.com/sorm/sorm</url>
-  <licenses>
-    <license>
-      <name>MIT/X11</name>
-      <url>http://www.github.com/sorm/sorm/LICENSE</url>
-    </license>
-  </licenses>
-  <scm>
-    <connection>scm:git:git@github.com:sorm/sorm.git</connection>
-    <url>scm:git:git@github.com:sorm/sorm.git</url>
-    <developerConnection>scm:git:git@github.com:sorm/sorm.git</developerConnection>
-  </scm>
-
-  <developers>
-    <developer>
-      <id>nikita-volkov</id>
-      <name>Nikita Volkov</name>
-      <email>nikita.y.volkov@mail.ru</email>
-    </developer>
-  </developers>
-}

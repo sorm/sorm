@@ -37,6 +37,7 @@ lazy val root = project.in(file(".")).settings(commonSettings:_*).
       else
         Some("releases"  at nexus + "service/local/staging/deploy/maven2")
     },
+    parallelExecution in Test := false,
     pomExtra := {
       <url>http://github.com/sorm/sorm</url>
         <licenses>

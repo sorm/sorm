@@ -18,6 +18,7 @@ lazy val root = project.in(file(".")).settings(commonSettings:_*).
       "joda-time" % "joda-time" % "2.1",
       "org.joda" % "joda-convert" % "1.2",
       "com.google.guava" % "guava" % "13.0.1",
+      "com.typesafe.scala-logging" %% "scala-logging" % "3.4.0",
       "org.slf4j" % "slf4j-simple" % "1.7.2" % "test",
       "postgresql" % "postgresql" % "9.1-901.jdbc4" % "test",
       "org.hsqldb" % "hsqldb" % "2.2.8" % "test",
@@ -28,13 +29,6 @@ lazy val root = project.in(file(".")).settings(commonSettings:_*).
       "org.scala-lang" % "scala-reflect" % scalaVersion.value,
       "org.scala-lang" % "scala-compiler" % scalaVersion.value
     ),
-    libraryDependencies += {
-      if(scalaVersion.value.startsWith("2.11")) {
-        "com.typesafe.scala-logging" %% "scala-logging" % "3.4.0"
-      }else{
-        "com.typesafe.scala-logging" % "scala-logging_2.11" % "3.4.0"
-      }
-    },
     publishMavenStyle := true,
     publishTo := {
       val nexus = "https://oss.sonatype.org/"

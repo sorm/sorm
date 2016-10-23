@@ -6,4 +6,4 @@ before_script:
   - mysql -e 'create database sorm_test;'
 
 script:
-  sbt ++$TRAVIS_SCALA_VERSION publishLocal
+  sbt ++$TRAVIS_SCALA_VERSION test

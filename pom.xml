@@ -188,6 +188,7 @@
         <configuration>
           <includes>
             <include>**/*Suite.class</include>
+            <include>**/*Suite1.class</include>
             <include>**/*Test.class</include>
             <include>**/*Tests.class</include>
             <include>**/*Spec.class</include>

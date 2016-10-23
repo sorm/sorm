@@ -1,8 +1,9 @@
 package sorm.macroimpl
 
-import scala.reflect.macros.blackbox.Context
-import scala.language.experimental.macros
 import sorm.Querier
+
+import scala.language.experimental.macros
+import scala.reflect.macros.blackbox.Context
 /**
   * Created by takezoux2 on 2016/08/23.
   */

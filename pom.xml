@@ -19,7 +19,7 @@
       <url>http://www.github.com/sorm/sorm/LICENSE</url>
     </license>
   </licenses>
-  
+
   <properties>
     <scala.version>2.11.8</scala.version>
     <scala.compat.version>2.11</scala.compat.version>
@@ -289,7 +289,26 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>1.7</version>
+        <executions>
+          <execution>
+            <id>add-source</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>src/main/scala-${scala.compat.version}</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
-  </build>
 
+  </build>
 </project>

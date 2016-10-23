@@ -1,10 +1,9 @@
 language: scala
 scala:
-  - 2.10.4
   - 2.11.8
 before_script:
   - psql -c 'create database test;' -U postgres
   - mysql -e 'create database sorm_test;'
 
 script:
-  sbt ++$TRAVIS_SCALA_VERSION "set test in assembly := {}" publishLocal
+  sbt ++$TRAVIS_SCALA_VERSION publishLocal

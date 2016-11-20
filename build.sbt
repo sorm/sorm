@@ -1,4 +1,4 @@
-
+import scala.xml.XML
 
 lazy val commonSettings = Seq(
   organization := "org.sorm-framework",
@@ -39,26 +39,10 @@ lazy val root = project.in(file(".")).settings(commonSettings:_*).
     },
     parallelExecution in Test := false,
     pomExtra := {
-      <url>http://github.com/sorm/sorm</url>
-        <licenses>
-          <license>
-            <name>MIT/X11</name>
-            <url>http://www.github.com/sorm/sorm/LICENSE</url>
-          </license>
-        </licenses>
-        <scm>
-          <connection>scm:git:git@github.com:sorm/sorm.git</connection>
-          <url>scm:git:git@github.com:sorm/sorm.git</url>
-          <developerConnection>scm:git:git@github.com:sorm/sorm.git</developerConnection>
-        </scm>
-
-        <developers>
-          <developer>
-            <id>nikita-volkov</id>
-            <name>Nikita Volkov</name>
-            <email>nikita.y.volkov@mail.ru</email>
-          </developer>
-        </developers>
+      val xml = XML.loadFile(file("pom-extra.xml"))
+      xml.child
     }
   )
+
+
 

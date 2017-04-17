@@ -21,14 +21,14 @@ For more info, tutorials and documentation please visit the [official site](http
 SORM is distributed in Maven Central, here's a dependency to the latest release version:
 
     <dependency>
-      <groupId>org.sorm-framework</groupId>
-      <artifactId>sorm</artifactId>
-      <version>0.3.22-SNAPSHOT</version>
+    <groupId>org.sorm-framework</groupId>
+    <artifactId>sorm</artifactId>
+    <version>0.3.21</version>
     </dependency>
 
 ## SBT
 
-    libraryDependencies += "org.sorm-framework" % "sorm" % "0.3.22-SNAPSHOT"
+    libraryDependencies += "org.sorm-framework" % "sorm" % "0.3.21"
 
 ---
 

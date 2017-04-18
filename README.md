@@ -1,10 +1,10 @@
-#SORM
+# SORM
 
 SORM is an object-relational mapping framework designed to eliminate boilerplate and maximize productivity. It is absolutely abstracted from relational side, automatically creating database tables, emitting queries, inserting, updating and deleting records. This all functionality is presented to the user with a simple API around standard Scala's case classes. 
 
 For more info, tutorials and documentation please visit the [official site](http://sorm-framework.org).
 
-##Supported databases
+## Supported databases
 
 * MySQL
 * PostgreSQL
@@ -12,23 +12,23 @@ For more info, tutorials and documentation please visit the [official site](http
 * HSQLDB
 * Oracle (experimental)
 
-##Supported Scala versions
+## Supported Scala versions
 
 2.10, 2.11
 
-##Maven
+## Maven
 
 SORM is distributed in Maven Central, here's a dependency to the latest release version:
 
     <dependency>
-      <groupId>org.sorm-framework</groupId>
-      <artifactId>sorm</artifactId>
-      <version>0.3.22-SNAPSHOT</version>
+    <groupId>org.sorm-framework</groupId>
+    <artifactId>sorm</artifactId>
+    <version>0.3.21</version>
     </dependency>
 
-##SBT
+## SBT
 
-    libraryDependencies += "org.sorm-framework" % "sorm" % "0.3.22-SNAPSHOT"
+    libraryDependencies += "org.sorm-framework" % "sorm" % "0.3.21"
 
 ---
 
